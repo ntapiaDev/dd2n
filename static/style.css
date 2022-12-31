@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, button, input {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1em;
+}
