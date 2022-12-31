@@ -10,11 +10,10 @@ const login = async ({ cookies, locals, request }) => {
     if (!username || !password) return fail(400, { invalid: true });
 
     const user = await getByUsername(username, locals.rethinkdb);
-    console.log(user);
     if (!user) return fail(400, { credentials: true });
 
-    // const checkPassword = await bcrypt.compare(password, user.password);
-    // if (!checkPassword) return fail(400, { credentials: true });
+    const checkPassword = await bcrypt.compare(password, user.password);
+    if (!checkPassword) return fail(400, { credentials: true });
 
     const NEW_SESSIONID = await refreshSESSIONID(user.sessionid, locals.rethinkdb);
 
@@ -23,7 +22,7 @@ const login = async ({ cookies, locals, request }) => {
         httpOnly: true,
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
-        //24 heures
+        // 24 heures
         maxAge: 60 * 60 * 24
     })
     throw redirect(303, '/')

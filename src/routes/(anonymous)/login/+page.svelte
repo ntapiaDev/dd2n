@@ -10,7 +10,7 @@
 	{#if form?.invalid}
 		<p>Merci de remplir tous les champs.</p>
 	{:else if form?.credentials}
-		<p>Nom d'utilisateur ou mot de passe incorrecte.</p>
+		<p>Nom d'utilisateur ou mot de passe incorrect.</p>
 	{/if}
 	<label for="username">Nom d'utilisateur</label>
 	<input type="text" id="username" name="username" />

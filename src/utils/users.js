@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import r from 'rethinkdb';
 
 export const getByUsername = async (username, rethinkdb) => {
@@ -29,5 +30,18 @@ export const refreshSESSIONID = async (SESSIONID, rethinkdb) => {
     await r.table('users').filter(r.row("sessionid").eq(SESSIONID)).update({"sessionid": NEW_SESSIONID}).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    return NEW_SESSIONID
+    return NEW_SESSIONID;
+}
+
+export const addUser = async (user, rethinkdb) => {
+    const hashedPassword = await bcrypt.hash(user.password, 10)
+    const SESSIONID = crypto.randomUUID();
+    await r.table('users').insert({
+        'username': user.username,
+        'password': hashedPassword,
+        'sessionid': SESSIONID
+    }).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+    return SESSIONID;
 }
