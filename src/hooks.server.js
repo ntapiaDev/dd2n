@@ -39,15 +39,15 @@ export const handle = async ({ event, resolve }) => {
     const user = await getBySESSIONID(SESSIONID, event.locals.rethinkdb);
     if (user) event.locals.user = {
         username: user.username,
-        // roles: user.roles,
-        // days: user.days,
-        // location: user.location,
-        // ap: user.ap,
-        // health: user.health,
-        // hunger: user.hunger,
-        // thirst: user.thirst,
-        // disease: user.disease,
-        // inventory: user.inventory
+        roles: user.roles,
+        days: user.days,
+        location: user.location,
+        ap: user.ap,
+        life: user.life,
+        hunger: user.hunger,
+        thirst: user.thirst,
+        disease: user.disease,
+        inventory: user.inventory
     }
 
     const response = await resolve(event);

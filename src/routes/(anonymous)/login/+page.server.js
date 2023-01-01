@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { fail, redirect } from '@sveltejs/kit';
-import { getByUsername, refreshSESSIONID } from '../../../utils/users';
+import { getByUsername, refreshSESSIONID, setSession } from '../../../utils/users';
 
 const login = async ({ cookies, locals, request }) => {
     const data = await request.formData();
@@ -17,14 +17,7 @@ const login = async ({ cookies, locals, request }) => {
 
     const NEW_SESSIONID = await refreshSESSIONID(user.sessionid, locals.rethinkdb);
 
-    cookies.set('SESSIONID', NEW_SESSIONID, {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
-        // 24 heures
-        maxAge: 60 * 60 * 24
-    })
+    setSession(cookies, NEW_SESSIONID);
     throw redirect(303, '/')
 }
 

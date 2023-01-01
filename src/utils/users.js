@@ -39,9 +39,29 @@ export const addUser = async (user, rethinkdb) => {
     await r.table('users').insert({
         'username': user.username,
         'password': hashedPassword,
-        'sessionid': SESSIONID
+        'role': 'user',
+        'sessionid': SESSIONID,
+        'days': 1,
+        'location': 'H8',
+        'ap': 100,
+        'life': 100,
+        'hunger': 2,
+        'thirst': 2,
+        'disease': 0,
+        'inventory': []
     }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
     return SESSIONID;
+}
+
+export const setSession = async (cookies, SESSIONID) => {
+    cookies.set('SESSIONID', SESSIONID, {
+        path: '/',
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        // 24 heures
+        maxAge: 60 * 60 * 24
+    })
 }
