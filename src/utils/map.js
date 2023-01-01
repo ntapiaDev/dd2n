@@ -12,7 +12,7 @@ export const generateMap = async (user_id, rethinkdb) => {
     });
 
     // Génération de la nouvelle carte
-    let map = { user_id, encampment}
+    let map = { user_id, encampment }
     let rows = [];
     for (let i = 0; i < size; i++) {
         let row = [];
@@ -44,4 +44,17 @@ export const getMap = async (user_id, rethinkdb) => {
         });
     });
     return map;
+}
+
+export const getNextDay = async (power, user_id, rethinkdb) => {
+    let map = await getMap(user_id, rethinkdb);
+    for (let row of map.rows) {
+        for (let cell of row) {
+            if (map.encampment !== cell.coordinate) cell.zombies = Math.round(cell.zombies * power + 1);
+        }
+    }
+
+    await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
 }
