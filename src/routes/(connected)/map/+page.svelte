@@ -7,17 +7,14 @@
 	export let data;
 
     $: map.set(data);
-	$: encampment = $map.encampment;
-	$: rows = $map.rows;
-	$: days = $map.days;
 </script>
 
 <section>
-	<Map {encampment} {rows} {days} />
+	<Map encampment={$map.encampment} rows={$map.rows} days={$map.days} />
 	<div>
-		<NextDay user_id={$map.user_id} power="1.1" />
-		<NextDay user_id={$map.user_id} power="1.5" />
-		<NextDay user_id={$map.user_id} power="2" />
+		<NextDay days={$map.days} user_id={$map.user_id} power="1.1" />
+		<NextDay days={$map.days} user_id={$map.user_id} power="1.5" />
+		<NextDay days={$map.days} user_id={$map.user_id} power="2" />
 	</div>
 	<Reset user_id={$map.user_id}/>
 </section>

@@ -30,6 +30,9 @@ export const generateMap = async (user_id, rethinkdb) => {
         map_id = result.generated_keys[0];
         if (err) throw err;
     });
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': 1 }).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
 
     return map_id;
 }
@@ -46,7 +49,7 @@ export const getMap = async (user_id, rethinkdb) => {
     return map;
 }
 
-export const getNextDay = async (power, user_id, rethinkdb) => {
+export const getNextDay = async (days, power, user_id, rethinkdb) => {
     let map = await getMap(user_id, rethinkdb);
     for (let row of map.rows) {
         for (let cell of row) {
@@ -55,6 +58,9 @@ export const getNextDay = async (power, user_id, rethinkdb) => {
     }
 
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1 }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
