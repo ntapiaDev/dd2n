@@ -39,8 +39,9 @@ export const handle = async ({ event, resolve }) => {
 
     // User dans locals
     if (user) event.locals.user = {
+        id: user.id,
         username: user.username,
-        roles: user.roles,
+        role: user.role,
         days: user.days,
         location: user.location,
         ap: user.ap,

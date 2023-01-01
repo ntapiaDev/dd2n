@@ -1,4 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { generateMap } from '../../../utils/map';
 import { addUser, getByUsername, setSession } from '../../../utils/users';
 
 const register = async ({ cookies, locals, request }) => {
@@ -13,7 +14,11 @@ const register = async ({ cookies, locals, request }) => {
 
     // REGEX (server + front?)
 
-    const SESSIONID = await addUser({ username, password }, locals.rethinkdb)
+    const { user_id, SESSIONID } = await addUser({ username, password }, locals.rethinkdb)
+
+    // Création de la carte du joueur
+    const map_id = await generateMap(user_id, locals.rethinkdb);
+    // Mettre le map_id dans le user??
 
     // Connexion automatique?
     setSession(cookies, SESSIONID);

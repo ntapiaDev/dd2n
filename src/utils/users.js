@@ -27,7 +27,7 @@ export const getBySESSIONID = async (SESSIONID, rethinkdb) => {
 
 export const refreshSESSIONID = async (SESSIONID, rethinkdb) => {
     const NEW_SESSIONID = crypto.randomUUID();
-    await r.table('users').filter(r.row("sessionid").eq(SESSIONID)).update({"sessionid": NEW_SESSIONID}).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("sessionid").eq(SESSIONID)).update({ "sessionid": NEW_SESSIONID }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
     return NEW_SESSIONID;
@@ -36,6 +36,7 @@ export const refreshSESSIONID = async (SESSIONID, rethinkdb) => {
 export const addUser = async (user, rethinkdb) => {
     const hashedPassword = await bcrypt.hash(user.password, 10)
     const SESSIONID = crypto.randomUUID();
+    let user_id;
     await r.table('users').insert({
         'username': user.username,
         'password': hashedPassword,
@@ -50,9 +51,10 @@ export const addUser = async (user, rethinkdb) => {
         'disease': 0,
         'inventory': []
     }).run(rethinkdb, function (err, result) {
+        user_id = result.generated_keys[0];
         if (err) throw err;
     });
-    return SESSIONID;
+    return { user_id, SESSIONID };
 }
 
 export const setSession = async (cookies, SESSIONID) => {
