@@ -19,20 +19,20 @@ export const handle = async ({ event, resolve }) => {
     });
     event.locals = { rethinkdb };
 
+    let user;
     // Récupération de la session
     const SESSIONID = await event.cookies.get('SESSIONID');
-    if (!SESSIONID) {
+    if (SESSIONID) user = await getBySESSIONID(SESSIONID, event.locals.rethinkdb);
+
+    if (!user && (event.url.pathname !== '/login' && event.url.pathname !== '/register')) {
+        return redirect('/login');
+    }
+    if (!user) {
         const response = await resolve(event);
         rethinkdb.close();
         return response;
     }
 
-    const user = await getBySESSIONID(SESSIONID, event.locals.rethinkdb);
-
-    // Routes autorisées
-    if (!user && (event.url.pathname !== '/login' && event.url.pathname !== '/register')) {
-        return redirect('/login');
-    }
     if (user && (event.url.pathname === '/login' || event.url.pathname === '/register')) {
         return redirect('/');
     }
