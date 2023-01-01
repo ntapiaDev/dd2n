@@ -9,7 +9,7 @@ const redirect = (location) =>
     });
 
 export const handle = async ({ event, resolve }) => {
-    //Connexion à la base de données
+    // Connexion à la base de données
     const rethinkdb = await r.connect({
         host: HOST,
         port: PORT,
@@ -19,16 +19,7 @@ export const handle = async ({ event, resolve }) => {
     });
     event.locals = { rethinkdb };
 
-    //Routes autorisées
-    const session = event.cookies.get('SESSIONID');
-    if (!session && (event.url.pathname !== '/login' && event.url.pathname !== '/register')) {
-        return redirect('/login');
-    }
-    if (session && (event.url.pathname === '/login' || event.url.pathname === '/register')) {
-        return redirect('/');
-    }
-
-    //Récupération de la session
+    // Récupération de la session
     const SESSIONID = await event.cookies.get('SESSIONID');
     if (!SESSIONID) {
         const response = await resolve(event);
@@ -37,6 +28,16 @@ export const handle = async ({ event, resolve }) => {
     }
 
     const user = await getBySESSIONID(SESSIONID, event.locals.rethinkdb);
+
+    // Routes autorisées
+    if (!user && (event.url.pathname !== '/login' && event.url.pathname !== '/register')) {
+        return redirect('/login');
+    }
+    if (user && (event.url.pathname === '/login' || event.url.pathname === '/register')) {
+        return redirect('/');
+    }
+
+    // User dans locals
     if (user) event.locals.user = {
         username: user.username,
         roles: user.roles,
