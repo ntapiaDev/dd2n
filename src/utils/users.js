@@ -51,8 +51,8 @@ export const addUser = async (user, rethinkdb) => {
         'disease': 0,
         'inventory': []
     }).run(rethinkdb, function (err, result) {
-        user_id = result.generated_keys[0];
         if (err) throw err;
+        user_id = result.generated_keys[0];
     });
     return { user_id, SESSIONID };
 }

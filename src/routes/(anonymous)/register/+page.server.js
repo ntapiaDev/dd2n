@@ -2,6 +2,11 @@ import { fail, redirect } from '@sveltejs/kit';
 import { generateMap } from '../../../utils/map';
 import { addUser, getByUsername, setSession } from '../../../utils/users';
 
+// 3 à 16 caractères
+const USER_REGEX = /^[A-Za-z][A-Za-z0-9_]{2,15}$/;
+// Minimum 8 caractères, 1 lettre min + maj, 1 chiffre et 1 caractère spécial
+const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+
 const register = async ({ cookies, locals, request }) => {
     const data = await request.formData();
     const username = data.get('username');
@@ -12,7 +17,8 @@ const register = async ({ cookies, locals, request }) => {
     const user = await getByUsername(username, locals.rethinkdb);
     if (user) return fail(400, { user: true });
 
-    // REGEX (server + front?)
+    if (!USER_REGEX.test(username)) return fail(400, { username: true });
+    if (!PASSWORD_REGEX.test(password)) return fail(400, { password: true });
 
     const { user_id, SESSIONID } = await addUser({ username, password }, locals.rethinkdb)
 

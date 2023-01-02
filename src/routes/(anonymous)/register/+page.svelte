@@ -2,6 +2,25 @@
 	import { enhance } from '$app/forms';
 
 	export let form;
+
+	let username = '';
+	let password = '';
+
+	// REGEX Username
+	const USER_REGEX = /^[A-Za-z][A-Za-z0-9_]{2,15}$/;
+	$: testUsername = !USER_REGEX.test(username);
+	// REGEX Password
+	const LENGTH_REGEX = /^.{8,}$/;
+	$: testLength = !LENGTH_REGEX.test(password);
+	const MIN_REGEX = /.*[a-z].*/;
+	$: testMin = !MIN_REGEX.test(password);
+	const MAJ_REGEX = /.*[A-Z].*/;
+	$: testMaj = !MAJ_REGEX.test(password);
+	const NUMBER_REGEX = /.*[0-9].*/;
+	$: testNumber = !NUMBER_REGEX.test(password);
+	const CHAR_REGEX = /.*[#?!@$%^&*-].*/;
+	$: testChar = !CHAR_REGEX.test(password);
+	$: testPassword = testLength || testMin || testMaj || testNumber || testChar;
 </script>
 
 <form method="POST" action="?/register" use:enhance>
@@ -11,11 +30,29 @@
 		<p>Merci de remplir tous les champs.</p>
 	{:else if form?.user}
 		<p>Ce nom d'utilisateur est déjà pris.</p>
+	{:else if form?.username}
+		<p>Votre nom d'utilisateur doit faire entre 3 et 16 caractères.</p>
+	{:else if form?.password}
+		<p>Votre mot de passe doit comporter au minimum 8 caractères et contenir au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial.</p>
 	{/if}
-	<label for="username">Nom d'utilisateur</label>
-	<input type="text" id="username" name="username" />
-	<label for="password">Mot de passe</label>
-	<input type="password" id="password" name="password" />
+	<label for="username">Nom d'utilisateur :</label>
+	<div class="username">
+		<div class="regex" class:testUsername>
+			<div class:testUsername>Doit faire entre 3 et 16 caractères.</div>
+		</div>
+		<input type="text" id="username" name="username" bind:value={username} />
+	</div>	
+	<label for="password">Mot de passe :</label>
+	<div class="password">
+		<div class="regex" class:testPassword>
+			<div class:testLength>Doit comporter au minimum 8 caractères.</div>
+			<div class:testMin>Contient au moins une lettre minuscule.</div>
+			<div class:testMaj>Contient au moins une lettre majuscule.</div>
+			<div class:testNumber>Contient au moins un chiffre.</div>
+			<div class:testChar>Contient au moins un caractère spécial.</div>
+		</div>
+		<input type="password" id="password" name="password" bind:value={password} />
+	</div>	
 	<button type="submit">Envoyer</button>
 </form>
 
@@ -23,11 +60,43 @@
 	form {
 		display: flex;
 		flex-direction: column;
+		padding: 1em;
+		border: 1px solid #AAA;
+		border-radius: 1em;
 	}
 	h1 {
 		text-align: center;
 	}
 	input {
 		margin: 1em 0;
+	}
+	p,
+	.regex.testUsername,
+	.regex.testPassword {
+		/* Inspiré de Bootstrap Alerts */
+		margin: 1rem 0;
+		padding: .75rem 1.25rem;
+		color: #721c24;
+		background-color: #f8d7da;
+		border: 1px solid #f5c6cb;
+		border-radius: .25rem;
+	}
+	.regex {
+		display: none;
+	}
+	.username:focus-within .regex,
+	.password:focus-within .regex {
+		display: block;
+	}
+	.regex div {
+		display: none;
+	}
+	.regex .testUsername,
+	.regex .testLength,
+	.regex .testMin,
+	.regex .testMaj,
+	.regex .testNumber,
+	.regex .testChar {
+		display: block;
 	}
 </style>
