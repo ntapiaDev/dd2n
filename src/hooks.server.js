@@ -1,5 +1,6 @@
 import r from 'rethinkdb';
 import { HOST, PORT, DB, USER, PASSWORD } from '$env/static/private';
+import { getItems } from './utils/items';
 import { getBySESSIONID } from './utils/users';
 
 const redirect = (location) =>
@@ -19,10 +20,13 @@ export const handle = async ({ event, resolve }) => {
     });
     event.locals = { rethinkdb };
 
+    // Chargement des objets
+    event.locals.items = await getItems(rethinkdb);
+
     let user;
     // Récupération de la session et sécurisation des routes
     const SESSIONID = await event.cookies.get('SESSIONID');
-    if (SESSIONID) user = await getBySESSIONID(SESSIONID, event.locals.rethinkdb);
+    if (SESSIONID) user = await getBySESSIONID(SESSIONID, rethinkdb);
 
     if (!user && (event.url.pathname !== '/login' && event.url.pathname !== '/register')) {
         return redirect('/login');

@@ -1,7 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
-
-	export let form;
+	import { items } from '../../../stores/items';
+	import Item from '../../../components/game/Item.svelte';
 </script>
 
 <h1>Administration du site</h1>
@@ -19,11 +19,13 @@
 			<input type="number" min="1" max="1" id="hunger" name="hunger" placeholder="hunger" />
 			<input type="number" min="1" max="1" id="thirst" name="thirst" placeholder="thirst" />
 			<input type="number" min="1" max="1" id="disease" name="disease" placeholder="disease" />
-            <button type="submit">Ajouter</button>
+			<button type="submit">Ajouter</button>
 		</div>
 	</form>
 	<h2>Liste des icones :</h2>
-    <!-- TODO ICON LIST -->
+	{#each $items as { id }}
+		<Item {id} />
+	{/each}
 </section>
 
 <style>
@@ -37,16 +39,16 @@
 	form {
 		margin: 1em 0;
 	}
-    input {
-        text-align: center;
-    }
-    .infos {
-        margin-bottom: 3px;
-    }
-    .infos input:nth-child(1) {
+	input {
+		text-align: center;
+	}
+	.infos {
+		margin-bottom: 3px;
+	}
+	.infos input:nth-child(1) {
 		width: 153px;
 	}
-    .infos input:nth-child(2) {
+	.infos input:nth-child(2) {
 		width: 293px;
 	}
 	.stats input {

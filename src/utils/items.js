@@ -8,3 +8,15 @@ export const addItem = async (item, rethinkdb) => {
     });
     return item_id;
 }
+
+export const getItems = async (rethinkdb) => {
+    let items;
+    await r.table('items').orderBy('id').run(rethinkdb, function (err, cursor) {
+        if (err) throw err;
+        cursor.toArray(function (err, result) {
+            if (err) throw err;
+            items = result;
+        });
+    });
+    return items
+}

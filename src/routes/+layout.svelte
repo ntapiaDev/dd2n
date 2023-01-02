@@ -1,11 +1,13 @@
 <script>
+	import { items } from '../stores/items';
+	import { player } from '../stores/player';	
 	import Player from '../components/game/Player.svelte';
 	import Footer from '../components/website/Footer.svelte';
 	import Header from '../components/website/Header.svelte';
-	import { player } from '../stores/player';
 
 	export let data;
 
+	$: items.set(data.items);
 	$: player.set(data.user);
 </script>
 

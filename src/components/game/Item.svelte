@@ -1,13 +1,15 @@
 <script>
     import { page } from '$app/stores';
+    import { items } from '../../stores/items';
     import { tooltip } from './tooltip';
 
-    export let icon;
-    export let title;
+    export let id;
+
+    const item = $items.find(i => i.id === id);
 </script>
 
 <!-- Remplacer par BASEURI ou équivalent?? -->
-<img src={$page.url.origin + "/icons/" + icon + ".png"} alt={icon} {title} use:tooltip>
+<img src={$page.url.origin + "/icons/" + item.icon + ".png"} alt={item.icon} title={item.description} use:tooltip>
 
 <style>
     img {

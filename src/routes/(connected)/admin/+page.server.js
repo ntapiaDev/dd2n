@@ -11,9 +11,7 @@ const item = async ({ locals, request }) => {
         'thirst': parseInt(data.get('thirst')) || 0,
         'disease': parseInt(data.get('disease')) || 0
     };
-    
-    const item_id = await addItem(item, locals.rethinkdb);
-    console.log(item_id);
+    await addItem(item, locals.rethinkdb);
 }
 
 export const actions = { item };

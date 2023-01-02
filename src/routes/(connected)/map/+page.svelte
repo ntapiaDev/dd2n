@@ -17,4 +17,7 @@
 		<NextDay power="2" />
 	</div>
 	<Reset />
+	<!-- Chercher la zone -->
+	<!-- Objets au sol -->
+	<!-- Ramasser et déposer un objet -->
 </section>

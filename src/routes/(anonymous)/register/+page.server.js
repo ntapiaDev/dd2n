@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { generateMap } from '../../../utils/map';
+import { generateMap } from '../../../utils/maps';
 import { addUser, getByUsername, setSession } from '../../../utils/users';
 
 // 3 à 16 caractères
