@@ -1,4 +1,4 @@
-import { generateMap, getMap, getNextDay } from "../../../utils/map";
+import { generateMap, getMap, getNextDay } from "../../../utils/maps";
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
