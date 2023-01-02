@@ -20,7 +20,7 @@ export const handle = async ({ event, resolve }) => {
     event.locals = { rethinkdb };
 
     let user;
-    // Récupération de la session
+    // Récupération de la session et sécurisation des routes
     const SESSIONID = await event.cookies.get('SESSIONID');
     if (SESSIONID) user = await getBySESSIONID(SESSIONID, event.locals.rethinkdb);
 
@@ -34,6 +34,9 @@ export const handle = async ({ event, resolve }) => {
     }
 
     if (user && (event.url.pathname === '/login' || event.url.pathname === '/register')) {
+        return redirect('/');
+    }
+    if (user.role !== 'admin' && event.url.pathname === '/admin') {
         return redirect('/');
     }
 

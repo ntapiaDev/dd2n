@@ -68,6 +68,7 @@
 		text-align: center;
 	}
 	input {
+		width: 100%;
 		margin: 1em 0;
 	}
 	p,

@@ -11,6 +11,9 @@
 			<a href="/register">Register</a>
 		{:else if $page.data.user}
 			<a href="/map">Go to map</a>
+			{#if $page.data.user.role === "admin"}
+				<a href="/admin">Administrer le site</a>
+			{/if}
 			<form method="POST" action="/logout" use:enhance>
 				<button type="submit">Logout</button>
 			</form>
