@@ -23,7 +23,16 @@
 				<option value="misc">Divers</option>
 				<!-- Munition? -->
 			</select>
-			<input type="text" name="credit" placeholder="Auteur" required />
+			<select name="rarity">
+				<option value="0">Normale</option>
+				<option value="1">Magique</option>
+				<option value="2">Rare</option>
+				<option value="3">Épique</option>
+			</select>
+			<select name="unique">
+				<option value="not_unique">Non unique</option>
+				<option value="unique">Unique</option>
+			</select>
 		</div>
 		<div class="stats">
 			<input type="number" min="1" max="100" name="attack" placeholder="Attaque" />
@@ -31,6 +40,7 @@
 			<input type="number" min="1" max="1" name="hunger" placeholder="Faim" />
 			<input type="number" min="1" max="1" name="thirst" placeholder="Soif" />
 			<input type="number" min="1" max="1" name="disease" placeholder="Maladie" />
+			<input type="text" name="credit" placeholder="Auteur" required />
 			<button type="submit">Ajouter</button>
 		</div>
 	</form>
@@ -53,7 +63,7 @@
 	form, .list {
 		margin: 1em 0;
 	}
-	input {
+	input, select {
 		text-align: center;
 	}
 	.infos {
@@ -64,9 +74,15 @@
 		width: 100px;
 	}
 	.infos input:nth-child(2) {
-		width: 264px;
+		width: 307px;
+	}
+	.infos select:nth-child(5) {
+		width: 150px;
 	}
 	.stats input {
 		width: 100px;
+	}
+	.stats button {
+		width: 150px
 	}
 </style>
