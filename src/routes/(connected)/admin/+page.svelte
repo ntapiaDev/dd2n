@@ -7,25 +7,39 @@
 <h1>Administration du site</h1>
 
 <section>
-	<h2>Ajouter des icones :</h2>
+	<h2>Ajouter des objets :</h2>
 	<form method="POST" action="?/item" use:enhance>
 		<div class="infos">
-			<input type="text" id="icon" name="icon" placeholder="icon" required />
-			<input type="text" id="description" name="description" placeholder="description" required />
+			<input type="text" name="icon" placeholder="Icone" required />
+			<input type="text" name="description" placeholder="Description" required />
+			<select name="type" required>
+				<option value="weapon">Arme</option>
+				<option value="armour">Armure</option>
+				<option value="food">Nourriture</option>
+				<option value="drink">Boisson</option>
+				<option value="drug">Médicament</option>
+				<option value="resource">Ressource</option>
+				<option value="blueprint">Plan</option>
+				<option value="misc">Divers</option>
+				<!-- Munition? -->
+			</select>
+			<input type="text" name="credit" placeholder="Auteur" required />
 		</div>
 		<div class="stats">
-			<input type="number" min="1" max="100" id="attack" name="attack" placeholder="attack" />
-			<input type="number" min="1" max="100" id="defense" name="defense" placeholder="defense" />
-			<input type="number" min="1" max="1" id="hunger" name="hunger" placeholder="hunger" />
-			<input type="number" min="1" max="1" id="thirst" name="thirst" placeholder="thirst" />
-			<input type="number" min="1" max="1" id="disease" name="disease" placeholder="disease" />
+			<input type="number" min="1" max="100" name="attack" placeholder="Attaque" />
+			<input type="number" min="1" max="100" name="defense" placeholder="Défense" />
+			<input type="number" min="1" max="1" name="hunger" placeholder="Faim" />
+			<input type="number" min="1" max="1" name="thirst" placeholder="Soif" />
+			<input type="number" min="1" max="1" name="disease" placeholder="Maladie" />
 			<button type="submit">Ajouter</button>
 		</div>
 	</form>
-	<h2>Liste des icones :</h2>
-	{#each $items as { id }}
-		<Item {id} />
-	{/each}
+	<h2>Liste des objets :</h2>
+	<div class="list">
+		{#each $items as { id }}
+			<Item {id} />
+		{/each}
+	</div>
 </section>
 
 <style>
@@ -36,7 +50,7 @@
 	section {
 		padding: 1em;
 	}
-	form {
+	form, .list {
 		margin: 1em 0;
 	}
 	input {
@@ -45,13 +59,14 @@
 	.infos {
 		margin-bottom: 3px;
 	}
-	.infos input:nth-child(1) {
-		width: 153px;
+	.infos input,
+	.infos select {
+		width: 100px;
 	}
 	.infos input:nth-child(2) {
-		width: 293px;
+		width: 264px;
 	}
 	.stats input {
-		width: 75px;
+		width: 100px;
 	}
 </style>

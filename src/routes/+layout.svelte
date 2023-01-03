@@ -1,6 +1,6 @@
 <script>
 	import { items } from '../stores/items';
-	import { player } from '../stores/player';	
+	import { user } from '../stores/user';	
 	import Player from '../components/game/Player.svelte';
 	import Footer from '../components/website/Footer.svelte';
 	import Header from '../components/website/Header.svelte';
@@ -8,7 +8,7 @@
 	export let data;
 
 	$: items.set(data.items);
-	$: player.set(data.user);
+	$: user.set(data.user);
 </script>
 
 <main>
