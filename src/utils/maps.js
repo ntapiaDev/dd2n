@@ -12,7 +12,7 @@ export const generateMap = async (user_id, rethinkdb) => {
     });
 
     // Génération de la nouvelle carte
-    let map = { user_id, encampment }
+    let map = { user_id, encampment, 'uniques': [] }
     let rows = [];
     for (let i = 0; i < size; i++) {
         let row = [];

@@ -6,26 +6,14 @@
     export let id;
 
     $: item = $items.find(i => i.id === id);
-
-    $: type =
-        item.attack > 1 ? "weapon" :
-        item.defense >= 1 ? "armour" :
-        item.hunger === 1 ? "food" :
-        item.thirst === 1 ? "drink" :
-        item.disease === 1 ? "drug" :
-        item.type === "resource" ? "resource" :
-        item.type === "blueprint" ? "blueprint" : "misc";
-    $: rarity =
-        item.rarity === 1 ? "magique" :
-        item.rarity === 2 ? "rare" :
-        item.rarity === 3 ? "épique" : "normal";
 </script>
 
-<span class="{type} {rarity}">
+<!-- ATTENTION : termes en français depuis DB (rarity) utilisés dans le nom des classes et options (à refaire si un jour site en anglais...) -->
+<span class="{item.type} {item.rarity}">
     <!-- Remplacer par BASEURI ou équivalent?? -->
     <img src={$page.url.origin + "/icons/" + item.icon + ".png"} 
         alt={item.icon + ' icon by ' + item.credit}
-        title={item.description + (rarity !== "normal" ? ` (${rarity})` : "") + (item.unique ? " (unique)" : "")}
+        title={item.description + (item.rarity !== "commun" ? ` (${item.rarity})` : "") + (item.unique ? " (unique)" : "")}
         use:tooltip>
     {#if item.unique}
         <img src={$page.url.origin + "/star.png"} alt="Objet unique by Kemalmoe" class="unique">
@@ -53,6 +41,9 @@
     .weapon {
         background-color: rgb(255, 205, 205);
     }
+    .ammunition {
+        background-color: rgb(255, 255, 255);
+    }
     .armour {
         background-color: rgb(255, 225, 205);
     }
@@ -73,7 +64,7 @@
     }
 
     /* Rarity */
-    .magique {
+    .inhabituel {
         border: 1px solid green;
     }
     .rare {
@@ -81,6 +72,9 @@
     }
     .épique {
         border: 1px solid purple;
+    }
+    .légendaire {
+        border: 1px solid orange;
     }
 
     /* Unique */

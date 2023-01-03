@@ -2,11 +2,11 @@
 	import Map from '../../../components/map/Map.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
-    import { map } from '../../../stores/map';
+	import { map } from '../../../stores/map';
 
 	export let data;
 
-    $: map.set(data);
+	$: map.set(data.map);
 </script>
 
 <section>

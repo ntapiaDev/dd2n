@@ -6,13 +6,13 @@ const item = async ({ locals, request }) => {
         'icon': data.get('icon'),
         'description': data.get('description'),
         'type': data.get('type'),
-        'rarity': parseInt(data.get('rarity')),
+        'rarity': data.get('rarity'),
         'unique': data.get('unique') === "unique",
-        'attack': parseInt(data.get('attack')) || (data.get('type') !== ("ammunition" || "blueprint" || "misc") ? 1 : 0),
-        'defense': parseInt(data.get('defense')) || 0,
         'hunger': parseInt(data.get('hunger')) || 0,
         'thirst': parseInt(data.get('thirst')) || 0,
         'disease': parseInt(data.get('disease')) || 0,
+        'attack': parseInt(data.get('attack')) || (data.get('type') !== ("drug" && "ammunition" && "blueprint" && "misc") ? 1 : 0),
+        'defense': parseInt(data.get('defense')) || 0,
         'credit': data.get('credit')
     };
     await addItem(item, locals.rethinkdb);

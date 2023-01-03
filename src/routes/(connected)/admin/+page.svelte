@@ -13,21 +13,22 @@
 			<input type="text" name="icon" placeholder="Icone" required />
 			<input type="text" name="description" placeholder="Description" required />
 			<select name="type" required>
-				<option value="weapon">Arme</option>
-				<option value="armour">Armure</option>
-				<option value="ammunition">Munition</option>
 				<option value="food">Nourriture</option>
 				<option value="drink">Boisson</option>
 				<option value="drug">Médicament</option>
+				<option value="weapon">Arme</option>
+				<option value="ammunition">Munition</option>
+				<option value="armour">Armure</option>
 				<option value="resource">Ressource</option>
 				<option value="blueprint">Plan</option>
 				<option value="misc">Divers</option>
 			</select>
 			<select name="rarity">
-				<option value="0">Normale</option>
-				<option value="1">Magique</option>
-				<option value="2">Rare</option>
-				<option value="3">Épique</option>
+				<option value="commun">Commun</option>
+				<option value="inhabituel">Inhabituel</option>
+				<option value="rare">Rare</option>
+				<option value="épique">Épique</option>
+				<option value="légendaire">Légendaire</option>
 			</select>
 			<select name="unique">
 				<option value="not_unique">Non unique</option>
@@ -35,16 +36,16 @@
 			</select>
 		</div>
 		<div class="stats">
-			<input type="number" min="1" max="100" name="attack" placeholder="Attaque" />
-			<input type="number" min="1" max="100" name="defense" placeholder="Défense" />
 			<input type="number" min="1" max="1" name="hunger" placeholder="Faim" />
 			<input type="number" min="1" max="1" name="thirst" placeholder="Soif" />
 			<input type="number" min="1" max="1" name="disease" placeholder="Maladie" />
+			<input type="number" min="1" max="100" name="attack" placeholder="Attaque" />
+			<input type="number" min="1" max="100" name="defense" placeholder="Défense" />
 			<input type="text" name="credit" placeholder="Auteur" required />
 			<button type="submit">Ajouter</button>
 		</div>
 	</form>
-	<h2>Liste des objets :</h2>
+	<h2>Liste des objets ({$items.length}) :</h2>
 	<div class="list">
 		{#each $items as { id }}
 			<Item {id} />
@@ -60,10 +61,12 @@
 	section {
 		padding: 1em;
 	}
-	form, .list {
+	form,
+	.list {
 		margin: 1em 0;
 	}
-	input, select {
+	input,
+	select {
 		text-align: center;
 	}
 	.infos {
@@ -83,6 +86,6 @@
 		width: 100px;
 	}
 	.stats button {
-		width: 150px
+		width: 150px;
 	}
 </style>
