@@ -8,7 +8,7 @@ const item = async ({ locals, request }) => {
         'type': data.get('type'),
         'rarity': parseInt(data.get('rarity')),
         'unique': data.get('unique') === "unique",
-        'attack': parseInt(data.get('attack')) || data.get('type') !== ("blueprint" || "misc") ? 1 : 0,
+        'attack': parseInt(data.get('attack')) || (data.get('type') !== ("ammunition" || "blueprint" || "misc") ? 1 : 0),
         'defense': parseInt(data.get('defense')) || 0,
         'hunger': parseInt(data.get('hunger')) || 0,
         'thirst': parseInt(data.get('thirst')) || 0,

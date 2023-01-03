@@ -15,13 +15,13 @@
 			<select name="type" required>
 				<option value="weapon">Arme</option>
 				<option value="armour">Armure</option>
+				<option value="ammunition">Munition</option>
 				<option value="food">Nourriture</option>
 				<option value="drink">Boisson</option>
 				<option value="drug">Médicament</option>
 				<option value="resource">Ressource</option>
 				<option value="blueprint">Plan</option>
 				<option value="misc">Divers</option>
-				<!-- Munition? -->
 			</select>
 			<select name="rarity">
 				<option value="0">Normale</option>
