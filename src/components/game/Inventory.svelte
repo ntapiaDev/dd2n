@@ -1,5 +1,5 @@
 <script>
-    import { sortItems } from '../../utils/items';
+    import { sortItems } from '../../utils/tools';
 	import Item from './Item.svelte';
 
 	export let items;
