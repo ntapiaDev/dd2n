@@ -1,4 +1,5 @@
 import r from 'rethinkdb';
+import layout from './layout';
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']; //16 * 16 = 256 cases max
 
@@ -19,7 +20,7 @@ export const generateMap = async (user_id, rethinkdb) => {
         for (let j = 1; j < size + 1; j++) {
             const distance = Math.abs(i - letters.indexOf(encampment[0])) + Math.abs(encampment.substring(1) - j);
             const zombies = Math.floor(Math.random() * (distance - 2)); // Définit la difficulté : proximité des zombies par rapport au campement
-            row.push({ 'coordinate': letters[i] + j, 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'items': [] });
+            row.push({ 'coordinate': letters[i] + j, 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'items': [] });
         }
         rows.push(row);
     }
@@ -64,4 +65,9 @@ export const getNextDay = async (days, power, user_id, rethinkdb) => {
     await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1 }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
+}
+
+export const search = async () => {
+    console.log('test');
+    
 }

@@ -16,4 +16,12 @@ const reset = async ({ locals }) => {
     await generateMap(locals.user.id, locals.rethinkdb);
 }
 
-export const actions = { nextday, reset };
+const search = async ({ locals }) => {
+    // TODO : Gestion de la rareté de la case
+    // const location = locals.user.location;
+    const items = locals.items.filter(i => i.type !== 'misc');
+    const foundItem = items[Math.floor(Math.random() * items.length)]
+    console.log(foundItem);
+}
+
+export const actions = { nextday, reset, search };

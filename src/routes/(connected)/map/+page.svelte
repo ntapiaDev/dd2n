@@ -1,10 +1,10 @@
 <script>
 	import { map } from '../../../stores/map';
 	import { user } from '../../../stores/user';
-	import Item from '../../../components/game/Item.svelte';
 	import Map from '../../../components/map/Map.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
+	import Search from '../../../components/map/actions/Search.svelte';
 
 	export let data;
 
@@ -12,8 +12,8 @@
 	// Simplifiable?? Trouver la bonne formule ReQL pour accéder à une case en particulier...
 	$: row = $map.rows.find(row => row.find(c => c.coordinate === $user.location));
 	$: cell = row.find(c => c.coordinate === $user.location);
-	$: rowNth = $map.rows.indexOf(row);
-	$: cellNth = row.indexOf(cell);
+	// $: rowNth = $map.rows.indexOf(row);
+	// $: cellNth = row.indexOf(cell);
 </script>
 
 <h1>Vous êtes sur la case {$user.location} :</h1>
@@ -33,8 +33,7 @@
 		</div>
 		<div class="actions">
 			<span class="title">Actions disponibles :</span>
-			<Item id="2eda30dc-9ad7-4f5c-a76d-e65bcc68cd30" />
-			<!-- Trigger: met dans l'inventaire ou pose au sol?? -->
+			<Search />
 		</div>
 		<div class="items">
 			<span class="title">Objets au sol :</span>
@@ -56,7 +55,7 @@
 		width: 45%;
 	}
 	.cell {
-		width: 60%;
+		width: 55%;
 		margin-left: 1em;
 	}
 	.actions,
