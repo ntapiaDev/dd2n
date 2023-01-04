@@ -50,6 +50,7 @@ export const getMap = async (user_id, rethinkdb) => {
 }
 
 export const getNextDay = async (days, power, user_id, rethinkdb) => {
+    // Transformer en une seule requête update...
     let map = await getMap(user_id, rethinkdb);
     for (let row of map.rows) {
         for (let cell of row) {

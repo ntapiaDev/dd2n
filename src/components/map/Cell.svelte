@@ -1,10 +1,12 @@
 <script>
+	import { user } from "../../stores/user";
+
 	export let cell;
     export let encampment;
 
 	const canTravel = () => {
 		const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']; //16 * 16 = 256 cases max
-		return Math.abs(letters.indexOf('H') - letters.indexOf(cell.coordinate[0])) + Math.abs(cell.coordinate.substring(1) - 10) === 1;
+		return Math.abs(letters.indexOf($user.location[0]) - letters.indexOf(cell.coordinate[0])) + Math.abs(cell.coordinate.substring(1) - parseInt($user.location.substring(1))) === 1;
 	}
 
 	const travel = () => {
@@ -14,7 +16,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <td	class="{encampment === cell.coordinate ? 'encampment' : ''}
-	{'H10' === cell.coordinate ? 'current' : ''}
+	{$user.location === cell.coordinate ? 'current' : ''}
 	{canTravel() ? 'travel' : ''}"
 	style={encampment !== cell.coordinate	? `background-color: rgb(255, 0, 0, ${cell.zombies / 16})` : ''}
 	on:click={travel}>

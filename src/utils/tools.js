@@ -5,6 +5,10 @@ export const sortItems = (items) => {
     // Si légendaire utilisé, refaire un tableau de tri par qualité... (/!\ Noms en français)
     : a.rarity > b.rarity ? 1 
     : a.rarity < b.rarity ? -1 
+    : a.attack > b.attack ? 1 
+    : a.attack < b.attack ? -1 
+    : a.defense > b.defense ? 1 
+    : a.defense < b.defense ? -1 
     : a.description > b.description ? 1 
     : a.description < b.description ? -1 
     : 0);

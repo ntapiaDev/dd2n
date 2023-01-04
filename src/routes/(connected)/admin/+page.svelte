@@ -47,6 +47,7 @@
 	<h2>Liste des objets ({$items.length}) :</h2>
 	<div class="list">
 		<!-- Optimiser et refactoriser -->
+		<!-- Afficher quantité par catégorie -->
 		<h3>Nourriture :</h3>
 		{#each $items as { id, type }}
 			{#if type === 'food'}

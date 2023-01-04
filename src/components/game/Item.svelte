@@ -13,7 +13,11 @@
     <!-- Remplacer par BASEURI ou équivalent?? -->
     <img src={$page.url.origin + "/icons/" + item.icon + ".png"} 
         alt={item.icon + ' icon by ' + item.credit}
-        title={item.description + (item.rarity !== "commun" ? ` (${item.rarity})` : "") + (item.unique ? " (unique)" : "")}
+        title={item.description 
+            + (item.type === 'weapon' ? ` (Puissance : ${item.attack})` : "")
+            + (item.type === 'armour' ? ` (Protection : ${item.defense})` : "")
+            + (item.rarity !== "commun" ? ` (${item.rarity})` : "") 
+            + (item.unique ? " (unique)" : "")}
         use:tooltip>
     {#if item.unique}
         <img src={$page.url.origin + "/star.png"} alt="Objet unique by Kemalmoe" class="unique">

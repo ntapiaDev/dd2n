@@ -2,7 +2,6 @@ import { generateMap, getMap, getNextDay } from "../../../utils/maps";
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
-    // Récupérer days depuis getMap?
     map.days = locals.user.days;
     return { map };
 }
