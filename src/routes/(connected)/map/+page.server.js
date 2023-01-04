@@ -19,10 +19,22 @@ const reset = async ({ locals }) => {
 }
 
 const search = async ({ locals }) => {
+    const location = locals.user.location;
+    const map = await getMap(locals.user.id, locals.rethinkdb);
+    const danger = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).layout.danger;
     // TODO : Gestion de la rareté de la case
-    // const location = locals.user.location;
-    const items = locals.items.filter(i => i.type !== 'misc');
-    const foundItem = items[Math.floor(Math.random() * items.length)]
+    const getItems = (danger) => {
+        if (danger === 1) {
+            return locals.items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel'].includes(i.rarity));
+        } else if (danger === 2) {
+            return locals.items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare'].includes(i.rarity));
+        } else if (danger === 3) {
+            return locals.items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare', 'épique'].includes(i.rarity));
+        }
+    }
+    const items = getItems(danger);
+    // Gestion de la chance de trouver tel ou tel objet? (ex: ressource haute, plan rare... (qualité plan aussi en fonction items nécessaires?))
+    const foundItem = items[Math.floor(Math.random() * items.length)];
     console.log(foundItem);
 }
 

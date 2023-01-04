@@ -1,6 +1,8 @@
 <script>
 	import { map } from '../../../stores/map';
 	import { user } from '../../../stores/user';
+	import { sortItems } from '../../../utils/tools';
+	import Item from '../../../components/game/Item.svelte';
 	import Map from '../../../components/map/Map.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
@@ -9,11 +11,8 @@
 	export let data;
 
 	$: map.set(data.map);
-	// Simplifiable?? Trouver la bonne formule ReQL pour accéder à une case en particulier...
-	$: row = $map.rows.find(row => row.find(c => c.coordinate === $user.location));
-	$: cell = row.find(c => c.coordinate === $user.location);
-	// $: rowNth = $map.rows.indexOf(row);
-	// $: cellNth = row.indexOf(cell);
+	// Simplifiable?? Trouver la bonne formule ReQL pour accéder à une case en particulier... (+doublon +page.server.js)
+	$: cell = $map.rows.find(row => row.find(c => c.coordinate === $user.location)).find(c => c.coordinate === $user.location);
 </script>
 
 <h1>Vous êtes sur la case {$user.location} :</h1>
@@ -37,6 +36,9 @@
 		</div>
 		<div class="items">
 			<span class="title">Objets au sol :</span>
+			{#each sortItems(cell.items) as {id}}
+				<Item {id} />
+			{/each}
 			<!-- Ramasser et déposer un objet au clic sur l'objet -->
 		</div>
 	</div>
@@ -60,6 +62,7 @@
 	}
 	.actions,
 	.items {
+		height: 45px;
 		display: flex;
 		align-items: center;
 		margin-top: 0.5em;
