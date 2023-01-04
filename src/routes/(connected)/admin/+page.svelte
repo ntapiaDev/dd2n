@@ -5,7 +5,6 @@
 </script>
 
 <h1>Administration du site</h1>
-
 <section>
 	<h2>Ajouter des objets :</h2>
 	<form method="POST" action="?/item" use:enhance>
@@ -47,8 +46,60 @@
 	</form>
 	<h2>Liste des objets ({$items.length}) :</h2>
 	<div class="list">
-		{#each $items as { id }}
-			<Item {id} />
+		<!-- Optimiser et refactoriser -->
+		<h3>Nourriture :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'food'}
+				<Item {id} />
+			{/if}
+		{/each}
+		<h3>Boisson :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'drink'}
+				<Item {id} />
+			{/if}
+		{/each}
+		<h3>Médicament :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'drug'}
+				<Item {id} />
+			{/if}
+		{/each}
+		<h3>Arme :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'weapon'}
+				<Item {id} />
+			{/if}
+		{/each}
+		<h3>Munition :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'ammunition'}
+				<Item {id} />
+			{/if}
+		{/each}
+		<h3>Armure :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'armour'}
+				<Item {id} />
+			{/if}
+		{/each}
+		<h3>Ressource :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'resource'}
+				<Item {id} />
+			{/if}
+		{/each}
+		<h3>Plan :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'blueprint'}
+				<Item {id} />
+			{/if}
+		{/each}
+		<h3>Divers :</h3>
+		{#each $items as { id, type }}
+			{#if type === 'misc'}
+				<Item {id} />
+			{/if}
 		{/each}
 	</div>
 </section>
@@ -58,11 +109,13 @@
 		margin: 1em 0 0;
 		text-align: center;
 	}
+	h3 {
+		margin-top: 0.5em;
+	}
 	section {
 		padding: 1em;
 	}
-	form,
-	.list {
+	form {
 		margin: 1em 0;
 	}
 	input,
