@@ -1,48 +1,39 @@
 <script>
-	import { user } from "../../stores/user";
+	import { enhance } from '$app/forms';
+	import { user } from '../../stores/user';
+	import { canTravel } from '../../utils/tools';
 
 	export let cell;
-    export let encampment;
+	export let encampment;
 
-	const canTravel = () => {
-		const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']; //16 * 16 = 256 cases max
-		const distance = Math.abs(letters.indexOf($user.location[0]) - letters.indexOf(cell.coordinate[0])) + Math.abs(cell.coordinate.substring(1) - $user.location.substring(1)) === 1;
-		if (distance) return !cell.layout.border.includes(direction(letters));
-		return distance;
-	}
-	const direction = (letters) => {
-		if ($user.location[0] === cell.coordinate[0]) {
-			return $user.location.substring(1) - cell.coordinate.substring(1) > 0 ? 2 : 4;
-		} else if (cell.coordinate.substring(1) === $user.location.substring(1)) {
-			return letters.indexOf(cell.coordinate[0]) - letters.indexOf($user.location[0]) > 0 ? 1 : 3;
-		}
-	}
-
-	const travel = () => {
-		if(canTravel()) console.log(cell.coordinate);
-	}
+	$: travel = canTravel($user.location, cell.coordinate, cell.layout.border, $user.ap);
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <td	class="{encampment === cell.coordinate ? 'encampment' : ''}
 	{$user.location === cell.coordinate ? 'current' : ''}
-	{canTravel() ? 'travel' : ''}
+	{travel ? 'travel' : ''}
 	{cell.layout.border.includes(1) ? 'bt' : ''}
 	{cell.layout.border.includes(2) ? 'br' : ''}
 	{cell.layout.border.includes(3) ? 'bb' : ''}
 	{cell.layout.border.includes(4) ? 'bl' : ''}"
-	style={encampment !== cell.coordinate ? `background-color: rgb(255, 0, 0, ${cell.zombies / 16})` : ''}
-	on:click={travel}>
+	style={encampment !== cell.coordinate ? `background-color: rgb(255, 0, 0, ${cell.zombies / 16})` : ''}>
+	{#if travel}
+		<form method="POST" action="?/travel" use:enhance>
+			<input type="text" name="target" value={cell.coordinate} hidden>
+			<button>{cell.zombies}</button>
+		</form>
+	{:else}
 	{cell.zombies}
+	{/if}
 </td>
 
 <style>
 	td {
-		width: 25px;
-		height: 25px;
+		width: 26px;
+		height: 26px;
 		text-align: center;
-		box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-		transition: 0.3s;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+		transition: box-shadow ease 0.3s;
 	}
 	td.encampment {
 		color: #fff;
@@ -52,10 +43,13 @@
 		border: 3px double blue;
 	}
 	td.travel:hover {
-		cursor: pointer;
-		box-shadow: 0 2px 6px rgba(0,0,255,0.48), 0 0 10px rgba(0,0,255,0.96);
+		box-shadow: 0 2px 6px rgba(0, 0, 255, 0.48), 0 0 10px rgba(0, 0, 255, 0.96);
 	}
-	/* Bordures de la zone */
+	button {
+		width: 100%;
+		height: 100%;
+		cursor: pointer;
+	}
 	.bt {
 		border-top: 1px solid black;
 	}

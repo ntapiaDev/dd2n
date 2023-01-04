@@ -67,7 +67,12 @@ export const getNextDay = async (days, power, user_id, rethinkdb) => {
     });
 }
 
-export const search = async () => {
-    console.log('test');
-    
+export const getSearch = async () => {
+    console.log('test');    
+}
+
+export const getTravel = async (user_id, target, ap, rethinkdb) => {
+    await r.table('users').filter({"id": user_id}).update({'location': target, 'ap': (ap - 1)}).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
 }
