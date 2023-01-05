@@ -66,7 +66,7 @@ export default {
     'E5': { 'danger': 2, 'border': [] },
     'E6': { 'danger': 2, 'border': [3] },
     'E7': { 'danger': 2, 'border': [3] },
-    'E8': { 'danger': 2, 'border': [3] },
+    'E8': { 'danger': 2, 'border': [] },
     'E9': { 'danger': 2, 'border': [3] },
     'E10': { 'danger': 2, 'border': [3] },
     'E11': { 'danger': 2, 'border': [] },

@@ -7,23 +7,27 @@
 	export let encampment;
 
 	$: travel = canTravel($user.location, cell.coordinate, cell.layout.border) && $user.ap > 0;
+	$: style = (encampment === cell.coordinate ? 'encampment ' : '') +
+	($user.location === cell.coordinate ? 'current ' : '') +
+	(travel ? 'travel ' : '') +
+	(cell.visible ? 
+		((cell.layout.border.includes(1) ? 'bt ' : '') +
+		(cell.layout.border.includes(2) ? 'br ' : '') +
+		(cell.layout.border.includes(3) ? 'bb ' : '') +
+		(cell.layout.border.includes(4) ? 'bl ' : '') +
+		(cell.visited || travel ? '' : 'blur'))
+	: 'fog')
 </script>
 
-<td	class="{encampment === cell.coordinate ? 'encampment' : ''}
-	{$user.location === cell.coordinate ? 'current' : ''}
-	{travel ? 'travel' : ''}
-	{cell.layout.border.includes(1) ? 'bt' : ''}
-	{cell.layout.border.includes(2) ? 'br' : ''}
-	{cell.layout.border.includes(3) ? 'bb' : ''}
-	{cell.layout.border.includes(4) ? 'bl' : ''}"
-	style={encampment !== cell.coordinate ? `background-color: rgb(255, 0, 0, ${cell.zombies / 16})` : ''}>
+<td	class={style}
+	style={encampment !== cell.coordinate && cell.visible ? `background-color: rgb(255, 0, 0, ${cell.zombies / 16})` : ''}>
 	{#if travel}
 		<form method="POST" action="?/travel" use:enhance>
 			<input type="text" name="target" value={cell.coordinate} hidden>
-			<button>{cell.zombies}</button>
+			<button>{cell.coordinate === encampment ? 'C' : (cell.visible && cell.visited ? cell.zombies : '?')}</button>
 		</form>
-	{:else}
-	{cell.zombies}
+	{:else if cell.visible && cell.visited}
+		{cell.coordinate === encampment ? 'C' : cell.zombies}
 	{/if}
 </td>
 
@@ -50,16 +54,22 @@
 		height: 100%;
 		cursor: pointer;
 	}
-	.bt {
+	td.bt {
 		border-top: 1px solid black;
 	}
-	.br {
+	td.br {
 		border-right: 1px solid black;
 	}
-	.bb {
+	td.bb {
 		border-bottom: 1px solid black;
 	}
-	.bl {
+	td.bl {
 		border-left: 1px solid black;
+	}
+	.fog {
+		background: content-box radial-gradient(rgb(100, 100, 100), rgb(128, 128, 128));
+	}
+	.blur {
+		filter : blur(1px);
 	}
 </style>

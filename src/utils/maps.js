@@ -2,11 +2,10 @@ import r from 'rethinkdb';
 import layout from './layout';
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']; //16 * 16 = 256 cases max
+const encampment = 'H8';
+const size = 15;
 
 export const generateMap = async (user_id, rethinkdb) => {
-    const size = 15;
-    const encampment = 'H8';
-
     // Suppression de l'ancienne carte
     await r.table('maps').filter(r.row("user_id").eq(user_id)).delete().run(rethinkdb, function (err, result) {
         if (err) throw err;
@@ -20,7 +19,9 @@ export const generateMap = async (user_id, rethinkdb) => {
         for (let j = 1; j < size + 1; j++) {
             const distance = Math.abs(i - letters.indexOf(encampment[0])) + Math.abs(encampment.substring(1) - j);
             const zombies = Math.floor(Math.random() * (distance - 2)); // Définit la difficulté : proximité des zombies par rapport au campement
-            row.push({ 'coordinate': letters[i] + j, 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'items': [], 'searchedBy': [] });
+            const visible = letters[i] + j === encampment;
+            const visited = letters[i] + j === encampment;
+            row.push({ 'coordinate': letters[i] + j, 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'items': [], 'searchedBy': [], visible, visited });
         }
         rows.push(row);
     }
@@ -55,8 +56,11 @@ export const getNextDay = async (days, power, user_id, rethinkdb) => {
     let map = await getMap(user_id, rethinkdb);
     for (let row of map.rows) {
         for (let cell of row) {
-            if (map.encampment !== cell.coordinate) cell.zombies = Math.round(cell.zombies * power + 1);
-            cell.searchedBy = [];
+            if (cell.coordinate !== encampment) {
+                cell.zombies = Math.round(cell.zombies * power + 1);
+                cell.searchedBy = [];
+                cell.visited = false;
+            } 
         }
     }
 
@@ -77,8 +81,11 @@ export const getSearch = async (user_id, map, ap, rethinkdb) => {
     });
 }
 
-export const getTravel = async (user_id, target, ap, rethinkdb) => {
+export const getTravel = async (user_id, target, ap, map, rethinkdb) => {
     await r.table('users').filter({ "id": user_id }).update({ 'location': target, 'ap': (ap - 1) }).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+    await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }

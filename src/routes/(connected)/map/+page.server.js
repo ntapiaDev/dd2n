@@ -54,8 +54,8 @@ const search = async ({ locals }) => {
         }
         const foundItem = pool[Math.floor(Math.random() * pool.length)];
         // On met l'item entier dans la case de la map
-        (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.push(foundItem);
         // Faire en une seule fois??
+        (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.push(foundItem);
         (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).searchedBy.push(locals.user.id);
         await getSearch(locals.user.id, map, ap, locals.rethinkdb)
     }
@@ -71,7 +71,12 @@ const travel = async ({ locals, request }) => {
         // Refactoriser?? utilisé sur +page.svelte aussi
         const border = (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).layout.border;
         // Vérification de la possibilité de voyager (anti-triche)
-        if (canTravel(location, target, border)) await getTravel(locals.user.id, target, ap, locals.rethinkdb);
+        if (canTravel(location, target, border)) {
+            // Faire en une seule fois?? (check si déjà visible et visité ou non??)
+            (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visible = true;
+            (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visited = true;
+            await getTravel(locals.user.id, target, ap, map, locals.rethinkdb);
+        }
     }
     throw redirect(303, '/map');
 }
