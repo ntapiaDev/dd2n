@@ -10,7 +10,10 @@
 	$: style = (encampment === cell.coordinate ? 'encampment ' : '') +
 	($user.location === cell.coordinate ? 'current ' : '') +
 	(travel ? 'travel ' : '') +
-	(cell.visible ? 
+	(cell.layout.danger === 1 ? 'inner ' : '') +
+	(cell.layout.danger === 2 ? 'middle ' : '') +
+	(cell.layout.danger === 3 ? 'outer ' : '') +
+	(cell.visible ?
 		((cell.layout.border.includes(1) ? 'bt ' : '') +
 		(cell.layout.border.includes(2) ? 'br ' : '') +
 		(cell.layout.border.includes(3) ? 'bb ' : '') +
@@ -44,30 +47,79 @@
 		background-color: blue;
 	}
 	td.current {
-		border: 3px double blue;
+		border: 3px double;
 	}
-	td.travel:hover {
-		box-shadow: 0 2px 6px rgba(0, 0, 255, 0.48), 0 0 10px rgba(0, 0, 255, 0.96);
+	td.travel.inner:hover {
+		box-shadow: 0 2px 6px rgba(0, 128, 0, 0.48), 0 0 10px rgba(0, 128, 0, 0.96);
+	}
+	td.travel.inner.encampment:hover {
+		box-shadow: 0 2px 6px rgb(0, 0, 255, 0.48), 0 0 10px rgb(0, 0, 255, 0.96);
+	}
+	td.travel.middle:hover {
+		box-shadow: 0 2px 6px rgb(255, 165, 0, 0.48), 0 0 10px rgb(255, 165, 0, 0.96);
+	}
+	td.travel.outer:hover {
+		box-shadow: 0 2px 6px rgb(255, 0, 0, 0.48), 0 0 10px rgb(255, 0, 0, 0.96);
 	}
 	button {
-		width: 100%;
-		height: 100%;
+		width: 25px;
+		height: 24px;
 		cursor: pointer;
 	}
+	.inner button {
+		background-color: rgba(0, 128, 0, 0.25);
+		border: 1px solid rgba(0, 128, 0, 0.48);
+	}
+	.inner.encampment button {
+		color: #fff;
+		background-color: rgb(0, 0, 255, 0.25);
+		border: 1px solid rgb(0, 0, 255, 0.48);
+	}
+	.middle button {
+		background-color: rgba(255, 165, 0, 0.25);
+		border: 1px solid rgba(255, 165, 0, 0.48);
+	}
+	.outer button {
+		background-color: rgba(255, 0, 0, 0.25);
+		border: 1px solid rgba(255, 0, 0, 0.48);
+	}
+	td.bt button,
+	td.bb button {
+		height: 21px;
+	}
+	td.br button,
+	td.bl button {
+		width: 21px;
+	}
 	td.bt {
-		border-top: 1px solid black;
+		border-top: 3px solid;
 	}
 	td.br {
-		border-right: 1px solid black;
+		border-right: 3px solid;
 	}
 	td.bb {
-		border-bottom: 1px solid black;
+		border-bottom: 3px solid;
 	}
 	td.bl {
-		border-left: 1px solid black;
+		border-left: 3px solid;
+	}
+	td.inner {
+		border-color: green;
+	}
+	td.inner.encampment {
+		border-color: #fff;
+	}
+	td.middle {
+		border-color: orange;
+	}
+	td.outer {
+		border-color: red;
 	}
 	.fog {
 		background: content-box radial-gradient(rgb(100, 100, 100), rgb(128, 128, 128));
+	}
+	.fog button {
+		color: #fff;
 	}
 	.blur {
 		filter : blur(1px);
