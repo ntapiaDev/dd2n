@@ -21,7 +21,7 @@ export const generateMap = async (user_id, rethinkdb) => {
             const zombies = Math.floor(Math.random() * (distance - 2)); // Définit la difficulté : proximité des zombies par rapport au campement
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
-            row.push({ 'coordinate': letters[i] + j, 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'items': [], 'searchedBy': [], visible, visited });
+            row.push({ 'coordinate': letters[i] + j, 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'estimated': 0, 'items': [], 'searchedBy': [], visible, visited });
         }
         rows.push(row);
     }

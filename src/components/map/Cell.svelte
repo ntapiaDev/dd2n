@@ -18,7 +18,7 @@
 		(cell.layout.border.includes(2) ? 'br ' : '') +
 		(cell.layout.border.includes(3) ? 'bb ' : '') +
 		(cell.layout.border.includes(4) ? 'bl ' : '') +
-		(cell.visited || travel ? '' : 'blur'))
+		(cell.visited ? '' : 'blur'))
 	: 'fog')
 </script>
 
@@ -27,10 +27,10 @@
 	{#if travel}
 		<form method="POST" action="?/travel" use:enhance>
 			<input type="text" name="target" value={cell.coordinate} hidden>
-			<button>{cell.coordinate === encampment ? 'C' : (cell.visible && cell.visited ? cell.zombies : '?')}</button>
+			<button>{cell.coordinate === encampment ? 'C' : (cell.visible ? (cell.visited ? cell.zombies : cell.estimated) : '?')}</button>
 		</form>
-	{:else if cell.visible && cell.visited}
-		{cell.coordinate === encampment ? 'C' : cell.zombies}
+	{:else if cell.visible}
+		{cell.coordinate === encampment ? 'C' : (cell.visited ? cell.zombies : cell.estimated)}
 	{/if}
 </td>
 
