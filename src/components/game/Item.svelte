@@ -1,92 +1,93 @@
 <script>
-    import { page } from '$app/stores';
-    import { items } from '../../stores/items';
-    import { tooltip } from './tooltip';
+	import { page } from '$app/stores';
+	import { items } from '../../stores/items';
+	import { tooltip } from './tooltip';
 
-    export let id;
+	export let id;
 
-    $: item = $items.find(i => i.id === id);
+	$: item = $items.find(i => i.id === id);
+	$: title = item.description +
+		(item.type === 'weapon' ? ` (Puissance : ${item.attack})` : '') +
+		(item.type === 'armour' ? ` (Protection : ${item.defense})` : '') +
+		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
+		(item.unique ? ' (unique)' : '');
 </script>
 
 <!-- ATTENTION : termes en français depuis DB (rarity) utilisés dans le nom des classes et options (à refaire si un jour site en anglais...) -->
 <span class="{item.type} {item.rarity}">
-    <!-- Remplacer par BASEURI ou équivalent?? -->
-    <img src={$page.url.origin + "/icons/" + item.icon + ".png"} 
-        alt={item.icon + ' icon by ' + item.credit}
-        title={item.description 
-            + (item.type === 'weapon' ? ` (Puissance : ${item.attack})` : "")
-            + (item.type === 'armour' ? ` (Protection : ${item.defense})` : "")
-            + (item.rarity !== "commun" ? ` (${item.rarity})` : "") 
-            + (item.unique ? " (unique)" : "")}
-        use:tooltip>
-    {#if item.unique}
-        <img src={$page.url.origin + "/star.png"} alt="Objet unique by Kemalmoe" class="unique">
-    {/if}
+	<!-- Remplacer par BASEURI ou équivalent?? -->
+	<img src={$page.url.origin + '/icons/' + item.icon + '.png'}
+		alt={item.icon + ' icon by ' + item.credit}
+		{title}
+		use:tooltip />
+	{#if item.unique}
+		<img src={$page.url.origin + '/star.png'} alt="Objet unique by Kemalmoe" class="unique" {title} use:tooltip />
+	{/if}
 </span>
 
 <style>
-    span {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        width: 25px;
-        height: 25px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-        border-radius: .25em;
-        /* cursor: pointer; */
-    }
-    img {
-        width: 20px;
-        height: 20px;
-    }
+	span {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		width: 25px;
+		height: 25px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+		border-radius: 0.25em;
+		/* cursor: pointer; */
+	}
+	img {
+		width: 20px;
+		height: 20px;
+	}
 
-    /* Type */
-    .weapon {
-        background-color: rgb(255, 205, 205);
-    }
-    .ammunition {
-        background-color: rgb(255, 255, 255);
-    }
-    .armour {
-        background-color: rgb(255, 225, 205);
-    }
-    .food {
-        background-color: rgb(205, 255, 205);
-    }
-    .drink {
-        background-color: rgb(205, 255, 255);
-    }
-    .drug {
-        background-color: rgb(255, 255, 205);
-    }
-    .resource {
-        background-color: rgb(255, 225, 155);
-    }
-    .blueprint {
-        background-color: rgb(255, 205, 255);
-    }
+	/* Type */
+	.weapon {
+		background-color: rgb(255, 205, 205);
+	}
+	.ammunition {
+		background-color: rgb(255, 255, 255);
+	}
+	.armour {
+		background-color: rgb(255, 225, 205);
+	}
+	.food {
+		background-color: rgb(205, 255, 205);
+	}
+	.drink {
+		background-color: rgb(205, 255, 255);
+	}
+	.drug {
+		background-color: rgb(255, 255, 205);
+	}
+	.resource {
+		background-color: rgb(255, 225, 155);
+	}
+	.blueprint {
+		background-color: rgb(255, 205, 255);
+	}
 
-    /* Rarity */
-    .inhabituel {
-        border: 1px solid green;
-    }
-    .rare {
-        border: 1px solid blue;
-    }
-    .épique {
-        border: 1px solid purple;
-    }
-    .légendaire {
-        border: 1px solid orange;
-    }
+	/* Rarity */
+	.inhabituel {
+		border: 1px solid green;
+	}
+	.rare {
+		border: 1px solid blue;
+	}
+	.épique {
+		border: 1px solid purple;
+	}
+	.légendaire {
+		border: 1px solid orange;
+	}
 
-    /* Unique */
-    .unique {
-        width: 12px;
-        height: 12px;
-        position: absolute;
-        top: 0px;
-        right: 0px;
-    }
+	/* Unique */
+	.unique {
+		width: 12px;
+		height: 12px;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+	}
 </style>

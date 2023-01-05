@@ -1,4 +1,4 @@
-import { redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { generateMap, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
 import { canTravel } from '../../../utils/tools';
 
@@ -12,6 +12,7 @@ const nextday = async ({ locals, request }) => {
     const data = await request.formData();
     const power = parseFloat(data.get('power'));
     await getNextDay(locals.user.days, power, locals.user.id, locals.rethinkdb);
+    throw redirect(303, '/map');
 }
 
 const reset = async ({ locals }) => {
@@ -20,9 +21,11 @@ const reset = async ({ locals }) => {
 
 const search = async ({ locals }) => {
     const ap = locals.user.ap;
-    if (ap > 0) {
-        const location = locals.user.location;
-        const map = await getMap(locals.user.id, locals.rethinkdb);
+    const location = locals.user.location;
+    const map = await getMap(locals.user.id, locals.rethinkdb);
+    if (ap > 0 && location !== map.encampment) {
+        // Si la case a déjà été fouillée ce jour, on renvoie une erreur
+        if ((map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
         const danger = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).layout.danger;
         // Gestion de la rareté de la case
         const getItems = (danger) => {
@@ -52,6 +55,8 @@ const search = async ({ locals }) => {
         const foundItem = pool[Math.floor(Math.random() * pool.length)];
         // On met l'item entier dans la case de la map
         (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.push(foundItem);
+        // Faire en une seule fois??
+        (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).searchedBy.push(locals.user.id);
         await getSearch(locals.user.id, map, ap, locals.rethinkdb)
     }
 }
