@@ -23,7 +23,7 @@
 </script>
 
 <td	class={style}
-	style={encampment !== cell.coordinate && cell.visible ? `background-color: rgb(255, 0, 0, ${cell.zombies / 16})` : ''}>
+	style={encampment !== cell.coordinate && cell.visible ? `background-color: rgb(255, 0, 0, ${cell.visited ? (cell.zombies / 16) : (cell.estimated / 16)})` : ''}>
 	{#if travel}
 		<form method="POST" action="?/travel" use:enhance>
 			<input type="text" name="target" value={cell.coordinate} hidden>

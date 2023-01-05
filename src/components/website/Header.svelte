@@ -4,18 +4,18 @@
 </script>
 
 <header>
-	<a href="/">Die2Nite - Reborn</a>
+	<a href="/">Don't Die 2Nite.</a>
 	<nav>
 		{#if !$page.data.user}
-			<a href="/login">Login</a>
-			<a href="/register">Register</a>
+			<a href="/login">Connexion</a>
+			<a href="/register">Enregistrement</a>
 		{:else if $page.data.user}
-			<a href="/map">Go to map</a>
+			<a href="/map">Voir la carte</a>
 			{#if $page.data.user.role === "admin"}
 				<a href="/admin">Administrer le site</a>
 			{/if}
 			<form method="POST" action="/logout" use:enhance>
-				<button type="submit">Logout</button>
+				<button type="submit">Se déconnecter</button>
 			</form>
 		{/if}
 	</nav>

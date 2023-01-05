@@ -2,6 +2,7 @@
 	import { map } from '../../../stores/map';
 	import { user } from '../../../stores/user';
 	import { sortItems } from '../../../utils/tools';
+	import Encampment from '../../../components/map/actions/Encampment.svelte';
 	import Item from '../../../components/game/Item.svelte';
 	import Map from '../../../components/map/Map.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
@@ -35,6 +36,8 @@
 			<span class="title">Actions disponibles :</span>
 			{#if $user.location !== $map.encampment}
 				<Search />
+			{:else if $user.location === $map.encampment}
+				<Encampment />
 			{/if}
 		</div>
 		<div class="items">

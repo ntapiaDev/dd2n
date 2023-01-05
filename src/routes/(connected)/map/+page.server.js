@@ -74,9 +74,18 @@ const travel = async ({ locals, request }) => {
         if (canTravel(location, target, border)) {
             // Faire en une seule fois?? (check si déjà visible et visité ou non??)
             // Trop lourd???
-            (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).estimated = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).zombies;
-            (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visible = true;
-            (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visited = true;
+            // (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).estimated = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).zombies;
+            // (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visible = true;
+            // (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visited = true;
+            for (let i = 0; i < map.rows.length; i++) {
+                for (let j = 0; j < map.rows[i].length; j++) {
+                    if (map.rows[i][j].coordinate === location) map.rows[i][j].estimated = map.rows[i][j].zombies;
+                    if (map.rows[i][j].coordinate === target) {
+                        if (map.rows[i][j].visible !== true) map.rows[i][j].visible = true;
+                        if (map.rows[i][j].visited !== true) map.rows[i][j].visited = true;
+                    }
+                }
+            }
             await getTravel(locals.user.id, target, ap, map, locals.rethinkdb);
         }
     }
