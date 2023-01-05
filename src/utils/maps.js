@@ -40,15 +40,19 @@ export const generateMap = async (user_id, rethinkdb) => {
 }
 
 export const getMap = async (user_id, rethinkdb) => {
-    let map;
-    await r.table('maps').filter(r.row("user_id").eq(user_id)).run(rethinkdb, function (err, cursor) {
-        if (err) throw err;
-        cursor.toArray(function (err, result) {
-            if (err) throw err;
-            map = result[0];
+    // let map;
+    // await r.table('maps').filter(r.row("user_id").eq(user_id)).run(rethinkdb, function (err, cursor) {
+    //     if (err) throw err;
+    //     cursor.toArray(function (err, result) {
+    //         if (err) throw err;
+    //         map = result[0];
+    //     });
+    // });
+    // return map;
+    return r.table('maps').filter({ user_id }).run(rethinkdb)
+        .then(function (result) {
+            return result._responses[0].r[0];
         });
-    });
-    return map;
 }
 
 export const getNextDay = async (days, power, user_id, rethinkdb) => {
@@ -60,14 +64,14 @@ export const getNextDay = async (days, power, user_id, rethinkdb) => {
                 cell.zombies = Math.round(cell.zombies * power + 1);
                 cell.searchedBy = [];
                 cell.visited = false;
-            } 
+            }
         }
     }
 
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1 }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1, 'ap': 100 }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
