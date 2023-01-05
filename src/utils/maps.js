@@ -31,7 +31,7 @@ export const generateMap = async (user_id, rethinkdb) => {
         map_id = result.generated_keys[0];
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': 1 }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': 1, 'ap': 100 }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 
@@ -67,12 +67,17 @@ export const getNextDay = async (days, power, user_id, rethinkdb) => {
     });
 }
 
-export const getSearch = async () => {
-    console.log('test');    
+export const getSearch = async (user_id, map, ap, rethinkdb) => {
+    await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'ap': (ap - 1) }).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
 }
 
 export const getTravel = async (user_id, target, ap, rethinkdb) => {
-    await r.table('users').filter({"id": user_id}).update({'location': target, 'ap': (ap - 1)}).run(rethinkdb, function (err, result) {
+    await r.table('users').filter({ "id": user_id }).update({ 'location': target, 'ap': (ap - 1) }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }

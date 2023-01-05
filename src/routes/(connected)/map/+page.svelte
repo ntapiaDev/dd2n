@@ -62,9 +62,10 @@
 	}
 	.actions,
 	.items {
-		height: 45px;
+		min-height: 45px;
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
 		margin-top: 0.5em;
 		padding: 0.5em;
 		border: 1px solid #aaa;

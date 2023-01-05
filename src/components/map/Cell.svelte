@@ -6,7 +6,7 @@
 	export let cell;
 	export let encampment;
 
-	$: travel = canTravel($user.location, cell.coordinate, cell.layout.border, $user.ap);
+	$: travel = canTravel($user.location, cell.coordinate, cell.layout.border) && $user.ap > 0;
 </script>
 
 <td	class="{encampment === cell.coordinate ? 'encampment' : ''}
