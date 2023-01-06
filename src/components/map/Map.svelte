@@ -1,14 +1,14 @@
 <script>
+	import { page } from '$app/stores';
 	import Row from './Row.svelte';
 
 	export let encampment;
 	export let rows;
-	export let days;
 </script>
 
 <table>
 	<tr>
-		<td>{days}</td>
+		<td>{$page.data.user.days}</td>
 		{#each rows as row, i}
 			<td>{row[i].coordinate.substring(1)}</td>
 		{/each}

@@ -1,7 +1,6 @@
 <script>
+	import { page } from '$app/stores';
 	import { flip } from 'svelte/animate';
-	import { map } from '../../../stores/map';
-	import { user } from '../../../stores/user';
 	import { sortItems } from '../../../utils/tools';
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
 	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
@@ -13,15 +12,15 @@
 	export let data;
 	export let form;
 
-	$: map.set(data.map);
+	$: map = data.map;
 	// Simplifiable?? Trouver la bonne formule ReQL pour accéder à une case en particulier... (+doublon +page.server.js)
-	$: cell = $map.rows.find(row => row.find(c => c.coordinate === $user.location)).find(c => c.coordinate === $user.location);
+	$: cell = map.rows.find(row => row.find(c => c.coordinate === $page.data.user.location)).find(c => c.coordinate === $page.data.user.location);
 </script>
 
-<h1>Vous êtes sur la case {$user.location} :</h1>
+<h1>Vous êtes sur la case {$page.data.user.location} :</h1>
 <section>
 	<div class="map">
-		<Map encampment={$map.encampment} rows={$map.rows} days={$map.days} />
+		<Map encampment={map.encampment} rows={map.rows} />
 		<div>
 			<NextDay power="1.1" />
 			<NextDay power="1.5" />
@@ -35,7 +34,7 @@
 		</div>
 		<div class="actions">
 			<span class="title">Actions disponibles :</span>
-			{#if $user.location === $map.encampment}
+			{#if $page.data.user.location === map.encampment}
 				<Encampment />
 			{/if}
 			<Search />

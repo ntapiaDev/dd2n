@@ -1,14 +1,14 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { user } from '../../stores/user';
+	import { page } from '$app/stores';
 	import { canTravel } from '../../utils/tools';
 
 	export let cell;
 	export let encampment;
 
-	$: travel = canTravel($user.location, cell.coordinate, cell.layout.border) && $user.ap > 0;
+	$: travel = canTravel($page.data.user.location, cell.coordinate, cell.layout.border) && $page.data.user.ap > 0;
 	$: style = (encampment === cell.coordinate ? 'encampment ' : '') +
-	($user.location === cell.coordinate ? 'current ' : '') +
+	($page.data.user.location === cell.coordinate ? 'current ' : '') +
 	(travel ? 'travel ' : '') +
 	(cell.layout.danger === 1 ? 'inner ' : '') +
 	(cell.layout.danger === 2 ? 'middle ' : '') +

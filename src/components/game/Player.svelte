@@ -1,11 +1,11 @@
 <script>
+    import { page } from '$app/stores';
     import { fly } from 'svelte/transition';
-    import { user } from '../../stores/user';
 	import Inventory from './Inventory.svelte';
 
     let player;
-    user.subscribe(value => {
-		player = value;
+    page.subscribe(value => {
+		player = value.data.user;
 	});
 </script>
 

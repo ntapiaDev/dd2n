@@ -1,12 +1,9 @@
 <script>
-	import { user } from '../stores/user';	
 	import Player from '../components/game/Player.svelte';
 	import Footer from '../components/website/Footer.svelte';
 	import Header from '../components/website/Header.svelte';
 
 	export let data;
-
-	$: user.set(data.user);
 </script>
 
 <main>
