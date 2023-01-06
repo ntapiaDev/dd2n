@@ -13,8 +13,7 @@
 	export let form;
 
 	$: map = data.map;
-	// Simplifiable?? Trouver la bonne formule ReQL pour accéder à une case en particulier... (+doublon +page.server.js)
-	$: cell = map.rows.find(row => row.find(c => c.coordinate === $page.data.user.location)).find(c => c.coordinate === $page.data.user.location);
+	$: cell = map.rows[$page.data.user.i][$page.data.user.j];
 </script>
 
 <h1>Vous êtes sur la case {$page.data.user.location} :</h1>

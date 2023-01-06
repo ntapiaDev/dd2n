@@ -55,7 +55,7 @@ export const getMap = async (user_id, rethinkdb) => {
         });
 }
 
-export const getNextDay = async (days, power, user_id, rethinkdb) => {
+export const getNextDay = async (days, location, power, user_id, rethinkdb) => {
     // Transformer en une seule requête update...
     let map = await getMap(user_id, rethinkdb);
     for (let row of map.rows) {
@@ -64,6 +64,7 @@ export const getNextDay = async (days, power, user_id, rethinkdb) => {
                 cell.zombies = Math.round(cell.zombies * power + 1);
                 cell.visited = false;
             }
+            if (location !== encampment && cell.coordinate === location) cell.visited = true;
             cell.searchedBy = [];
         }
     }

@@ -11,7 +11,7 @@ export async function load({ locals }) {
 const nextday = async ({ locals, request }) => {
     const data = await request.formData();
     const power = parseFloat(data.get('power'));
-    await getNextDay(locals.user.days, power, locals.user.id, locals.rethinkdb);
+    await getNextDay(locals.user.days, locals.user.location, power, locals.user.id, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
