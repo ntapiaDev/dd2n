@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 import { sortItems } from './tools';
 
-export const addItem = async (item, rethinkdb) => {
+export const getAddItem = async (item, rethinkdb) => {
     let item_id;
     await r.table('items').insert(item).run(rethinkdb, function (err, result) {
         if (err) throw err;

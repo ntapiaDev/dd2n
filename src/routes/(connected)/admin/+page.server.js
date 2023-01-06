@@ -1,6 +1,11 @@
-import { addItem } from "../../../utils/items";
+import { getAddItem, getItems } from "../../../utils/items";
 
-const item = async ({ locals, request }) => {
+export async function load ({ locals }) {
+    const items = await getItems(locals.rethinkdb);
+    return { items };
+}
+
+const addItem = async ({ locals, request }) => {
     const data = await request.formData();
     const item = {
         'icon': data.get('icon'),
@@ -15,7 +20,7 @@ const item = async ({ locals, request }) => {
         'defense': parseInt(data.get('defense')) || 0,
         'credit': data.get('credit')
     };
-    await addItem(item, locals.rethinkdb);
+    await getAddItem(item, locals.rethinkdb);
 }
 
-export const actions = { item };
+export const actions = { addItem };

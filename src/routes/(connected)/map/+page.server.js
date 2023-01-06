@@ -1,7 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { canTravel } from '../../../utils/tools';
 import { generateMap, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
-import { moveItem } from '../../../utils/items';
+import { getItems, moveItem } from '../../../utils/items';
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
@@ -49,6 +49,7 @@ const search = async ({ locals }) => {
     const ap = locals.user.ap;
     const location = locals.user.location;
     const map = await getMap(locals.user.id, locals.rethinkdb);
+    const itemList = await getItems(locals.rethinkdb);
     if (ap > 0) {
         // Si la case a déjà été fouillée ce jour, on renvoie une erreur
         if ((map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
@@ -56,11 +57,11 @@ const search = async ({ locals }) => {
         // Gestion de la rareté de la case
         const getItems = (danger) => {
             if (danger === 1) {
-                return locals.items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel'].includes(i.rarity));
+                return itemList.filter(i => i.type !== 'misc' && ['commun', 'inhabituel'].includes(i.rarity));
             } else if (danger === 2) {
-                return locals.items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare'].includes(i.rarity));
+                return itemList.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare'].includes(i.rarity));
             } else if (danger === 3) {
-                return locals.items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare', 'épique'].includes(i.rarity));
+                return itemList.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare', 'épique'].includes(i.rarity));
             }
         }
         const items = getItems(danger);

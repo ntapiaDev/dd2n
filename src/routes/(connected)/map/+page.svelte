@@ -42,9 +42,9 @@
 		</div>
 		<div class="items">
 			<span class="title">Objets au sol :</span>
-			{#each sortItems(cell.items) as { id, uuid } (uuid)}
+			{#each sortItems(cell.items) as item (item.uuid)}
 				<span animate:flip>
-					<InteractiveItem {id} action={'/map?/pickUp'} />
+					<InteractiveItem {item} action={'/map?/pickUp'} />
 				</span>
 			{/each}
 		</div>

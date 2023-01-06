@@ -20,9 +20,6 @@ export const handle = async ({ event, resolve }) => {
     });
     event.locals = { rethinkdb };
 
-    // Chargement des objets
-    event.locals.items = await getItems(rethinkdb);
-
     let user;
     // Récupération de la session et sécurisation des routes
     const SESSIONID = await event.cookies.get('SESSIONID');

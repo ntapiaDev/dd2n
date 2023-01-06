@@ -2,14 +2,14 @@
 	import { enhance } from '$app/forms';
 	import Item from '../../game/Item.svelte';
 
-	export let id;
+	export let item;
 	export let action;
 </script>
 
 <form method="POST" {action} use:enhance>
-	<input type="text" name="id" value={id} hidden>
+	<input type="text" name="id" value={item.id} hidden>
 	<button>
-		<Item {id} />
+		<Item {item} />
 	</button>
 </form>
 

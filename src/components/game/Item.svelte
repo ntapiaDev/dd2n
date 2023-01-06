@@ -1,12 +1,10 @@
 <script>
 	import { page } from '$app/stores';
-	import { items } from '../../stores/items';
 	import { tooltip } from './tooltip';
 
-	export let id;
+	export let item;
 
-	$: item = $items.find(i => i.id === id);
-	$: title = item.description +
+	const title = item.description +
 		(item.type === 'weapon' ? ` (Puissance : ${item.attack})` : '') +
 		(item.type === 'armour' ? ` (Protection : ${item.defense})` : '') +
 		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +

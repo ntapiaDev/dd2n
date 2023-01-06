@@ -1,13 +1,15 @@
 <script>
 	import { enhance } from '$app/forms';
-	import { items } from '../../../stores/items';
 	import Item from '../../../components/game/Item.svelte';
+
+	export let data;
+	let items = data.items;
 </script>
 
 <h1>Administration du site</h1>
 <section>
 	<h2>Ajouter des objets :</h2>
-	<form method="POST" action="?/item" use:enhance>
+	<form method="POST" action="?/addItem" use:enhance>
 		<div class="infos">
 			<input type="text" name="icon" placeholder="Icone" required />
 			<input type="text" name="description" placeholder="Description" required />
@@ -44,62 +46,62 @@
 			<button type="submit">Ajouter</button>
 		</div>
 	</form>
-	<h2>Liste des objets ({$items.length}) :</h2>
+	<h2>Liste des objets ({ items.length }) :</h2>
 	<div class="list">
 		<!-- Optimiser et refactoriser -->
 		<!-- Afficher quantité par catégorie -->
 		<h3>Nourriture :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'food'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'food'}
+				<Item {item} />
 			{/if}
 		{/each}
 		<h3>Boisson :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'drink'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'drink'}
+				<Item {item} />
 			{/if}
 		{/each}
 		<h3>Médicament :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'drug'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'drug'}
+				<Item {item} />
 			{/if}
 		{/each}
 		<h3>Arme :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'weapon'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'weapon'}
+				<Item {item} />
 			{/if}
 		{/each}
 		<h3>Munition :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'ammunition'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'ammunition'}
+				<Item {item} />
 			{/if}
 		{/each}
 		<h3>Armure :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'armour'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'armour'}
+				<Item {item} />
 			{/if}
 		{/each}
 		<h3>Ressource :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'resource'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'resource'}
+				<Item {item} />
 			{/if}
 		{/each}
 		<h3>Plan :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'blueprint'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'blueprint'}
+				<Item {item} />
 			{/if}
 		{/each}
 		<h3>Divers :</h3>
-		{#each $items as { id, type }}
-			{#if type === 'misc'}
-				<Item {id} />
+		{#each items as item}
+			{#if item.type === 'misc'}
+				<Item {item} />
 			{/if}
 		{/each}
 	</div>

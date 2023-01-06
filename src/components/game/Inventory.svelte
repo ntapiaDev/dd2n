@@ -10,9 +10,9 @@
 
 <span class="inventory">
     <span class="title">Inventaire :</span>
-    {#each sortItems(items) as { id, uuid} (uuid)}
+    {#each sortItems(items) as item (item.uuid)}
         <span class="animation" animate:flip>         
-            <Item {id} />            
+            <Item {item} />            
         </span>
     {/each}
     {#each Array(size - items.length) as _}
