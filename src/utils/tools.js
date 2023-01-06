@@ -17,6 +17,7 @@ export const sortItems = (items) => {
 }
 
 // Fusionner les deux en une + letters??
+// Faire avec i et j au lieu des lettres
 export const canTravel = (location, target, border) => {
     const distance = Math.abs(letters.indexOf(location[0]) - letters.indexOf(target[0])) + Math.abs(target.substring(1) - location.substring(1)) === 1;
     if (distance) return !border.includes(direction(location, target));

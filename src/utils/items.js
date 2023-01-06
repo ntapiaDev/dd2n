@@ -11,15 +11,19 @@ export const getAddItem = async (item, rethinkdb) => {
 }
 
 export const getItems = async (rethinkdb) => {
-    let items;
-    await r.table('items').orderBy('id').run(rethinkdb, function (err, cursor) {
-        if (err) throw err;
-        cursor.toArray(function (err, result) {
-            if (err) throw err;
-            items = result;
+    // let items;
+    // await r.table('items').run(rethinkdb, function (err, cursor) {
+    //     if (err) throw err;
+    //     cursor.toArray(function (err, result) {
+    //         if (err) throw err;
+    //         items = result;
+    //     });
+    // });
+    // return sortItems(items);
+    return r.table('items').run(rethinkdb)
+        .then(function (result) {
+            return sortItems(result._responses[0].r);
         });
-    });
-    return sortItems(items);
 }
 
 // Importance de l'ordre? Enlever l'item avant de le déplacer pour éviter les duplicas?

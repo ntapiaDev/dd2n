@@ -1,6 +1,5 @@
 import r from 'rethinkdb';
 import { HOST, PORT, DB, USER, PASSWORD } from '$env/static/private';
-import { getItems } from './utils/items';
 import { getBySESSIONID } from './utils/users';
 
 const redirect = (location) =>
@@ -22,7 +21,7 @@ export const handle = async ({ event, resolve }) => {
 
     let user;
     // Récupération de la session et sécurisation des routes
-    const SESSIONID = await event.cookies.get('SESSIONID');
+    const SESSIONID = event.cookies.get('SESSIONID');
     if (SESSIONID) user = await getBySESSIONID(SESSIONID, rethinkdb);
 
     if (!user && (event.url.pathname !== '/login' && event.url.pathname !== '/register')) {
@@ -48,6 +47,8 @@ export const handle = async ({ event, resolve }) => {
         role: user.role,
         days: user.days,
         location: user.location,
+        i: user.i,
+        j: user.j,
         ap: user.ap,
         life: user.life,
         hunger: user.hunger,

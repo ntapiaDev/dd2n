@@ -18,18 +18,19 @@ const nextday = async ({ locals, request }) => {
 const pickUp = async ({ locals, request }) => {
     const data = await request.formData();
     const id = data.get('id');
-    const location = locals.user.location;
+    const li = locals.user.i;
+    const lj = locals.user.j;
     const map = await getMap(locals.user.id, locals.rethinkdb);
     // On vérifie que l'item est bien présent à son point d'origine
-    if (!map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location).items.some(i => i.id === id)) return fail(400, { origin: true });
+    if (!map.rows[li][lj].items.some(i => i.id === id)) return fail(400, { origin: true });
     // On vérifie que l'inventaire n'est pas plein
     if (locals.user.inventory.length === 10) return fail(400, { full: true });
 
     // Possibilité de simplifier...?
     const getItem = () => {
-        for (let item of (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items) {
+        for (let item of map.rows[li][lj].items) {
             if (item.id === id) {
-                (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.splice((map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.indexOf(item), 1);
+                map.rows[li][lj].items.splice(map.rows[li][lj].items.indexOf(item), 1);
                 return item;
             }
         }
@@ -46,14 +47,16 @@ const reset = async ({ locals }) => {
 
 const search = async ({ locals }) => {
     const ap = locals.user.ap;
-    const location = locals.user.location;
+    const li = locals.user.i;
+    const lj = locals.user.j;
     const map = await getMap(locals.user.id, locals.rethinkdb);
     const itemList = await getItems(locals.rethinkdb);
     if (ap > 0) {
         // Si la case a déjà été fouillée ce jour, on renvoie une erreur
-        if ((map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
-        const danger = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).layout.danger;
+        if (map.rows[li][lj].searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
+        const danger = map.rows[li][lj].layout.danger;
         // Gestion de la rareté de la case
+        // Faire 3 requêtes séparées??
         const getItems = (danger) => {
             if (danger === 1) {
                 return itemList.filter(i => i.type !== 'misc' && ['commun', 'inhabituel'].includes(i.rarity));
@@ -83,40 +86,38 @@ const search = async ({ locals }) => {
         foundItem.uuid = crypto.randomUUID();
         // On met l'item entier dans la case de la map
         // Faire en une seule fois??
-        (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.push(foundItem);
-        (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).searchedBy.push(locals.user.id);
+        map.rows[li][lj].items.push(foundItem);
+        map.rows[li][lj].searchedBy.push(locals.user.id);
         await getSearch(locals.user.id, map, ap, locals.rethinkdb)
-    }
+    } else return fail(400, { exhausted: true })
 }
 
 const travel = async ({ locals, request }) => {
     const ap = locals.user.ap;
     if (ap > 0) {
         const location = locals.user.location;
+        const li = locals.user.i;
+        const lj = locals.user.j;
         const data = await request.formData();
         const target = data.get('target');
+        const ti = data.get('ti');
+        const tj = data.get('tj');
         const map = await getMap(locals.user.id, locals.rethinkdb);
+        if (map.rows[ti][tj].coordinate !== target) return fail(400, { location: true });
         // Refactoriser?? utilisé sur +page.svelte aussi
-        const border = (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).layout.border;
+        const border = map.rows[ti][tj].layout.border;
         // Vérification de la possibilité de voyager (anti-triche)
         if (canTravel(location, target, border)) {
-            // Faire en une seule fois?? (check si déjà visible et visité ou non??)
             // Trop lourd???
             // (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).estimated = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).zombies;
             // (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visible = true;
             // (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visited = true;
-            for (let i = 0; i < map.rows.length; i++) {
-                for (let j = 0; j < map.rows[i].length; j++) {
-                    if (map.rows[i][j].coordinate === location) map.rows[i][j].estimated = map.rows[i][j].zombies;
-                    if (map.rows[i][j].coordinate === target) {
-                        if (map.rows[i][j].visible !== true) map.rows[i][j].visible = true;
-                        if (map.rows[i][j].visited !== true) map.rows[i][j].visited = true;
-                    }
-                }
-            }
-            await getTravel(locals.user.id, target, ap, map, locals.rethinkdb);
+            map.rows[li][lj].estimated = map.rows[li][lj].zombies;
+            if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
+            if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
+            await getTravel(locals.user.id, target, ti, tj, ap, map, locals.rethinkdb);
         }
-    }
+    } else return fail(400, { exhausted: true })
     throw redirect(303, '/map');
 }
 

@@ -21,7 +21,7 @@ export const generateMap = async (user_id, rethinkdb) => {
             const zombies = Math.floor(Math.random() * (distance - 2)); // Définit la difficulté : proximité des zombies par rapport au campement
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
-            row.push({ 'coordinate': letters[i] + j, 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'estimated': 0, 'items': [], 'searchedBy': [], visible, visited });
+            row.push({ 'coordinate': letters[i] + j, i, 'j': (j - 1), 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'estimated': 0, 'items': [], 'searchedBy': [], visible, visited });
         }
         rows.push(row);
     }
@@ -32,7 +32,7 @@ export const generateMap = async (user_id, rethinkdb) => {
         map_id = result.generated_keys[0];
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': 1, 'ap': 100, 'location': encampment, 'inventory': [] }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': 1, 'ap': 100, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [] }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 
@@ -85,8 +85,8 @@ export const getSearch = async (user_id, map, ap, rethinkdb) => {
     });
 }
 
-export const getTravel = async (user_id, target, ap, map, rethinkdb) => {
-    await r.table('users').filter({ "id": user_id }).update({ 'location': target, 'ap': (ap - 1) }).run(rethinkdb, function (err, result) {
+export const getTravel = async (user_id, target, ti, tj, ap, map, rethinkdb) => {
+    await r.table('users').filter({ "id": user_id }).update({ 'location': target, 'i': ti, 'j': tj, 'ap': (ap - 1) }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {

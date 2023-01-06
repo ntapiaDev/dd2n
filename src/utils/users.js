@@ -26,15 +26,19 @@ export const addUser = async (user, rethinkdb) => {
 }
 
 export const getBySESSIONID = async (SESSIONID, rethinkdb) => {
-    let user;
-    await r.table('users').filter(r.row("sessionid").eq(SESSIONID)).run(rethinkdb, function (err, cursor) {
-        if (err) throw err;
-        cursor.toArray(function (err, result) {
-            if (err) throw err;
-            user = result[0];
+    // let user;
+    // await r.table('users').filter(r.row("sessionid").eq(SESSIONID)).run(rethinkdb, function (err, cursor) {
+    //     if (err) throw err;
+    //     cursor.toArray(function (err, result) {
+    //         if (err) throw err;
+    //         user = result[0];
+    //     });
+    // });
+    // return user;
+    return r.table('users').filter({ sessionid: SESSIONID }).run(rethinkdb)
+        .then(function (result) {
+            return result._responses[0].r[0];
         });
-    });
-    return user
 }
 
 export const getByUsername = async (username, rethinkdb) => {
@@ -46,7 +50,7 @@ export const getByUsername = async (username, rethinkdb) => {
             user = result[0];
         });
     });
-    return user
+    return user;
 }
 
 export const refreshSESSIONID = async (SESSIONID, rethinkdb) => {
@@ -56,8 +60,6 @@ export const refreshSESSIONID = async (SESSIONID, rethinkdb) => {
     });
     return NEW_SESSIONID;
 }
-
-
 
 export const setSession = async (cookies, SESSIONID) => {
     cookies.set('SESSIONID', SESSIONID, {

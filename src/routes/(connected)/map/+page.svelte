@@ -47,8 +47,14 @@
 				</span>
 			{/each}
 		</div>
+		{#if form?.exhausted}
+			<p>Vous n'avez plus assez de points d'action.</p>
+		{/if}
 		{#if form?.full}
 			<p>Votre inventaire est plein.</p>
+		{/if}
+		{#if form?.location}
+			<p>Vous n'êtes pas sur la bonne case.</p>
 		{/if}
 		{#if form?.origin}
 			<p>Cet objet n'est pas présent sur la case.</p>

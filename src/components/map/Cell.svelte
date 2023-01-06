@@ -27,6 +27,8 @@
 	{#if travel}
 		<form method="POST" action="?/travel" use:enhance>
 			<input type="text" name="target" value={cell.coordinate} hidden>
+			<input type="text" name="ti" value={cell.i} hidden>
+			<input type="text" name="tj" value={cell.j} hidden>
 			<button>{cell.coordinate === encampment ? 'C' : (cell.visible ? (cell.visited ? cell.zombies : cell.estimated) : '?')}</button>
 		</form>
 	{:else if cell.visible}
