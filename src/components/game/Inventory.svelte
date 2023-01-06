@@ -1,33 +1,38 @@
 <script>
+    import { flip } from 'svelte/animate';
     import { sortItems } from '../../utils/tools';
 	import Item from './Item.svelte';
 
 	export let items;
-    $: sortItems(items);
 
     let size = 10; // Taille changeable si items de stockage (sac, etc) importés dans items.
 </script>
 
 <span class="inventory">
     <span class="title">Inventaire :</span>
-    {#each Array(size) as _, i}
-        {#if items[i]}
-            <Item id={items[i].id} />
-        {:else}
-            <span class="empty"></span>
-        {/if}
+    {#each sortItems(items) as { id, uuid} (uuid)}
+        <span class="animation" animate:flip>         
+            <Item {id} />            
+        </span>
+    {/each}
+    {#each Array(size - items.length) as _}
+        <span class="empty"></span>
     {/each}
     <span class="total">({items.length}/{size})</span>
 </span>
 
 <style>
     .inventory {
-        display: flex;
+        display: inline-flex;
     }
     .title {
         display: flex;
         align-items: center;
         margin: 0 4px;
+    }
+    .animation {
+        width: 25px;
+        height: 25px;
     }
     .empty {
         width: 25px;

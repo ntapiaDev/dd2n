@@ -79,6 +79,8 @@ const search = async ({ locals }) => {
             }
         }
         const foundItem = pool[Math.floor(Math.random() * pool.length)];
+        foundItem.quality = 50 + Math.round(Math.random() * 50);
+        foundItem.uuid = crypto.randomUUID();
         // On met l'item entier dans la case de la map
         // Faire en une seule fois??
         (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.push(foundItem);

@@ -16,9 +16,11 @@ export function tooltip(element) {
 			border-radius: 4px;
 			padding: 4px;
 			position: absolute;
-			top: ${event.pageX + 5}px;
-			left: ${event.pageY + 5}px;
+			top: -50px;
+			left: -50px;
 		`;
+        // top: ${event.pageX + 5}px;
+		// left: ${event.pageY + 5}px;
         document.body.appendChild(div);
     }
     function mouseMove(event) {
@@ -40,6 +42,10 @@ export function tooltip(element) {
             element.removeEventListener('mouseover', mouseOver);
             element.removeEventListener('mouseleave', mouseLeave);
             element.removeEventListener('mousemove', mouseMove);
+            // Pour faire disparaitre le tooltip...
+            if (div && document.body.contains(div)) {
+                document.body.removeChild(div);
+            }
         }
     }
 }

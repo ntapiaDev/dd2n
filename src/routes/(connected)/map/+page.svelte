@@ -1,4 +1,5 @@
 <script>
+	import { flip } from 'svelte/animate';
 	import { map } from '../../../stores/map';
 	import { user } from '../../../stores/user';
 	import { sortItems } from '../../../utils/tools';
@@ -41,8 +42,10 @@
 		</div>
 		<div class="items">
 			<span class="title">Objets au sol :</span>
-			{#each sortItems(cell.items) as { id }}
-				<InteractiveItem {id} action={'/map?/pickUp'} />
+			{#each sortItems(cell.items) as { id, uuid } (uuid)}
+				<span animate:flip>
+					<InteractiveItem {id} action={'/map?/pickUp'} />
+				</span>
 			{/each}
 		</div>
 		{#if form?.full}

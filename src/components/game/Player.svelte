@@ -10,7 +10,12 @@
 </script>
 
 <div in:fly={{ y: -30, duration: 500}}>
-    {player.username} - Jour {player.days} - {player.location} - {player.ap} PA - Vie : {player.life} PV - Faim {player.hunger} - Soif : {player.thirst} - Maladie : {player.disease} - <Inventory items={player.inventory} />
+    <span>
+        {player.username} - Jour {player.days} - {player.location} - Vie : {player.life} PV - Faim {player.hunger} - Soif : {player.thirst} - Maladie : {player.disease} - <Inventory items={player.inventory} />
+    </span>
+    <span>
+        {player.ap} PA
+    </span>
 </div>
 
 <style>
@@ -18,7 +23,7 @@
         width: 1000px;
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         margin: 0 auto;
         padding: 0.5em 2em;
         background-color: #EEE;
