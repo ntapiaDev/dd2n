@@ -3,7 +3,7 @@
 	import { user } from '../../../stores/user';
 	import { sortItems } from '../../../utils/tools';
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
-	import Item from '../../../components/game/Item.svelte';
+	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
 	import Map from '../../../components/map/Map.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
@@ -34,19 +34,23 @@
 		</div>
 		<div class="actions">
 			<span class="title">Actions disponibles :</span>
-			{#if $user.location !== $map.encampment}
-				<Search />
-			{:else if $user.location === $map.encampment}
+			{#if $user.location === $map.encampment}
 				<Encampment />
 			{/if}
+			<Search />
 		</div>
 		<div class="items">
 			<span class="title">Objets au sol :</span>
 			{#each sortItems(cell.items) as { id }}
-				<Item {id} />
+				<InteractiveItem {id} action={'/map?/pickUp'} />
 			{/each}
-			<!-- Ramasser et déposer un objet au clic sur l'objet -->
 		</div>
+		{#if form?.full}
+			<p>Votre inventaire est plein.</p>
+		{/if}
+		{#if form?.origin}
+			<p>Cet objet n'est pas présent sur la case.</p>
+		{/if}
 		{#if form?.searched}
 			<p>Vous avez déjà fouillé cette zone aujourd'hui.</p>
 		{/if}

@@ -12,7 +12,7 @@
     <span class="title">Inventaire :</span>
     {#each Array(size) as _, i}
         {#if items[i]}
-            <span><Item id={items[i].id} /></span>
+            <Item id={items[i].id} />
         {:else}
             <span class="empty"></span>
         {/if}

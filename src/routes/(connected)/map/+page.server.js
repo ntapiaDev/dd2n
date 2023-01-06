@@ -1,6 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { generateMap, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
 import { canTravel } from '../../../utils/tools';
+import { generateMap, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
+import { moveItem } from '../../../utils/items';
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
@@ -15,6 +16,31 @@ const nextday = async ({ locals, request }) => {
     throw redirect(303, '/map');
 }
 
+const pickUp = async ({ locals, request }) => {
+    const data = await request.formData();
+    const id = data.get('id');
+    const location = locals.user.location;
+    const map = await getMap(locals.user.id, locals.rethinkdb);
+    // On vérifie que l'item est bien présent à son point d'origine
+    if (!map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location).items.some(i => i.id === id)) return fail(400, { origin: true });
+    // On vérifie que l'inventaire n'est pas plein
+    if (locals.user.inventory.length === 10) return fail(400, { full: true });
+
+    // Possibilité de simplifier...?
+    const getItem = () => {
+        for (let item of (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items) {
+            if (item.id === id) {
+                (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.splice((map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).items.indexOf(item), 1);
+                return item;
+            }
+        }
+    }
+    const inventory = locals.user.inventory;
+    inventory.push(getItem())
+    await moveItem(locals.user.id, map, inventory, locals.rethinkdb);
+    throw redirect(303, '/map');
+}
+
 const reset = async ({ locals }) => {
     await generateMap(locals.user.id, locals.rethinkdb);
 }
@@ -23,7 +49,7 @@ const search = async ({ locals }) => {
     const ap = locals.user.ap;
     const location = locals.user.location;
     const map = await getMap(locals.user.id, locals.rethinkdb);
-    if (ap > 0 && location !== map.encampment) {
+    if (ap > 0) {
         // Si la case a déjà été fouillée ce jour, on renvoie une erreur
         if ((map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
         const danger = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).layout.danger;
@@ -92,4 +118,4 @@ const travel = async ({ locals, request }) => {
     throw redirect(303, '/map');
 }
 
-export const actions = { nextday, reset, search, travel };
+export const actions = { nextday, pickUp, reset, search, travel };

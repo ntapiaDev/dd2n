@@ -62,9 +62,9 @@ export const getNextDay = async (days, power, user_id, rethinkdb) => {
         for (let cell of row) {
             if (cell.coordinate !== encampment) {
                 cell.zombies = Math.round(cell.zombies * power + 1);
-                cell.searchedBy = [];
                 cell.visited = false;
             }
+            cell.searchedBy = [];
         }
     }
 

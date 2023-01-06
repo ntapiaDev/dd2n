@@ -21,3 +21,13 @@ export const getItems = async (rethinkdb) => {
     });
     return sortItems(items);
 }
+
+// Importance de l'ordre? Enlever l'item avant de le déplacer pour éviter les duplicas?
+export const moveItem = async (user_id, map, inventory, rethinkdb) => {
+    await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'inventory': inventory }).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+}
