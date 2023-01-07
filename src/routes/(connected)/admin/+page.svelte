@@ -1,9 +1,43 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { flip } from 'svelte/animate';
+	import { sortItems } from '../../../utils/tools';
 	import Item from '../../../components/game/Item.svelte';
 
 	export let data;
-	let items = data.items;
+	$: items = sortItems(data.items);
+
+	const types = [
+		'Nourriture',
+		'Boisson',
+		'Médicament',
+		'Arme',
+		'Munition',
+		'Armure',
+		'Ressource',
+		'Plan',
+		'Divers'
+	];
+
+	let itemsArray = [];
+
+	$: if (items) {
+		let type = 'food';
+		let i = 0;
+		let row = [];
+		itemsArray = [];
+		for (let item of items) {
+			if (item.type === type) row.push(item);
+			else {
+				itemsArray.push(row);
+				type = item.type;
+				row = [];
+				row.push(item);
+				i++;
+			}
+		}
+		itemsArray.push(row);
+	}
 </script>
 
 <h1>Administration du site</h1>
@@ -46,63 +80,15 @@
 			<button type="submit">Ajouter</button>
 		</div>
 	</form>
-	<h2>Liste des objets ({ items.length }) :</h2>
+	<h2>Liste des objets ({items.length}) :</h2>
 	<div class="list">
-		<!-- Optimiser et refactoriser -->
-		<!-- Afficher quantité par catégorie -->
-		<h3>Nourriture :</h3>
-		{#each items as item}
-			{#if item.type === 'food'}
-				<Item {item} />
-			{/if}
-		{/each}
-		<h3>Boisson :</h3>
-		{#each items as item}
-			{#if item.type === 'drink'}
-				<Item {item} />
-			{/if}
-		{/each}
-		<h3>Médicament :</h3>
-		{#each items as item}
-			{#if item.type === 'drug'}
-				<Item {item} />
-			{/if}
-		{/each}
-		<h3>Arme :</h3>
-		{#each items as item}
-			{#if item.type === 'weapon'}
-				<Item {item} />
-			{/if}
-		{/each}
-		<h3>Munition :</h3>
-		{#each items as item}
-			{#if item.type === 'ammunition'}
-				<Item {item} />
-			{/if}
-		{/each}
-		<h3>Armure :</h3>
-		{#each items as item}
-			{#if item.type === 'armour'}
-				<Item {item} />
-			{/if}
-		{/each}
-		<h3>Ressource :</h3>
-		{#each items as item}
-			{#if item.type === 'resource'}
-				<Item {item} />
-			{/if}
-		{/each}
-		<h3>Plan :</h3>
-		{#each items as item}
-			{#if item.type === 'blueprint'}
-				<Item {item} />
-			{/if}
-		{/each}
-		<h3>Divers :</h3>
-		{#each items as item}
-			{#if item.type === 'misc'}
-				<Item {item} />
-			{/if}
+		{#each itemsArray as row, i}
+			<h3>{types[i]} ({row.length}) :</h3>
+			{#each row as item (item.id)}
+				<span animate:flip>
+					<Item {item} />
+				</span>
+			{/each}
 		{/each}
 	</div>
 </section>
@@ -143,5 +129,8 @@
 	}
 	.stats button {
 		width: 150px;
+	}
+	span {
+		display: inline-block;
 	}
 </style>
