@@ -37,7 +37,7 @@ export const getBySESSIONID = async (SESSIONID, rethinkdb) => {
     // return user;
     return r.table('users').filter({ sessionid: SESSIONID }).run(rethinkdb)
         .then(function (result) {
-            return result._responses[0].r[0];
+            return result._responses[0]?.r[0];
         });
 }
 

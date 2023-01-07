@@ -39,7 +39,7 @@
 			<Search />
 		</div>
 		<div class="items">
-			<span class="title">Objets au sol :</span>
+			<span class="title">Objets au sol ({ cell.items.length }) :</span>
 			{#each sortItems(cell.items) as item (item.uuid)}
 				<span animate:flip>
 					<InteractiveItem {item} action={'/map?/pickUp'} />
@@ -56,7 +56,7 @@
 			<p>Vous n'êtes pas sur la bonne case.</p>
 		{/if}
 		{#if form?.origin}
-			<p>Cet objet n'est pas présent sur la case.</p>
+			<p>Cet objet n'est pas présent sur la case ou dans votre inventaire.</p>
 		{/if}
 		{#if form?.searched}
 			<p>Vous avez déjà fouillé cette zone aujourd'hui.</p>

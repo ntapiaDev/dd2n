@@ -1,7 +1,7 @@
 <script>
     import { flip } from 'svelte/animate';
     import { sortItems } from '../../utils/tools';
-	import Item from './Item.svelte';
+	import InteractiveItem from '../map/actions/InteractiveItem.svelte';
 
 	export let items;
 
@@ -12,7 +12,7 @@
     <span class="title">Inventaire :</span>
     {#each sortItems(items) as item (item.uuid)}
         <span class="animation" animate:flip>         
-            <Item {item} />            
+            <InteractiveItem {item} action={'/map?/drop'} />         
         </span>
     {/each}
     {#each Array(size - items.length) as _}

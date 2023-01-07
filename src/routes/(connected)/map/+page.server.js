@@ -8,11 +8,29 @@ export async function load({ locals }) {
     return { map };
 }
 
-const nextday = async ({ locals, request }) => {
+const drop = async ({ locals, request }) => {
     const data = await request.formData();
-    const power = parseFloat(data.get('power'));
-    await getNextDay(locals.user.days, locals.user.location, power, locals.user.id, locals.rethinkdb);
+    const id = data.get('id');
+    const inventory = locals.user.inventory;
+    // On vérifie que l'item est bien présent à son point d'origine
+    if (!inventory.some(i => i.id === id)) return fail(400, { origin: true });
+    // Possibilité de simplifier...?
+    const getItem = () => {
+        for (let item of inventory) {
+            if (item.id === id) {
+                inventory.splice(inventory.indexOf(item), 1);
+                return item;
+            }
+        }
+    }
+    const map = await getMap(locals.user.id, locals.rethinkdb);
+    map.rows[locals.user.i][locals.user.j].items.push(getItem())
+    await moveItem(locals.user.id, map, inventory, locals.rethinkdb);
     throw redirect(303, '/map');
+}
+
+const nextday = async ({ locals }) => {
+    await getNextDay(locals.user.days, locals.user.location, locals.user.id, locals.rethinkdb);
 }
 
 const pickUp = async ({ locals, request }) => {
@@ -24,8 +42,8 @@ const pickUp = async ({ locals, request }) => {
     // On vérifie que l'item est bien présent à son point d'origine
     if (!map.rows[li][lj].items.some(i => i.id === id)) return fail(400, { origin: true });
     // On vérifie que l'inventaire n'est pas plein
-    if (locals.user.inventory.length === 10) return fail(400, { full: true });
-
+    const inventory = locals.user.inventory;
+    if (inventory.length === 10) return fail(400, { full: true });
     // Possibilité de simplifier...?
     const getItem = () => {
         for (let item of map.rows[li][lj].items) {
@@ -35,7 +53,6 @@ const pickUp = async ({ locals, request }) => {
             }
         }
     }
-    const inventory = locals.user.inventory;
     inventory.push(getItem())
     await moveItem(locals.user.id, map, inventory, locals.rethinkdb);
     throw redirect(303, '/map');
@@ -69,24 +86,30 @@ const search = async ({ locals }) => {
         const items = getItems(danger);
         let pool = [];
         for (let item of items) {
-            // Probabilité en fonction du type
-            const type = item.type === 'resource' ? 10 :
-                ['food', 'drink', 'ammunition'].includes(item.type) ? 3 :
-                ['drug', 'weapon', 'armour'].includes(item.type) ? 2 : 1;
-            // Probabilité en fonction de la rareté
-            const rarity = item.rarity === 'commun' ? 5 :
-                item.rarity === 'inhabituel' ? 3 :
-                item.rarity === 'rare' ? 2 : 1;
-            for (let i = 0; i < (type * rarity); i++) {
-                pool.push(item);
+            if (!item.unique || !map.uniques.includes(item.id)) {
+                // Probabilité en fonction du type
+                const type = item.type === 'resource' ? 10 :
+                    ['food', 'drink', 'ammunition'].includes(item.type) ? 3 :
+                    ['drug', 'weapon', 'armour'].includes(item.type) ? 2 : 1;
+                // Probabilité en fonction de la rareté
+                const rarity = item.rarity === 'commun' ? 5 :
+                    item.rarity === 'inhabituel' ? 3 :
+                    item.rarity === 'rare' ? 2 : 1;
+                for (let i = 0; i < (type * rarity); i++) {
+                    pool.push(item);
+                }
             }
         }
-        const foundItem = pool[Math.floor(Math.random() * pool.length)];
-        foundItem.quality = 50 + Math.round(Math.random() * 50);
-        foundItem.uuid = crypto.randomUUID();
-        // On met l'item entier dans la case de la map
-        // Faire en une seule fois??
-        map.rows[li][lj].items.push(foundItem);
+        // Possibilité de trouver jusqu'à 3 objets à la fois
+        for (let i = 0; i < Math.ceil(Math.random() * 3); i++) {
+            const foundItem = pool[Math.floor(Math.random() * pool.length)];
+            foundItem.quality = 50 + Math.round(Math.random() * 50);
+            foundItem.uuid = crypto.randomUUID();
+            // On met l'item entier dans la case de la map
+            map.rows[li][lj].items.push(foundItem);
+            // Gestion des objets uniques
+            if (foundItem.unique) map.uniques.push(foundItem.id);
+        }
         map.rows[li][lj].searchedBy.push(locals.user.id);
         await getSearch(locals.user.id, map, ap, locals.rethinkdb)
     } else return fail(400, { exhausted: true })
@@ -121,4 +144,4 @@ const travel = async ({ locals, request }) => {
     throw redirect(303, '/map');
 }
 
-export const actions = { nextday, pickUp, reset, search, travel };
+export const actions = { drop, nextday, pickUp, reset, search, travel };

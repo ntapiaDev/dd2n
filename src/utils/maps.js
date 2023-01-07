@@ -51,17 +51,17 @@ export const getMap = async (user_id, rethinkdb) => {
     // return map;
     return r.table('maps').filter({ user_id }).run(rethinkdb)
         .then(function (result) {
-            return result._responses[0].r[0];
+            return result._responses[0]?.r[0];
         });
 }
 
-export const getNextDay = async (days, location, power, user_id, rethinkdb) => {
+export const getNextDay = async (days, location, user_id, rethinkdb) => {
     // Transformer en une seule requête update...
     let map = await getMap(user_id, rethinkdb);
     for (let row of map.rows) {
         for (let cell of row) {
             if (cell.coordinate !== encampment) {
-                cell.zombies = Math.round(cell.zombies * power + 1);
+                cell.zombies = Math.round(cell.zombies * (1 + (cell.layout.danger / 10)) + 1);
                 cell.visited = false;
             }
             if (location !== encampment && cell.coordinate === location) cell.visited = true;

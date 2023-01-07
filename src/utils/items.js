@@ -22,7 +22,7 @@ export const getItems = async (rethinkdb) => {
     // return sortItems(items);
     return r.table('items').run(rethinkdb)
         .then(function (result) {
-            return sortItems(result._responses[0].r);
+            return sortItems(result._responses[0]?.r);
         });
 }
 
