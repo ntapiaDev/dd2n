@@ -54,7 +54,8 @@ export const handle = async ({ event, resolve }) => {
         hunger: user.hunger,
         thirst: user.thirst,
         disease: user.disease,
-        inventory: user.inventory
+        inventory: user.inventory,
+        slots: user.slots
     }
 
     const response = await resolve(event);

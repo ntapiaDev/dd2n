@@ -1,6 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { fly } from 'svelte/transition';
+	import Armour from './Armour.svelte';
 	import Inventory from './Inventory.svelte';
 
     let player;
@@ -11,7 +12,15 @@
 
 <div in:fly={{ y: -30, duration: 500}}>
     <span>
-        {player.username} - Jour {player.days} - {player.location} - Vie : {player.life} PV - Faim {player.hunger} - Soif : {player.thirst} - Maladie : {player.disease} - <Inventory items={player.inventory} />
+        {player.username} -
+        Jour {player.days} -
+        {player.location} -
+        Vie : {player.life} PV -
+        <!-- Faim {player.hunger} -
+        Soif : {player.thirst} -
+        Maladie : {player.disease} - -->
+        <Armour items={player.inventory} /> -
+        <Inventory items={player.inventory} />
     </span>
     <span>
         {player.ap} PA

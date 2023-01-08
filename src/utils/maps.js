@@ -47,7 +47,7 @@ export const generateMap = async (user_id, rethinkdb) => {
             "thirst": 0,
             "type": "food",
             "unique": false,
-            "uuid": "96fc77e9-5270-46e6-83f6-82c98a7bbb56"
+            "uuid": crypto.randomUUID()
         }, {
             "attack": 1,
             "credit": "Freepik",
@@ -62,7 +62,7 @@ export const generateMap = async (user_id, rethinkdb) => {
             "thirst": 1,
             "type": "drink",
             "unique": false,
-            "uuid": "264d747b-3ed6-49c7-b5f6-42fcb0c983c3"
+            "uuid": crypto.randomUUID()
         },
         {
             "attack": 0,
@@ -75,10 +75,11 @@ export const generateMap = async (user_id, rethinkdb) => {
             "id": "cfbe3557-aa69-4bbf-bf91-befa5d814852",
             "quality": 100,
             "rarity": "commun",
+            "slot": "A3",
             "thirst": 0,
             "type": "misc",
             "unique": false,
-            "uuid": "d32e1643-15ac-469e-9276-1cedd6104774"
+            "uuid": crypto.randomUUID()
         }, {
             "attack": 0,
             "credit": "Freepik",
@@ -90,10 +91,11 @@ export const generateMap = async (user_id, rethinkdb) => {
             "id": "a032c050-a549-4e68-8eef-4a037efd6bef",
             "quality": 100,
             "rarity": "commun",
+            "slot": "A2",
             "thirst": 0,
             "type": "misc",
             "unique": false,
-            "uuid": "cf10294b-7297-4723-a4aa-15e6a79363a6"
+            "uuid": crypto.randomUUID()
         }]
     }).run(rethinkdb, function (err, result) {
         if (err) throw err;

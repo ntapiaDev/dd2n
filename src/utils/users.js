@@ -17,7 +17,15 @@ export const addUser = async (user, rethinkdb) => {
         'hunger': 2,
         'thirst': 2,
         'disease': 0,
-        'inventory': []
+        'inventory': [],
+        'slots': {
+            'W1': {},
+            'W2': {},
+            'W3': {},
+            'A1': {},
+            'A2': {},
+            'A3': {},
+        }
     }).run(rethinkdb, function (err, result) {
         if (err) throw err;
         user_id = result.generated_keys[0];

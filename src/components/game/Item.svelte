@@ -41,15 +41,6 @@
 	}
 
 	/* Type */
-	.weapon {
-		background-color: rgb(255, 205, 205);
-	}
-	.ammunition {
-		background-color: rgb(255, 255, 255);
-	}
-	.armour {
-		background-color: rgb(255, 225, 205);
-	}
 	.food {
 		background-color: rgb(205, 255, 205);
 	}
@@ -59,11 +50,23 @@
 	.drug {
 		background-color: rgb(255, 255, 205);
 	}
+	.weapon {
+		background-color: rgb(255, 205, 205);
+	}
+	.ammunition {
+		background-color: #EEE;
+	}
+	.armour {
+		background-color: rgb(255, 225, 205);
+	}
 	.resource {
 		background-color: rgb(255, 225, 155);
 	}
 	.blueprint {
 		background-color: rgb(255, 205, 255);
+	}
+	.misc {
+		background-color: #EEE;
 	}
 
 	/* Rarity */
