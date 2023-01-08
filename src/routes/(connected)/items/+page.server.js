@@ -1,4 +1,4 @@
-import { redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { getEquip } from "../../../utils/items";
 
 export async function load() {
@@ -26,7 +26,24 @@ const equip = async ({ locals, request }) => {
         if (slots[item.slot]) inventory.push(slots[item.slot]);
         slots[item.slot] = item;
         await getEquip(locals.user.id, inventory, slots, locals.rethinkdb);
-    }
+    } else return fail(400, { item: true });
 }
 
-export const actions = { equip };
+const unequip = async ({ locals, request }) => {
+    const data = await request.formData();
+    const id = data.get('id');
+    const slots = locals.user.slots;
+    const item = Object.entries(slots).find(slot => slot.find(i => i.id === id))?.find(i => i.id === id);
+    // Vérification que l'objet existe (prévoir un cas d'erreur? message flash??)
+    if (item) {
+        // On vérifie qu'il reste de la place dans l'inventaire
+        const inventory = locals.user.inventory;
+        if (inventory.length < 10) {
+            inventory.push(item);
+            slots[item.slot] = '';
+            await getEquip(locals.user.id, inventory, slots, locals.rethinkdb);
+        } else return fail(400, { full: true });
+    } else return fail(400, { item: true });
+}
+
+export const actions = { equip, unequip };
