@@ -15,9 +15,9 @@
             <InteractiveItem {item} action={'/map?/drop'} />         
         </span>
     {/each}
-    <!-- {#each Array(size - items.length) as _}
+    {#each Array(size - items.length) as _}
         <span class="empty"></span>
-    {/each} -->
+    {/each}
     <span class="total">({items.length}/{size})</span>
 </span>
 

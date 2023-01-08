@@ -4,9 +4,9 @@
 
 	export let item;
 
-	const title = item.description +
-		(item.type === 'weapon' ? ` (Puissance : ${item.attack})` : '') +
-		(item.type === 'armour' || item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
+	$: title = item.description +
+		(item.attack > 0 ? ` (Puissance : ${item.attack})` : '') +
+		(item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
 		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '');
 </script>

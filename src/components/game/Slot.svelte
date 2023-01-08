@@ -98,6 +98,7 @@
 	let open = false;
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="item" on:mouseenter={() => (open = true)} on:mouseleave={() => (open = false)}>
 	{#if slot}
 		<InteractiveItem item={slot} action={'/items?/unequip'} />
@@ -105,7 +106,7 @@
 		<Item item={icons[name]} />
 	{/if}
 	{#if open}
-		<div transition:slide={{ duration: 500, easing: quintOut }}>
+		<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
 			{#each items as item}
 				{#if item.slot === name}
 					<InteractiveItem {item} action={'/items?/equip'} />

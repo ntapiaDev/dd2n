@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { flip } from 'svelte/animate';
 	import { sortItems } from '../../../utils/tools';
+	import Attack from '../../../components/map/actions/Attack.svelte';
 	import Drink from '../../../components/map/actions/Drink.svelte';
 	import Eat from '../../../components/map/actions/Eat.svelte';
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
@@ -10,6 +11,7 @@
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
 	import Search from '../../../components/map/actions/Search.svelte';
+	import Shoot from '../../../components/map/actions/Shoot.svelte';
 
 	export let data;
 	export let form;
@@ -57,6 +59,10 @@
 			<Search />
 			<Eat />
 			<Drink />
+			<Attack item={$page.data.user.slots.W1 ?? ''} />
+			{#if $page.data.user.slots.W2.attack && $page.data.user.slots.W2.weapon === $page.data.user.slots.W3.weapon}
+				<Shoot item={$page.data.user.slots.W2} />
+			{/if}
 		</div>
 		<div class="items">
 			<span class="title">Objets au sol ({cell.items.length}) :</span>
