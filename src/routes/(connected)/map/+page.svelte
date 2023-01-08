@@ -11,7 +11,6 @@
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
 	import Search from '../../../components/map/actions/Search.svelte';
-	import Shoot from '../../../components/map/actions/Shoot.svelte';
 
 	export let data;
 	export let form;
@@ -59,9 +58,13 @@
 			<Search />
 			<Eat />
 			<Drink />
-			<Attack item={$page.data.user.slots.W1 ?? ''} />
+			{#if $page.data.user.slots.W1.attack}
+				<Attack item={$page.data.user.slots.W1} />
+			{:else}
+				<Attack />
+			{/if}
 			{#if $page.data.user.slots.W2.attack && $page.data.user.slots.W2.weapon === $page.data.user.slots.W3.weapon}
-				<Shoot item={$page.data.user.slots.W2} />
+				<Attack item={$page.data.user.slots.W2} />
 			{/if}
 		</div>
 		<div class="items">
@@ -72,11 +75,17 @@
 				</span>
 			{/each}
 		</div>
+		{#if form?.ammo}
+			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
+		{/if}
 		{#if form?.exhausted}
 			<p>Vous n'avez plus assez de points d'action.</p>
 		{/if}
 		{#if form?.full}
 			<p>Votre inventaire est plein.</p>
+		{/if}
+		{#if form?.item}
+			<p>Vous ne possédez pas cette arme ou celle-ci n'est pas équipée.</p>
 		{/if}
 		{#if form?.location}
 			<p>Vous n'êtes pas sur la bonne case.</p>
@@ -86,6 +95,9 @@
 		{/if}
 		{#if form?.searched}
 			<p>Vous avez déjà fouillé cette zone aujourd'hui.</p>
+		{/if}
+		{#if form?.zombies}
+			<p>Il n'y a pas de zombies à attaquer.</p>
 		{/if}
 	</div>
 </section>

@@ -64,6 +64,21 @@ export const generateMap = async (user_id, rethinkdb) => {
             "unique": false,
             "uuid": crypto.randomUUID()
         }], 'slots': {
+            'W0': {
+                "attack": 1,
+                "credit": 'Freepik',
+                "defense": 0,
+                "description": 'Se battre à mains nues',
+                "disease": 0,
+                "hunger": 0,
+                "icon": 'attack',
+                "id": 'd1a3d28e-bd5f-486a-b4fb-7d36254f4344',
+                "rarity": 'commun',
+                "slot": "W0",
+                "thirst": 0,
+                "type": 'misc',
+                "unique": false
+            },
             'W1': '',
             'W2': '',
             'W3': '',
@@ -108,6 +123,15 @@ export const generateMap = async (user_id, rethinkdb) => {
     });
 
     return map_id;
+}
+
+export const getAttack = async (user_id, map, slots, ap, rethinkdb) => {
+    await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+    await r.table('users').filter(r.row("id").eq(user_id)).update({'ap': (ap - 1), slots}).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
 }
 
 export const getMap = async (user_id, rethinkdb) => {

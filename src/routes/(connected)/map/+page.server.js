@@ -1,11 +1,34 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { canTravel } from '../../../utils/tools';
-import { generateMap, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
+import { generateMap, getAttack, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
 import { getItems, moveItem } from '../../../utils/items';
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
     return { map };
+}
+
+const attack = async ({ locals, request }) => {
+    const data = await request.formData();
+    const id = data.get('id');
+    const slots = locals.user.slots;
+    const item = Object.entries(slots).find(slot => slot.find(i => i.id === id))?.find(i => i.id === id);
+    // Vérification que l'objet existe (prévoir un cas d'erreur? message flash??)
+    if (item) {
+        const map = await getMap(locals.user.id, locals.rethinkdb);
+        if (map.rows[locals.user.i][locals.user.j].zombies === 0) return fail(400, { zombies: true });
+        if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
+        // Gestion de la casse de l'objet si non arme à feu
+        if (item.slot === 'W1' && Math.random() > 0.75) slots[item.slot] = ''; // Casse à afficher dans les logs
+        // Gestion des munitions si arme à feu
+
+        // Possibilité de coup critique?? Affiché dans les logs
+        // Gestion de la qualité de l'arme??
+        map.rows[locals.user.i][locals.user.j].zombies -= item.attack;
+        if (map.rows[locals.user.i][locals.user.j].zombies < 0) map.rows[locals.user.i][locals.user.j].zombies = 0;
+        await getAttack(locals.user.id, map, slots, locals.user.ap, locals.rethinkdb)
+        throw redirect(303, '/map');
+    } else return fail(400, { item: true });
 }
 
 const drop = async ({ locals, request }) => {
@@ -145,4 +168,4 @@ const travel = async ({ locals, request }) => {
     throw redirect(303, '/map');
 }
 
-export const actions = { drop, nextday, pickUp, reset, search, travel };
+export const actions = { attack, drop, nextday, pickUp, reset, search, travel };
