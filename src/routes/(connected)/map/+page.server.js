@@ -103,6 +103,7 @@ const search = async ({ locals }) => {
         // Possibilité de trouver jusqu'à 3 objets à la fois
         for (let i = 0; i < Math.ceil(Math.random() * 3); i++) {
             const foundItem = pool[Math.floor(Math.random() * pool.length)];
+            pool = pool.filter(i => i.id !== foundItem.id);
             foundItem.quality = 50 + Math.round(Math.random() * 50);
             foundItem.uuid = crypto.randomUUID();
             // On met l'item entier dans la case de la map

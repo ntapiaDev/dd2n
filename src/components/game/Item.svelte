@@ -6,7 +6,7 @@
 
 	const title = item.description +
 		(item.type === 'weapon' ? ` (Puissance : ${item.attack})` : '') +
-		(item.type === 'armour' ? ` (Protection : ${item.defense})` : '') +
+		(item.type === 'armour' || item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
 		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '');
 </script>

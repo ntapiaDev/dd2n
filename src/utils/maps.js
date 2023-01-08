@@ -32,7 +32,70 @@ export const generateMap = async (user_id, rethinkdb) => {
         map_id = result.generated_keys[0];
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': 1, 'ap': 100, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [] }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({
+        'days': 1, 'ap': 100, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
+            "attack": 1,
+            "credit": "Freepik",
+            "defense": 0,
+            "description": "Un sandwich végétarien",
+            "disease": 0,
+            "hunger": 1,
+            "icon": "sandwich",
+            "id": "4a8c8331-5c9c-4034-b4ff-69f8c0b43922",
+            "quality": 100,
+            "rarity": "commun",
+            "thirst": 0,
+            "type": "food",
+            "unique": false,
+            "uuid": "96fc77e9-5270-46e6-83f6-82c98a7bbb56"
+        }, {
+            "attack": 1,
+            "credit": "Freepik",
+            "defense": 0,
+            "description": "Une bouteille d'eau minérale",
+            "disease": 0,
+            "hunger": 0,
+            "icon": "water",
+            "id": "95e76f54-8ca9-4528-bcc0-3c159dde7c8b",
+            "quality": 100,
+            "rarity": "commun",
+            "thirst": 1,
+            "type": "drink",
+            "unique": false,
+            "uuid": "264d747b-3ed6-49c7-b5f6-42fcb0c983c3"
+        },
+        {
+            "attack": 0,
+            "credit": "Good Ware",
+            "defense": 1,
+            "description": "Un short en jean",
+            "disease": 0,
+            "hunger": 0,
+            "icon": "short",
+            "id": "cfbe3557-aa69-4bbf-bf91-befa5d814852",
+            "quality": 100,
+            "rarity": "commun",
+            "thirst": 0,
+            "type": "misc",
+            "unique": false,
+            "uuid": "d32e1643-15ac-469e-9276-1cedd6104774"
+        }, {
+            "attack": 0,
+            "credit": "Freepik",
+            "defense": 1,
+            "description": "Une chemise hawaïenne",
+            "disease": 0,
+            "hunger": 0,
+            "icon": "shirt",
+            "id": "a032c050-a549-4e68-8eef-4a037efd6bef",
+            "quality": 100,
+            "rarity": "commun",
+            "thirst": 0,
+            "type": "misc",
+            "unique": false,
+            "uuid": "cf10294b-7297-4723-a4aa-15e6a79363a6"
+        }]
+    }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 

@@ -2,6 +2,8 @@
 	import { page } from '$app/stores';
 	import { flip } from 'svelte/animate';
 	import { sortItems } from '../../../utils/tools';
+	import Drink from '../../../components/map/actions/Drink.svelte';
+	import Eat from '../../../components/map/actions/Eat.svelte';
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
 	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
 	import Map from '../../../components/map/Map.svelte';
@@ -20,11 +22,7 @@
 <section>
 	<div class="map">
 		<Map encampment={map.encampment} rows={map.rows} />
-		<div>
-			<NextDay power="1.1" />
-			<NextDay power="1.5" />
-			<NextDay power="2" />
-		</div>
+		<NextDay />
 		<Reset />
 	</div>
 	<div class="cell">
@@ -37,6 +35,8 @@
 				<Encampment />
 			{/if}
 			<Search />
+			<Eat />
+			<Drink />
 		</div>
 		<div class="items">
 			<span class="title">Objets au sol ({ cell.items.length }) :</span>
