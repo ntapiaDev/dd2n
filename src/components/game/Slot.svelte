@@ -9,6 +9,48 @@
 	export let items;
 
 	const icons = {
+		W1: {
+			attack: 0,
+			credit: 'DinosoftLabs',
+			defense: 0,
+			description: 'Équiper une arme blanche',
+			disease: 0,
+			hunger: 0,
+			icon: 'baton',
+			id: 'e15f3c22-08eb-47e2-939f-a620d438efdb',
+			rarity: 'commun',
+			thirst: 0,
+			type: 'misc',
+			unique: false
+		},
+		W2: {
+			attack: 0,
+			credit: 'Freepik',
+			defense: 0,
+			description: 'Équiper une arme à feu',
+			disease: 0,
+			hunger: 0,
+			icon: 'pistol',
+			id: 'b0549187-ecc7-4e7c-9c4c-cca8ad2b057d',
+			rarity: 'commun',
+			thirst: 0,
+			type: 'misc',
+			unique: false
+		},
+		W3: {
+			attack: 0,
+			credit: 'manshagraphics',
+			defense: 0,
+			description: 'Équiper des munitions',
+			disease: 0,
+			hunger: 0,
+			icon: 'ammo',
+			id: '1c193330-a525-4ed3-b247-ac94472f5be0',
+			rarity: 'commun',
+			thirst: 0,
+			type: 'misc',
+			unique: false
+		},
 		A1: {
 			attack: 0,
 			credit: 'iconixar',

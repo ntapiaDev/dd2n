@@ -16,6 +16,14 @@
 
 	$: map = data.map;
 	$: cell = map.rows[$page.data.user.i][$page.data.user.j];
+	$: armour =
+		($page.data.user.slots.A1.defense ?? 0) +
+		($page.data.user.slots.A2.defense ?? 0) +
+		($page.data.user.slots.A3.defense ?? 0);
+	$: style =
+		cell.zombies === 0 ? ' safe' :
+		cell.zombies > 0 && cell.zombies <= armour ? ' warning' :
+		cell.zombies > 0 && cell.zombies > armour ? ' danger' : '';
 </script>
 
 <h1>Vous êtes sur la case {$page.data.user.location} :</h1>
@@ -26,8 +34,20 @@
 		<Reset />
 	</div>
 	<div class="cell">
-		<div class="people">
-			<span>Zombies sur la zone : {cell.zombies}</span>
+		<div class={"people" + style}>
+			{#if cell.coordinate === map.encampment}
+				<span>Ceci est votre campement.</span>
+				<span>Il résiste aux hordes de zombies, pour le moment...</span>
+			{:else}
+				<span>Il y a actuellement <b>{cell.zombies}</b> zombie{cell.zombies > 1 ? 's' : ''} sur la zone.</span>
+				{#if cell.zombies === 0}
+					<span>Profitez du calme, cela ne va sans doute pas durer...</span>
+				{:else if cell.zombies > 0 && cell.zombies <= armour}
+					<span>Votre armure de <b>{armour}</b> vous protège, vous pouvez progresser librement.</span>
+				{:else if cell.zombies > 0 && cell.zombies > armour}
+					<span>Votre armure de <b>{armour}</b> est trop faible : vous êtes bloqué !</span>
+				{/if}
+			{/if}
 		</div>
 		<div class="actions">
 			<span class="title">Actions disponibles :</span>
@@ -39,7 +59,7 @@
 			<Drink />
 		</div>
 		<div class="items">
-			<span class="title">Objets au sol ({ cell.items.length }) :</span>
+			<span class="title">Objets au sol ({cell.items.length}) :</span>
 			{#each sortItems(cell.items) as item (item.uuid)}
 				<span animate:flip>
 					<InteractiveItem {item} action={'/map?/pickUp'} />
@@ -80,6 +100,19 @@
 		width: 55%;
 		margin-left: 1em;
 	}
+	.people {
+		display: flex;
+		flex-direction: column;
+	}
+	.safe {
+		color: green;
+	}
+	.warning {
+		color: orange
+	}
+	.danger {
+		color: red
+	}
 	.actions,
 	.items {
 		min-height: 45px;
@@ -96,10 +129,10 @@
 	p {
 		/* Inspiré de Bootstrap Alerts */
 		margin: 1rem 0;
-		padding: .75rem 1.25rem;
+		padding: 0.75rem 1.25rem;
 		color: #721c24;
 		background-color: #f8d7da;
 		border: 1px solid #f5c6cb;
-		border-radius: .25rem;
+		border-radius: 0.25rem;
 	}
 </style>

@@ -15,7 +15,7 @@
 				<a href="/admin">Administrer le site</a>
 			{/if}
 			<form method="POST" action="/logout" use:enhance>
-				<button type="submit">Se déconnecter</button>
+				<button type="submit">Se déconnecter ({$page.data.user.username})</button>
 			</form>
 		{/if}
 	</nav>
