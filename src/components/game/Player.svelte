@@ -19,7 +19,7 @@
         <!-- Faim {player.hunger} -
         Soif : {player.thirst} -
         Maladie : {player.disease} - -->
-        <Armour items={player.inventory} /> -
+        <Armour items={player.inventory} slots={player.slots} /> -
         <Inventory items={player.inventory} />
     </span>
     <span>

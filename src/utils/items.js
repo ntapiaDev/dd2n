@@ -10,6 +10,12 @@ export const getAddItem = async (item, rethinkdb) => {
     return item_id;
 }
 
+export const getEquip = async (user_id, inventory, slots, rethinkdb) => {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ inventory, slots }).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+}
+
 export const getItems = async (rethinkdb) => {
     // let items;
     // await r.table('items').run(rethinkdb, function (err, cursor) {

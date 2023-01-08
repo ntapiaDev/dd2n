@@ -5,6 +5,7 @@
 	import Item from './Item.svelte';
 
 	export let items;
+	export let slots;
 
 	const icons = [
 		{
@@ -58,46 +59,59 @@
 
 <span class="armour">
 	<span class="title">Protection :</span>
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class="icon" on:click={() => (a1 = !a1)}>
-		<Item item={icons[0]} />
-		{#if a1}
-			<div transition:slide={{ duration: 300, easing: quintOut }}>
-				{#each items as item}
-					{#if item.slot === 'A1'}
-						<InteractiveItem {item} />
-					{/if}
-				{/each}
-			</div>
+	<!-- Factoriser??? -->
+	<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+	<div class="item" on:mouseenter={() => (a1 = true)} on:mouseleave={() => (a1 = false)}>
+		{#if slots.A1}
+			<Item item={slots.A1} />
+		{:else}
+			<Item item={icons[0]} />
 		{/if}
+        {#if a1}
+            <div transition:slide={{ duration: 500, easing: quintOut }}>
+                {#each items as item}
+                    {#if item.slot === 'A1'}
+                        <InteractiveItem {item} action={'/items?/equip'} />
+                    {/if}
+                {/each}
+            </div>
+        {/if}
 	</div>
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class="icon" on:click={() => (a2 = !a2)}>
-		<Item item={icons[1]} />
-		{#if a2}
-			<div transition:slide={{ duration: 300, easing: quintOut }}>
-				{#each items as item}
-					{#if item.slot === 'A2'}
-						<InteractiveItem {item} />
-					{/if}
-				{/each}
-			</div>
+	<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+	<div class="item" on:mouseenter={() => (a2 = true)} on:mouseleave={() => (a2 = true)}>
+        {#if slots.A2}
+			<Item item={slots.A2} />
+		{:else}
+			<Item item={icons[1]} />
 		{/if}
+        {#if a2}
+            <div transition:slide={{ duration: 500, easing: quintOut }}>
+                {#each items as item}
+                    {#if item.slot === 'A2'}
+                        <InteractiveItem {item} action={'/items?/equip'} />
+                    {/if}
+                {/each}
+            </div>
+        {/if}
 	</div>
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<div class="icon" on:click={() => (a3 = !a3)}>
-		<Item item={icons[2]} />
-		{#if a3}
-			<div transition:slide={{ duration: 300, easing: quintOut }}>
-				{#each items as item}
-					{#if item.slot === 'A3'}
-						<InteractiveItem {item} />
-					{/if}
-				{/each}
-			</div>
+	<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+	<div class="item" on:mouseenter={() => (a3 = true)} on:mouseleave={() => (a3 = false)}>
+        {#if slots.A3}
+			<Item item={slots.A3} />
+		{:else}
+			<Item item={icons[2]} />
 		{/if}
+        {#if a3}
+            <div transition:slide={{ duration: 500, easing: quintOut }}>
+                {#each items as item}
+                    {#if item.slot === 'A3'}
+                        <InteractiveItem {item} action={'/items?/equip'} />
+                    {/if}
+                {/each}
+            </div>
+        {/if}
 	</div>
-	<span class="total">0 DEF</span>
+	<span class="total">{(slots.A1.defense ?? 0) + (slots.A2.defense ?? 0) + (slots.A3.defense ?? 0)} DEF</span>
 </span>
 
 <style>
@@ -109,10 +123,9 @@
 		align-items: center;
 		margin: 0 4px;
 	}
-	.icon {
+	.item {
 		width: 25px;
         height: 25px;
-		cursor: pointer;
 	}
 	.total {
 		display: flex;

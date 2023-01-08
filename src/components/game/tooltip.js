@@ -24,13 +24,17 @@ export function tooltip(element) {
         document.body.appendChild(div);
     }
     function mouseMove(event) {
-        div.style.left = `${event.pageX + 5}px`;
-        div.style.top = `${event.pageY + 5}px`;
+        if (div) {
+            div.style.left = `${event.pageX + 5}px`;
+            div.style.top = `${event.pageY + 5}px`;
+        }
     }
     function mouseLeave() {
-        document.body.removeChild(div);
-        // NOTE: restore the `title` attribute
-        element.setAttribute('title', title);
+        if (div && document.body.contains(div)) {
+            document.body.removeChild(div);
+            // NOTE: restore the `title` attribute
+            element.setAttribute('title', title);
+        }
     }
 
     element.addEventListener('mouseover', mouseOver);

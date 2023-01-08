@@ -63,40 +63,46 @@ export const generateMap = async (user_id, rethinkdb) => {
             "type": "drink",
             "unique": false,
             "uuid": crypto.randomUUID()
-        },
-        {
-            "attack": 0,
-            "credit": "Good Ware",
-            "defense": 1,
-            "description": "Un short en jean",
-            "disease": 0,
-            "hunger": 0,
-            "icon": "short",
-            "id": "cfbe3557-aa69-4bbf-bf91-befa5d814852",
-            "quality": 100,
-            "rarity": "commun",
-            "slot": "A3",
-            "thirst": 0,
-            "type": "misc",
-            "unique": false,
-            "uuid": crypto.randomUUID()
-        }, {
-            "attack": 0,
-            "credit": "Freepik",
-            "defense": 1,
-            "description": "Une chemise hawaïenne",
-            "disease": 0,
-            "hunger": 0,
-            "icon": "shirt",
-            "id": "a032c050-a549-4e68-8eef-4a037efd6bef",
-            "quality": 100,
-            "rarity": "commun",
-            "slot": "A2",
-            "thirst": 0,
-            "type": "misc",
-            "unique": false,
-            "uuid": crypto.randomUUID()
-        }]
+        }], 'slots': {
+            'W1': '',
+            'W2': '',
+            'W3': '',
+            'A1': '',
+            'A2': {
+                "attack": 0,
+                "credit": "Freepik",
+                "defense": 1,
+                "description": "Une chemise hawaïenne",
+                "disease": 0,
+                "hunger": 0,
+                "icon": "shirt",
+                "id": "a032c050-a549-4e68-8eef-4a037efd6bef",
+                "quality": 100,
+                "rarity": "commun",
+                "slot": "A2",
+                "thirst": 0,
+                "type": "misc",
+                "unique": false,
+                "uuid": crypto.randomUUID()
+            },
+            'A3': {
+                "attack": 0,
+                "credit": "Good Ware",
+                "defense": 1,
+                "description": "Un short en jean",
+                "disease": 0,
+                "hunger": 0,
+                "icon": "short",
+                "id": "cfbe3557-aa69-4bbf-bf91-befa5d814852",
+                "quality": 100,
+                "rarity": "commun",
+                "slot": "A3",
+                "thirst": 0,
+                "type": "misc",
+                "unique": false,
+                "uuid": crypto.randomUUID()
+            },
+        }
     }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
