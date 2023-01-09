@@ -19,7 +19,10 @@ const attack = async ({ locals, request }) => {
         if (map.rows[locals.user.i][locals.user.j].zombies === 0) return fail(400, { zombies: true });
         if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
         // Gestion de la casse de l'objet si non arme à feu
-        if (item.slot === 'W1' && Math.random() > 0.75) slots[item.slot] = ''; // Casse à afficher dans les logs
+        if (item.slot === 'W1') {
+            item.durability -= 1;
+            if (item.durability === 0) slots['W1'] = ''; // Casse à afficher dans les logs
+        }
         // Gestion des munitions si arme à feu
         else if (item.slot === 'W2') {
             slots['W3'].quantity -= 1;
@@ -142,6 +145,7 @@ const search = async ({ locals }) => {
         for (let i = 0; i < Math.ceil(Math.random() * 3); i++) {
             const foundItem = pool[Math.floor(Math.random() * pool.length)];
             pool = pool.filter(i => i.id !== foundItem.id);
+            if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
             foundItem.quality = 50 + Math.round(Math.random() * 50);
             foundItem.uuid = crypto.randomUUID();
             // Si l'item est une munition, on ajoute une quantité aléatoire

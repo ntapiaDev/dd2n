@@ -16,7 +16,7 @@
         <!-- {player.username} -
         Jour {player.days} -
         {player.location} - -->
-        Vie : {player.life} PV -
+        <!-- Vie : {player.life} PV - -->
         <!-- Faim {player.hunger} -
         Soif : {player.thirst} -
         Maladie : {player.disease} - -->

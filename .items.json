@@ -1,6 +1,6 @@
 [
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Un paquet de chips entamé",
@@ -14,7 +14,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Un sandwich végétarien",
@@ -28,7 +28,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Un steak saignant",
@@ -42,7 +42,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Une cuisse de poulet",
@@ -56,7 +56,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Du jus d'orange",
@@ -70,7 +70,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Flat Icons",
         "defense": 0,
         "description": "Un vieux pinot noir",
@@ -84,7 +84,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Une bouteille d'eau minérale",
@@ -98,7 +98,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Tanahcon",
         "defense": 0,
         "description": "Une canette de coca",
@@ -127,20 +127,6 @@
     },
     {
         "attack": 0,
-        "credit": "prettycons",
-        "defense": 0,
-        "description": "Des antibiotiques",
-        "disease": 1,
-        "hunger": 0,
-        "icon": "antibiotics",
-        "id": "a44dfd72-a8e5-4cda-86ee-e790ed400432",
-        "rarity": "rare",
-        "thirst": 0,
-        "type": "drug",
-        "unique": false
-    },
-    {
-        "attack": 1,
         "credit": "surang",
         "defense": 0,
         "description": "De la Vicodin non addictive",
@@ -154,7 +140,21 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
+        "credit": "prettycons",
+        "defense": 0,
+        "description": "Des antibiotiques",
+        "disease": 1,
+        "hunger": 0,
+        "icon": "antibiotics",
+        "id": "a44dfd72-a8e5-4cda-86ee-e790ed400432",
+        "rarity": "rare",
+        "thirst": 0,
+        "type": "drug",
+        "unique": false
+    },
+    {
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Une seringue de morphine",
@@ -173,10 +173,12 @@
         "defense": 0,
         "description": "Un cutter mal aiguisé",
         "disease": 0,
+        "durabilityMax": 10,
         "hunger": 0,
         "icon": "cutter",
         "id": "d0e99471-b22b-4ac6-9dec-a3fd211e6bfb",
         "rarity": "commun",
+        "slot": "W1",
         "thirst": 0,
         "type": "weapon",
         "unique": false
@@ -187,10 +189,12 @@
         "defense": 0,
         "description": "Une batte de baseball",
         "disease": 0,
+        "durabilityMax": 20,
         "hunger": 0,
         "icon": "baseball",
         "id": "55e376a5-7cbb-47d1-81a6-a29f0cc191f7",
         "rarity": "commun",
+        "slot": "W1",
         "thirst": 0,
         "type": "weapon",
         "unique": false
@@ -201,10 +205,12 @@
         "defense": 0,
         "description": "Une pelle boueuse",
         "disease": 0,
+        "durabilityMax": 10,
         "hunger": 0,
         "icon": "shovel",
         "id": "1226715e-fc16-4d6c-9a25-0a7d2df099bd",
         "rarity": "commun",
+        "slot": "W1",
         "thirst": 0,
         "type": "weapon",
         "unique": false
@@ -215,10 +221,12 @@
         "defense": 0,
         "description": "Un couteau de boucher",
         "disease": 0,
+        "durabilityMax": 20,
         "hunger": 0,
         "icon": "knife",
         "id": "701eb7f2-7d45-4713-b070-da8aafb431f2",
         "rarity": "inhabituel",
+        "slot": "W1",
         "thirst": 0,
         "type": "weapon",
         "unique": false
@@ -233,9 +241,11 @@
         "icon": "gun",
         "id": "c278c863-00df-4e52-b283-d6affb244cda",
         "rarity": "inhabituel",
+        "slot": "W2",
         "thirst": 0,
         "type": "weapon",
-        "unique": false
+        "unique": false,
+        "weapon": "gun"
     },
     {
         "attack": 8,
@@ -247,9 +257,11 @@
         "icon": "rifle",
         "id": "ee4fd601-2dd8-4b73-8141-4f6237d83b4a",
         "rarity": "rare",
+        "slot": "W2",
         "thirst": 0,
         "type": "weapon",
-        "unique": false
+        "unique": false,
+        "weapon": "rifle"
     },
     {
         "attack": 8,
@@ -257,10 +269,12 @@
         "defense": 0,
         "description": "Un katana de ninja",
         "disease": 0,
+        "durabilityMax": 40,
         "hunger": 0,
         "icon": "katana",
         "id": "def43339-7e73-4de4-af40-daa847de9a0a",
         "rarity": "rare",
+        "slot": "W1",
         "thirst": 0,
         "type": "weapon",
         "unique": false
@@ -275,9 +289,11 @@
         "icon": "shotgun",
         "id": "425c8d3a-4139-41c3-92dd-e2c82c7e41a5",
         "rarity": "rare",
+        "slot": "W2",
         "thirst": 0,
         "type": "weapon",
-        "unique": false
+        "unique": false,
+        "weapon": "shotgun"
     },
     {
         "attack": 25,
@@ -289,9 +305,11 @@
         "icon": "machine-gun",
         "id": "2c549773-44f6-401c-8456-e63341d99696",
         "rarity": "épique",
+        "slot": "W2",
         "thirst": 0,
         "type": "weapon",
-        "unique": true
+        "unique": true,
+        "weapon": "machine-gun"
     },
     {
         "attack": 0,
@@ -303,9 +321,11 @@
         "icon": "gun_ammo",
         "id": "06715e39-5d55-4ef5-9e21-fe6e77d29692",
         "rarity": "inhabituel",
+        "slot": "W3",
         "thirst": 0,
         "type": "ammunition",
-        "unique": false
+        "unique": false,
+        "weapon": "gun"
     },
     {
         "attack": 0,
@@ -317,9 +337,11 @@
         "icon": "rifle_ammo",
         "id": "ab108d32-6ff6-4112-8180-1e2d7c031aaa",
         "rarity": "rare",
+        "slot": "W3",
         "thirst": 0,
         "type": "ammunition",
-        "unique": false
+        "unique": false,
+        "weapon": "rifle"
     },
     {
         "attack": 0,
@@ -331,9 +353,11 @@
         "icon": "shotgun_ammo",
         "id": "659a4740-48f2-4f31-bd34-bd08963a9365",
         "rarity": "rare",
+        "slot": "W3",
         "thirst": 0,
         "type": "ammunition",
-        "unique": false
+        "unique": false,
+        "weapon": "shotgun"
     },
     {
         "attack": 0,
@@ -345,26 +369,44 @@
         "icon": "machine-gun_ammo",
         "id": "641a1a18-0a89-4687-a85a-238a199fa786",
         "rarity": "épique",
+        "slot": "W3",
         "thirst": 0,
         "type": "ammunition",
-        "unique": false
+        "unique": false,
+        "weapon": "machine-gun"
     },
     {
-        "attack": 1,
-        "credit": "dreamicons",
+        "attack": 0,
+        "credit": "surang",
         "defense": 2,
-        "description": "Un pantalon d'aventurier",
+        "description": "Un chapeau de cowboy",
         "disease": 0,
         "hunger": 0,
-        "icon": "pants",
-        "id": "094d3e10-f961-4905-82a5-c99b9b5d6532",
+        "icon": "cowboy",
+        "id": "dea5ea9e-52bb-4365-9194-0d4cf1aa83be",
         "rarity": "commun",
+        "slot": "A1",
         "thirst": 0,
         "type": "armour",
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
+        "credit": "dreamicons",
+        "defense": 2,
+        "description": "Un pantalon d'aventurier",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "trouser",
+        "id": "094d3e10-f961-4905-82a5-c99b9b5d6532",
+        "rarity": "commun",
+        "slot": "A3",
+        "thirst": 0,
+        "type": "armour",
+        "unique": false
+    },
+    {
+        "attack": 0,
         "credit": "Smashicons",
         "defense": 2,
         "description": "Une veste en cuir",
@@ -373,12 +415,13 @@
         "icon": "leather-jacket",
         "id": "9d8d44c9-6cb7-4b63-b820-8428785370c8",
         "rarity": "commun",
+        "slot": "A2",
         "thirst": 0,
         "type": "armour",
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 5,
         "description": "Un casque de moto",
@@ -387,12 +430,13 @@
         "icon": "moto-helmet",
         "id": "db61d67f-3c1d-4ab6-9f7b-650f7b255341",
         "rarity": "inhabituel",
+        "slot": "A1",
         "thirst": 0,
         "type": "armour",
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "surang",
         "defense": 5,
         "description": "Un gilet pare-balles",
@@ -401,12 +445,13 @@
         "icon": "police-armour",
         "id": "4ed833bc-d97b-4659-841e-045e4fc0a082",
         "rarity": "inhabituel",
+        "slot": "A2",
         "thirst": 0,
         "type": "armour",
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Smashicons",
         "defense": 10,
         "description": "Une armure de chevalier servant",
@@ -415,12 +460,13 @@
         "icon": "knight-armour",
         "id": "d323bd1a-a15f-459a-82ba-c69ef87746f4",
         "rarity": "rare",
+        "slot": "A2",
         "thirst": 0,
         "type": "armour",
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Konkapp",
         "defense": 15,
         "description": "Une tenue de cosmonaute",
@@ -429,12 +475,13 @@
         "icon": "astronaute",
         "id": "3c69f5d3-b32e-4fe4-b5b1-7dd4249b054e",
         "rarity": "épique",
+        "slot": "A2",
         "thirst": 0,
         "type": "armour",
         "unique": true
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "surang",
         "defense": 0,
         "description": "Des morceaux de ferraille",
@@ -448,7 +495,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "smashingstocks",
         "defense": 0,
         "description": "Des planches de bois",
@@ -462,7 +509,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Icongeek26",
         "defense": 0,
         "description": "Une bobine de ficelle",
@@ -476,7 +523,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "juicy_fish",
         "defense": 0,
         "description": "Une bouteille en plastique vide",
@@ -490,7 +537,21 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Une paire d'élastiques",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "elastics",
+        "id": "64347602-bb40-4a93-862d-a2ee3cd21187",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "resource",
+        "unique": false
+    },
+    {
+        "attack": 0,
         "credit": "Mehwish",
         "defense": 0,
         "description": "Une poignée de clous rouillés",
@@ -504,7 +565,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Chanut-is-Industries",
         "defense": 0,
         "description": "Quelques boulons et écrous",
@@ -518,7 +579,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "smashingstocks",
         "defense": 0,
         "description": "Un bloc de béton",
@@ -532,7 +593,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Good Ware",
         "defense": 0,
         "description": "Un rouleau de corde emmêlé",
@@ -546,7 +607,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Design Circle",
         "defense": 0,
         "description": "Une poutre en acier",
@@ -560,7 +621,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Smashicons",
         "defense": 0,
         "description": "Du fil barbelé",
@@ -574,7 +635,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Du fil électrique",
@@ -588,7 +649,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "surang",
         "defense": 0,
         "description": "Un circuit électronique",
@@ -602,7 +663,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "ultimatearm",
         "defense": 0,
         "description": "Une grosse vis",
@@ -616,7 +677,7 @@
         "unique": false
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Un groupe électrogène",
@@ -630,7 +691,7 @@
         "unique": true
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "Flat Icons",
         "defense": 0,
         "description": "Une lame de scie circulaire",
@@ -658,7 +719,7 @@
         "unique": true
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "wanicon",
         "defense": 0,
         "description": "Plan: Barricade",
@@ -672,7 +733,7 @@
         "unique": true
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "wanicon",
         "defense": 0,
         "description": "Plan: Bombe artisanale",
@@ -686,7 +747,7 @@
         "unique": true
     },
     {
-        "attack": 1,
+        "attack": 0,
         "credit": "wanicon",
         "defense": 0,
         "description": "Plan: Fossé",
@@ -698,6 +759,20 @@
         "thirst": 0,
         "type": "blueprint",
         "unique": true
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Boire",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "drink",
+        "id": "d0c278e8-c40b-4362-aea9-1e0b239c4ff8",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
     },
     {
         "attack": 0,
@@ -731,11 +806,153 @@
         "attack": 0,
         "credit": "Freepik",
         "defense": 0,
+        "description": "Manger",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "eat",
+        "id": "17b06314-2f60-453c-98d5-a9ce0049dc51",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
         "description": "Un méchant zombie dévoreur de cerveau",
         "disease": 0,
         "hunger": 0,
         "icon": "zombie",
         "id": "09bbb34f-667a-48b8-afed-ce876ff4154c",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "manshagraphics",
+        "defense": 0,
+        "description": "Équiper des munitions",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "ammo",
+        "id": "1c193330-a525-4ed3-b247-ac94472f5be0",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "iconixar",
+        "defense": 0,
+        "description": "Équiper un casque",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "helmet",
+        "id": "f4dfe943-c662-49bf-83c5-090203e30a08",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Good Ware",
+        "defense": 0,
+        "description": "Équiper un pantalon",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "pants",
+        "id": "9a707225-a87a-4910-a919-3336ad4d94da",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Équiper un torse",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "armour",
+        "id": "c9e9a022-1088-499a-9354-5e7f012f1517",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "DinosoftLabs",
+        "defense": 0,
+        "description": "Équiper une arme blanche",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "baton",
+        "id": "e15f3c22-08eb-47e2-939f-a620d438efdb",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Équiper une arme à feu",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "pistol",
+        "id": "b0549187-ecc7-4e7c-9c4c-cca8ad2b057d",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Good Ware",
+        "defense": 1,
+        "description": "Un short en jean",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "short",
+        "id": "cfbe3557-aa69-4bbf-bf91-befa5d814852",
+        "rarity": "commun",
+        "slot": "A3",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 1,
+        "description": "Une chemise hawaïenne",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "shirt",
+        "id": "a032c050-a549-4e68-8eef-4a037efd6bef",
+        "rarity": "commun",
+        "slot": "A2",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 1,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Se battre à mains nues",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "attack",
+        "id": "d1a3d28e-bd5f-486a-b4fb-7d36254f4344",
         "rarity": "commun",
         "thirst": 0,
         "type": "misc",

@@ -9,6 +9,10 @@
 		(item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
 		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '');
+
+	$: durability =	item.slot !== "W1" ? 1 : item.durability / item.durabilityMax;
+	$: x = durability > 0.5 ? 510 - (255 * 2 * durability) : 255;
+	$: y = durability > 0.5 ? 202 - (74 * durability) : 330 * durability;
 </script>
 
 <!-- ATTENTION : termes en français depuis DB (rarity) utilisés dans le nom des classes et options (à refaire si un jour site en anglais...) -->
@@ -24,6 +28,11 @@
 		<span class="quantity">
 			{item.quantity}
 		</span>
+	{/if}
+	{#if item.slot === "W1"}
+		<div class="durability">
+			<div class="bar" style={`width: ${durability * 100}%; background-color: rgb(${x}, ${y}, 0)`}></div>
+		</div>
 	{/if}
 </span>
 
@@ -103,5 +112,16 @@
 		text-shadow: 1px 0 0 #EEE, 1px 1px 0 #EEE, 0 1px 0 #EEE, -1px 1px 0 #EEE, -1px 0 0 #EEE, -1px -1px 0 #EEE, 0 -1px 0 #EEE, 1px -1px 0 #EEE;
 		opacity: 0.9;
 		font-size: 0.9em;
+	}
+
+	/* Durability */
+	.durability {
+		width: 20px;
+		height: 3px;
+		position: absolute;
+		bottom: 2px;
+	}
+	.bar {
+		height: 100%;
 	}
 </style>
