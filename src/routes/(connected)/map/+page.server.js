@@ -11,24 +11,36 @@ export async function load({ locals }) {
 }
 
 const attack = async ({ locals, request }) => {
+    if (locals.user.ap === 0) return fail(400, { exhausted: true });
+    let wound = locals.user.wound;
+    if (wound > 1) return fail(400, { wounded: true });
     const data = await request.formData();
     const id = data.get('id');
     const slots = locals.user.slots;
     const item = Object.entries(slots).find(slot => slot.find(i => i.id === id))?.find(i => i.id === id);
-    if (locals.user.ap === 0) return fail(400, { exhausted: true });
     // Vérification que l'objet existe (prévoir un cas d'erreur? message flash??)
     if (item) {
         const map = await getMap(locals.user.id, locals.rethinkdb);
         if (map.rows[locals.user.i][locals.user.j].zombies === 0) return fail(400, { zombies: true });
         if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
         // Gestion de la casse de l'objet si non arme à feu
-        let broken = false;
         let ammo = false;
-        if (item.slot === 'W1') {
+        let broken = false;
+        let woundedW0 = false;
+        let woundedW1 = false;
+        if (item.slot === 'W0' && Math.random() > 0.75) {
+            wound += 1;
+            woundedW0 = wound;
+        }
+        else if (item.slot === 'W1') {
             item.durability -= 1;
             if (item.durability === 0) {
                 slots['W1'] = '';
                 broken = true;
+            }
+            if (Math.random() > 0.99) {
+                wound += 1;
+                woundedW1 = wound;
             }
         }
         // Gestion des munitions si arme à feu
@@ -45,8 +57,8 @@ const attack = async ({ locals, request }) => {
         map.rows[locals.user.i][locals.user.j].zombies -= item.attack;
         if (map.rows[locals.user.i][locals.user.j].zombies < 0) map.rows[locals.user.i][locals.user.j].zombies = 0;
         const killed = zombies - map.rows[locals.user.i][locals.user.j].zombies;
-        await getAttack(locals.user.id, map, slots, locals.user.ap, locals.rethinkdb)
-        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', broken, ammo }, locals.rethinkdb);
+        await getAttack(locals.user.id, map, slots, locals.user.ap, wound, locals.rethinkdb)
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', ammo, broken, woundedW0, woundedW1 }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
 }
@@ -79,7 +91,7 @@ const drop = async ({ locals, request }) => {
 }
 
 const nextday = async ({ locals }) => {
-    await getNextDay(locals.user.days, locals.user.location, locals.user.id, locals.rethinkdb);
+    await getNextDay(locals.user.id, locals.user.days, locals.user.location, locals.user.wound, locals.rethinkdb);
 }
 
 const pickUp = async ({ locals, request }) => {

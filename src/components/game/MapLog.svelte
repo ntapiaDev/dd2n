@@ -1,4 +1,5 @@
 <script>
+    import { page } from '$app/stores';
 	// import { fade } from "svelte/transition";
 	import { sortItems } from "../../utils/tools";
     import Item from "./Item.svelte";
@@ -12,6 +13,37 @@
         }
 		return `Le ${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()} à ${addZero(date.getHours())}:${addZero(date.getMinutes())}:${addZero(date.getSeconds())}`;
 	}
+
+    const wound = [
+		{
+			attack: 0,
+			credit: 'surang',
+			defense: 0,
+			description: 'Quelques égratignures',
+			disease: 0,
+			hunger: 0,
+			icon: 'scratch',
+			id: '09453469-913a-401b-93df-e299a78bc300',
+			rarity: 'commun',
+			thirst: 0,
+			type: 'misc',
+			unique: false
+		},
+		{
+			attack: 0,
+			credit: 'Freepik',
+			defense: 0,
+			description: 'Gravement blessé',
+			disease: 0,
+			hunger: 0,
+			icon: 'injured',
+			id: '0c69e019-aaf0-48b3-ad20-ea38d9389d6f',
+			rarity: 'commun',
+			thirst: 0,
+			type: 'misc',
+			unique: false
+		}
+	];
 </script>
 
 <div class="log">
@@ -26,6 +58,19 @@
             <div>Son arme s'est brisée sous le choc.</div>
         {:else if log.log.ammo}
             <div>Il n'a plus de munitions !</div>
+        {/if}
+        {#if log.log.woundedW0}
+            {#if log.log.woundedW0 === 1}
+            <div>A force de se battre à mains nues, {log.player} a maintenant <Item item={wound[0]} /></div>
+            {:else if log.log.woundedW0 === 2}
+            <div>A force de se battre à mains nues, {log.player} est maintenant <Item item={wound[1]} /></div>
+            {/if}
+        {:else if log.log.woundedW1}
+            {#if log.log.woundedW1 === 1}
+            <div>Un zombie s'est approché un peu trop près et {log.player} a maintenant <Item item={wound[0]} /></div>
+            {:else if log.log.woundedW1 === 2}
+            <div>Après un accrochage avec un zombie, {log.player} est maintenant <Item item={wound[1]} /></div>
+            {/if}
         {/if}
         </div>
     {:else if log.action === 'loot'}

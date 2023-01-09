@@ -3,6 +3,7 @@
     import { fly } from 'svelte/transition';
 	import Armour from './Armour.svelte';
 	import Inventory from './Inventory.svelte';
+	import Status from './Status.svelte';
 	import Weapon from './Weapon.svelte';
 
     let player;
@@ -20,6 +21,7 @@
         <!-- Faim {player.hunger} -
         Soif : {player.thirst} -
         Maladie : {player.disease} - -->
+        <Status />
         <Weapon items={player.inventory} W1={player.slots.W1} W2={player.slots.W2} W3={player.slots.W3} /> -
         <Armour items={player.inventory} A1={player.slots.A1} A2={player.slots.A2} A3={player.slots.A3} /> -
         <Inventory items={player.inventory} />

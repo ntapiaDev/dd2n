@@ -18,6 +18,7 @@ export function tooltip(element) {
 			position: absolute;
 			top: -50px;
 			left: -50px;
+            z-index: 100;
 		`;
         // top: ${event.pageX + 5}px;
 		// left: ${event.pageY + 5}px;

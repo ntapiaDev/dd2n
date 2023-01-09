@@ -59,7 +59,7 @@ export const handle = async ({ event, resolve }) => {
         life: user.life,
         hunger: user.hunger,
         thirst: user.thirst,
-        disease: user.disease,
+        wound: user.wound,
         inventory: user.inventory,
         slots: user.slots
     }

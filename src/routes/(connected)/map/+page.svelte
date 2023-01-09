@@ -6,6 +6,7 @@
 	import Drink from '../../../components/map/actions/Drink.svelte';
 	import Eat from '../../../components/map/actions/Eat.svelte';
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
+	import Heal from '../../../components/map/actions/Heal.svelte';
 	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
 	import Map from '../../../components/map/Map.svelte';
 	import MapLog from '../../../components/game/MapLog.svelte';
@@ -60,6 +61,7 @@
 			<Search />
 			<Eat />
 			<Drink />
+			<Heal />
 			{#if $page.data.user.slots.W1.attack}
 				<Attack item={$page.data.user.slots.W1} />
 			{:else}
@@ -103,6 +105,9 @@
 		{/if}
 		{#if form?.searched}
 			<p>Vous avez déjà fouillé cette zone aujourd'hui.</p>
+		{/if}
+		{#if form?.wounded}
+			<p>Vous êtes trop mal-en-point pour pouvoir vous battre au corps à corps.</p>
 		{/if}
 		{#if form?.zombies}
 			<p>Il n'y a pas de zombies à attaquer.</p>

@@ -33,7 +33,7 @@ export const generateMap = async (user_id, rethinkdb) => {
         if (err) throw err;
     });
     await r.table('users').filter(r.row("id").eq(user_id)).update({
-        'days': 1, 'ap': 100, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
+        'days': 1, 'ap': 100, 'wound': 0, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
             "attack": 0,
             "credit": "Freepik",
             "defense": 0,
@@ -125,11 +125,11 @@ export const generateMap = async (user_id, rethinkdb) => {
     return map_id;
 }
 
-export const getAttack = async (user_id, map, slots, ap, rethinkdb) => {
+export const getAttack = async (user_id, map, slots, ap, wound, rethinkdb) => {
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({'ap': (ap - 1), slots}).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({'ap': (ap - 1), slots, wound}).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
@@ -150,7 +150,7 @@ export const getMap = async (user_id, rethinkdb) => {
         });
 }
 
-export const getNextDay = async (days, location, user_id, rethinkdb) => {
+export const getNextDay = async (user_id, days, location, wound, rethinkdb) => {
     // Transformer en une seule requête update...
     let map = await getMap(user_id, rethinkdb);
     for (let row of map.rows) {
@@ -163,11 +163,14 @@ export const getNextDay = async (days, location, user_id, rethinkdb) => {
             cell.searchedBy = [];
         }
     }
+    if (wound === 1) wound = 0;
+    else if (wound === 2) wound = 3;
+    // else if (wound === 3) : DEAD
 
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1, 'ap': 100 }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1, 'ap': 100, wound }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
