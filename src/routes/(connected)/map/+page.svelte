@@ -8,6 +8,7 @@
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
 	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
 	import Map from '../../../components/map/Map.svelte';
+	import MapLog from '../../../components/game/MapLog.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
 	import Search from '../../../components/map/actions/Search.svelte';
@@ -16,6 +17,7 @@
 	export let form;
 
 	$: map = data.map;
+	$: logs = data.logs;
 	$: cell = map.rows[$page.data.user.i][$page.data.user.j];
 	$: armour =
 		($page.data.user.slots.A1.defense ?? 0) +
@@ -75,6 +77,12 @@
 				</span>
 			{/each}
 		</div>
+		<div class="log">
+			<span class="title">Historique de la zone :</span>
+			{#each logs as log}
+				<MapLog {log} />
+			{/each}
+		</div>
 		{#if form?.ammo}
 			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
 		{/if}
@@ -132,7 +140,8 @@
 		color: red
 	}
 	.actions,
-	.items {
+	.items,
+	.log {
 		min-height: 45px;
 		display: flex;
 		align-items: center;
@@ -141,8 +150,16 @@
 		padding: 0.5em;
 		border: 1px solid #aaa;
 	}
+	.log {
+		flex-direction: column;
+		align-items: baseline;
+	}
 	.title {
 		margin-right: 4px;
+	}
+	.log .title {
+		margin-bottom: 1em;
+		text-decoration: underline;
 	}
 	p {
 		/* Inspiré de Bootstrap Alerts */

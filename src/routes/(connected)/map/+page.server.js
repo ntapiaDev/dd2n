@@ -1,11 +1,13 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { canTravel } from '../../../utils/tools';
-import { generateMap, getAttack, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
 import { getItems, moveItem } from '../../../utils/items';
+import { addLog, deleteLogs, getLogsByCoordinate } from "../../../utils/logs";
+import { generateMap, getAttack, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
-    return { map };
+    const logs = await getLogsByCoordinate(locals.user.location, locals.rethinkdb);
+    return { map, logs };
 }
 
 const attack = async ({ locals, request }) => {
@@ -13,26 +15,38 @@ const attack = async ({ locals, request }) => {
     const id = data.get('id');
     const slots = locals.user.slots;
     const item = Object.entries(slots).find(slot => slot.find(i => i.id === id))?.find(i => i.id === id);
+    if (locals.user.ap === 0) return fail(400, { exhausted: true });
     // Vérification que l'objet existe (prévoir un cas d'erreur? message flash??)
     if (item) {
         const map = await getMap(locals.user.id, locals.rethinkdb);
         if (map.rows[locals.user.i][locals.user.j].zombies === 0) return fail(400, { zombies: true });
         if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
         // Gestion de la casse de l'objet si non arme à feu
+        let broken = false;
+        let ammo = false;
         if (item.slot === 'W1') {
             item.durability -= 1;
-            if (item.durability === 0) slots['W1'] = ''; // Casse à afficher dans les logs
+            if (item.durability === 0) {
+                slots['W1'] = '';
+                broken = true;
+            }
         }
         // Gestion des munitions si arme à feu
         else if (item.slot === 'W2') {
             slots['W3'].quantity -= 1;
-            if (slots['W3'].quantity === 0) slots['W3'] = '';
+            if (slots['W3'].quantity === 0) {
+                slots['W3'] = '';
+                ammo = true;
+            }
         }
         // Possibilité de coup critique?? Affiché dans les logs
         // Gestion de la qualité de l'arme??
+        const zombies = map.rows[locals.user.i][locals.user.j].zombies;
         map.rows[locals.user.i][locals.user.j].zombies -= item.attack;
         if (map.rows[locals.user.i][locals.user.j].zombies < 0) map.rows[locals.user.i][locals.user.j].zombies = 0;
+        const killed = zombies - map.rows[locals.user.i][locals.user.j].zombies;
         await getAttack(locals.user.id, map, slots, locals.user.ap, locals.rethinkdb)
+        await addLog(locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', broken, ammo }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
 }
@@ -60,6 +74,7 @@ const drop = async ({ locals, request }) => {
     if (item.type === 'ammunition' && map.rows[li][lj].items.find(i => i.id === item.id)) map.rows[li][lj].items.find(i => i.id === item.id).quantity += item.quantity;
     else map.rows[li][lj].items.push(item);
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
+    await addLog(locals.user.location, locals.user.username, 'drop', { item }, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
@@ -95,11 +110,13 @@ const pickUp = async ({ locals, request }) => {
         inventory.push(item);
     }
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
+    await addLog(locals.user.location, locals.user.username, 'pickup', { item }, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
 const reset = async ({ locals }) => {
     await generateMap(locals.user.id, locals.rethinkdb);
+    await deleteLogs(locals.rethinkdb);
 }
 
 const search = async ({ locals }) => {
@@ -142,6 +159,7 @@ const search = async ({ locals }) => {
             }
         }
         // Possibilité de trouver jusqu'à 3 objets à la fois
+        let loots = [];
         for (let i = 0; i < Math.ceil(Math.random() * 3); i++) {
             const foundItem = pool[Math.floor(Math.random() * pool.length)];
             pool = pool.filter(i => i.id !== foundItem.id);
@@ -158,9 +176,11 @@ const search = async ({ locals }) => {
                 // Gestion des objets uniques
                 if (foundItem.unique) map.uniques.push(foundItem.id);
             }
+            loots.push(foundItem);
         }
         map.rows[li][lj].searchedBy.push(locals.user.id);
         await getSearch(locals.user.id, map, ap, locals.rethinkdb)
+        await addLog(locals.user.location, locals.user.username, 'loot', { loots }, locals.rethinkdb);
     } else return fail(400, { exhausted: true })
 }
 
@@ -188,6 +208,8 @@ const travel = async ({ locals, request }) => {
             if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
             if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
             await getTravel(locals.user.id, target, ti, tj, ap, map, locals.rethinkdb);
+            await addLog(location, locals.user.username, 'out', {}, locals.rethinkdb);
+            await addLog(target, locals.user.username, 'in', {}, locals.rethinkdb);
         }
     } else return fail(400, { exhausted: true })
     throw redirect(303, '/map');

@@ -10,7 +10,7 @@
 		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '');
 
-	$: durability =	item.slot !== "W1" ? 1 : item.durability / item.durabilityMax;
+	$: durability =	!item.durability ? 1 : item.durability / item.durabilityMax;
 	$: x = durability > 0.5 ? 510 - (255 * 2 * durability) : 255;
 	$: y = durability > 0.5 ? 202 - (74 * durability) : 330 * durability;
 </script>
@@ -25,13 +25,13 @@
 	{#if item.unique}
 		<img src={$page.url.origin + '/star.png'} alt="Objet unique by Kemalmoe" class="unique" {title} use:tooltip />
 	{:else if item.quantity}
-		<span class="quantity">
+		<span class="quantity" {title} use:tooltip>
 			{item.quantity}
 		</span>
 	{/if}
-	{#if item.slot === "W1"}
+	{#if item.durability}
 		<div class="durability">
-			<div class="bar" style={`width: ${durability * 100}%; background-color: rgb(${x}, ${y}, 0)`}></div>
+			<div class="bar" style={`width: ${durability * 100}%; background-color: rgb(${x}, ${y}, 0)`} {title} use:tooltip></div>
 		</div>
 	{/if}
 </span>
