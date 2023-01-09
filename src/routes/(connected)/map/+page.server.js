@@ -21,7 +21,10 @@ const attack = async ({ locals, request }) => {
         // Gestion de la casse de l'objet si non arme à feu
         if (item.slot === 'W1' && Math.random() > 0.75) slots[item.slot] = ''; // Casse à afficher dans les logs
         // Gestion des munitions si arme à feu
-
+        else if (item.slot === 'W2') {
+            slots['W3'].quantity -= 1;
+            if (slots['W3'].quantity === 0) slots['W3'] = '';
+        }
         // Possibilité de coup critique?? Affiché dans les logs
         // Gestion de la qualité de l'arme??
         map.rows[locals.user.i][locals.user.j].zombies -= item.attack;
@@ -46,9 +49,14 @@ const drop = async ({ locals, request }) => {
             }
         }
     }
+    const item = getItem();
     const map = await getMap(locals.user.id, locals.rethinkdb);
-    map.rows[locals.user.i][locals.user.j].items.push(getItem())
-    await moveItem(locals.user.id, map, inventory, locals.rethinkdb);
+    const li = locals.user.i;
+    const lj = locals.user.j;
+    const slots = locals.user.slots;
+    if (item.type === 'ammunition' && map.rows[li][lj].items.find(i => i.id === item.id)) map.rows[li][lj].items.find(i => i.id === item.id).quantity += item.quantity;
+    else map.rows[li][lj].items.push(item);
+    await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
@@ -64,9 +72,6 @@ const pickUp = async ({ locals, request }) => {
     const map = await getMap(locals.user.id, locals.rethinkdb);
     // On vérifie que l'item est bien présent à son point d'origine
     if (!map.rows[li][lj].items.some(i => i.id === id)) return fail(400, { origin: true });
-    // On vérifie que l'inventaire n'est pas plein
-    const inventory = locals.user.inventory;
-    if (inventory.length === 10) return fail(400, { full: true });
     // Possibilité de simplifier...?
     const getItem = () => {
         for (let item of map.rows[li][lj].items) {
@@ -76,8 +81,17 @@ const pickUp = async ({ locals, request }) => {
             }
         }
     }
-    inventory.push(getItem())
-    await moveItem(locals.user.id, map, inventory, locals.rethinkdb);
+    const item = getItem();
+    const slots = locals.user.slots;
+    const inventory = locals.user.inventory;
+    if (item.type === 'ammunition' && slots[item.slot].id === item.id) slots[item.slot].quantity += item.quantity;
+    else if (item.type === 'ammunition' && inventory.find(i => i.id === item.id)) inventory.find(i => i.id === item.id).quantity += item.quantity;
+    else {
+        // On vérifie que l'inventaire n'est pas plein
+        if (inventory.length === 10) return fail(400, { full: true });
+        inventory.push(item);
+    }
+    await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
@@ -112,7 +126,8 @@ const search = async ({ locals }) => {
             if (!item.unique || !map.uniques.includes(item.id)) {
                 // Probabilité en fonction du type
                 const type = item.type === 'resource' ? 10 :
-                    ['food', 'drink', 'ammunition'].includes(item.type) ? 3 :
+                    item.type === 'ammunition' ? 15 :
+                    ['food', 'drink'].includes(item.type) ? 3 :
                     ['drug', 'weapon', 'armour'].includes(item.type) ? 2 : 1;
                 // Probabilité en fonction de la rareté
                 const rarity = item.rarity === 'commun' ? 5 :
@@ -129,10 +144,16 @@ const search = async ({ locals }) => {
             pool = pool.filter(i => i.id !== foundItem.id);
             foundItem.quality = 50 + Math.round(Math.random() * 50);
             foundItem.uuid = crypto.randomUUID();
-            // On met l'item entier dans la case de la map
-            map.rows[li][lj].items.push(foundItem);
-            // Gestion des objets uniques
-            if (foundItem.unique) map.uniques.push(foundItem.id);
+            // Si l'item est une munition, on ajoute une quantité aléatoire
+            if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
+            // Si la munition est déjà présente sur la case, on stack la munition
+            if (foundItem.type === 'ammunition' && map.rows[li][lj].items.find(i => i.id === foundItem.id)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
+            else {
+                // On met l'item entier dans la case de la map
+                map.rows[li][lj].items.push(foundItem);
+                // Gestion des objets uniques
+                if (foundItem.unique) map.uniques.push(foundItem.id);
+            }
         }
         map.rows[li][lj].searchedBy.push(locals.user.id);
         await getSearch(locals.user.id, map, ap, locals.rethinkdb)

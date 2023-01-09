@@ -12,7 +12,7 @@
 </script>
 
 <!-- ATTENTION : termes en français depuis DB (rarity) utilisés dans le nom des classes et options (à refaire si un jour site en anglais...) -->
-<span class="{item.type} {item.rarity}">
+<span class="container {item.type} {item.rarity}">
 	<!-- Remplacer par BASEURI ou équivalent?? -->
 	<img src={$page.url.origin + '/icons/' + item.icon + '.png'}
 		alt={item.icon + ' icon by ' + item.credit}
@@ -20,11 +20,15 @@
 		use:tooltip />
 	{#if item.unique}
 		<img src={$page.url.origin + '/star.png'} alt="Objet unique by Kemalmoe" class="unique" {title} use:tooltip />
+	{:else if item.quantity}
+		<span class="quantity">
+			{item.quantity}
+		</span>
 	{/if}
 </span>
 
 <style>
-	span {
+	.container {
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
@@ -89,5 +93,15 @@
 		position: absolute;
 		top: 0px;
 		right: 0px;
+	}
+
+	/* Quantity */
+	.quantity {
+		position: absolute;
+		top: -3px;
+		right: 1px;
+		text-shadow: 1px 0 0 #EEE, 1px 1px 0 #EEE, 0 1px 0 #EEE, -1px 1px 0 #EEE, -1px 0 0 #EEE, -1px -1px 0 #EEE, 0 -1px 0 #EEE, 1px -1px 0 #EEE;
+		opacity: 0.9;
+		font-size: 0.9em;
 	}
 </style>
