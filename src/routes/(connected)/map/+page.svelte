@@ -151,7 +151,10 @@
 		border: 1px solid #aaa;
 	}
 	.log {
+		max-height: 500px;
+		overflow-y: auto;
 		flex-direction: column;
+		flex-wrap: nowrap;
 		align-items: baseline;
 	}
 	.title {

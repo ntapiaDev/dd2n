@@ -6,7 +6,7 @@ import { generateMap, getAttack, getMap, getNextDay, getSearch, getTravel } from
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
-    const logs = await getLogsByCoordinate(locals.user.location, locals.rethinkdb);
+    const logs = await getLogsByCoordinate(locals.user.id, locals.user.location, locals.rethinkdb);
     return { map, logs };
 }
 
@@ -46,7 +46,7 @@ const attack = async ({ locals, request }) => {
         if (map.rows[locals.user.i][locals.user.j].zombies < 0) map.rows[locals.user.i][locals.user.j].zombies = 0;
         const killed = zombies - map.rows[locals.user.i][locals.user.j].zombies;
         await getAttack(locals.user.id, map, slots, locals.user.ap, locals.rethinkdb)
-        await addLog(locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', broken, ammo }, locals.rethinkdb);
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', broken, ammo }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
 }
@@ -74,7 +74,7 @@ const drop = async ({ locals, request }) => {
     if (item.type === 'ammunition' && map.rows[li][lj].items.find(i => i.id === item.id)) map.rows[li][lj].items.find(i => i.id === item.id).quantity += item.quantity;
     else map.rows[li][lj].items.push(item);
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
-    await addLog(locals.user.location, locals.user.username, 'drop', { item }, locals.rethinkdb);
+    await addLog(locals.user.id, locals.user.location, locals.user.username, 'drop', { item }, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
@@ -110,13 +110,13 @@ const pickUp = async ({ locals, request }) => {
         inventory.push(item);
     }
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
-    await addLog(locals.user.location, locals.user.username, 'pickup', { item }, locals.rethinkdb);
+    await addLog(locals.user.id, locals.user.location, locals.user.username, 'pickup', { item }, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
 const reset = async ({ locals }) => {
     await generateMap(locals.user.id, locals.rethinkdb);
-    await deleteLogs(locals.rethinkdb);
+    await deleteLogs(locals.user.id, locals.rethinkdb);
 }
 
 const search = async ({ locals }) => {
@@ -180,7 +180,7 @@ const search = async ({ locals }) => {
         }
         map.rows[li][lj].searchedBy.push(locals.user.id);
         await getSearch(locals.user.id, map, ap, locals.rethinkdb)
-        await addLog(locals.user.location, locals.user.username, 'loot', { loots }, locals.rethinkdb);
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots }, locals.rethinkdb);
     } else return fail(400, { exhausted: true })
 }
 
@@ -208,8 +208,8 @@ const travel = async ({ locals, request }) => {
             if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
             if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
             await getTravel(locals.user.id, target, ti, tj, ap, map, locals.rethinkdb);
-            await addLog(location, locals.user.username, 'out', {}, locals.rethinkdb);
-            await addLog(target, locals.user.username, 'in', {}, locals.rethinkdb);
+            await addLog(locals.user.id, location, locals.user.username, 'out', {}, locals.rethinkdb);
+            await addLog(locals.user.id, target, locals.user.username, 'in', {}, locals.rethinkdb);
         }
     } else return fail(400, { exhausted: true })
     throw redirect(303, '/map');
