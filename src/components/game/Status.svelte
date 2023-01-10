@@ -1,10 +1,14 @@
 <script>
+	import Hunger from "./Hunger.svelte";
+	import Thirst from "./Thirst.svelte";
 	import Wound from "./Wound.svelte";
 </script>
 
 <span class="status">
 	<span class="title">Statut :</span>
 	<Wound />
+	<Hunger />
+	<Thirst />
 </span>
 
 <style>

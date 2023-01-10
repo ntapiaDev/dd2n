@@ -12,8 +12,6 @@ export async function load({ locals }) {
 
 const attack = async ({ locals, request }) => {
     if (locals.user.ap === 0) return fail(400, { exhausted: true });
-    let wound = locals.user.wound;
-    if (wound > 1) return fail(400, { wounded: true });
     const data = await request.formData();
     const id = data.get('id');
     const slots = locals.user.slots;
@@ -23,7 +21,8 @@ const attack = async ({ locals, request }) => {
         const map = await getMap(locals.user.id, locals.rethinkdb);
         if (map.rows[locals.user.i][locals.user.j].zombies === 0) return fail(400, { zombies: true });
         if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
-        // Gestion de la casse de l'objet si non arme à feu
+        let wound = locals.user.wound;
+        if (wound > 1 && item.slot !== 'W2') return fail(400, { wounded: true });
         let ammo = false;
         let broken = false;
         let woundedW0 = false;
@@ -32,6 +31,7 @@ const attack = async ({ locals, request }) => {
             wound += 1;
             woundedW0 = wound;
         }
+        // Gestion de la casse de l'objet si non arme à feu
         else if (item.slot === 'W1') {
             item.durability -= 1;
             if (item.durability === 0) {
@@ -92,6 +92,7 @@ const drop = async ({ locals, request }) => {
 
 const nextday = async ({ locals }) => {
     await getNextDay(locals.user.id, locals.user.days, locals.user.location, locals.user.wound, locals.rethinkdb);
+    if (locals.user.wound > 0) await addLog(locals.user.id, locals.user.location, locals.user.username, 'wound', { 'wound': locals.user.wound }, locals.rethinkdb);
 }
 
 const pickUp = async ({ locals, request }) => {

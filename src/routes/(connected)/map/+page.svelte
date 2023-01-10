@@ -19,18 +19,19 @@
 
 	$: map = data.map;
 	$: logs = data.logs;
-	$: cell = map.rows[$page.data.user.i][$page.data.user.j];
+	$: user = $page.data.user;
+	$: cell = map.rows[user.i][user.j];
 	$: armour =
-		($page.data.user.slots.A1.defense ?? 0) +
-		($page.data.user.slots.A2.defense ?? 0) +
-		($page.data.user.slots.A3.defense ?? 0);
+		(user.slots.A1.defense ?? 0) +
+		(user.slots.A2.defense ?? 0) +
+		(user.slots.A3.defense ?? 0);
 	$: style =
 		cell.zombies === 0 ? ' safe' :
 		cell.zombies > 0 && cell.zombies <= armour ? ' warning' :
 		cell.zombies > 0 && cell.zombies > armour ? ' danger' : '';
 </script>
 
-<h1>Vous êtes sur la case {$page.data.user.location} :</h1>
+<h1>Vous êtes sur la case {user.location} :</h1>
 <section>
 	<div class="map">
 		<Map encampment={map.encampment} rows={map.rows} />
@@ -55,20 +56,26 @@
 		</div>
 		<div class="actions">
 			<span class="title">Actions disponibles :</span>
-			{#if $page.data.user.location === map.encampment}
+			{#if user.location === map.encampment}
 				<Encampment />
 			{/if}
 			<Search />
-			<Eat />
-			<Drink />
-			<Heal />
-			{#if $page.data.user.slots.W1.attack}
-				<Attack item={$page.data.user.slots.W1} />
+			{#if user.hunger}
+				<Eat />
+			{/if}
+			{#if user.thirst}
+				<Drink />
+			{/if}
+			{#if user.wound}
+				<Heal items={user.inventory} wound={user.wound} />
+			{/if}
+			{#if user.slots.W1.attack}
+				<Attack item={user.slots.W1} />
 			{:else}
 				<Attack />
 			{/if}
-			{#if $page.data.user.slots.W2.attack && $page.data.user.slots.W2.weapon === $page.data.user.slots.W3.weapon}
-				<Attack item={$page.data.user.slots.W2} />
+			{#if user.slots.W2.attack && user.slots.W2.weapon === user.slots.W3.weapon}
+				<Attack item={user.slots.W2} />
 			{/if}
 		</div>
 		<div class="items">

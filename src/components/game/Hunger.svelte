@@ -2,30 +2,16 @@
 	import { page } from '$app/stores';
 	import Item from './Item.svelte';
 
-	const wounds = [
+	const hunger = [
 		{
 			attack: 0,
-			credit: 'Freepik',
+			credit: 'manshagraphics',
 			defense: 0,
-			description: 'Indemne',
+			description: 'Rassasié',
 			disease: 0,
 			hunger: 0,
-			icon: 'healthy',
-			id: '62372da1-0ac8-4bc0-a0a6-24ebcd928930',
-			rarity: 'commun',
-			thirst: 0,
-			type: 'misc',
-			unique: false
-		},
-		{
-			attack: 0,
-			credit: 'surang',
-			defense: 0,
-			description: 'Quelques égratignures',
-			disease: 0,
-			hunger: 0,
-			icon: 'scratch',
-			id: '09453469-913a-401b-93df-e299a78bc300',
+			icon: 'satiated',
+			id: '7265569b-e8aa-427f-a325-65c2ebc5bc59',
 			rarity: 'commun',
 			thirst: 0,
 			type: 'misc',
@@ -35,11 +21,11 @@
 			attack: 0,
 			credit: 'Freepik',
 			defense: 0,
-			description: 'Gravement blessé',
+			description: 'Petite faim',
 			disease: 0,
 			hunger: 0,
-			icon: 'injured',
-			id: '0c69e019-aaf0-48b3-ad20-ea38d9389d6f',
+			icon: 'hungry',
+			id: '23a97671-c68a-4b55-82ed-338a43ec6737',
 			rarity: 'commun',
 			thirst: 0,
 			type: 'misc',
@@ -49,11 +35,25 @@
 			attack: 0,
 			credit: 'Freepik',
 			defense: 0,
-			description: 'À l\'agonie',
+			description: 'Affamé',
 			disease: 0,
 			hunger: 0,
-			icon: 'dying',
-			id: '542a9d5d-36c8-42d5-b8c3-6910d7f3db00',
+			icon: 'meal',
+			id: '068033a5-e1c8-42d9-a16d-415ca7f8c5f6',
+			rarity: 'commun',
+			thirst: 0,
+			type: 'misc',
+			unique: false
+		},
+		{
+			attack: 0,
+			credit: 'Freepik',
+			defense: 0,
+			description: 'Mort de faim',
+			disease: 0,
+			hunger: 0,
+			icon: 'hunger',
+			id: '781741f2-56d8-4fba-8cb7-a79ea1ab1ca7',
 			rarity: 'commun',
 			thirst: 0,
 			type: 'misc',
@@ -62,4 +62,4 @@
 	];
 </script>
 
-<Item item={wounds[$page.data.user.wound]} />
+<Item item={hunger[$page.data.user.hunger]} />

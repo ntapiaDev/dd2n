@@ -7,6 +7,7 @@
 	$: title = item.description +
 		(item.attack > 0 ? ` (Puissance : ${item.attack})` : '') +
 		(item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
+		(item.wound ? ` (${item.wound})` : '') +
 		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '');
 

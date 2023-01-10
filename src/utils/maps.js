@@ -33,7 +33,7 @@ export const generateMap = async (user_id, rethinkdb) => {
         if (err) throw err;
     });
     await r.table('users').filter(r.row("id").eq(user_id)).update({
-        'days': 1, 'ap': 100, 'wound': 0, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
+        'days': 1, 'ap': 100, 'wound': 0, 'hunger': 0, 'thirst': 0, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
             "attack": 0,
             "credit": "Freepik",
             "defense": 0,
