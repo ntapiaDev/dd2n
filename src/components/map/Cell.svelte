@@ -18,6 +18,7 @@
 		(cell.layout.border.includes(2) ? 'br ' : '') +
 		(cell.layout.border.includes(3) ? 'bb ' : '') +
 		(cell.layout.border.includes(4) ? 'bl ' : '') +
+		(cell.building ? 'building ' : '') +
 		(((cell.visited && cell.empty) || (!cell.visited && cell.estimated.empty)) ? 'empty ' : '') +
 		(cell.visited ? '' : 'blur'))
 	: 'fog')
@@ -105,6 +106,14 @@
 	}
 	td.bl {
 		border-left: 3px solid;
+	}
+	td.building {
+		border: 3px solid;
+	}
+	td.building button {
+		width: 20px;
+		height: 21px;
+		margin-top: -1px;
 	}
 	td.inner {
 		border-color: green;

@@ -60,6 +60,9 @@
 				<span>Ceci est votre campement.</span>
 				<span>Il résiste aux hordes de zombies, pour le moment...</span>
 			{:else}
+				{#if cell.building}
+					<span>Vous remarquez <b>{cell.building.type}</b> dans les parages.</span>
+				{/if}
 				<span>Il y a actuellement <b>{cell.zombies}</b> zombie{cell.zombies > 1 ? 's' : ''} sur la zone.</span>
 				{#if cell.zombies === 0}
 					<span>Profitez du calme, cela ne va sans doute pas durer...</span>

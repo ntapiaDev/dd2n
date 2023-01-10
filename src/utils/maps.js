@@ -1,5 +1,6 @@
 import r from 'rethinkdb';
 import layout from './layout';
+import { getBuildings } from './tools';
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']; //16 * 16 = 256 cases max
 const encampment = 'H8';
@@ -14,6 +15,8 @@ export const generateMap = async (user_id, rethinkdb) => {
     // Génération de la nouvelle carte
     let map = { user_id, encampment, 'uniques': [] }
     let rows = [];
+    const buildings = getBuildings();
+    console.log(buildings);
     for (let i = 0; i < size; i++) {
         let row = [];
         for (let j = 1; j < size + 1; j++) {
@@ -21,7 +24,8 @@ export const generateMap = async (user_id, rethinkdb) => {
             const zombies = Math.floor(Math.random() * (distance - 2)); // Définit la difficulté : proximité des zombies par rapport au campement
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
-            row.push({ 'coordinate': letters[i] + j, i, 'j': (j - 1), 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'empty': false, 'estimated': { 'zombies': 0, 'empty': false }, 'items': [], 'searchedBy': [], visible, visited });
+            const building = buildings[letters[i] + j] ?? '';
+            row.push({ 'coordinate': letters[i] + j, i, 'j': (j - 1), 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'empty': false, 'estimated': { 'zombies': 0, 'empty': false }, 'items': [], 'searchedBy': [], visible, visited, building });
         }
         rows.push(row);
     }
