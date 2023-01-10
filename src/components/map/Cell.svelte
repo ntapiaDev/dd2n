@@ -18,21 +18,22 @@
 		(cell.layout.border.includes(2) ? 'br ' : '') +
 		(cell.layout.border.includes(3) ? 'bb ' : '') +
 		(cell.layout.border.includes(4) ? 'bl ' : '') +
+		(((cell.visited && cell.empty) || (!cell.visited && cell.estimated.empty)) ? 'empty ' : '') +
 		(cell.visited ? '' : 'blur'))
 	: 'fog')
 </script>
 
 <td	class={style}
-	style={encampment !== cell.coordinate && cell.visible ? `background-color: rgb(255, 0, 0, ${cell.visited ? (cell.zombies / 16) : (cell.estimated / 16)})` : ''}>
+	style={encampment !== cell.coordinate && cell.visible ? `background-color: rgb(255, 0, 0, ${cell.visited ? (cell.zombies / 16) : (cell.estimated.zombies / 16)})` : ''}>
 	{#if travel}
 		<form method="POST" action="?/travel" use:enhance>
 			<input type="text" name="target" value={cell.coordinate} hidden>
 			<input type="text" name="ti" value={cell.i} hidden>
 			<input type="text" name="tj" value={cell.j} hidden>
-			<button>{cell.coordinate === encampment ? 'C' : (cell.visible ? (cell.visited ? cell.zombies : cell.estimated) : '?')}</button>
+			<button>{cell.coordinate === encampment ? 'C' : (cell.visible ? (cell.visited ? cell.zombies : cell.estimated.zombies) : '?')}</button>
 		</form>
 	{:else if cell.visible}
-		{cell.coordinate === encampment ? 'C' : (cell.visited ? cell.zombies : cell.estimated)}
+		{cell.coordinate === encampment ? 'C' : (cell.visited ? cell.zombies : cell.estimated.zombies)}
 	{/if}
 </td>
 
@@ -125,5 +126,9 @@
 	}
 	.blur {
 		filter : blur(1px);
+	}
+	.empty {
+		background-image: radial-gradient(rgb(48, 48, 48) 1px, transparent 0);
+  		background-size: 3px 3px;
 	}
 </style>

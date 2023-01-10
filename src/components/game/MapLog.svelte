@@ -121,6 +121,11 @@
 				<span><Item {item} /></span>
 			{/each}
 		</div>
+		{#if log.log.empty}
+			<span>La zone ne semble plus contenir grand chose d'utile.</span>
+		{/if}	
+	{:else if log.action === 'new'}
+		<div>L'agitation de la nuit a permis de dévoiler de nouvelles ressources...</div>
 	{:else if log.action === 'pickup'}
 		<div class="item">{log.player} a ramassé <span><Item item={log.log.item} /></span></div>
 	{:else if log.action === 'drop'}

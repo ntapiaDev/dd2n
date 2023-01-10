@@ -139,6 +139,8 @@ const search = async ({ locals }) => {
     const map = await getMap(locals.user.id, locals.rethinkdb);
     const itemList = await getItems(locals.rethinkdb);
     if (ap > 0) {
+        // Si la zone est vide, on renvoie une erreur
+        if (map.rows[li][lj].empty) return fail(400, { empty: true });
         // Si la case a déjà été fouillée ce jour, on renvoie une erreur
         if (map.rows[li][lj].searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
         const danger = map.rows[li][lj].layout.danger;
@@ -192,8 +194,11 @@ const search = async ({ locals }) => {
             loots.push(foundItem);
         }
         map.rows[li][lj].searchedBy.push(locals.user.id);
+        map.rows[li][lj].empty = Math.random() > (danger === 1 ?
+            0.5 : danger === 2 ?
+            0.75 : 0.9);
         await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, locals.rethinkdb)
-        await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots }, locals.rethinkdb);
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots, 'empty': map.rows[li][lj].empty }, locals.rethinkdb);
     } else return fail(400, { exhausted: true })
 }
 
@@ -217,7 +222,8 @@ const travel = async ({ locals, request }) => {
             // (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).estimated = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).zombies;
             // (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visible = true;
             // (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visited = true;
-            map.rows[li][lj].estimated = map.rows[li][lj].zombies;
+            map.rows[li][lj].estimated.zombies = map.rows[li][lj].zombies;
+            map.rows[li][lj].estimated.empty = map.rows[li][lj].empty;
             if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
             if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
             await getTravel(locals.user.id, target, ti, tj, ap, locals.user.hunger, locals.user.thirst, map, locals.rethinkdb);

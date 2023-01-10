@@ -8,6 +8,7 @@
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
 	import Heal from '../../../components/map/actions/Heal.svelte';
 	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
+	import Item from '../../../components/game/Item.svelte';
 	import Map from '../../../components/map/Map.svelte';
 	import MapLog from '../../../components/game/MapLog.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
@@ -29,6 +30,21 @@
 		cell.zombies === 0 ? ' safe' :
 		cell.zombies > 0 && cell.zombies <= armour ? ' warning' :
 		cell.zombies > 0 && cell.zombies > armour ? ' danger' : '';
+
+	const walking = {
+		attack: 0 ,
+		credit: "surang" ,
+		defense: 0 ,
+		description: "Vous n'avez plus rien à faire ici" ,
+		disease: 0 ,
+		hunger: 0 ,
+		icon: "walking" ,
+		id: "55473765-045d-4882-a2ba-d82fe93f97ab" ,
+		rarity: "commun" ,
+		thirst: 0 ,
+		type: "misc" ,
+		unique: false
+	}
 </script>
 
 <h1>Vous êtes sur la case {user.location} :</h1>
@@ -53,13 +69,18 @@
 					<span>Votre armure de <b>{armour}</b> est trop faible : vous êtes bloqué !</span>
 				{/if}
 			{/if}
+			{#if cell.empty}
+				<span><b>Cette zone est maintenant épuisée...</b></span>
+			{/if}
 		</div>
 		<div class="actions">
 			<span class="title">Actions disponibles :</span>
 			{#if user.location === map.encampment}
 				<Encampment />
 			{/if}
-			<Search />
+			{#if !cell.searchedBy.includes(user.id) && !cell.empty}
+				<Search />
+			{/if}
 			{#if user.hunger <= 75}
 				<Eat items={user.inventory} />
 			{/if}
@@ -69,13 +90,18 @@
 			{#if user.wound}
 				<Heal items={user.inventory} wound={user.wound} />
 			{/if}
-			{#if user.slots.W1.attack}
-				<Attack item={user.slots.W1} />
-			{:else}
-				<Attack />
+			{#if cell.zombies > 0}
+				{#if user.slots.W1.attack}
+					<Attack item={user.slots.W1} />
+				{:else}
+					<Attack />
+				{/if}
+				{#if user.slots.W2.attack && user.slots.W2.weapon === user.slots.W3.weapon}
+					<Attack item={user.slots.W2} />
+				{/if}
 			{/if}
-			{#if user.slots.W2.attack && user.slots.W2.weapon === user.slots.W3.weapon}
-				<Attack item={user.slots.W2} />
+			{#if user.location !== map.encampment && (cell.searchedBy.includes(user.id) || cell.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && cell.zombies === 0}
+				<Item item={walking} />
 			{/if}
 		</div>
 		<div class="items">
@@ -94,6 +120,9 @@
 		</div>
 		{#if form?.ammo}
 			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
+		{/if}
+		{#if form?.empty}
+			<p>Cette zone est épuisée.</p>
 		{/if}
 		{#if form?.exhausted}
 			<p>Vous n'avez plus assez de points d'action.</p>
