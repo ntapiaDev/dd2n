@@ -69,6 +69,20 @@
 			thirst: 0,
 			type: 'misc',
 			unique: false
+		},
+		{
+			attack: 0 ,
+			credit: "Smashicons" ,
+			defense: 0 ,
+			description: "Décédé" ,
+			disease: 0 ,
+			hunger: 0 ,
+			icon: "dead" ,
+			id: "1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8" ,
+			rarity: "commun" ,
+			thirst: 0 ,
+			type: "misc" ,
+			unique: false
 		}
 	];
 </script>
@@ -80,7 +94,7 @@
 	{:else if log.action === 'out'}
 		<div>{log.player} a quitté la zone.</div>
 	{:else if log.action === 'kill'}
-		<div>{log.player} a tué	<span class="zombies">{log.log.zombies} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec {log.log.weapon.toLowerCase()}.
+		<div>{log.player} a tué	<span class="zombies">{log.log.zombies} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="weapon">{log.log.weapon.toLowerCase()}</span>.
 			{#if log.log.broken}
 				<div>Son arme s'est brisée sous le choc.</div>
 			{:else if log.log.ammo}
@@ -119,9 +133,10 @@
         {:else if log.log.wound === 2}
             <div class="item">En se réveillant ce matin, {log.player} se sentait <span><Item item={wounds[3]} /></span></div>
         {:else if log.log.wound === 3}
-			<!-- Gestion de la mort... -->
-            <div>Vous devriez être mort...</div>
+			<div class="item">Gravement blessé, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
         {/if}
+	{:else if log.action === 'feed'}
+		<div>{log.player} a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.</div>
 	{/if}
 </div>
 
@@ -154,11 +169,23 @@
 	.zombies {
 		color: red;
 	}
+	.weapon {
+		color: orange;
+	}
 	.item {
 		display: flex;
 		align-items: center;
 	}
-	.item span:nth-child(1) {
+	.item span:first-child {
 		margin-left: 4px;
+	}
+	.item span:last-child {
+		margin-right: 4px;
+	}
+	.food {
+		color: green;
+	}
+	.drink {
+		color: blue;
 	}
 </style>

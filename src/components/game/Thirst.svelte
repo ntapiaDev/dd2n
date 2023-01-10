@@ -58,8 +58,23 @@
 			thirst: 0,
 			type: 'misc',
 			unique: false
+		},
+		{
+			attack: 0,
+			credit: 'Smashicons',
+			defense: 0,
+			description: 'Décédé',
+			disease: 0,
+			hunger: 0,
+			icon: 'dead',
+			id: '1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8',
+			rarity: 'commun',
+			thirst: 0,
+			type: 'misc',
+			unique: false
 		}
 	];
+	$: index = Math.floor(4 - (4 * $page.data.user.thirst) / 100) < 5 ? Math.floor(4 - (4 * $page.data.user.thirst) / 100) : 4
 </script>
 
-<Item item={thirst[$page.data.user.thirst]} />
+<Item item={thirst[index]} />

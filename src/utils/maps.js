@@ -33,36 +33,38 @@ export const generateMap = async (user_id, rethinkdb) => {
         if (err) throw err;
     });
     await r.table('users').filter(r.row("id").eq(user_id)).update({
-        'days': 1, 'ap': 100, 'wound': 0, 'hunger': 0, 'thirst': 0, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
+        'days': 1, 'ap': 100, 'wound': 0, 'hunger': 75, 'thirst': 75, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
             "attack": 0,
             "credit": "Freepik",
             "defense": 0,
-            "description": "Un sandwich végétarien",
+            "description": "Une cuisse de poulet",
             "disease": 0,
             "hunger": 1,
-            "icon": "sandwich",
-            "id": "4a8c8331-5c9c-4034-b4ff-69f8c0b43922",
+            "icon": "poulet",
+            "id": "41805ead-1cc7-4d58-8fc5-9dd1838ab331",
             "quality": 100,
             "rarity": "commun",
             "thirst": 0,
             "type": "food",
             "unique": false,
-            "uuid": crypto.randomUUID()
+            "uuid": crypto.randomUUID(),
+            "value": 20
         }, {
             "attack": 0,
-            "credit": "Freepik",
+            "credit": "Tanahcon",
             "defense": 0,
-            "description": "Une bouteille d'eau minérale",
+            "description": "Une canette de coca",
             "disease": 0,
             "hunger": 0,
-            "icon": "water",
-            "id": "95e76f54-8ca9-4528-bcc0-3c159dde7c8b",
+            "icon": "cola",
+            "id": "f8384e81-5c25-4509-96a6-f57f40a2faef",
             "quality": 100,
             "rarity": "commun",
             "thirst": 1,
             "type": "drink",
             "unique": false,
-            "uuid": crypto.randomUUID()
+            "uuid": crypto.randomUUID(),
+            "value": 20
         }], 'slots': {
             'W0': {
                 "attack": 1,
@@ -125,11 +127,11 @@ export const generateMap = async (user_id, rethinkdb) => {
     return map_id;
 }
 
-export const getAttack = async (user_id, map, slots, ap, wound, rethinkdb) => {
+export const getAttack = async (user_id, map, slots, ap, hunger, thirst, wound, rethinkdb) => {
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({'ap': (ap - 1), slots, wound}).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'ap': (ap - 1), 'hunger': (hunger - 1), 'thirst': (thirst - 1), slots, wound }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
@@ -150,7 +152,7 @@ export const getMap = async (user_id, rethinkdb) => {
         });
 }
 
-export const getNextDay = async (user_id, days, location, wound, rethinkdb) => {
+export const getNextDay = async (user_id, days, location, hunger, thirst, wound, rethinkdb) => {
     // Transformer en une seule requête update...
     let map = await getMap(user_id, rethinkdb);
     for (let row of map.rows) {
@@ -165,27 +167,27 @@ export const getNextDay = async (user_id, days, location, wound, rethinkdb) => {
     }
     if (wound === 1) wound = 0;
     else if (wound === 2) wound = 3;
-    // else if (wound === 3) : DEAD
+    else if (wound === 3) wound = 4;
 
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1, 'ap': 100, wound }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1, 'ap': 100, 'hunger': (hunger - 25), 'thirst': (thirst - 25), wound }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
 
-export const getSearch = async (user_id, map, ap, rethinkdb) => {
+export const getSearch = async (user_id, map, ap, hunger, thirst, rethinkdb) => {
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'ap': (ap - 1) }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'ap': (ap - 1), 'hunger': (hunger - 1), 'thirst': (thirst - 1) }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
 
-export const getTravel = async (user_id, target, ti, tj, ap, map, rethinkdb) => {
-    await r.table('users').filter({ "id": user_id }).update({ 'location': target, 'i': ti, 'j': tj, 'ap': (ap - 1) }).run(rethinkdb, function (err, result) {
+export const getTravel = async (user_id, target, ti, tj, ap, hunger, thirst, map, rethinkdb) => {
+    await r.table('users').filter({ "id": user_id }).update({ 'location': target, 'i': ti, 'j': tj, 'ap': (ap - 1), 'hunger': (hunger - 1), 'thirst': (thirst - 1) }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {

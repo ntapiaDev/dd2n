@@ -57,7 +57,7 @@ const attack = async ({ locals, request }) => {
         map.rows[locals.user.i][locals.user.j].zombies -= item.attack;
         if (map.rows[locals.user.i][locals.user.j].zombies < 0) map.rows[locals.user.i][locals.user.j].zombies = 0;
         const killed = zombies - map.rows[locals.user.i][locals.user.j].zombies;
-        await getAttack(locals.user.id, map, slots, locals.user.ap, wound, locals.rethinkdb)
+        await getAttack(locals.user.id, map, slots, locals.user.ap, locals.user.hunger, locals.user.thirst, wound, locals.rethinkdb)
         await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', ammo, broken, woundedW0, woundedW1 }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
@@ -91,7 +91,7 @@ const drop = async ({ locals, request }) => {
 }
 
 const nextday = async ({ locals }) => {
-    await getNextDay(locals.user.id, locals.user.days, locals.user.location, locals.user.wound, locals.rethinkdb);
+    await getNextDay(locals.user.id, locals.user.days, locals.user.location, locals.user.hunger, locals.user.thirst, locals.user.wound, locals.rethinkdb);
     if (locals.user.wound > 0) await addLog(locals.user.id, locals.user.location, locals.user.username, 'wound', { 'wound': locals.user.wound }, locals.rethinkdb);
 }
 
@@ -192,7 +192,7 @@ const search = async ({ locals }) => {
             loots.push(foundItem);
         }
         map.rows[li][lj].searchedBy.push(locals.user.id);
-        await getSearch(locals.user.id, map, ap, locals.rethinkdb)
+        await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, locals.rethinkdb)
         await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots }, locals.rethinkdb);
     } else return fail(400, { exhausted: true })
 }
@@ -220,7 +220,7 @@ const travel = async ({ locals, request }) => {
             map.rows[li][lj].estimated = map.rows[li][lj].zombies;
             if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
             if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
-            await getTravel(locals.user.id, target, ti, tj, ap, map, locals.rethinkdb);
+            await getTravel(locals.user.id, target, ti, tj, ap, locals.user.hunger, locals.user.thirst, map, locals.rethinkdb);
             await addLog(locals.user.id, location, locals.user.username, 'out', {}, locals.rethinkdb);
             await addLog(locals.user.id, target, locals.user.username, 'in', {}, locals.rethinkdb);
         }

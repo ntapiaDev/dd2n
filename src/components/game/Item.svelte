@@ -7,9 +7,13 @@
 	$: title = item.description +
 		(item.attack > 0 ? ` (Puissance : ${item.attack})` : '') +
 		(item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
+		(item.value ? ` (+${item.value}% et ${item.value / 10} PA)` : '') +
 		(item.wound ? ` (${item.wound})` : '') +
 		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
-		(item.unique ? ' (unique)' : '');
+		(item.unique ? ' (unique)' : '') +
+		// Affichage de la faim et de la soif dans la barre de joueur (à simplifier)
+		(['satiated', 'hungry', 'meal', 'hunger'].includes(item.icon) ? ` (${$page.data.user.hunger}%)` : '') +
+		(['hydrated', 'thirsty', 'drop', 'dehydrated'].includes(item.icon) ? ` (${$page.data.user.thirst}%)` : '');
 
 	$: durability =	!item.durability ? 1 : item.durability / item.durabilityMax;
 	$: x = durability > 0.5 ? 510 - (255 * 2 * durability) : 255;

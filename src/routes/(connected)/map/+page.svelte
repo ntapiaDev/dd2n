@@ -60,11 +60,11 @@
 				<Encampment />
 			{/if}
 			<Search />
-			{#if user.hunger}
-				<Eat />
+			{#if user.hunger <= 75}
+				<Eat items={user.inventory} />
 			{/if}
-			{#if user.thirst}
-				<Drink />
+			{#if user.thirst <= 75}
+				<Drink items={user.inventory} />
 			{/if}
 			{#if user.wound}
 				<Heal items={user.inventory} wound={user.wound} />
