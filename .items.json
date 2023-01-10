@@ -1,6 +1,7 @@
 [
     {
         "attack": 0,
+        "code": "b1",
         "credit": "Freepik",
         "defense": 0,
         "description": "Un paquet de chips entamé",
@@ -11,10 +12,12 @@
         "rarity": "commun",
         "thirst": 0,
         "type": "food",
-        "unique": false
+        "unique": false,
+        "value": 10
     },
     {
         "attack": 0,
+        "code": "b1",
         "credit": "Freepik",
         "defense": 0,
         "description": "Un sandwich végétarien",
@@ -25,10 +28,12 @@
         "rarity": "commun",
         "thirst": 0,
         "type": "food",
-        "unique": false
+        "unique": false,
+        "value": 30
     },
     {
         "attack": 0,
+        "code": "b1",
         "credit": "Freepik",
         "defense": 0,
         "description": "Un steak saignant",
@@ -39,10 +44,12 @@
         "rarity": "commun",
         "thirst": 0,
         "type": "food",
-        "unique": false
+        "unique": false,
+        "value": 40
     },
     {
         "attack": 0,
+        "code": "b1",
         "credit": "Freepik",
         "defense": 0,
         "description": "Une cuisse de poulet",
@@ -53,10 +60,12 @@
         "rarity": "commun",
         "thirst": 0,
         "type": "food",
-        "unique": false
+        "unique": false,
+        "value": 20
     },
     {
         "attack": 0,
+        "code": "b1",
         "credit": "Freepik",
         "defense": 0,
         "description": "Du jus d'orange",
@@ -67,10 +76,12 @@
         "rarity": "commun",
         "thirst": 1,
         "type": "drink",
-        "unique": false
+        "unique": false,
+        "value": 20
     },
     {
         "attack": 0,
+        "code": "b1",
         "credit": "Flat Icons",
         "defense": 0,
         "description": "Un vieux pinot noir",
@@ -81,10 +92,12 @@
         "rarity": "commun",
         "thirst": 1,
         "type": "drink",
-        "unique": false
+        "unique": false,
+        "value": 10
     },
     {
         "attack": 0,
+        "code": "b1",
         "credit": "Freepik",
         "defense": 0,
         "description": "Une bouteille d'eau minérale",
@@ -95,10 +108,12 @@
         "rarity": "commun",
         "thirst": 1,
         "type": "drink",
-        "unique": false
+        "unique": false,
+        "value": 50
     },
     {
         "attack": 0,
+        "code": "b1",
         "credit": "Tanahcon",
         "defense": 0,
         "description": "Une canette de coca",
@@ -109,10 +124,28 @@
         "rarity": "commun",
         "thirst": 1,
         "type": "drink",
-        "unique": false
+        "unique": false,
+        "value": 20
     },
     {
         "attack": 0,
+        "code": "b3",
+        "credit": "Konkapp",
+        "defense": 0,
+        "description": "Des pansements",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "bandages",
+        "id": "17777a5f-edc5-49c7-95b7-c744d962a12a",
+        "rarity": "inhabituel",
+        "thirst": 0,
+        "type": "drug",
+        "unique": false,
+        "wound": "égratignures"
+    },
+    {
+        "attack": 0,
+        "code": "b3",
         "credit": "Flat Icons",
         "defense": 0,
         "description": "Du paracétamol",
@@ -123,13 +156,15 @@
         "rarity": "inhabituel",
         "thirst": 0,
         "type": "drug",
-        "unique": false
+        "unique": false,
+        "wound": "égratignures"
     },
     {
         "attack": 0,
+        "code": "b3",
         "credit": "surang",
         "defense": 0,
-        "description": "De la Vicodin non addictive",
+        "description": "De la Vicodin",
         "disease": 1,
         "hunger": 0,
         "icon": "vicodin",
@@ -137,10 +172,12 @@
         "rarity": "rare",
         "thirst": 0,
         "type": "drug",
-        "unique": false
+        "unique": false,
+        "wound": "blessures graves"
     },
     {
         "attack": 0,
+        "code": "b3",
         "credit": "prettycons",
         "defense": 0,
         "description": "Des antibiotiques",
@@ -151,10 +188,12 @@
         "rarity": "rare",
         "thirst": 0,
         "type": "drug",
-        "unique": false
+        "unique": false,
+        "wound": "blessures graves"
     },
     {
         "attack": 0,
+        "code": "b3",
         "credit": "Freepik",
         "defense": 0,
         "description": "Une seringue de morphine",
@@ -165,7 +204,8 @@
         "rarity": "épique",
         "thirst": 0,
         "type": "drug",
-        "unique": false
+        "unique": false,
+        "wound": "blessures mortelles"
     },
     {
         "attack": 1,
@@ -185,6 +225,7 @@
     },
     {
         "attack": 2,
+        "code": "b5",
         "credit": "Freepik",
         "defense": 0,
         "description": "Une batte de baseball",
@@ -233,6 +274,7 @@
     },
     {
         "attack": 5,
+        "code": "b5",
         "credit": "kosonicon",
         "defense": 0,
         "description": "Un pistolet de policier",
@@ -249,6 +291,7 @@
     },
     {
         "attack": 8,
+        "code": "b5",
         "credit": "Chanut-is-Industries",
         "defense": 0,
         "description": "Un fusil de chasse",
@@ -281,6 +324,7 @@
     },
     {
         "attack": 10,
+        "code": "b5",
         "credit": "Nikita Golubev",
         "defense": 0,
         "description": "Un fusil à pompe",
@@ -313,6 +357,7 @@
     },
     {
         "attack": 0,
+        "code": "b5",
         "credit": "Smashicons",
         "defense": 0,
         "description": "Munition pour pistolet",
@@ -329,6 +374,7 @@
     },
     {
         "attack": 0,
+        "code": "b5",
         "credit": "Freepik",
         "defense": 0,
         "description": "Munition pour fusil",
@@ -345,6 +391,7 @@
     },
     {
         "attack": 0,
+        "code": "b5",
         "credit": "Smashicons",
         "defense": 0,
         "description": "Munition pour fusil à pompe",
@@ -437,6 +484,7 @@
     },
     {
         "attack": 0,
+        "code": "b5",
         "credit": "surang",
         "defense": 5,
         "description": "Un gilet pare-balles",
@@ -482,6 +530,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "surang",
         "defense": 0,
         "description": "Des morceaux de ferraille",
@@ -496,6 +545,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "smashingstocks",
         "defense": 0,
         "description": "Des planches de bois",
@@ -510,6 +560,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "Icongeek26",
         "defense": 0,
         "description": "Une bobine de ficelle",
@@ -524,6 +575,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "juicy_fish",
         "defense": 0,
         "description": "Une bouteille en plastique vide",
@@ -538,6 +590,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "Freepik",
         "defense": 0,
         "description": "Une paire d'élastiques",
@@ -552,6 +605,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "Mehwish",
         "defense": 0,
         "description": "Une poignée de clous rouillés",
@@ -566,6 +620,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "Chanut-is-Industries",
         "defense": 0,
         "description": "Quelques boulons et écrous",
@@ -580,6 +635,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "smashingstocks",
         "defense": 0,
         "description": "Un bloc de béton",
@@ -594,6 +650,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "Good Ware",
         "defense": 0,
         "description": "Un rouleau de corde emmêlé",
@@ -608,6 +665,19 @@
     },
     {
         "attack": 0,
+        "code": "b4",
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Une multiprise",
+        "icon": "power-strip",
+        "id": "09e700d1-8887-4823-a8e7-81c78711c0bd",
+        "rarity": "inhabituel",
+        "type": "resource",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "code": "b2",
         "credit": "Design Circle",
         "defense": 0,
         "description": "Une poutre en acier",
@@ -622,6 +692,7 @@
     },
     {
         "attack": 0,
+        "code": "b2",
         "credit": "Smashicons",
         "defense": 0,
         "description": "Du fil barbelé",
@@ -636,6 +707,7 @@
     },
     {
         "attack": 0,
+        "code": "b4",
         "credit": "Freepik",
         "defense": 0,
         "description": "Du fil électrique",
@@ -650,6 +722,7 @@
     },
     {
         "attack": 0,
+        "code": "b4",
         "credit": "surang",
         "defense": 0,
         "description": "Un circuit électronique",
@@ -664,6 +737,7 @@
     },
     {
         "attack": 0,
+        "code": "b4",
         "credit": "ultimatearm",
         "defense": 0,
         "description": "Une grosse vis",
@@ -692,6 +766,19 @@
     },
     {
         "attack": 0,
+        "code": "b4",
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Un écran tactile",
+        "icon": "tablet",
+        "id": "502a0872-4351-4c07-9f83-62d7f48641fd",
+        "rarity": "épique",
+        "type": "resource",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "code": "b2",
         "credit": "Flat Icons",
         "defense": 0,
         "description": "Une lame de scie circulaire",
@@ -764,11 +851,53 @@
         "attack": 0,
         "credit": "Freepik",
         "defense": 0,
+        "description": "Affamé",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "meal",
+        "id": "068033a5-e1c8-42d9-a16d-415ca7f8c5f6",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
         "description": "Boire",
         "disease": 0,
         "hunger": 0,
         "icon": "drink",
         "id": "d0c278e8-c40b-4362-aea9-1e0b239c4ff8",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Smashicons",
+        "defense": 0,
+        "description": "Décédé",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "dead",
+        "id": "1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Déshydraté",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "drop",
+        "id": "20738a03-9c34-411e-b08b-1ade1cc927a6",
         "rarity": "commun",
         "thirst": 0,
         "type": "misc",
@@ -806,6 +935,62 @@
         "attack": 0,
         "credit": "Freepik",
         "defense": 0,
+        "description": "Fouiller le bâtiment",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "building",
+        "id": "ade8a391-a49f-40b6-9862-55f61c891e86",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Gravement blessé",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "injured",
+        "id": "0c69e019-aaf0-48b3-ad20-ea38d9389d6f",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "kmg design",
+        "defense": 0,
+        "description": "Hydraté",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "hydrated",
+        "id": "0ba7eb83-93e3-4dee-8d70-ae0ca8f86292",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Indemne",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "healthy",
+        "id": "62372da1-0ac8-4bc0-a0a6-24ebcd928930",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
         "description": "Manger",
         "disease": 0,
         "hunger": 0,
@@ -820,11 +1005,137 @@
         "attack": 0,
         "credit": "Freepik",
         "defense": 0,
+        "description": "Mort de faim",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "hunger",
+        "id": "781741f2-56d8-4fba-8cb7-a79ea1ab1ca7",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Mort de soif",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "dehydrated",
+        "id": "9031ee03-0eb8-4f07-9bee-7218840ae2bc",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Petite faim",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "hungry",
+        "id": "23a97671-c68a-4b55-82ed-338a43ec6737",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Good Ware",
+        "defense": 0,
+        "description": "Petite soif",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "thirsty",
+        "id": "b8efc8bc-ba78-408b-932f-bc41c8e927f6",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "surang",
+        "defense": 0,
+        "description": "Quelques égratignures",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "scratch",
+        "id": "09453469-913a-401b-93df-e299a78bc300",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "manshagraphics",
+        "defense": 0,
+        "description": "Rassasié",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "satiated",
+        "id": "7265569b-e8aa-427f-a325-65c2ebc5bc59",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Se soigner",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "heal",
+        "id": "eb8a1f18-adb1-47c3-8481-f8210966519f",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
         "description": "Un méchant zombie dévoreur de cerveau",
         "disease": 0,
         "hunger": 0,
         "icon": "zombie",
         "id": "09bbb34f-667a-48b8-afed-ce876ff4154c",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "surang",
+        "defense": 0,
+        "description": "Vous n'avez plus rien à faire ici",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "walking",
+        "id": "55473765-045d-4882-a2ba-d82fe93f97ab",
+        "rarity": "commun",
+        "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "À l'agonie",
+        "disease": 0,
+        "hunger": 0,
+        "icon": "dying",
+        "id": "542a9d5d-36c8-42d5-b8c3-6910d7f3db00",
         "rarity": "commun",
         "thirst": 0,
         "type": "misc",

@@ -17,18 +17,16 @@ export const getEquip = async (user_id, inventory, slots, rethinkdb) => {
 }
 
 export const getItems = async (rethinkdb) => {
-    // let items;
-    // await r.table('items').run(rethinkdb, function (err, cursor) {
-    //     if (err) throw err;
-    //     cursor.toArray(function (err, result) {
-    //         if (err) throw err;
-    //         items = result;
-    //     });
-    // });
-    // return sortItems(items);
     return r.table('items').run(rethinkdb)
         .then(function (result) {
             return sortItems(result._responses[0]?.r);
+        });
+}
+
+export const getItemsByCode = async (code, rethinkdb) => {
+    return r.table('items').filter({ code }).run(rethinkdb)
+        .then(function (result) {
+            return sortItems(result._responses[0]?.r ?? []);
         });
 }
 

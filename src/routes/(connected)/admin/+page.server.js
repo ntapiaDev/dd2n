@@ -13,10 +13,7 @@ const addItem = async ({ locals, request }) => {
         'type': data.get('type'),
         'rarity': data.get('rarity'),
         'unique': data.get('unique') === "unique",
-        'hunger': parseInt(data.get('hunger')) || 0,
-        'thirst': parseInt(data.get('thirst')) || 0,
-        'disease': parseInt(data.get('disease')) || 0,
-        'attack': parseInt(data.get('attack')) || (data.get('type') !== ("drug" && "ammunition" && "blueprint" && "misc") ? 1 : 0),
+        'attack': parseInt(data.get('attack')) || 0,
         'defense': parseInt(data.get('defense')) || 0,
         'credit': data.get('credit')
     };

@@ -1,6 +1,6 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { canTravel } from '../../../utils/tools';
-import { getItems, moveItem } from '../../../utils/items';
+import { getItems, getItemsByCode, moveItem } from '../../../utils/items';
 import { addLog, deleteLogs, getLogsByCoordinate } from "../../../utils/logs";
 import { generateMap, getAttack, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
 
@@ -61,6 +61,74 @@ const attack = async ({ locals, request }) => {
         await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', ammo, broken, woundedW0, woundedW1 }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
+}
+
+const building = async ({ locals, request }) => {
+    const ap = locals.user.ap;
+    if (ap === 0) return fail(400, { exhausted: true });
+    const li = locals.user.i;
+    const lj = locals.user.j;
+    const map = await getMap(locals.user.id, locals.rethinkdb);
+    if (!map.rows[li][lj].building) return fail(400, { building: true });
+    // Si le bâtiment est vide, on renvoie une erreur
+    if (map.rows[li][lj].building.empty) return fail(400, { emptyBuilding: true });
+    // Si le bâtiment a déjà été fouillé ce jour, on renvoie une erreur
+    if (map.rows[li][lj].building.searchedBy.includes(locals.user.id)) return fail(400, { searchedBuilding: true });
+
+    const code = map.rows[li][lj].building.code;
+    const items = await getItemsByCode(code, locals.rethinkdb);
+
+    // REFACTO avec des options pour les valeurs
+    let pool = [];
+    for (let item of items) {
+        if (!item.unique || !map.uniques.includes(item.id)) {
+            // Probabilité en fonction du type
+            const type = item.type === 'resource' ? 10 :
+                item.type === 'ammunition' ? 15 :
+                ['food', 'drink'].includes(item.type) ? 3 :
+                ['drug', 'weapon', 'armour'].includes(item.type) ? 2 : 1;
+            // Probabilité en fonction de la rareté
+            const rarity = item.rarity === 'commun' ? 5 :
+                item.rarity === 'inhabituel' ? 3 :
+                item.rarity === 'rare' ? 2 : 1;
+            for (let i = 0; i < (type * rarity); i++) {
+                pool.push(item);
+            }
+        }
+    }
+
+    // REFACTO AUSSI ??
+    // Possibilité de trouver jusqu'à 5 objets à la fois
+    let loots = [];
+    for (let i = 0; i < Math.ceil(Math.random() * 5); i++) {
+        const foundItem = pool[Math.floor(Math.random() * pool.length)];
+        pool = pool.filter(i => i.id !== foundItem.id);
+        if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
+        foundItem.quality = 50 + Math.round(Math.random() * 50);
+        foundItem.uuid = crypto.randomUUID();
+        // Si l'item est une munition, on ajoute une quantité aléatoire
+        if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
+        // Si la munition est déjà présente sur la case, on stack la munition
+        if (foundItem.type === 'ammunition' && map.rows[li][lj].items.find(i => i.id === foundItem.id)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
+        else {
+            // On met l'item entier dans la case de la map
+            map.rows[li][lj].items.push(foundItem);
+            // Gestion des objets uniques
+            if (foundItem.unique) map.uniques.push(foundItem.id);
+        }
+        loots.push(foundItem);
+    }
+
+    map.rows[li][lj].building.searchedBy.push(locals.user.id);
+
+    // Bâtiment non épuisable??
+    // map.rows[li][lj].empty = Math.random() > (danger === 1 ?
+    //     0.5 : danger === 2 ?
+    //     0.75 : 0.9);
+    
+    // Même fonction que pour la fouille de la zone
+    await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, locals.rethinkdb);
+    await addLog(locals.user.id, locals.user.location, locals.user.username, 'building', { loots, 'empty': map.rows[li][lj].building.empty }, locals.rethinkdb);
 }
 
 const drop = async ({ locals, request }) => {
@@ -234,4 +302,4 @@ const travel = async ({ locals, request }) => {
     throw redirect(303, '/map');
 }
 
-export const actions = { attack, drop, nextday, pickUp, reset, search, travel };
+export const actions = { attack, building, drop, nextday, pickUp, reset, search, travel };

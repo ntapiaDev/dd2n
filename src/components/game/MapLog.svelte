@@ -124,6 +124,16 @@
 		{#if log.log.empty}
 			<span>La zone ne semble plus contenir grand chose d'utile.</span>
 		{/if}	
+	{:else if log.action === 'building'}
+		<div class="item">
+			{log.player} a trouvé dans le bâtiment
+			{#each sortItems(log.log.loots) as item}
+				<span><Item {item} /></span>
+			{/each}
+		</div>
+		{#if log.log.empty}
+			<span>Le bâtiment a l'air vide maintenant.</span>
+		{/if}	
 	{:else if log.action === 'new'}
 		<div>L'agitation de la nuit a permis de dévoiler de nouvelles ressources...</div>
 	{:else if log.action === 'pickup'}

@@ -21,10 +21,12 @@ export const generateMap = async (user_id, rethinkdb) => {
         let row = [];
         for (let j = 1; j < size + 1; j++) {
             const distance = Math.abs(i - letters.indexOf(encampment[0])) + Math.abs(encampment.substring(1) - j);
-            const zombies = Math.floor(Math.random() * (distance - 2)); // Définit la difficulté : proximité des zombies par rapport au campement
+            let zombies = Math.floor(Math.random() * (distance - 2)); // Définit la difficulté : proximité des zombies par rapport au campement
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
             const building = buildings[letters[i] + j] ?? '';
+            // Batiments avec +2 zombies? Ou zombies x2...?
+            if (building) zombies += 2;
             row.push({ 'coordinate': letters[i] + j, i, 'j': (j - 1), 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'empty': false, 'estimated': { 'zombies': 0, 'empty': false }, 'items': [], 'searchedBy': [], visible, visited, building });
         }
         rows.push(row);
@@ -163,11 +165,13 @@ export const getNextDay = async (user_id, days, location, hunger, thirst, wound,
     for (let row of map.rows) {
         for (let cell of row) {
             if (cell.coordinate !== encampment) {
-                cell.zombies = Math.round(cell.zombies * (1 + (cell.layout.danger / 10)) + 1);
+                // Petit coef si bâtiment sur la zone : +2 zombies au lieu de 1
+                cell.zombies = Math.round(cell.zombies * (1 + (cell.layout.danger / 10)) + (cell.building ? 2 : 1));
                 cell.visited = false;
             }
             if (location !== encampment && cell.coordinate === location) cell.visited = true;
             cell.searchedBy = [];
+            if (cell.building) cell.building.searchedBy = [];
             if (cell.empty && Math.random() > 0.9) {
                 cell.empty = false;
                 logs.push({ user_id, 'coordinate': cell.coordinate, 'action': 'new', 'date': Date.now() });

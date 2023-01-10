@@ -44,11 +44,11 @@ export const getBuildings = () => {
     }
 
     const buildings = {};
-    buildings[getCoord(inner)] = {type: 'une épicerie', code: 'b1'};
-    buildings[getCoord(middle)] = {type: 'un entrepot de bricolage', code: 'b2'};
-    buildings[getCoord(middle)] = {type: 'une pharmacie', code: 'b3'};
-    buildings[getCoord(outer)] = {type: 'un magasin de matériel informatique', code: 'b4'};
-    buildings[getCoord(outer)] = {type: 'un commissariat de police', code: 'b5'};
+    buildings[getCoord(inner)] = {type: 'Une épicerie', code: 'b1', searchedBy: [], empty: false};
+    buildings[getCoord(middle)] = {type: 'Un entrepot de bricolage', code: 'b2', searchedBy: [], empty: false};
+    buildings[getCoord(middle)] = {type: 'Une pharmacie', code: 'b3', searchedBy: [], empty: false};
+    buildings[getCoord(outer)] = {type: 'Un magasin de matériel informatique', code: 'b4', searchedBy: [], empty: false};
+    buildings[getCoord(outer)] = {type: 'Un commissariat de police', code: 'b5', searchedBy: [], empty: false};
 
     return buildings;
 }

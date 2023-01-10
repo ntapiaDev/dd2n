@@ -3,6 +3,7 @@
 	import { flip } from 'svelte/animate';
 	import { sortItems } from '../../../utils/tools';
 	import Attack from '../../../components/map/actions/Attack.svelte';
+	import Building from '../../../components/map/actions/Building.svelte';
 	import Drink from '../../../components/map/actions/Drink.svelte';
 	import Eat from '../../../components/map/actions/Eat.svelte';
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
@@ -61,7 +62,7 @@
 				<span>Il résiste aux hordes de zombies, pour le moment...</span>
 			{:else}
 				{#if cell.building}
-					<span>Vous remarquez <b>{cell.building.type}</b> dans les parages.</span>
+					<span>Vous remarquez <b>{cell.building.type.toLowerCase()}</b> dans les parages.</span>
 				{/if}
 				<span>Il y a actuellement <b>{cell.zombies}</b> zombie{cell.zombies > 1 ? 's' : ''} sur la zone.</span>
 				{#if cell.zombies === 0}
@@ -81,8 +82,11 @@
 			{#if user.location === map.encampment}
 				<Encampment />
 			{/if}
-			{#if !cell.searchedBy.includes(user.id) && !cell.empty}
+			{#if user.ap > 0 && !cell.searchedBy.includes(user.id) && !cell.empty}
 				<Search />
+			{/if}
+			{#if user.ap > 0 && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty}
+				<Building />
 			{/if}
 			{#if user.hunger <= 75}
 				<Eat items={user.inventory} />
@@ -93,7 +97,7 @@
 			{#if user.wound}
 				<Heal items={user.inventory} wound={user.wound} />
 			{/if}
-			{#if cell.zombies > 0}
+			{#if user.ap > 0 && cell.zombies > 0}
 				{#if user.slots.W1.attack}
 					<Attack item={user.slots.W1} />
 				{:else}
@@ -103,7 +107,8 @@
 					<Attack item={user.slots.W2} />
 				{/if}
 			{/if}
-			{#if user.location !== map.encampment && (cell.searchedBy.includes(user.id) || cell.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && cell.zombies === 0}
+			<!-- Gérer le cas avec 0 PA en étant toujours sur la map -->
+			{#if user.location !== map.encampment && (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && cell.zombies === 0}
 				<Item item={walking} />
 			{/if}
 		</div>
@@ -124,8 +129,14 @@
 		{#if form?.ammo}
 			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
 		{/if}
+		{#if form?.building}
+			<p>Il n'y a pas de bâtiment dans cette zone.</p>
+		{/if}
 		{#if form?.empty}
 			<p>Cette zone est épuisée.</p>
+		{/if}
+		{#if form?.emptyBuilding}
+			<p>Ce bâtiment est vide.</p>
 		{/if}
 		{#if form?.exhausted}
 			<p>Vous n'avez plus assez de points d'action.</p>
@@ -144,6 +155,9 @@
 		{/if}
 		{#if form?.searched}
 			<p>Vous avez déjà fouillé cette zone aujourd'hui.</p>
+		{/if}
+		{#if form?.searchedBuilding}
+			<p>Vous avez déjà fouillé ce bâtiment aujourd'hui.</p>
 		{/if}
 		{#if form?.wounded}
 			<p>Vous êtes trop mal-en-point pour pouvoir vous battre au corps à corps.</p>
