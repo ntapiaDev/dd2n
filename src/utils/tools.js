@@ -13,6 +13,12 @@ const getCoord = (array) => {
     return coor;
 }
 
+export const getDistance = (location, target) => {
+    const { i: li, j: lj} = getIJ(location);
+    const { i: ti, j: tj} = getIJ(target);
+    return Math.abs(li - ti) + Math.abs(lj - tj);
+}
+
 export const getIJ = (coordinate) => {
     const i = letters.indexOf(coordinate[0]);
     const j = coordinate.substring(1) - 1;

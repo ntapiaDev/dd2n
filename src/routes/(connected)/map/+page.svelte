@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { flip } from 'svelte/animate';
-	import { sortItems } from '../../../utils/tools';
+	import { getDistance, sortItems } from '../../../utils/tools';
 	import Attack from '../../../components/map/actions/Attack.svelte';
 	import Building from '../../../components/map/actions/Building.svelte';
 	import Drink from '../../../components/map/actions/Drink.svelte';
@@ -33,6 +33,9 @@
 		cell.zombies === 0 ? ' safe' :
 		cell.zombies > 0 && cell.zombies <= armour ? ' warning' :
 		cell.zombies > 0 && cell.zombies > armour ? ' danger' : '';
+
+	// Futur bouton de retour automatique
+	// $: distance = getDistance(user.location, map.encampment);
 
 	const walking = {
 		attack: 0 ,
