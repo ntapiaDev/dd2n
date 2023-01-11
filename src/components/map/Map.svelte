@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import Row from './Row.svelte';
 
+	export let current;
 	export let encampment;
 	export let rows;
 </script>
@@ -14,7 +15,7 @@
 		{/each}
 	</tr>
 	{#each rows as row}
-		<Row {row} {encampment} />
+		<Row {row} {encampment} {current} />
 	{/each}
 </table>
 

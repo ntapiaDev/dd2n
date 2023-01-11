@@ -16,6 +16,7 @@ export const addUser = async (user, rethinkdb) => {
         'wound': 0,
         'hunger': 100,
         'thirst': 100,
+        'force': false,
         'inventory': [],
         'slots': {
             'W1': {},

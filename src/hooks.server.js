@@ -60,6 +60,7 @@ export const handle = async ({ event, resolve }) => {
         hunger: user.hunger,
         thirst: user.thirst,
         wound: user.wound,
+        force: user.force,
         inventory: user.inventory,
         slots: user.slots
     }

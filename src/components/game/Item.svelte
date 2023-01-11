@@ -3,6 +3,7 @@
 	import { tooltip } from './tooltip';
 
 	export let item;
+	export let quantity = 0;
 
 	$: title = item.description +
 		(item.attack > 0 ? ` (Puissance : ${item.attack})` : '') +
@@ -29,9 +30,9 @@
 		use:tooltip />
 	{#if item.unique}
 		<img src={$page.url.origin + '/star.png'} alt="Objet unique by Kemalmoe" class="unique" {title} use:tooltip />
-	{:else if item.quantity}
+	{:else if item.quantity || quantity}
 		<span class="quantity" {title} use:tooltip>
-			{item.quantity}
+			{item.quantity ?? quantity}
 		</span>
 	{/if}
 	{#if item.durability}

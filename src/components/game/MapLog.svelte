@@ -101,6 +101,7 @@
 		<div>{log.player} a
 			{log.log.weapon === "Une grenade explosive" ? 'fait sauter' :
 				log.log.weapon === "Une grenade incendiaire" ? 'brûlé vif' :
+				log.log.weapon === "Une grenade fumigène" ? 'enfumé' :
 				log.log.weapon === "Du C-4" ? 'exterminé' : 'tué'}
 			<span class="zombies">{log.log.zombies} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="weapon">{firstLetterToLowerCase(log.log.weapon)}</span>.
 			{#if log.log.broken}
@@ -120,6 +121,9 @@
 				{:else if log.log.woundedW1 === 2}
 					<div>Après un accrochage avec un zombie, {log.player} est maintenant <Item item={wounds[2]} /></div>
 				{/if}
+			{/if}
+			{#if log.log.weapon === "Une grenade fumigène"}
+				<div>Cette diversion lui permet de quitter la zone en toute sécurité.</div>
 			{/if}
 		</div>
 	{:else if log.action === 'loot'}
@@ -160,6 +164,8 @@
         {/if}
 	{:else if log.action === 'feed'}
 		<div>{log.player} a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.</div>
+	{:else if log.action === 'force'}
+		<div>Rassemblant son courage, {log.player} est passé en force et peut quitter la zone. Après une lutte acharnée, il est maintenant <Item item={wounds[2]} /></div>
 	{/if}
 </div>
 

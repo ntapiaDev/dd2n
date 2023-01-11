@@ -4,9 +4,12 @@
 	import { canTravel } from '../../utils/tools';
 
 	export let cell;
+	export let current;
 	export let encampment;
 
-	$: travel = canTravel($page.data.user.location, cell.coordinate, cell.layout.border) && $page.data.user.ap > 0;
+	$: travel = canTravel($page.data.user.location, cell.coordinate, cell.layout.border)
+		&& $page.data.user.ap > 0
+		&& (current.zombies <= (($page.data.user.slots.A1.defense ?? 0) + ($page.data.user.slots.A2.defense ?? 0) + ($page.data.user.slots.A3.defense ?? 0)) || $page.data.user.force);
 	$: style = (encampment === cell.coordinate ? 'encampment ' : '') +
 	($page.data.user.location === cell.coordinate ? 'current ' : '') +
 	(travel ? 'travel ' : '') +

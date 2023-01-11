@@ -2,7 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { canTravel } from '../../../utils/tools';
 import { getItems, getItemsByCode, moveItem } from '../../../utils/items';
 import { addLog, deleteLogs, getLogsByCoordinate } from "../../../utils/logs";
-import { generateMap, getAttack, getMap, getNextDay, getSearch, getTravel } from "../../../utils/maps";
+import { generateMap, getAttack, getMap, getNextDay, getSearch, getTravel, pushThrough } from "../../../utils/maps";
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
@@ -23,11 +23,12 @@ const attack = async ({ locals, request }) => {
         // On vérifie que le type de munitions correspond
         if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
         let wound = locals.user.wound;
-        if (wound > 1 && item.slot !== 'W2') return fail(400, { wounded: true });
+        if (wound > 1 && !['W2', 'W4'].includes(item.slot)) return fail(400, { wounded: true });
         let ammo = false;
         let broken = false;
         let woundedW0 = false;
         let woundedW1 = false;
+        let force = false;
         if (item.slot === 'W0' && Math.random() > 0.75) {
             wound += 1;
             woundedW0 = wound;
@@ -58,6 +59,7 @@ const attack = async ({ locals, request }) => {
             if (slots['W4'].quantity === 0) {
                 slots['W4'] = '';
             }
+            if (item.description === 'Une grenade fumigène') force = true;
         }
         // Possibilité de coup critique?? Affiché dans les logs
         // Gestion de la qualité de l'arme??
@@ -65,7 +67,7 @@ const attack = async ({ locals, request }) => {
         map.rows[locals.user.i][locals.user.j].zombies -= item.attack;
         if (map.rows[locals.user.i][locals.user.j].zombies < 0) map.rows[locals.user.i][locals.user.j].zombies = 0;
         const killed = zombies - map.rows[locals.user.i][locals.user.j].zombies;
-        await getAttack(locals.user.id, map, slots, locals.user.ap, locals.user.hunger, locals.user.thirst, wound, locals.rethinkdb)
+        await getAttack(locals.user.id, map, slots, locals.user.ap, locals.user.hunger, locals.user.thirst, wound, force, locals.rethinkdb)
         await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', ammo, broken, woundedW0, woundedW1 }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
@@ -165,6 +167,14 @@ const drop = async ({ locals, request }) => {
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
     await addLog(locals.user.id, locals.user.location, locals.user.username, 'drop', { item }, locals.rethinkdb);
     throw redirect(303, '/map');
+}
+
+const force = async ({ locals }) => {
+    const map = await getMap(locals.user.id, locals.rethinkdb);
+    if (map.rows[locals.user.i][locals.user.j].zombies <= ((locals.user.slots.A1.defense ?? 0) + (locals.user.slots.A2.defense ?? 0) + (locals.user.slots.A3.defense ?? 0))) return fail(400, { clear: true });
+    if (locals.user.wound > 1) return fail(400, { force: true });
+    await pushThrough(locals.user.id, locals.rethinkdb);
+    await addLog(locals.user.id, locals.user.location, locals.user.username, 'force', { wound: true }, locals.rethinkdb);
 }
 
 const nextday = async ({ locals }) => {
@@ -293,6 +303,7 @@ const travel = async ({ locals, request }) => {
         const tj = data.get('tj');
         const map = await getMap(locals.user.id, locals.rethinkdb);
         if (map.rows[ti][tj].coordinate !== target) return fail(400, { location: true });
+        if ((map.rows[li][lj].zombies > ((locals.user.slots.A1.defense ?? 0) + (locals.user.slots.A2.defense ?? 0) + (locals.user.slots.A3.defense ?? 0))) && !locals.user.force) return fail(400, { blocked: true });
         // Refactoriser?? utilisé sur +page.svelte aussi
         const border = map.rows[ti][tj].layout.border;
         // Vérification de la possibilité de voyager (anti-triche)
@@ -309,4 +320,4 @@ const travel = async ({ locals, request }) => {
     throw redirect(303, '/map');
 }
 
-export const actions = { attack, building, drop, nextday, pickUp, reset, search, travel };
+export const actions = { attack, building, drop, force, nextday, pickUp, reset, search, travel };

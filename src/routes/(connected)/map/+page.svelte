@@ -7,6 +7,7 @@
 	import Drink from '../../../components/map/actions/Drink.svelte';
 	import Eat from '../../../components/map/actions/Eat.svelte';
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
+	import Force from '../../../components/map/actions/Force.svelte';
 	import Heal from '../../../components/map/actions/Heal.svelte';
 	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
 	import Item from '../../../components/game/Item.svelte';
@@ -51,7 +52,7 @@
 <h1>Vous êtes sur la case {user.location} :</h1>
 <section>
 	<div class="map">
-		<Map encampment={map.encampment} rows={map.rows} />
+		<Map encampment={map.encampment} rows={map.rows} current={cell} />
 		<NextDay />
 		<Reset />
 	</div>
@@ -69,8 +70,10 @@
 					<span>Profitez du calme, cela ne va sans doute pas durer...</span>
 				{:else if cell.zombies > 0 && cell.zombies <= armour}
 					<span>Votre armure de <b>{armour}</b> vous protège, vous pouvez progresser librement.</span>
-				{:else if cell.zombies > 0 && cell.zombies > armour}
+				{:else if cell.zombies > 0 && cell.zombies > armour && !user.force}
 					<span>Votre armure de <b>{armour}</b> est trop faible : vous êtes bloqué !</span>
+				{:else if user.force}
+					<span>Dépêchez-vous de partir d'ici avant de vous faire repérer !</span>
 				{/if}
 			{/if}
 			{#if cell.empty}
@@ -98,9 +101,9 @@
 				<Heal items={user.inventory} wound={user.wound} />
 			{/if}
 			{#if user.ap > 0 && cell.zombies > 0}
-				{#if user.slots.W1.attack}
+				{#if user.slots.W1.attack && user.wound <2}
 					<Attack item={user.slots.W1} />
-				{:else}
+				{:else if user.wound <2}
 					<Attack />
 				{/if}
 				{#if user.slots.W2.attack && user.slots.W2.weapon === user.slots.W3.weapon}
@@ -109,6 +112,9 @@
 				{#if user.slots.W4.attack}
 					<Attack item={user.slots.W4} />
 				{/if}
+			{/if}
+			{#if (cell.zombies > ((user.slots.A1.defense ?? 0) + (user.slots.A2.defense ?? 0) + (user.slots.A3.defense ?? 0))) && !user.force && (user.wound < 2)}
+				<Force />
 			{/if}
 			<!-- Gérer le cas avec 0 PA en étant toujours sur la map -->
 			{#if user.location !== map.encampment && (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && cell.zombies === 0}
@@ -131,41 +137,35 @@
 		</div>
 		{#if form?.ammo}
 			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
-		{/if}
-		{#if form?.building}
+		{:else if form?.blocked}
+			<p>Il y a trop de zombies pour pouvoir passer.</p>
+		{:else if form?.building}
 			<p>Il n'y a pas de bâtiment dans cette zone.</p>
-		{/if}
-		{#if form?.empty}
+		{:else if form?.clear}
+			<p>Vous n'avez pas besoin de passer en force pour quitter la zone.</p>
+		{:else if form?.empty}
 			<p>Cette zone est épuisée.</p>
-		{/if}
-		{#if form?.emptyBuilding}
+		{:else if form?.emptyBuilding}
 			<p>Ce bâtiment est vide.</p>
-		{/if}
-		{#if form?.exhausted}
+		{:else if form?.exhausted}
 			<p>Vous n'avez plus assez de points d'action.</p>
-		{/if}
-		{#if form?.full}
+		{:else if form?.force}
+			<p>Il serait trop dangereux de passer en force avec vos blessures.</p>
+		{:else if form?.full}
 			<p>Votre inventaire est plein.</p>
-		{/if}
-		{#if form?.item}
+		{:else if form?.item}
 			<p>Vous ne possédez pas cette arme ou celle-ci n'est pas équipée.</p>
-		{/if}
-		{#if form?.location}
+		{:else if form?.location}
 			<p>Vous n'êtes pas sur la bonne case.</p>
-		{/if}
-		{#if form?.origin}
+		{:else if form?.origin}
 			<p>Cet objet n'est pas présent sur la case ou dans votre inventaire.</p>
-		{/if}
-		{#if form?.searched}
+		{:else if form?.searched}
 			<p>Vous avez déjà fouillé cette zone aujourd'hui.</p>
-		{/if}
-		{#if form?.searchedBuilding}
+		{:else if form?.searchedBuilding}
 			<p>Vous avez déjà fouillé ce bâtiment aujourd'hui.</p>
-		{/if}
-		{#if form?.wounded}
+		{:else if form?.wounded}
 			<p>Vous êtes trop mal-en-point pour pouvoir vous battre au corps à corps.</p>
-		{/if}
-		{#if form?.zombies}
+		{:else if form?.zombies}
 			<p>Il n'y a pas de zombies à attaquer.</p>
 		{/if}
 	</div>

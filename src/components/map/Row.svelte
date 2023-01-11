@@ -1,6 +1,7 @@
 <script>
     import Cell from "./Cell.svelte";
 
+	export let current;
 	export let row;
 	export let encampment;
 </script>
@@ -8,7 +9,7 @@
 <tr>
 	<td>{row[0].coordinate[0]}</td>
 	{#each row as cell}
-		<Cell {cell} {encampment} />
+		<Cell {cell} {encampment} {current} />
 	{/each}
 </tr>
 

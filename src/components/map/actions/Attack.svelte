@@ -1,4 +1,5 @@
 <script>
+	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
 	import Item from '../../game/Item.svelte';
 
@@ -23,7 +24,7 @@
 <form method="POST" action="/map?/attack" use:enhance>
 	<input type="text" name="id" value={item.id} hidden>
 	<button>
-		<Item {item} />
+		<Item {item} quantity={item.slot === 'W2' ? $page.data.user.slots.W3.quantity : 0}/>
 	</button>
 </form>
 

@@ -39,7 +39,7 @@ export const generateMap = async (user_id, rethinkdb) => {
         if (err) throw err;
     });
     await r.table('users').filter(r.row("id").eq(user_id)).update({
-        'days': 1, 'ap': 100, 'wound': 0, 'hunger': 75, 'thirst': 75, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
+        'days': 1, 'ap': 100, 'wound': 0, 'hunger': 75, 'thirst': 75, 'force': false, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
             "attack": 0,
             "credit": "Freepik",
             "defense": 0,
@@ -134,25 +134,16 @@ export const generateMap = async (user_id, rethinkdb) => {
     return map_id;
 }
 
-export const getAttack = async (user_id, map, slots, ap, hunger, thirst, wound, rethinkdb) => {
+export const getAttack = async (user_id, map, slots, ap, hunger, thirst, wound, force, rethinkdb) => {
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'ap': (ap - 1), 'hunger': (hunger - 1), 'thirst': (thirst - 1), slots, wound }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'ap': (ap - 1), 'hunger': (hunger - 1), 'thirst': (thirst - 1), slots, wound, force }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
 
 export const getMap = async (user_id, rethinkdb) => {
-    // let map;
-    // await r.table('maps').filter(r.row("user_id").eq(user_id)).run(rethinkdb, function (err, cursor) {
-    //     if (err) throw err;
-    //     cursor.toArray(function (err, result) {
-    //         if (err) throw err;
-    //         map = result[0];
-    //     });
-    // });
-    // return map;
     return r.table('maps').filter({ user_id }).run(rethinkdb)
         .then(function (result) {
             return result._responses[0]?.r[0];
@@ -186,7 +177,7 @@ export const getNextDay = async (user_id, days, location, hunger, thirst, wound,
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1, 'ap': 100, 'hunger': (hunger - 25), 'thirst': (thirst - 25), wound }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter(r.row("id").eq(user_id)).update({ 'days': days + 1, 'ap': 100, 'hunger': (hunger - 25), 'thirst': (thirst - 25), wound, 'force': false }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
     // A FACTORISER ;) Ajout d'un log si une case s'est régénérée pendant la nuit
@@ -205,10 +196,16 @@ export const getSearch = async (user_id, map, ap, hunger, thirst, rethinkdb) => 
 }
 
 export const getTravel = async (user_id, target, ti, tj, ap, hunger, thirst, map, rethinkdb) => {
-    await r.table('users').filter({ "id": user_id }).update({ 'location': target, 'i': ti, 'j': tj, 'ap': (ap - 1), 'hunger': (hunger - 1), 'thirst': (thirst - 1) }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter({ "id": user_id }).update({ 'location': target, 'i': ti, 'j': tj, 'ap': (ap - 1), 'hunger': (hunger - 1), 'thirst': (thirst - 1), 'force': false }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
     await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
+        if (err) throw err;
+    });
+}
+
+export const pushThrough = async (user_id, rethinkdb) => {
+    await r.table('users').filter({ "id": user_id }).update({ 'force': true, 'wound': 2 }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
