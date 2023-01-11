@@ -64,7 +64,7 @@
 				<span>Il résiste aux hordes de zombies, pour le moment...</span>
 			{:else}
 				{#if cell.building}
-					<span>Vous remarquez <b>{cell.building.type.toLowerCase()}{cell.building.empty ? ' vide' : ''}</b> dans les parages.</span>
+					<span>Vous remarquez <b>{cell.building.type.toLowerCase()}{cell.building.empty ? ' vide' : ''}</b> dans les parages{#if (cell.zombies > ((user.slots.A1.defense ?? 0) + (user.slots.A2.defense ?? 0) + (user.slots.A3.defense ?? 0))) && !cell.building.empty}{' mais son accès est bloqué par une horde de zombies'}{/if}.</span>
 				{/if}
 				<span>Il y a actuellement <b>{cell.zombies}</b> zombie{cell.zombies > 1 ? 's' : ''} sur la zone.</span>
 				{#if cell.zombies === 0}
@@ -94,7 +94,7 @@
 			{#if user.ap && !cell.searchedBy.includes(user.id) && !cell.empty}
 				<Search />
 			{/if}
-			{#if user.ap && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty}
+			{#if user.ap && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty && (cell.zombies <= ((user.slots.A1.defense ?? 0) + (user.slots.A2.defense ?? 0) + (user.slots.A3.defense ?? 0)))}
 				<Building />
 			{/if}
 			{#if user.hunger <= 75}
@@ -123,7 +123,7 @@
 				<Force />
 			{/if}
 			<!-- Gérer le cas avec 0 PA en étant toujours sur la map -->
-			{#if user.location !== map.encampment && (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && !cell.zombies}
+			{#if (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && !cell.zombies}
 				<Item item={walking} />
 			{/if}
 		</div>
@@ -143,6 +143,8 @@
 		</div>
 		{#if form?.ammo}
 			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
+		{:else if form?.access}
+			<p>Il y a trop de zombies pour fouiller le bâtiment.</p>
 		{:else if form?.blocked}
 			<p>Il y a trop de zombies pour pouvoir passer.</p>
 		{:else if form?.building}

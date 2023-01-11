@@ -25,6 +25,10 @@
 </form>
 
 <style>
+	form {
+		width: 25px;
+		height: 25px;
+	}
 	button {
 		border: none;
 		background-color: transparent;

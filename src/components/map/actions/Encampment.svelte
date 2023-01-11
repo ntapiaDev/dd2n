@@ -18,13 +18,17 @@
 	};
 </script>
 
-<!-- <form method="POST" action="/map?/encampment" use:enhance> -->
-<button>
-	<Item {item} />
-</button>
+<form method="POST" action="/map?/encampment" use:enhance>
+	<button>
+		<Item {item} />
+	</button>
+</form>
 
-<!-- </form> -->
 <style>
+	form {
+		width: 25px;
+		height: 25px;
+	}
 	button {
 		border: none;
 		background-color: transparent;

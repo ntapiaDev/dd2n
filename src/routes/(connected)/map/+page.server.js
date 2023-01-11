@@ -30,7 +30,7 @@ const attack = async ({ locals, request }) => {
         let broken = false;
         let woundedW0 = false;
         let woundedW1 = false;
-        let force = false;
+        let force = locals.user.force;
         if (item.slot === 'W0' && Math.random() > 0.75) {
             wound += 1;
             woundedW0 = wound;
@@ -61,7 +61,7 @@ const attack = async ({ locals, request }) => {
             if (slots['W4'].quantity === 0) {
                 slots['W4'] = '';
             }
-            if (item.description === 'Une grenade fumigène') force = true;
+            if (item.description === 'Une grenade fumigène' && !force) force = true;
         }
         // Possibilité de coup critique?? Affiché dans les logs
         // Gestion de la qualité de l'arme??
@@ -88,11 +88,14 @@ const building = async ({ locals, request }) => {
     const li = locals.user.i;
     const lj = locals.user.j;
     const map = await getMap(locals.user.id, locals.rethinkdb);
+    // S'il n'y a pas de batiment, on renvoie une erreur
     if (!map.rows[li][lj].building) return fail(400, { building: true });
     // Si le bâtiment est vide, on renvoie une erreur
     if (map.rows[li][lj].building.empty) return fail(400, { emptyBuilding: true });
     // Si le bâtiment a déjà été fouillé ce jour, on renvoie une erreur
     if (map.rows[li][lj].building.searchedBy.includes(locals.user.id)) return fail(400, { searchedBuilding: true });
+    // S'il y a trop de zombies sur la zone, on renvoie une erreur
+    if ((map.rows[li][lj].zombies > ((locals.user.slots.A1.defense ?? 0) + (locals.user.slots.A2.defense ?? 0) + (locals.user.slots.A3.defense ?? 0)))) return fail(400, { access: true });
 
     const code = map.rows[li][lj].building.code;
     const items = await getItemsByCode(code, locals.rethinkdb);
