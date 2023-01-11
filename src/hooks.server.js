@@ -62,7 +62,8 @@ export const handle = async ({ event, resolve }) => {
         wound: user.wound,
         force: user.force,
         inventory: user.inventory,
-        slots: user.slots
+        slots: user.slots,
+        stats: user.stats
     }
 
     const response = await resolve(event);

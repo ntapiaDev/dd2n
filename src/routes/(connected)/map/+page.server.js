@@ -69,14 +69,17 @@ const attack = async ({ locals, request }) => {
         map.rows[li][lj].zombies -= item.attack;
         if (map.rows[li][lj].zombies < 0) map.rows[li][lj].zombies = 0;
         const killed = zombies - map.rows[li][lj].zombies;
-        // Coup critique :
+        // Coup critique
         let critical = 0;
         if (map.rows[li][lj].zombies > 0 && Math.random() > 0.9) {
             map.rows[li][lj].zombies -= (Math.ceil(item.attack * Math.random()));
             if (map.rows[li][lj].zombies < 0) map.rows[li][lj].zombies = 0;
             critical = zombies - killed - map.rows[li][lj].zombies;
-        } 
-        await getAttack(locals.user.id, map, slots, locals.user.ap, locals.user.hunger, locals.user.thirst, wound, force, locals.rethinkdb)
+        }
+        // Statistiques nombre de zombies tués
+        const stats = locals.user.stats;
+        stats.zombies += (killed + critical);
+        await getAttack(locals.user.id, map, slots, locals.user.ap, locals.user.hunger, locals.user.thirst, wound, force, stats, locals.rethinkdb)
         await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', ammo, broken, woundedW0, woundedW1, critical }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
@@ -149,8 +152,12 @@ const building = async ({ locals, request }) => {
     // Ne se régénère pas...
     map.rows[li][lj].building.empty = Math.random() > 0.9;
     
+    // Stats objets trouvés
+    const stats = locals.user.stats;
+    stats.items += loots.length;
+
     // Même fonction que pour la fouille de la zone
-    await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, locals.rethinkdb);
+    await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, stats, locals.rethinkdb);
     await addLog(locals.user.id, locals.user.location, locals.user.username, 'building', { loots, 'empty': map.rows[li][lj].building.empty }, locals.rethinkdb);
 }
 
@@ -298,7 +305,10 @@ const search = async ({ locals }) => {
         map.rows[li][lj].empty = Math.random() > (danger === 1 ?
             0.5 : danger === 2 ?
             0.75 : 0.9);
-        await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, locals.rethinkdb)
+        // Stats objets trouvés
+        const stats = locals.user.stats;
+        stats.items += loots.length;
+        await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, stats, locals.rethinkdb)
         await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots, 'empty': map.rows[li][lj].empty }, locals.rethinkdb);
     } else return fail(400, { exhausted: true })
 }

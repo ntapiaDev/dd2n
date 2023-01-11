@@ -5,7 +5,9 @@
 	export let item;
 	export let quantity = 0;
 
-	$: title = item.description +
+	// Titre exporté pour les stats (Header)
+	// $: title = item.description +
+	export let title = item.description +
 		(item.attack > 0 ? ` (Puissance : ${item.attack})` : '') +
 		(item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
 		(item.value ? ` (+${item.value}% et ${item.value / 10} PA)` : '') +

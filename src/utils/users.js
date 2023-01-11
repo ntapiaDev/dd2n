@@ -26,6 +26,10 @@ export const addUser = async (user, rethinkdb) => {
             'A1': {},
             'A2': {},
             'A3': {},
+        },
+        'stats': {
+            'items': 0,
+            'zombies': 0
         }
     }).run(rethinkdb, function (err, result) {
         if (err) throw err;
