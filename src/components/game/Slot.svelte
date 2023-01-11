@@ -51,6 +51,17 @@
 			type: 'misc',
 			unique: false
 		},
+		W4: {
+			attack: 0,
+			credit: 'Smashicons',
+			defense: 0,
+			description: "Équiper de l'explosif",
+			icon: 'explosive',
+			id: '9e067be7-c438-40c3-9974-5d92582bb8c1',
+			rarity: 'commun',
+			type: 'misc',
+			unique: false
+		},
 		A1: {
 			attack: 0,
 			credit: 'iconixar',

@@ -14,6 +14,7 @@
 		'Médicament',
 		'Arme',
 		'Munition',
+		'Explosif',
 		'Armure',
 		'Ressource',
 		'Plan',
@@ -54,6 +55,7 @@
 				<option value="drug">Médicament</option>
 				<option value="weapon">Arme</option>
 				<option value="ammunition">Munition</option>
+				<option value="explosive">Explosif</option>
 				<option value="armour">Armure</option>
 				<option value="resource">Ressource</option>
 				<option value="blueprint">Plan</option>

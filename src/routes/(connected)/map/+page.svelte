@@ -106,6 +106,9 @@
 				{#if user.slots.W2.attack && user.slots.W2.weapon === user.slots.W3.weapon}
 					<Attack item={user.slots.W2} />
 				{/if}
+				{#if user.slots.W4.attack}
+					<Attack item={user.slots.W4} />
+				{/if}
 			{/if}
 			<!-- Gérer le cas avec 0 PA en étant toujours sur la map -->
 			{#if user.location !== map.encampment && (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && cell.zombies === 0}

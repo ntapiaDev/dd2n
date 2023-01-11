@@ -1,7 +1,7 @@
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']; //16 * 16 = 256 cases max
 
 export const sortItems = (items) => {
-    const order = ['food', 'drink', 'drug', 'weapon', 'ammunition', 'armour', 'resource', 'blueprint', 'misc'];
+    const order = ['food', 'drink', 'drug', 'weapon', 'ammunition', 'explosive', 'armour', 'resource', 'blueprint', 'misc'];
     return items = items.sort((a, b) => order.indexOf(a.type) > order.indexOf(b.type) ? 1
     : order.indexOf(a.type) < order.indexOf(b.type) ? -1 
     // Si légendaire utilisé, refaire un tableau de tri par qualité... (/!\ Noms en français)

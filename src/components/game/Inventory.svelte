@@ -1,7 +1,9 @@
 <script>
+    import { page } from '$app/stores';
     import { flip } from 'svelte/animate';
     import { sortItems } from '../../utils/tools';
 	import InteractiveItem from '../map/actions/InteractiveItem.svelte';
+	import Item from './Item.svelte';
 
 	export let items;
 
@@ -11,8 +13,12 @@
 <span class="inventory">
     <span class="title">Inventaire :</span>
     {#each sortItems(items) as item (item.uuid)}
-        <span class="animation" animate:flip>         
-            <InteractiveItem {item} action={'/map?/drop'} />         
+        <span class="animation" animate:flip>
+            {#if $page.url.pathname === '/map'}
+                <InteractiveItem {item} action={'/map?/drop'} /> 
+            {:else}
+                <Item {item} />
+            {/if}
         </span>
     {/each}
     {#each Array(size - items.length) as _}

@@ -20,6 +20,7 @@ const attack = async ({ locals, request }) => {
     if (item) {
         const map = await getMap(locals.user.id, locals.rethinkdb);
         if (map.rows[locals.user.i][locals.user.j].zombies === 0) return fail(400, { zombies: true });
+        // On vérifie que le type de munitions correspond
         if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
         let wound = locals.user.wound;
         if (wound > 1 && item.slot !== 'W2') return fail(400, { wounded: true });
@@ -49,6 +50,13 @@ const attack = async ({ locals, request }) => {
             if (slots['W3'].quantity === 0) {
                 slots['W3'] = '';
                 ammo = true;
+            }
+        }
+        // Gestion des explosifs
+        else if (item.slot === 'W4') {
+            slots['W4'].quantity -= 1;
+            if (slots['W4'].quantity === 0) {
+                slots['W4'] = '';
             }
         }
         // Possibilité de coup critique?? Affiché dans les logs
@@ -85,6 +93,7 @@ const building = async ({ locals, request }) => {
             // Probabilité en fonction du type
             const type = item.type === 'resource' ? 10 :
                 item.type === 'ammunition' ? 15 :
+                item.type === 'explosive' ? 5 :
                 ['food', 'drink'].includes(item.type) ? 3 :
                 ['drug', 'weapon', 'armour'].includes(item.type) ? 2 : 1;
             // Probabilité en fonction de la rareté
@@ -98,9 +107,9 @@ const building = async ({ locals, request }) => {
     }
 
     // REFACTO AUSSI ??
-    // Possibilité de trouver jusqu'à 5 objets à la fois
+    // Possibilité de trouver entre 2 et 5 objets à la fois
     let loots = [];
-    for (let i = 0; i < Math.ceil(Math.random() * 5); i++) {
+    for (let i = 0; i < (Math.ceil(Math.random() * 4) + 1); i++) {
         const foundItem = pool[Math.floor(Math.random() * pool.length)];
         pool = pool.filter(i => i.id !== foundItem.id);
         if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
@@ -108,8 +117,9 @@ const building = async ({ locals, request }) => {
         foundItem.uuid = crypto.randomUUID();
         // Si l'item est une munition, on ajoute une quantité aléatoire
         if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
+        if (foundItem.type === 'explosive') foundItem.quantity = 1;
         // Si la munition est déjà présente sur la case, on stack la munition
-        if (foundItem.type === 'ammunition' && map.rows[li][lj].items.find(i => i.id === foundItem.id)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
+        if (['ammunition', 'explosive'].includes(foundItem.type) && map.rows[li][lj].items.find(i => i.id === foundItem.id)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
         else {
             // On met l'item entier dans la case de la map
             map.rows[li][lj].items.push(foundItem);
@@ -123,7 +133,7 @@ const building = async ({ locals, request }) => {
 
     // Bâtiments non épuisables??
     // Ne se régénère pas...
-    map.rows[li][lj].building.empty = Math.random() > 0.75;
+    map.rows[li][lj].building.empty = Math.random() > 0.9;
     
     // Même fonction que pour la fouille de la zone
     await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, locals.rethinkdb);
@@ -150,7 +160,7 @@ const drop = async ({ locals, request }) => {
     const li = locals.user.i;
     const lj = locals.user.j;
     const slots = locals.user.slots;
-    if (item.type === 'ammunition' && map.rows[li][lj].items.find(i => i.id === item.id)) map.rows[li][lj].items.find(i => i.id === item.id).quantity += item.quantity;
+    if (['ammunition', 'explosive'].includes(item.type) && map.rows[li][lj].items.find(i => i.id === item.id)) map.rows[li][lj].items.find(i => i.id === item.id).quantity += item.quantity;
     else map.rows[li][lj].items.push(item);
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
     await addLog(locals.user.id, locals.user.location, locals.user.username, 'drop', { item }, locals.rethinkdb);
@@ -182,8 +192,8 @@ const pickUp = async ({ locals, request }) => {
     const item = getItem();
     const slots = locals.user.slots;
     const inventory = locals.user.inventory;
-    if (item.type === 'ammunition' && slots[item.slot].id === item.id) slots[item.slot].quantity += item.quantity;
-    else if (item.type === 'ammunition' && inventory.find(i => i.id === item.id)) inventory.find(i => i.id === item.id).quantity += item.quantity;
+    if (['ammunition', 'explosive'].includes(item.type) && slots[item.slot].id === item.id) slots[item.slot].quantity += item.quantity;
+    else if (['ammunition', 'explosive'].includes(item.type) && inventory.find(i => i.id === item.id)) inventory.find(i => i.id === item.id).quantity += item.quantity;
     else {
         // On vérifie que l'inventaire n'est pas plein
         if (inventory.length === 10) return fail(400, { full: true });
@@ -229,6 +239,7 @@ const search = async ({ locals }) => {
                 // Probabilité en fonction du type
                 const type = item.type === 'resource' ? 10 :
                     item.type === 'ammunition' ? 15 :
+                    item.type === 'explosive' ? 5 :
                     ['food', 'drink'].includes(item.type) ? 3 :
                     ['drug', 'weapon', 'armour'].includes(item.type) ? 2 : 1;
                 // Probabilité en fonction de la rareté
@@ -250,8 +261,9 @@ const search = async ({ locals }) => {
             foundItem.uuid = crypto.randomUUID();
             // Si l'item est une munition, on ajoute une quantité aléatoire
             if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
+            if (foundItem.type === 'explosive') foundItem.quantity = 1;
             // Si la munition est déjà présente sur la case, on stack la munition
-            if (foundItem.type === 'ammunition' && map.rows[li][lj].items.find(i => i.id === foundItem.id)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
+            if (['ammunition', 'explosive'].includes(foundItem.type) && map.rows[li][lj].items.find(i => i.id === foundItem.id)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
             else {
                 // On met l'item entier dans la case de la map
                 map.rows[li][lj].items.push(foundItem);
@@ -285,10 +297,6 @@ const travel = async ({ locals, request }) => {
         const border = map.rows[ti][tj].layout.border;
         // Vérification de la possibilité de voyager (anti-triche)
         if (canTravel(location, target, border)) {
-            // Trop lourd???
-            // (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).estimated = (map.rows.find(row => row.find(c => c.coordinate === location)).find(c => c.coordinate === location)).zombies;
-            // (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visible = true;
-            // (map.rows.find(row => row.find(c => c.coordinate === target)).find(c => c.coordinate === target)).visited = true;
             map.rows[li][lj].estimated.zombies = map.rows[li][lj].zombies;
             map.rows[li][lj].estimated.empty = map.rows[li][lj].empty;
             if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;

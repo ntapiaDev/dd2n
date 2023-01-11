@@ -13,6 +13,10 @@
 		return `Le ${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()} à ${addZero(date.getHours())}:${addZero(date.getMinutes())}:${addZero(date.getSeconds())}`;
 	};
 
+	const firstLetterToLowerCase = (word) => {
+		return word.charAt(0).toLowerCase() + word.slice(1);
+	}
+
 	const wounds = [
 		{
 			attack: 0,
@@ -94,7 +98,11 @@
 	{:else if log.action === 'out'}
 		<div>{log.player} a quitté la zone.</div>
 	{:else if log.action === 'kill'}
-		<div>{log.player} a tué	<span class="zombies">{log.log.zombies} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="weapon">{log.log.weapon.toLowerCase()}</span>.
+		<div>{log.player} a
+			{log.log.weapon === "Une grenade explosive" ? 'fait sauter' :
+				log.log.weapon === "Une grenade incendiaire" ? 'brûlé vif' :
+				log.log.weapon === "Du C-4" ? 'exterminé' : 'tué'}
+			<span class="zombies">{log.log.zombies} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="weapon">{firstLetterToLowerCase(log.log.weapon)}</span>.
 			{#if log.log.broken}
 				<div>Son arme s'est brisée sous le choc.</div>
 			{:else if log.log.ammo}
@@ -141,7 +149,7 @@
 	{:else if log.action === 'drop'}
 		<div class="item">{log.player} a déposé <span><Item item={log.log.item} /></span></div>
 	{:else if log.action === 'heal'}
-		<div>{log.player} s'est soigné avec {log.log.drug.charAt(0).toLowerCase() + log.log.drug.slice(1)}.</div>
+		<div>{log.player} s'est soigné avec {firstLetterToLowerCase(log.log.drug)}.</div>
     {:else if log.action === 'wound'}
         {#if log.log.wound === 1}
             <div class="item">En se réveillant ce matin, {log.player} était de nouveau <span><Item item={wounds[0]} /></span></div>

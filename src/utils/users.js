@@ -21,6 +21,7 @@ export const addUser = async (user, rethinkdb) => {
             'W1': {},
             'W2': {},
             'W3': {},
+            'W4': {},
             'A1': {},
             'A2': {},
             'A3': {},
@@ -33,15 +34,6 @@ export const addUser = async (user, rethinkdb) => {
 }
 
 export const getBySESSIONID = async (SESSIONID, rethinkdb) => {
-    // let user;
-    // await r.table('users').filter(r.row("sessionid").eq(SESSIONID)).run(rethinkdb, function (err, cursor) {
-    //     if (err) throw err;
-    //     cursor.toArray(function (err, result) {
-    //         if (err) throw err;
-    //         user = result[0];
-    //     });
-    // });
-    // return user;
     return r.table('users').filter({ sessionid: SESSIONID }).run(rethinkdb)
         .then(function (result) {
             return result._responses[0]?.r[0];

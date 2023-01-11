@@ -5,6 +5,7 @@
 	export let W1;
 	export let W2;
 	export let W3;
+	export let W4;
 </script>
 
 <span class="weapon">
@@ -12,6 +13,7 @@
 	<Slot name="W1" slot={W1} {items} />
 	<Slot name="W2" slot={W2} {items} />
 	<Slot name="W3" slot={W3} {items} />
+	<Slot name="W4" slot={W4} {items} />
 </span>
 
 <style>

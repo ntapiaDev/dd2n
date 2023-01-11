@@ -73,6 +73,9 @@
 	.ammunition {
 		background-color: #EEE;
 	}
+	.explosive {
+		background-color: rgb(255, 205, 205);
+	}
 	.armour {
 		background-color: rgb(255, 225, 205);
 	}
