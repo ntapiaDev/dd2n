@@ -16,6 +16,7 @@
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
 	import Search from '../../../components/map/actions/Search.svelte';
+	import Tchat from '../../../components/map/actions/Tchat.svelte';
 	import Tunnel from '../../../components/map/actions/Tunnel.svelte';
 
 	export let data;
@@ -50,7 +51,7 @@
 		thirst: 0 ,
 		type: "misc" ,
 		unique: false
-	}
+	};
 </script>
 
 <h1>Vous êtes sur la case {user.location} :</h1>
@@ -144,6 +145,9 @@
 				<MapLog {log} />
 			{/each}
 		</div>
+		<div class="tchat">
+			<Tchat />
+		</div>
 		{#if form?.ammo}
 			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
 		{:else if form?.access}
@@ -166,6 +170,8 @@
 			<p>Votre inventaire est plein.</p>
 		{:else if form?.item}
 			<p>Vous ne possédez pas cette arme ou celle-ci n'est pas équipée.</p>
+		{:else if form?.length}
+			<p>Votre message est trop long (100 caractères maximum).</p>
 		{:else if form?.location}
 			<p>Vous n'êtes pas sur la bonne case.</p>
 		{:else if form?.origin}
@@ -215,7 +221,8 @@
 	}
 	.actions,
 	.items,
-	.log {
+	.log,
+	.tchat {
 		min-height: 45px;
 		display: flex;
 		align-items: center;
@@ -225,7 +232,7 @@
 		border: 1px solid #aaa;
 	}
 	.log {
-		max-height: 500px;
+		max-height: 480px;
 		overflow-y: auto;
 		flex-direction: column;
 		flex-wrap: nowrap;

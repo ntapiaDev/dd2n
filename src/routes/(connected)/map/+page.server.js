@@ -313,6 +313,13 @@ const search = async ({ locals }) => {
     } else return fail(400, { exhausted: true })
 }
 
+const tchat = async ({ locals, request }) => {
+    const data = await request.formData();
+    const message = data.get('message');
+    if (message.length > 100) return fail(400, { length: true });
+    await addLog(locals.user.id, locals.user.location, locals.user.username, 'tchat', { message }, locals.rethinkdb);
+}
+
 const travel = async ({ locals, request }) => {
     const ap = locals.user.ap;
     if (ap > 0) {
@@ -363,4 +370,4 @@ const tunnel = async ({ locals }) => {
     await addLog(locals.user.id, exit, locals.user.username, 'inTunnel', {}, locals.rethinkdb);
 }
 
-export const actions = { attack, building, drop, force, nextday, pickUp, reset, search, travel, tunnel };
+export const actions = { attack, building, drop, force, nextday, pickUp, reset, search, tchat, travel, tunnel };

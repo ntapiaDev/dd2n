@@ -173,6 +173,8 @@
 		<div>{log.player} a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.</div>
 	{:else if log.action === 'force'}
 		<div>Rassemblant son courage, {log.player} est passé en force et peut quitter la zone. Après une lutte acharnée, il est maintenant <Item item={wounds[2]} /></div>
+	{:else if log.action === 'tchat'}
+		<div>{log.player} : <i>{log.log.message}</i></div>
 	{/if}
 </div>
 

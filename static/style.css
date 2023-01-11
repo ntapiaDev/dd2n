@@ -12,3 +12,6 @@ body, button, input, select, textarea {
     font-family: 'Outfit', sans-serif;
     font-size: 1em;
 }
+
+b { font-weight: bold; }
+i { font-style: italic; color: rgb(100, 100, 100) }
