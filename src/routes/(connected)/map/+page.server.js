@@ -14,12 +14,14 @@ const attack = async ({ locals, request }) => {
     if (locals.user.ap === 0) return fail(400, { exhausted: true });
     const data = await request.formData();
     const id = data.get('id');
+    const li = locals.user.i;
+    const lj = locals.user.j;
     const slots = locals.user.slots;
     const item = Object.entries(slots).find(slot => slot.find(i => i.id === id))?.find(i => i.id === id);
     // Vérification que l'objet existe (prévoir un cas d'erreur? message flash??)
     if (item) {
         const map = await getMap(locals.user.id, locals.rethinkdb);
-        if (map.rows[locals.user.i][locals.user.j].zombies === 0) return fail(400, { zombies: true });
+        if (map.rows[li][lj].zombies === 0) return fail(400, { zombies: true });
         // On vérifie que le type de munitions correspond
         if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
         let wound = locals.user.wound;
@@ -63,12 +65,19 @@ const attack = async ({ locals, request }) => {
         }
         // Possibilité de coup critique?? Affiché dans les logs
         // Gestion de la qualité de l'arme??
-        const zombies = map.rows[locals.user.i][locals.user.j].zombies;
-        map.rows[locals.user.i][locals.user.j].zombies -= item.attack;
-        if (map.rows[locals.user.i][locals.user.j].zombies < 0) map.rows[locals.user.i][locals.user.j].zombies = 0;
-        const killed = zombies - map.rows[locals.user.i][locals.user.j].zombies;
+        const zombies = map.rows[li][lj].zombies;
+        map.rows[li][lj].zombies -= item.attack;
+        if (map.rows[li][lj].zombies < 0) map.rows[li][lj].zombies = 0;
+        const killed = zombies - map.rows[li][lj].zombies;
+        // Coup critique :
+        let critical = 0;
+        if (map.rows[li][lj].zombies > 0 && Math.random() > 0.9) {
+            map.rows[li][lj].zombies -= (Math.ceil(item.attack * Math.random()));
+            if (map.rows[li][lj].zombies < 0) map.rows[li][lj].zombies = 0;
+            critical = zombies - killed - map.rows[li][lj].zombies;
+        } 
         await getAttack(locals.user.id, map, slots, locals.user.ap, locals.user.hunger, locals.user.thirst, wound, force, locals.rethinkdb)
-        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', ammo, broken, woundedW0, woundedW1 }, locals.rethinkdb);
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', ammo, broken, woundedW0, woundedW1, critical }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
 }

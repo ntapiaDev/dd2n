@@ -104,6 +104,9 @@
 				log.log.weapon === "Une grenade fumigène" ? 'enfumé' :
 				log.log.weapon === "Du C-4" ? 'exterminé' : 'tué'}
 			<span class="zombies">{log.log.zombies} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="weapon">{firstLetterToLowerCase(log.log.weapon)}</span>.
+			{#if log.log.critical}
+				<span>Un coup bien placé a permis de toucher <span class="zombies">{log.log.critical} zombie{log.log.critical > 1 ? 's' : ''}</span> supplémentaire{log.log.critical > 1 ? 's' : ''}.</span>
+			{/if}
 			{#if log.log.broken}
 				<div>Son arme s'est brisée sous le choc.</div>
 			{:else if log.log.ammo}
