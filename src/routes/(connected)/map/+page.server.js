@@ -121,10 +121,9 @@ const building = async ({ locals, request }) => {
 
     map.rows[li][lj].building.searchedBy.push(locals.user.id);
 
-    // Bâtiment non épuisable??
-    // map.rows[li][lj].empty = Math.random() > (danger === 1 ?
-    //     0.5 : danger === 2 ?
-    //     0.75 : 0.9);
+    // Bâtiments non épuisables??
+    // Ne se régénère pas...
+    map.rows[li][lj].building.empty = Math.random() > 0.75;
     
     // Même fonction que pour la fouille de la zone
     await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, locals.rethinkdb);

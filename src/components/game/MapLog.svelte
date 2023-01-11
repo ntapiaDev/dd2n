@@ -102,9 +102,9 @@
 			{/if}
 			{#if log.log.woundedW0}
 				{#if log.log.woundedW0 === 1}
-					<div>A force de se battre à mains nues, {log.player} a maintenant <Item item={wounds[1]} /></div>
+					<div>À force de se battre à mains nues, {log.player} a maintenant <Item item={wounds[1]} /></div>
 				{:else if log.log.woundedW0 === 2}
-					<div>A force de se battre à mains nues, {log.player} est maintenant <Item item={wounds[2]} /></div>
+					<div>À force de se battre à mains nues, {log.player} est maintenant <Item item={wounds[2]} /></div>
 				{/if}
 			{:else if log.log.woundedW1}
 				{#if log.log.woundedW1 === 1}
@@ -132,7 +132,7 @@
 			{/each}
 		</div>
 		{#if log.log.empty}
-			<span>Le bâtiment a l'air vide maintenant.</span>
+			<span>Le bâtiment a maintenant l'air totalement vide.</span>
 		{/if}	
 	{:else if log.action === 'new'}
 		<div>L'agitation de la nuit a permis de dévoiler de nouvelles ressources...</div>
@@ -144,7 +144,7 @@
 		<div>{log.player} s'est soigné avec {log.log.drug.charAt(0).toLowerCase() + log.log.drug.slice(1)}.</div>
     {:else if log.action === 'wound'}
         {#if log.log.wound === 1}
-            <div class="item">En se réveillant ce matin, {log.player} était à nouveau <span><Item item={wounds[0]} /></span></div>
+            <div class="item">En se réveillant ce matin, {log.player} était de nouveau <span><Item item={wounds[0]} /></span></div>
         {:else if log.log.wound === 2}
             <div class="item">En se réveillant ce matin, {log.player} se sentait <span><Item item={wounds[3]} /></span></div>
         {:else if log.log.wound === 3}

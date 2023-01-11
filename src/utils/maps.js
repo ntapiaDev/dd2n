@@ -16,7 +16,6 @@ export const generateMap = async (user_id, rethinkdb) => {
     let map = { user_id, encampment, 'uniques': [] }
     let rows = [];
     const buildings = getBuildings();
-    console.log(buildings);
     for (let i = 0; i < size; i++) {
         let row = [];
         for (let j = 1; j < size + 1; j++) {

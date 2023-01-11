@@ -62,7 +62,7 @@
 				<span>Il résiste aux hordes de zombies, pour le moment...</span>
 			{:else}
 				{#if cell.building}
-					<span>Vous remarquez <b>{cell.building.type.toLowerCase()}</b> dans les parages.</span>
+					<span>Vous remarquez <b>{cell.building.type.toLowerCase()}{cell.building.empty ? ' vide' : ''}</b> dans les parages.</span>
 				{/if}
 				<span>Il y a actuellement <b>{cell.zombies}</b> zombie{cell.zombies > 1 ? 's' : ''} sur la zone.</span>
 				{#if cell.zombies === 0}
