@@ -94,9 +94,13 @@
 <div class="log">
 	<span class="date">{formatDate(log)}</span>
 	{#if log.action === 'in'}
-		<div>{log.player} est arrivé sur la zone.</div>
+		<div>{log.player} est arrivé dans la zone.</div>
 	{:else if log.action === 'out'}
 		<div>{log.player} a quitté la zone.</div>
+	{:else if log.action === 'inTunnel'}
+		<div>{log.player} est sorti du passage souterrain.</div>
+	{:else if log.action === 'outTunnel'}
+		<div>{log.player} est entrée dans le passage souterrain.</div>
 	{:else if log.action === 'kill'}
 		<div>{log.player} a
 			{log.log.weapon === "Une grenade explosive" ? 'fait sauter' :

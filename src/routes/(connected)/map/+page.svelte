@@ -16,6 +16,7 @@
 	import NextDay from '../../../components/map/NextDay.svelte';
 	import Reset from '../../../components/map/Reset.svelte';
 	import Search from '../../../components/map/actions/Search.svelte';
+	import Tunnel from '../../../components/map/actions/Tunnel.svelte';
 
 	export let data;
 	export let form;
@@ -75,6 +76,9 @@
 				{:else if user.force}
 					<span>Dépêchez-vous de partir d'ici avant de vous faire repérer !</span>
 				{/if}
+				{#if map.tunnel.includes(user.location)}
+					<span>Cette zone abrite un <b>passage souterrain</b> menant vers une zone {cell.layout.danger === 2 ? 'dangereuse' : 'plus calme'}.</span>
+				{/if}
 			{/if}
 			{#if cell.empty}
 				<span><b>Cette zone est maintenant épuisée...</b></span>
@@ -84,11 +88,13 @@
 			<span class="title">Actions disponibles :</span>
 			{#if user.location === map.encampment}
 				<Encampment />
+			{:else if user.ap && map.tunnel.includes(user.location)}
+				<Tunnel />
 			{/if}
-			{#if user.ap > 0 && !cell.searchedBy.includes(user.id) && !cell.empty}
+			{#if user.ap && !cell.searchedBy.includes(user.id) && !cell.empty}
 				<Search />
 			{/if}
-			{#if user.ap > 0 && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty}
+			{#if user.ap && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty}
 				<Building />
 			{/if}
 			{#if user.hunger <= 75}
@@ -100,7 +106,7 @@
 			{#if user.wound}
 				<Heal items={user.inventory} wound={user.wound} />
 			{/if}
-			{#if user.ap > 0 && cell.zombies > 0}
+			{#if user.ap && cell.zombies }
 				{#if user.slots.W1.attack && user.wound <2}
 					<Attack item={user.slots.W1} />
 				{:else if user.wound <2}
@@ -117,7 +123,7 @@
 				<Force />
 			{/if}
 			<!-- Gérer le cas avec 0 PA en étant toujours sur la map -->
-			{#if user.location !== map.encampment && (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && cell.zombies === 0}
+			{#if user.location !== map.encampment && (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && !cell.zombies}
 				<Item item={walking} />
 			{/if}
 		</div>
@@ -163,6 +169,8 @@
 			<p>Vous avez déjà fouillé cette zone aujourd'hui.</p>
 		{:else if form?.searchedBuilding}
 			<p>Vous avez déjà fouillé ce bâtiment aujourd'hui.</p>
+		{:else if form?.tunnel}
+			<p>Il n'y a pas de tunnel ici.</p>
 		{:else if form?.wounded}
 			<p>Vous êtes trop mal-en-point pour pouvoir vous battre au corps à corps.</p>
 		{:else if form?.zombies}

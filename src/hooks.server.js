@@ -42,9 +42,9 @@ export const handle = async ({ event, resolve }) => {
 
     // Gestion des pages du jeu
     // Créer une variable in/out
-    if (user.location !== 'H8' && (event.url.pathname === '/' || event.url.pathname === '/encampment')) {
-        return redirect('/map');
-    }
+    // if (user.location !== 'H8' && (event.url.pathname === '/' || event.url.pathname === '/encampment')) {
+    //     return redirect('/map');
+    // }
 
     // User dans locals
     if (user) event.locals.user = {

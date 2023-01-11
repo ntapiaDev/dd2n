@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
 import layout from './layout';
-import { getBuildings } from './tools';
+import { getBuildings, getTunnel } from './tools';
 
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P']; //16 * 16 = 256 cases max
 const encampment = 'H8';
@@ -13,7 +13,8 @@ export const generateMap = async (user_id, rethinkdb) => {
     });
 
     // Génération de la nouvelle carte
-    let map = { user_id, encampment, 'uniques': [] }
+    const tunnel = getTunnel();
+    let map = { user_id, encampment, tunnel, 'uniques': [] }
     let rows = [];
     const buildings = getBuildings();
     console.log(buildings);
@@ -25,9 +26,10 @@ export const generateMap = async (user_id, rethinkdb) => {
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
             const building = buildings[letters[i] + j] ?? '';
+            const entrance = tunnel.includes(letters[i] + j);
             // Batiments avec +2 zombies? Ou zombies x2...?
             if (building) zombies += 2;
-            row.push({ 'coordinate': letters[i] + j, i, 'j': (j - 1), 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'empty': false, 'estimated': { 'zombies': 0, 'empty': false }, 'items': [], 'searchedBy': [], visible, visited, building });
+            row.push({ 'coordinate': letters[i] + j, i, 'j': (j - 1), 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'empty': false, 'estimated': { 'zombies': 0, 'empty': false }, 'items': [], 'searchedBy': [], visible, visited, building, entrance });
         }
         rows.push(row);
     }
@@ -145,6 +147,13 @@ export const getAttack = async (user_id, map, slots, ap, hunger, thirst, wound, 
 
 export const getMap = async (user_id, rethinkdb) => {
     return r.table('maps').filter({ user_id }).run(rethinkdb)
+        .then(function (result) {
+            return result._responses[0]?.r[0];
+        });
+}
+
+export const getMapTunnel = async (user_id, rethinkdb) => {
+    return r.table('maps').filter({ user_id })('tunnel').run(rethinkdb)
         .then(function (result) {
             return result._responses[0]?.r[0];
         });

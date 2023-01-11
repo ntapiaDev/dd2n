@@ -22,6 +22,7 @@
 		(cell.layout.border.includes(3) ? 'bb ' : '') +
 		(cell.layout.border.includes(4) ? 'bl ' : '') +
 		(cell.building ? 'building ' : '') +
+		(cell.entrance ? 'tunnel ' : '') +
 		(((cell.visited && cell.empty) || (!cell.visited && cell.estimated.empty)) ? 'empty ' : '') +
 		(cell.visited ? '' : 'blur'))
 	: 'fog')
@@ -113,7 +114,11 @@
 	td.building {
 		border: 3px solid;
 	}
-	td.building button {
+	td.tunnel {
+		border: 3px dashed;
+	}
+	td.building button,
+	td.tunnel button {
 		width: 20px;
 		height: 21px;
 		margin-top: -1px;

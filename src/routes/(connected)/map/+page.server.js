@@ -1,8 +1,8 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { canTravel } from '../../../utils/tools';
+import { canTravel, getIJ } from '../../../utils/tools';
 import { getItems, getItemsByCode, moveItem } from '../../../utils/items';
 import { addLog, deleteLogs, getLogsByCoordinate } from "../../../utils/logs";
-import { generateMap, getAttack, getMap, getNextDay, getSearch, getTravel, pushThrough } from "../../../utils/maps";
+import { generateMap, getAttack, getMap, getMapTunnel, getNextDay, getSearch, getTravel, pushThrough } from "../../../utils/maps";
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
@@ -329,4 +329,25 @@ const travel = async ({ locals, request }) => {
     throw redirect(303, '/map');
 }
 
-export const actions = { attack, building, drop, force, nextday, pickUp, reset, search, travel };
+const tunnel = async ({ locals }) => {
+    const ap = locals.user.ap;
+    if (ap === 0) return fail(400, { exhausted: true });
+    const location = locals.user.location;
+    const tunnel = await getMapTunnel(locals.user.id, locals.rethinkdb);
+    if (!tunnel.includes(location)) return fail(400, { tunnel: true });
+    // Actualisation des zones sortante et entrante
+    const li = locals.user.i;
+    const lj = locals.user.j;
+    const exit = tunnel.filter(c => c !== location)[0];
+    const { i: ti, j: tj } = getIJ(exit);
+    const map = await getMap(locals.user.id, locals.rethinkdb);
+    map.rows[li][lj].estimated.zombies = map.rows[li][lj].zombies;
+    map.rows[li][lj].estimated.empty = map.rows[li][lj].empty;
+    if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
+    if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
+    await getTravel(locals.user.id, exit, ti, tj, ap, locals.user.hunger, locals.user.thirst, map, locals.rethinkdb);
+    await addLog(locals.user.id, location, locals.user.username, 'outTunnel', {}, locals.rethinkdb);
+    await addLog(locals.user.id, exit, locals.user.username, 'inTunnel', {}, locals.rethinkdb);
+}
+
+export const actions = { attack, building, drop, force, nextday, pickUp, reset, search, travel, tunnel };
