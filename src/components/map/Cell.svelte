@@ -24,6 +24,7 @@
 		(cell.building ? 'building ' : '') +
 		(cell.entrance ? 'tunnel ' : '') +
 		(((cell.visited && cell.empty) || (!cell.visited && cell.estimated.empty)) ? 'empty ' : '') +
+		((cell.visited && cell.building?.empty) ? 'empty-building ' : '') +
 		(cell.visited ? '' : 'blur'))
 	: 'fog')
 </script>
@@ -48,11 +49,13 @@
 		height: 26px;
 		text-align: center;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-		transition: box-shadow ease 0.3s;
+		text-shadow: 1px 0 0 #ddd, 1px 1px 0 #ddd, 0 1px 0 #ddd, -1px 1px 0 #ddd, -1px 0 0 #ddd, -1px -1px 0 #ddd, 0 -1px 0 #ddd, 1px -1px 0 #ddd;
+		transition: box-shadow ease 0.3s, text-shadow ease 0.6s;
 	}
 	td.encampment {
 		color: #fff;
 		background-color: blue;
+		text-shadow: 1px 0 0 rgb(48, 48, 48), 1px 1px 0 rgb(48, 48, 48), 0 1px 0 rgb(48, 48, 48), -1px 1px 0 rgb(48, 48, 48), -1px 0 0 rgb(48, 48, 48), -1px -1px 0 rgb(48, 48, 48), 0 -1px 0 rgb(48, 48, 48), 1px -1px 0 rgb(48, 48, 48);
 	}
 	td.current {
 		border: 3px double;
@@ -114,6 +117,9 @@
 	td.building {
 		border: 3px solid;
 	}
+	td.empty-building {
+		border: 3px dotted;
+	}
 	td.tunnel {
 		border: 3px dashed;
 	}
@@ -145,7 +151,19 @@
 		filter : blur(1px);
 	}
 	.empty {
-		background-image: radial-gradient(rgb(48, 48, 48) 1px, transparent 0);
-  		background-size: 3px 3px;
+  		background-size: 4px 4px;
+		background-position: center;
+	}
+	td.inner.empty {
+		background-image: radial-gradient(green 1px, transparent 0);
+	}
+	td.inner.encampment.empty {
+		background-image: radial-gradient(rgb(96, 96, 255) 1px, transparent 0);
+	}
+	td.middle.empty {
+		background-image: radial-gradient(orange 1px, transparent 0);
+	}
+	td.outer.empty {
+		background-image: radial-gradient(red 1px, transparent 0);
 	}
 </style>

@@ -4,10 +4,9 @@
 
 	export let item;
 	export let quantity = 0;
+	export let substitute;
 
-	// Titre exporté pour les stats (Header)
-	// $: title = item.description +
-	export let title = item.description +
+	$: title = substitute ?? (item.description +
 		(item.attack > 0 ? ` (Puissance : ${item.attack})` : '') +
 		(item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
 		(item.value ? ` (+${item.value}% et ${item.value / 10} PA)` : '') +
@@ -16,7 +15,7 @@
 		(item.unique ? ' (unique)' : '') +
 		// Affichage de la faim et de la soif dans la barre de joueur (à simplifier)
 		(['satiated', 'hungry', 'meal', 'hunger'].includes(item.icon) ? ` (${$page.data.user.hunger}%)` : '') +
-		(['hydrated', 'thirsty', 'drop', 'dehydrated'].includes(item.icon) ? ` (${$page.data.user.thirst}%)` : '');
+		(['hydrated', 'thirsty', 'drop', 'dehydrated'].includes(item.icon) ? ` (${$page.data.user.thirst}%)` : ''));
 
 	$: durability =	!item.durability ? 1 : item.durability / item.durabilityMax;
 	$: x = durability > 0.5 ? 510 - (255 * 2 * durability) : 255;

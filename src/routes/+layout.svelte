@@ -22,6 +22,7 @@
 		display: flex;
 		flex-direction: column;
 		margin: auto;
+		background-color: #fff;
 		border: 1px solid black;
 	}
 </style>

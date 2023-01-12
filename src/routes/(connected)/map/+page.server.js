@@ -235,7 +235,7 @@ const pickUp = async ({ locals, request }) => {
 }
 
 const reset = async ({ locals }) => {
-    await generateMap(locals.user.id, locals.rethinkdb);
+    await generateMap(locals.user.id, locals.user.username, locals.rethinkdb);
     await deleteLogs(locals.user.id, locals.rethinkdb);
 }
 
@@ -343,6 +343,8 @@ const travel = async ({ locals, request }) => {
         if (canTravel(location, target, border)) {
             map.rows[li][lj].estimated.zombies = map.rows[li][lj].zombies;
             map.rows[li][lj].estimated.empty = map.rows[li][lj].empty;
+            map.rows[li][lj].players = map.rows[li][lj].players.filter(u => u !== locals.user.username);
+            map.rows[ti][tj].players.push(locals.user.username);
             if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
             if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
             await getTravel(locals.user.id, target, ti, tj, ap, locals.user.hunger, locals.user.thirst, map, locals.rethinkdb);
@@ -367,6 +369,8 @@ const tunnel = async ({ locals }) => {
     const map = await getMap(locals.user.id, locals.rethinkdb);
     map.rows[li][lj].estimated.zombies = map.rows[li][lj].zombies;
     map.rows[li][lj].estimated.empty = map.rows[li][lj].empty;
+    map.rows[li][lj].players = map.rows[li][lj].players.filter(u => u !== locals.user.username);
+    map.rows[ti][tj].players.push(locals.user.username);
     if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
     if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
     await getTravel(locals.user.id, exit, ti, tj, ap, locals.user.hunger, locals.user.thirst, map, locals.rethinkdb);

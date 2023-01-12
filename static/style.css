@@ -8,6 +8,10 @@
     box-sizing: border-box;
 }
 
+body {
+    background-image: url('./city-apocalypse.jpg');
+}
+
 body, button, input, select, textarea {
     font-family: 'Outfit', sans-serif;
     font-size: 1em;

@@ -38,6 +38,20 @@
 	// Futur bouton de retour automatique
 	// $: distance = getDistance(user.location, map.encampment);
 
+	const human = {
+		attack: 0 ,
+		credit: "Freepik" ,
+		defense: 0 ,
+		description: "Un petit joueur tout innocent" ,
+		disease: 0 ,
+		hunger: 0 ,
+		icon: "human" ,
+		id: "68604984-3955-466c-bfd0-af3b2a5710a3" ,
+		rarity: "commun" ,
+		thirst: 0 ,
+		type: "misc" ,
+		unique: false
+	};
 	const walking = {
 		attack: 0 ,
 		credit: "surang" ,
@@ -52,6 +66,13 @@
 		type: "misc" ,
 		unique: false
 	};
+
+	const getUsernames = (cell) => {
+		let usernames = '';
+		for (let username of cell.players) usernames += ('<br/>' + username);
+		return usernames;
+	}
+	$: players = `Joueurs sur la case (${cell.players.length}) :` + getUsernames(cell);
 </script>
 
 <h1>Vous êtes sur la case {user.location} :</h1>
@@ -130,6 +151,9 @@
 			{#if (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && !cell.zombies}
 				<Item item={walking} />
 			{/if}
+			<span class="players">
+				<Item item={human} substitute={players} quantity={cell.players.length} />
+			</span>
 		</div>
 		<div class="items">
 			<span class="title">Objets au sol ({cell.items.length}) :</span>
@@ -235,8 +259,13 @@
 		padding: 0.5em;
 		border: 1px solid #aaa;
 	}
+	.actions .players {
+		width: 25px;
+		height: 25px;
+		margin-left: auto;
+	}
 	.log {
-		max-height: 490px;
+		max-height: 480px;
 		overflow-y: auto;
 		flex-direction: column;
 		flex-wrap: nowrap;

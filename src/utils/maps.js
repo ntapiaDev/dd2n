@@ -6,7 +6,7 @@ const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'
 const encampment = 'H8';
 const size = 15;
 
-export const generateMap = async (user_id, rethinkdb) => {
+export const generateMap = async (user_id, username, rethinkdb) => {
     // Suppression de l'ancienne carte
     await r.table('maps').filter(r.row("user_id").eq(user_id)).delete().run(rethinkdb, function (err, result) {
         if (err) throw err;
@@ -27,9 +27,12 @@ export const generateMap = async (user_id, rethinkdb) => {
             const visited = letters[i] + j === encampment;
             const building = buildings[letters[i] + j] ?? '';
             const entrance = tunnel.includes(letters[i] + j);
+            if (zombies < 0) zombies = 0;
             // Batiments avec +2 zombies? Ou zombies x2...?
             if (building) zombies += 2;
-            row.push({ 'coordinate': letters[i] + j, i, 'j': (j - 1), 'layout': layout[letters[i] + j], 'players': [], 'zombies': zombies > 0 ? zombies : 0, 'empty': false, 'estimated': { 'zombies': 0, 'empty': false }, 'items': [], 'searchedBy': [], visible, visited, building, entrance });
+            const players = [];
+            if (letters[i] + j === encampment) players.push(username);
+            row.push({ 'coordinate': letters[i] + j, i, 'j': (j - 1), 'layout': layout[letters[i] + j], players, zombies, 'empty': false, 'estimated': { 'zombies': 0, 'empty': false }, 'items': [], 'searchedBy': [], visible, visited, building, entrance });
         }
         rows.push(row);
     }

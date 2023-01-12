@@ -46,6 +46,7 @@
 		flex-grow: 2;
 		border: none;
 		border-bottom: 1px solid #AAA;
+		outline: none;
 	}
 	button {
         margin-left: 0.5em;

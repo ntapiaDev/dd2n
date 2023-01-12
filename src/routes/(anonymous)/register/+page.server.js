@@ -23,7 +23,7 @@ const register = async ({ cookies, locals, request }) => {
     const { user_id, SESSIONID } = await addUser({ username, password }, locals.rethinkdb)
 
     // Création de la carte du joueur
-    await generateMap(user_id, locals.rethinkdb);
+    await generateMap(user_id, username, locals.rethinkdb);
 
     // Connexion automatique?
     setSession(cookies, SESSIONID);
