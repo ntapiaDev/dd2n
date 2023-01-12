@@ -63,7 +63,8 @@ export const handle = async ({ event, resolve }) => {
         force: user.force,
         inventory: user.inventory,
         slots: user.slots,
-        stats: user.stats
+        stats: user.stats,
+        tchat: user.tchat
     }
 
     const response = await resolve(event);

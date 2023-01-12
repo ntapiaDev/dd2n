@@ -4,7 +4,7 @@
 	import Item from '../game/Item.svelte';
 
 	// Statistiques
-	$: title = 'Objets trouvés : ' + $page.data.user.stats.items + '<br/>' + 'Zombies tués : ' + $page.data.user.stats.zombies;
+	$: title = 'Objets trouvés : ' + $page.data.user?.stats.items + '<br/>' + 'Zombies tués : ' + $page.data.user?.stats.zombies;
 	const stats = {
 		attack: 0,
 		credit: 'smashingstocks',

@@ -170,7 +170,7 @@
 			<p>Votre inventaire est plein.</p>
 		{:else if form?.item}
 			<p>Vous ne possédez pas cette arme ou celle-ci n'est pas équipée.</p>
-		{:else if form?.length}
+		{:else if form?.long}
 			<p>Votre message est trop long (100 caractères maximum).</p>
 		{:else if form?.location}
 			<p>Vous n'êtes pas sur la bonne case.</p>
@@ -180,6 +180,10 @@
 			<p>Vous avez déjà fouillé cette zone aujourd'hui.</p>
 		{:else if form?.searchedBuilding}
 			<p>Vous avez déjà fouillé ce bâtiment aujourd'hui.</p>
+		{:else if form?.short}
+			<p>Votre message est trop court (3 caractères minimum).</p>
+		{:else if form?.tchat}
+			<p>Vous avez déjà laissé un message dans cette zone aujourd'hui.</p>
 		{:else if form?.tunnel}
 			<p>Il n'y a pas de tunnel ici.</p>
 		{:else if form?.wounded}
@@ -232,7 +236,7 @@
 		border: 1px solid #aaa;
 	}
 	.log {
-		max-height: 480px;
+		max-height: 490px;
 		overflow-y: auto;
 		flex-direction: column;
 		flex-wrap: nowrap;

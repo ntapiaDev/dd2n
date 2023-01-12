@@ -3,6 +3,7 @@ import { canTravel, getIJ } from '../../../utils/tools';
 import { getItems, getItemsByCode, moveItem } from '../../../utils/items';
 import { addLog, deleteLogs, getLogsByCoordinate } from "../../../utils/logs";
 import { generateMap, getAttack, getMap, getMapTunnel, getNextDay, getSearch, getTravel, pushThrough } from "../../../utils/maps";
+import { addTchat } from "../../../utils/player";
 
 export async function load({ locals }) {
     const map = await getMap(locals.user.id, locals.rethinkdb);
@@ -314,10 +315,13 @@ const search = async ({ locals }) => {
 }
 
 const tchat = async ({ locals, request }) => {
+    if (locals.user.tchat.includes(locals.user.location)) return fail(400, { tchat: true });
     const data = await request.formData();
     const message = data.get('message');
-    if (message.length > 100) return fail(400, { length: true });
+    if (message.length < 3) return fail(400, { short: true });
+    if (message.length > 100) return fail(400, { long: true });
     await addLog(locals.user.id, locals.user.location, locals.user.username, 'tchat', { message }, locals.rethinkdb);
+    await addTchat(locals.user.id, locals.user.location, locals.rethinkdb);
 }
 
 const travel = async ({ locals, request }) => {

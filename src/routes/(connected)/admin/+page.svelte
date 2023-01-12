@@ -6,7 +6,7 @@
 
 	export let data;
 	$: items = sortItems(data.items);
-	// $: console.log(items);
+	$: console.log(items);
 
 	const types = [
 		'Nourriture',

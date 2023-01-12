@@ -423,6 +423,58 @@
         "weapon": "machine-gun"
     },
     {
+        "attack": 20,
+        "code": "b5",
+        "credit": "Eucalyp",
+        "defense": 0,
+        "description": "Une grenade explosive",
+        "icon": "grenade",
+        "id": "e6e92ef0-40ae-4505-82e7-b2783b502eaa",
+        "rarity": "inhabituel",
+        "slot": "W4",
+        "type": "explosive",
+        "unique": false
+    },
+    {
+        "attack": 1,
+        "code": "b5",
+        "credit": "Smashicons",
+        "defense": 0,
+        "description": "Une grenade fumigène",
+        "icon": "smoke",
+        "id": "9ff1f780-33dd-49de-8567-fbf762f63f68",
+        "rarity": "rare",
+        "slot": "W4",
+        "type": "explosive",
+        "unique": false
+    },
+    {
+        "attack": 40,
+        "code": "b5",
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Une grenade incendiaire",
+        "icon": "incendiary",
+        "id": "48ba4e01-089f-4eab-a8bc-51787d9a2833",
+        "rarity": "rare",
+        "slot": "W4",
+        "type": "explosive",
+        "unique": false
+    },
+    {
+        "attack": 100,
+        "code": "b5",
+        "credit": "max.icons",
+        "defense": 0,
+        "description": "Du C-4",
+        "icon": "c4",
+        "id": "517b3f81-547e-4d0b-9eed-5a6c3f8d4b93",
+        "rarity": "épique",
+        "slot": "W4",
+        "type": "explosive",
+        "unique": false
+    },
+    {
         "attack": 0,
         "credit": "surang",
         "defense": 2,
@@ -991,6 +1043,17 @@
         "attack": 0,
         "credit": "Freepik",
         "defense": 0,
+        "description": "Laisser un message",
+        "icon": "write",
+        "id": "e6f9dc67-f4e1-4b66-8192-0b27fccce49e",
+        "rarity": "commun",
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
         "description": "Manger",
         "disease": 0,
         "hunger": 0,
@@ -1031,6 +1094,17 @@
     },
     {
         "attack": 0,
+        "credit": "surang",
+        "defense": 0,
+        "description": "Passage en force (blessure grave)",
+        "icon": "force",
+        "id": "cf45ff13-134b-489d-8afb-a06a42054018",
+        "rarity": "commun",
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
         "credit": "Freepik",
         "defense": 0,
         "description": "Petite faim",
@@ -1054,6 +1128,17 @@
         "id": "b8efc8bc-ba78-408b-932f-bc41c8e927f6",
         "rarity": "commun",
         "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
+        "description": "Prendre le passage souterrain",
+        "icon": "tunnel",
+        "id": "10766425-d03d-47a0-a1b4-8c489ca318f5",
+        "rarity": "commun",
         "type": "misc",
         "unique": false
     },
@@ -1089,6 +1174,17 @@
         "attack": 0,
         "credit": "Freepik",
         "defense": 0,
+        "description": "Retourner au campement",
+        "icon": "exit",
+        "id": "683c0989-6dbf-44ef-ab9c-1335db3421c6",
+        "rarity": "commun",
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Freepik",
+        "defense": 0,
         "description": "Se soigner",
         "disease": 0,
         "hunger": 0,
@@ -1096,6 +1192,17 @@
         "id": "eb8a1f18-adb1-47c3-8481-f8210966519f",
         "rarity": "commun",
         "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "smashingstocks",
+        "defense": 0,
+        "description": "Statistiques",
+        "icon": "stats",
+        "id": "dc030e8f-8b59-4fe5-8153-057ed1b38c17",
+        "rarity": "commun",
         "type": "misc",
         "unique": false
     },
@@ -1138,6 +1245,17 @@
         "id": "542a9d5d-36c8-42d5-b8c3-6910d7f3db00",
         "rarity": "commun",
         "thirst": 0,
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "attack": 0,
+        "credit": "Smashicons",
+        "defense": 0,
+        "description": "Équiper de l'explosif",
+        "icon": "explosive",
+        "id": "9e067be7-c438-40c3-9974-5d92582bb8c1",
+        "rarity": "commun",
         "type": "misc",
         "unique": false
     },
