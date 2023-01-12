@@ -182,6 +182,8 @@
 			<p>Il n'y a pas de bâtiment dans cette zone.</p>
 		{:else if form?.clear}
 			<p>Vous n'avez pas besoin de passer en force pour quitter la zone.</p>
+		{:else if form?.direction}
+			<p>Vous ne pouvez pas aller dans cette direction.</p>
 		{:else if form?.empty}
 			<p>Cette zone est épuisée.</p>
 		{:else if form?.emptyBuilding}

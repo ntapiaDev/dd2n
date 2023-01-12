@@ -392,9 +392,8 @@ const travel = async ({ locals, request }) => {
             await getTravel(locals.user.id, target, ti, tj, ap, locals.user.hunger, locals.user.thirst, map, locals.rethinkdb);
             await addLog(locals.user.id, location, locals.user.username, 'out', {}, locals.rethinkdb);
             await addLog(locals.user.id, target, locals.user.username, 'in', {}, locals.rethinkdb);
-        }
+        } else return fail(400, { direction: true });
     } else return fail(400, { exhausted: true })
-    throw redirect(303, '/map');
 }
 
 const tunnel = async ({ locals }) => {

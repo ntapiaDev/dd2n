@@ -36,6 +36,10 @@ export const sortItems = (items) => {
     : a.type === 'weapon' && (a.attack - a.plus) < (b.attack - b.plus) ? -1 
     : a.type === 'armour' && (a.defense - a.plus) > (b.defense - b.plus) ? 1 
     : a.type === 'armour' && (a.defense - a.plus) < (b.defense - b.plus) ? -1 
+    : a.slot > b.slot ? 1 
+    : a.slot < b.slot ? -1 
+    : a.value > b.value ? 1 
+    : a.value < b.value ? -1 
     : a.description > b.description ? 1 
     : a.description < b.description ? -1 
     : a.plus > b.plus ? 1 
