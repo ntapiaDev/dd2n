@@ -107,7 +107,7 @@
 				log.log.weapon === "Une grenade incendiaire" ? 'brûlé vif' :
 				log.log.weapon === "Une grenade fumigène" ? 'enfumé' :
 				log.log.weapon === "Du C-4" ? 'exterminé' : 'tué'}
-			<span class="zombies">{log.log.zombies} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="weapon">{firstLetterToLowerCase(log.log.weapon)}</span>.
+			<span class="zombies">{log.log.zombies} {log.log.plus > 0 ? `(+${log.log.plus})` : ''} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="weapon">{firstLetterToLowerCase(log.log.weapon)}</span>.
 			{#if log.log.critical}
 				<span>Un coup bien placé a permis de toucher <span class="zombies">{log.log.critical} zombie{log.log.critical > 1 ? 's' : ''}</span> supplémentaire{log.log.critical > 1 ? 's' : ''}.</span>
 			{/if}
@@ -133,26 +133,41 @@
 				<div>Cette diversion lui permet de quitter la zone en toute sécurité.</div>
 			{/if}
 		</div>
-	{:else if log.action === 'loot'}
+	{:else if ['loot', 'building'].includes(log.action)}
 		<div class="item">
-			{log.player} a trouvé
+			{log.player} a trouvé {log.action === 'building' ? 'dans le bâtiment' : ''}
 			{#each sortItems(log.log.loots) as item}
 				<span><Item {item} /></span>
 			{/each}
 		</div>
+		{#if log.log.plus.one || log.log.plus.two || log.log.plus.tree || log.log.plus.four}
+			{log.player} découvre
+			{#if log.log.plus.one}{log.log.plus.one} objet{log.log.plus.one > 1 ? 's' : ''} <span class="p1">hors du commun</span>{#if (log.log.plus.two && (log.log.plus.tree || log.log.plus.four)) || (log.log.plus.tree && log.log.plus.four)}
+					{', '}
+				{:else if log.log.plus.two || log.log.plus.tree || log.log.plus.four}
+					{' et '}
+				{/if}
+			{/if}
+			{#if log.log.plus.two}{log.log.plus.two} objet{log.log.plus.two > 1 ? 's' : ''} <span class="p2">remarquable{log.log.plus.two > 1 ? 's' : ''}</span>{#if log.log.plus.tree && log.log.plus.four}
+					{', '}
+				{:else if log.log.plus.tree || log.log.plus.four}
+					{' et '}
+				{/if}
+			{/if}
+			{#if log.log.plus.tree}{log.log.plus.tree} objet{log.log.plus.tree > 1 ? 's' : ''} <span class="p3">extraordinaire{log.log.plus.tree > 1 ? 's' : ''}</span>
+				{#if log.log.plus.four}
+					{' et '}
+				{/if}
+			{/if}
+			{#if log.log.plus.four}{log.log.plus.four} objet{log.log.plus.four > 1 ? 's' : ''} <span class="p4">fantastique{log.log.plus.four > 1 ? 's' : ''}</span>
+			{/if}
+				{' !'}
+		{/if}
 		{#if log.log.empty}
-			<span>La zone ne semble plus contenir grand chose d'utile.</span>
-		{/if}	
-	{:else if log.action === 'building'}
-		<div class="item">
-			{log.player} a trouvé dans le bâtiment
-			{#each sortItems(log.log.loots) as item}
-				<span><Item {item} /></span>
-			{/each}
-		</div>
-		{#if log.log.empty}
-			<span>Le bâtiment a maintenant l'air totalement vide.</span>
-		{/if}	
+			<div>La zone ne semble plus contenir grand chose d'utile.</div>
+		{:else if log.log.emptyBuilding}
+			<div>Le bâtiment a maintenant l'air totalement vide.</div>
+		{/if}
 	{:else if log.action === 'new'}
 		<div>L'agitation de la nuit a permis de dévoiler de nouvelles ressources...</div>
 	{:else if log.action === 'pickup'}
@@ -207,7 +222,7 @@
 	.zombies {
 		color: red;
 	}
-	.weapon {
+	.weapon, .p4 {
 		color: orange;
 	}
 	.item {
@@ -220,10 +235,13 @@
 	.item span:last-child {
 		margin-right: 4px;
 	}
-	.food {
+	.food, .p1 {
 		color: green;
 	}
-	.drink {
+	.drink, .p2 {
 		color: blue;
+	}
+	.p3 {
+		color: purple;
 	}
 </style>

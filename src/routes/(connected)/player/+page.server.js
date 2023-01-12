@@ -9,14 +9,14 @@ export async function load() {
 const feed = async ({ locals, request }) => {
     // FACTORISER !!
     const data = await request.formData();
-    const id = data.get('id');
+    const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     // On vérifie que l'item est bien présent dans l'inventaire
-    if (!inventory.some(i => i.id === id)) return fail(400, { origin: true });
+    if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });
     // On récupère l'item
     const getItem = () => {
         for (let item of inventory) {
-            if (item.id === id) {
+            if (item.uuid === uuid) {
                 inventory.splice(inventory.indexOf(item), 1);
                 return item;
             }
@@ -54,14 +54,14 @@ const heal = async ({ locals, request }) => {
     let wound = locals.user.wound;
     if (!wound) return fail(400, { healthy: true });
     const data = await request.formData();
-    const id = data.get('id');
+    const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     // On vérifie que l'item est bien présent dans l'inventaire
-    if (!inventory.some(i => i.id === id)) return fail(400, { origin: true });
+    if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });
     // On récupère l'item
     const getItem = () => {
         for (let item of inventory) {
-            if (item.id === id) {
+            if (item.uuid === uuid) {
                 inventory.splice(inventory.indexOf(item), 1);
                 return item;
             }

@@ -64,11 +64,15 @@ const attack = async ({ locals, request }) => {
             }
             if (item.description === 'Une grenade fumigène' && !force) force = true;
         }
+        let plus = item.plus;
         // Possibilité de coup critique?? Affiché dans les logs
         // Gestion de la qualité de l'arme??
         const zombies = map.rows[li][lj].zombies;
         map.rows[li][lj].zombies -= item.attack;
-        if (map.rows[li][lj].zombies < 0) map.rows[li][lj].zombies = 0;
+        if (map.rows[li][lj].zombies < 0) {
+            plus += map.rows[li][lj].zombies;
+            map.rows[li][lj].zombies = 0;
+        }
         const killed = zombies - map.rows[li][lj].zombies;
         // Coup critique
         let critical = 0;
@@ -81,12 +85,12 @@ const attack = async ({ locals, request }) => {
         const stats = locals.user.stats;
         stats.zombies += (killed + critical);
         await getAttack(locals.user.id, map, slots, locals.user.ap, locals.user.hunger, locals.user.thirst, wound, force, stats, locals.rethinkdb)
-        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', ammo, broken, woundedW0, woundedW1, critical }, locals.rethinkdb);
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, woundedW0, woundedW1, critical }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
 }
 
-const building = async ({ locals, request }) => {
+const building = async ({ locals }) => {
     const ap = locals.user.ap;
     if (ap === 0) return fail(400, { exhausted: true });
     const li = locals.user.i;
@@ -133,6 +137,17 @@ const building = async ({ locals, request }) => {
         if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
         foundItem.quality = 50 + Math.round(Math.random() * 50);
         foundItem.uuid = crypto.randomUUID();
+        // Objets +1,2,3,4
+        if (['weapon', 'armour'].includes(foundItem.type)) {
+            const random = Math.random();
+            foundItem.plus =
+                random === 1 ? 4 :
+                random > 0.95 ? 3 :
+                random > 0.90 ? 2 :
+                random > 0.75 ? 1 : 0
+            if (foundItem.type === 'weapon') foundItem.attack += foundItem.plus;
+            else if (foundItem.type === 'armour') foundItem.defense += foundItem.plus;
+        }
         // Si l'item est une munition, on ajoute une quantité aléatoire
         if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
         if (foundItem.type === 'explosive') foundItem.quantity = 1;
@@ -145,6 +160,14 @@ const building = async ({ locals, request }) => {
             if (foundItem.unique) map.uniques.push(foundItem.id);
         }
         loots.push(foundItem);
+    }
+    // Nombre de plus pour les logs
+    let plus = { one: 0, two: 0, tree: 0, four: 0};
+    for (let loot of (loots)) {
+        if (loot.plus === 1) plus.one++;
+        else if (loot.plus === 2) plus.two++;
+        else if (loot.plus === 3) plus.tree++;
+        else if (loot.plus === 4) plus.four++;
     }
 
     map.rows[li][lj].building.searchedBy.push(locals.user.id);
@@ -159,19 +182,19 @@ const building = async ({ locals, request }) => {
 
     // Même fonction que pour la fouille de la zone
     await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, stats, locals.rethinkdb);
-    await addLog(locals.user.id, locals.user.location, locals.user.username, 'building', { loots, 'empty': map.rows[li][lj].building.empty }, locals.rethinkdb);
+    await addLog(locals.user.id, locals.user.location, locals.user.username, 'building', { loots, plus, 'emptyBuilding': map.rows[li][lj].building.empty }, locals.rethinkdb);
 }
 
 const drop = async ({ locals, request }) => {
     const data = await request.formData();
-    const id = data.get('id');
+    const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     // On vérifie que l'item est bien présent à son point d'origine
-    if (!inventory.some(i => i.id === id)) return fail(400, { origin: true });
+    if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });
     // Possibilité de simplifier...?
     const getItem = () => {
         for (let item of inventory) {
-            if (item.id === id) {
+            if (item.uuid === uuid) {
                 inventory.splice(inventory.indexOf(item), 1);
                 return item;
             }
@@ -204,16 +227,16 @@ const nextday = async ({ locals }) => {
 
 const pickUp = async ({ locals, request }) => {
     const data = await request.formData();
-    const id = data.get('id');
+    const uuid = data.get('uuid');
     const li = locals.user.i;
     const lj = locals.user.j;
     const map = await getMap(locals.user.id, locals.rethinkdb);
     // On vérifie que l'item est bien présent à son point d'origine
-    if (!map.rows[li][lj].items.some(i => i.id === id)) return fail(400, { origin: true });
+    if (!map.rows[li][lj].items.some(i => i.uuid === uuid)) return fail(400, { origin: true });
     // Possibilité de simplifier...?
     const getItem = () => {
         for (let item of map.rows[li][lj].items) {
-            if (item.id === id) {
+            if (item.uuid === uuid) {
                 map.rows[li][lj].items.splice(map.rows[li][lj].items.indexOf(item), 1);
                 return item;
             }
@@ -289,6 +312,17 @@ const search = async ({ locals }) => {
             if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
             foundItem.quality = 50 + Math.round(Math.random() * 50);
             foundItem.uuid = crypto.randomUUID();
+            // Objets +1,2,3,4
+            if (['weapon', 'armour'].includes(foundItem.type)) {
+                const random = Math.random();
+                foundItem.plus =
+                    random === 1 ? 4 :
+                    random > 0.95 ? 3 :
+                    random > 0.90 ? 2 :
+                    random > 0.75 ? 1 : 0
+                if (foundItem.type === 'weapon') foundItem.attack += foundItem.plus;
+                else if (foundItem.type === 'armour') foundItem.defense += foundItem.plus;
+            }
             // Si l'item est une munition, on ajoute une quantité aléatoire
             if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
             if (foundItem.type === 'explosive') foundItem.quantity = 1;
@@ -302,6 +336,14 @@ const search = async ({ locals }) => {
             }
             loots.push(foundItem);
         }
+        // Nombre de plus pour les logs
+        let plus = { one: 0, two: 0, tree: 0, four: 0};
+        for (let loot of (loots)) {
+            if (loot.plus === 1) plus.one++;
+            else if (loot.plus === 2) plus.two++;
+            else if (loot.plus === 3) plus.tree++;
+            else if (loot.plus === 4) plus.four++;
+        }
         map.rows[li][lj].searchedBy.push(locals.user.id);
         map.rows[li][lj].empty = Math.random() > (danger === 1 ?
             0.5 : danger === 2 ?
@@ -310,7 +352,7 @@ const search = async ({ locals }) => {
         const stats = locals.user.stats;
         stats.items += loots.length;
         await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, stats, locals.rethinkdb)
-        await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots, 'empty': map.rows[li][lj].empty }, locals.rethinkdb);
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots, plus, 'empty': map.rows[li][lj].empty }, locals.rethinkdb);
     } else return fail(400, { exhausted: true })
 }
 

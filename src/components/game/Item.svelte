@@ -6,9 +6,16 @@
 	export let quantity = 0;
 	export let substitute;
 
+	$: plusColor =
+		item.plus === 1 ? 'green' :
+		item.plus === 2 ? 'blue' :
+		item.plus === 3 ? 'purple' :
+		item.plus === 4 ? 'orange' : 'black';
+
 	$: title = substitute ?? (item.description +
-		(item.attack > 0 ? ` (Puissance : ${item.attack})` : '') +
-		(item.defense > 0 ? ` (Protection : ${item.defense})` : '') +
+		(item.plus > 0 ? ` <span style="color:${plusColor}">+${item.plus}</span>` : '') +
+		(item.attack > 0 ? ` (Puissance : <span style="color:${plusColor}">${item.attack}</span>)` : '') +
+		(item.defense > 0 ? ` (Protection : <span style="color:${plusColor}">${item.defense}</span>)` : '') +
 		(item.value ? ` (+${item.value}% et ${item.value / 10} PA)` : '') +
 		(item.wound ? ` (${item.wound})` : '') +
 		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +

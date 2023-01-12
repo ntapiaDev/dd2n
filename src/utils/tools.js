@@ -32,12 +32,14 @@ export const sortItems = (items) => {
     // Si légendaire utilisé, refaire un tableau de tri par qualité... (/!\ Noms en français)
     : a.rarity > b.rarity ? 1 
     : a.rarity < b.rarity ? -1 
-    : a.attack > b.attack ? 1 
-    : a.attack < b.attack ? -1 
-    : a.defense > b.defense ? 1 
-    : a.defense < b.defense ? -1 
+    : a.type === 'weapon' && (a.attack - a.plus) > (b.attack - b.plus) ? 1 
+    : a.type === 'weapon' && (a.attack - a.plus) < (b.attack - b.plus) ? -1 
+    : a.type === 'armour' && (a.defense - a.plus) > (b.defense - b.plus) ? 1 
+    : a.type === 'armour' && (a.defense - a.plus) < (b.defense - b.plus) ? -1 
     : a.description > b.description ? 1 
     : a.description < b.description ? -1 
+    : a.plus > b.plus ? 1 
+    : a.plus < b.plus ? -1 
     : 0);
 }
 

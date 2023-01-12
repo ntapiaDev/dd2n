@@ -7,7 +7,7 @@
 </script>
 
 <form method="POST" {action} use:enhance>
-	<input type="text" name="id" value={item.id} hidden>
+	<input type="text" name="uuid" value={item.uuid} hidden>
 	<button>
 		<Item {item} />
 	</button>

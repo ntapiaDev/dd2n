@@ -7,14 +7,14 @@ export async function load() {
 
 const equip = async ({ locals, request }) => {
     const data = await request.formData();
-    const id = data.get('id');
+    const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     // Vérification que l'objet existe (prévoir un cas d'erreur? message flash??)
-    if (inventory.find(i => i.id === id)) {
+    if (inventory.find(i => i.uuid === uuid)) {
         // Factoriser --> tools, utilisé dans map et items
         const getItem = () => {
             for (let item of inventory) {
-                if (item.id === id) {
+                if (item.uuid === uuid) {
                     inventory.splice(inventory.indexOf(item), 1);
                     return item;
                 }
@@ -31,9 +31,9 @@ const equip = async ({ locals, request }) => {
 
 const unequip = async ({ locals, request }) => {
     const data = await request.formData();
-    const id = data.get('id');
+    const uuid = data.get('uuid');
     const slots = locals.user.slots;
-    const item = Object.entries(slots).find(slot => slot.find(i => i.id === id))?.find(i => i.id === id);
+    const item = Object.entries(slots).find(slot => slot.find(i => i.uuid === uuid))?.find(i => i.uuid === uuid);
     // Vérification que l'objet existe (prévoir un cas d'erreur? message flash??)
     if (item) {
         // On vérifie qu'il reste de la place dans l'inventaire
