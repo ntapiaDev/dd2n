@@ -11,6 +11,7 @@
 	import Heal from '../../../components/map/actions/Heal.svelte';
 	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
 	import Item from '../../../components/game/Item.svelte';
+	import Loots from '../../../components/map/Loots.svelte';
 	import Map from '../../../components/map/Map.svelte';
 	import MapLog from '../../../components/game/MapLog.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
@@ -83,6 +84,7 @@
 <section>
 	<div class="map">
 		<Map encampment={map.encampment} rows={map.rows} current={cell} />
+		<Loots {map} />
 	</div>
 	<div class="cell">
 		<div class={"people" + style}>

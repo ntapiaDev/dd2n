@@ -66,7 +66,6 @@
 				<option value="misc">Divers</option>
 			</select>
 			<select name="rarity" required>
-				<option value="">Rareté</option>
 				<option value="commun">Commun</option>
 				<option value="inhabituel">Inhabituel</option>
 				<option value="rare">Rare</option>
