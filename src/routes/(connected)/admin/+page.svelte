@@ -8,6 +8,9 @@
 	$: items = sortItems(data.items);
 	$: console.log(items);
 
+	let type = '';
+	let slot = '';
+
 	const types = [
 		'Nourriture',
 		'Boisson',
@@ -49,7 +52,8 @@
 		<div class="infos">
 			<input type="text" name="icon" placeholder="Icone" required />
 			<input type="text" name="description" placeholder="Description" required />
-			<select name="type" required>
+			<select name="type" bind:value={type} required>
+				<option value="">Type</option>
 				<option value="food">Nourriture</option>
 				<option value="drink">Boisson</option>
 				<option value="drug">Médicament</option>
@@ -61,24 +65,69 @@
 				<option value="blueprint">Plan</option>
 				<option value="misc">Divers</option>
 			</select>
-			<select name="rarity">
+			<select name="rarity" required>
+				<option value="">Rareté</option>
 				<option value="commun">Commun</option>
 				<option value="inhabituel">Inhabituel</option>
 				<option value="rare">Rare</option>
 				<option value="épique">Épique</option>
 				<option value="légendaire">Légendaire</option>
 			</select>
-			<select name="unique">
+			<select name="unique" required>
 				<option value="not_unique">Non unique</option>
 				<option value="unique">Unique</option>
 			</select>
 		</div>
 		<div class="stats">
-			<input type="number" min="1" max="1" name="hunger" placeholder="Faim" />
-			<input type="number" min="1" max="1" name="thirst" placeholder="Soif" />
-			<input type="number" min="1" max="1" name="disease" placeholder="Maladie" />
-			<input type="number" min="1" max="100" name="attack" placeholder="Attaque" />
-			<input type="number" min="1" max="100" name="defense" placeholder="Défense" />
+			{#if ['weapon', 'ammunition', 'explosive', 'armour'].includes(type)}
+				<select name="slot" bind:value={slot} required>
+					<option value="">Slot</option>
+					{#if type === 'armour'}
+						<option value="A1">A1</option>
+						<option value="A2">A2</option>
+						<option value="A3">A3</option>
+					{:else if type === 'weapon'}
+						<option value="W1">W1</option>
+						<option value="W2">W2</option>
+					{:else if type === 'ammunition'}
+						<option value="W3">W3</option>
+					{:else if type === 'explosive'}
+						<option value="W4">W4</option>
+					{/if}
+				</select>
+				{#if type === 'armour'}
+					<input type="number" min="1" max="100" name="defense" placeholder="Défense" required />
+				{:else if ['weapon', 'explosive'].includes(type)}
+					<input type="number" min="1" max="100" name="attack" placeholder="Attaque" required />
+					{#if slot === 'W1'}
+						<input type="number" min="1" max="100" name="durabilityMax" placeholder="Durabilité" required />
+					{/if}
+				{/if}
+				{#if ['W2', 'W3'].includes(slot)}
+					<select name="weapon" required>
+						<option value="">Arme</option>
+						<option value="gun">Gun</option>
+						<option value="rifle">Rifle</option>
+						<option value="shotgun">Shotgun</option>
+						<option value="machine-gun">Machine gun</option>
+					</select>
+				{/if}
+			{:else if type === 'drug'}
+				<select name="wound" class="drug" required>
+					<option value="">Blessures</option>
+					<option value="égratignures">Égratignures</option>
+					<option value="blessures graves">Blessures graves</option>
+					<option value="blessures mortelles">Blessures mortelles</option>
+				</select>
+			{/if}
+			<select name="code" class="code">
+				<option value="">Bâtiment</option>
+				<option value="b1">Épicerie</option>
+				<option value="b2">Entrepot de bricolage</option>
+				<option value="b3">Pharmacie</option>
+				<option value="b4">Magasin de matériel informatique</option>
+				<option value="b5">Commissariat de police</option>
+			</select>
 			<input type="text" name="credit" placeholder="Auteur" required />
 			<button type="submit">Ajouter</button>
 		</div>
@@ -127,11 +176,16 @@
 	.infos select:nth-child(5) {
 		width: 150px;
 	}
-	.stats input {
+	.stats input,
+	.stats select,
+	.stats button {
 		width: 100px;
 	}
-	.stats button {
-		width: 150px;
+	select.drug {
+		width: 203px;
+	}
+	select.code {
+		width: 307px;
 	}
 	span {
 		display: inline-block;
