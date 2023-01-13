@@ -5,7 +5,7 @@
 </script>
 
 {#if open}
-    <aside transition:fly={{ y: -278, duration: 300 }}>
+    <aside transition:fly={{ y: -278, duration: 500 }}>
         <span class="title">Légende de la carte :</span>
         <div class="grid">
             <div class="td encampment">C</div><span>Campement</span>

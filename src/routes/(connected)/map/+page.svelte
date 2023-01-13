@@ -160,7 +160,7 @@
 		<div class="items">
 			<span class="title">Objets au sol ({cell.items.length}) :</span>
 			{#each sortItems(cell.items) as item (item.uuid)}
-				<span animate:flip>
+				<span class="item" animate:flip>
 					<InteractiveItem {item} action={'/map?/pickUp'} />
 				</span>
 			{/each}
@@ -266,27 +266,42 @@
 	.items,
 	.log,
 	.tchat {
-		min-height: 45px;
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
 		margin-top: 0.5em;
 		padding: 0.5em;
 		border: 1px solid #aaa;
 	}
+	.actions,
+	.items {
+		display: grid;
+		grid-template-columns: repeat(22, 1fr);
+		gap: 1px 0;
+	}
 	.actions .players {
 		width: 25px;
 		height: 25px;
-		margin-left: auto;
+		grid-column: 22 / 22;
+	}
+	.actions .title,
+	.items .title {
+		height: 25px;
+		grid-column: 1 / 7;		
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #EEE;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+		border-radius: 0.25em;
+	}
+	.item {
+		width: 25px;
+		height: 25px;
 	}
 	.log {
 		padding-top: 0.75em;
 		overflow-y: auto;
 	}
-	.title {
-		margin-right: 4px;
-	}
 	.log .title {
+		display: block;
 		margin-bottom: 1em;
 		text-decoration: underline;
 	}

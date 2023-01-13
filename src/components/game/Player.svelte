@@ -12,7 +12,7 @@
 	});
 </script>
 
-<div in:fly={{ y: -30, duration: 500}}>
+<div in:fly={{ y: -30, duration: 500 }}>
     <span>
         <Status />
         <Weapon items={player.inventory} W1={player.slots.W1} W2={player.slots.W2} W3={player.slots.W3} W4={player.slots.W4} />
@@ -33,7 +33,7 @@
         margin: 0 auto;
         padding: 0.5em 2em;
         background-color: #EEE;
-        border: 1px solid black;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
         border-top: none;
         border-radius: 0 0 1em 1em;
     }

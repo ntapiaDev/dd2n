@@ -14,10 +14,10 @@
 </form>
 
 <style>
-	form {
+	form,
+	button {
 		width: 25px;
 		height: 25px;
-		margin-bottom: 1px;
 	}
 	button {
 		border: none;
