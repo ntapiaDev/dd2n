@@ -5,3 +5,9 @@
 <form method="POST" action="/map?/reset" use:enhance>
 	<button type="submit">Reset</button>
 </form>
+
+<style>
+    button {
+        cursor: pointer;
+    }
+</style>

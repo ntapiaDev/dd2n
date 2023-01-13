@@ -75,12 +75,14 @@
 	$: players = `Joueurs sur la case (${cell.players.length}) :` + getUsernames(cell);
 </script>
 
+<aside>
+	<NextDay />
+	<Reset />
+</aside>
 <h1>Vous êtes sur la case {user.location} :</h1>
 <section>
 	<div class="map">
 		<Map encampment={map.encampment} rows={map.rows} current={cell} />
-		<NextDay />
-		<Reset />
 	</div>
 	<div class="cell">
 		<div class={"people" + style}>
@@ -221,20 +223,31 @@
 </section>
 
 <style>
+	aside {
+		padding: 1em;
+		position: absolute;
+		top: 25px;
+		left: 25px;
+		border-radius: 1em;
+		background-color: rgb(255, 255, 255, 0.25);
+	}
 	h1 {
 		margin: 1em 0 0;
 		text-align: center;
 	}
 	section {
-		display: flex;
 		margin: 1em;
-	}
-	.map {
-		width: 45%;
+		display: flex;
+		flex-grow: 1;
+		flex-basis: 50px;
+		overflow-y: hidden;
 	}
 	.cell {
-		width: 55%;
+		width: 50%;
 		margin-left: 1em;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
 	}
 	.people {
 		display: flex;
@@ -267,11 +280,8 @@
 		margin-left: auto;
 	}
 	.log {
-		max-height: 480px;
+		padding-top: 0.75em;
 		overflow-y: auto;
-		flex-direction: column;
-		flex-wrap: nowrap;
-		align-items: baseline;
 	}
 	.title {
 		margin-right: 4px;
@@ -282,7 +292,7 @@
 	}
 	p {
 		/* Inspiré de Bootstrap Alerts */
-		margin: 1rem 0;
+		margin: 1rem 0 0;
 		padding: 0.75rem 1.25rem;
 		color: #721c24;
 		background-color: #f8d7da;

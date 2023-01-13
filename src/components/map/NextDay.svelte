@@ -5,3 +5,9 @@
 <form method="POST" action="/map?/nextday" use:enhance>
 	<button type="submit">Next day</button>
 </form>
+
+<style>
+    button {
+        cursor: pointer;
+    }
+</style>
