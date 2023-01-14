@@ -65,7 +65,6 @@ const attack = async ({ locals, request }) => {
             if (item.description === 'Une grenade fumigène' && !force) force = true;
         }
         let plus = item.plus;
-        // Possibilité de coup critique?? Affiché dans les logs
         // Gestion de la qualité de l'arme??
         const zombies = map.rows[li][lj].zombies;
         map.rows[li][lj].zombies -= item.attack;

@@ -39,11 +39,17 @@
 			zombies += cell.zombies;
 			for (let loot of cell.items) {
 				quantity ++;
-				if (loots.find((i) => i.id === loot.id)) {
-					loots[loots.indexOf(loots.find((i) => i.id === loot.id))].coordinates.push(cell.coordinate);
+				let newLoot = {...loot};
+				if (loots.find((i) => i.id === newLoot.id)) {
+					loots[loots.indexOf(loots.find((i) => i.id === newLoot.id))].coordinates.push(cell.coordinate);
 				} else {
-					loot.coordinates = [cell.coordinate];
-					loots.push(loot);
+					if (newLoot.plus) {
+						if (newLoot.type === 'weapon') newLoot.attack -= newLoot.plus;
+						else if (newLoot.type === 'armour') newLoot.defense -= newLoot.plus;
+						newLoot.plus = 0;
+					}
+					newLoot.coordinates = [cell.coordinate];
+					loots.push(newLoot);
 				}
 			}
 		}

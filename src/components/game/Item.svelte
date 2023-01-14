@@ -4,7 +4,7 @@
 
 	export let item;
 	export let quantity = 0;
-	export let substitute;
+	export let substitute = undefined;
 
 	$: plusColor =
 		item.plus === 1 ? 'green' :
@@ -40,10 +40,10 @@
 		<img src={$page.url.origin + '/star.png'} alt="Objet unique by Kemalmoe" class="unique" {title} use:tooltip />
 	{:else if quantity || item.quantity}
 		<span class="quantity" {title} use:tooltip>
-			{quantity ?? item.quantity}
+			{quantity || item.quantity}
 		</span>
 	{/if}
-	{#if item.durability}
+	{#if item.durability && quantity < 2}
 		<div class="durability">
 			<div class="bar" style={`width: ${durability * 100}%; background-color: rgb(${x}, ${y}, 0)`} {title} use:tooltip></div>
 		</div>
