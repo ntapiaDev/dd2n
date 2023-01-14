@@ -4,13 +4,25 @@
 	import { canTravel } from '../../utils/tools';
 
 	export let cell;
+	export let coordinates;
 	export let current;
 	export let encampment;
+	export let players;
+
+	let loots = 0
+	$: if (coordinates) loots = 0;
+	$: if (coordinates.includes(cell.coordinate)) {
+		for (let coordinate of coordinates) {
+			if (coordinate === cell.coordinate) loots++;
+		}
+	}
 
 	$: travel = canTravel($page.data.user.location, cell.coordinate, cell.layout.border)
 		&& $page.data.user.ap > 0
 		&& (current.zombies <= (($page.data.user.slots.A1.defense ?? 0) + ($page.data.user.slots.A2.defense ?? 0) + ($page.data.user.slots.A3.defense ?? 0)) || $page.data.user.force);
-	$: style = (encampment === cell.coordinate ? 'encampment ' : '') +
+	$: style = coordinates.includes(cell.coordinate) ? 'show-coordinates' :
+	players.find(p => p.coordinate === cell.coordinate) ? 'show-players' :
+	((encampment === cell.coordinate ? 'encampment ' : '') +
 	($page.data.user.location === cell.coordinate ? 'current ' : '') +
 	(travel ? 'travel ' : '') +
 	(cell.layout.danger === 1 ? 'inner ' : '') +
@@ -26,7 +38,7 @@
 		(((cell.visited && cell.empty) || (!cell.visited && cell.estimated.empty)) ? 'empty ' : '') +
 		((cell.visited && cell.building?.empty) ? 'empty-building ' : '') +
 		(cell.visited ? '' : 'blur'))
-	: 'fog')
+	: 'fog'))
 </script>
 
 <td	class={style}
@@ -36,10 +48,14 @@
 			<input type="text" name="target" value={cell.coordinate} hidden>
 			<input type="text" name="ti" value={cell.i} hidden>
 			<input type="text" name="tj" value={cell.j} hidden>
-			<button>{cell.coordinate === encampment ? 'C' : (cell.visible ? (cell.visited ? cell.zombies : cell.estimated.zombies) : '?')}</button>
+			<button>{coordinates.length ? (loots === 0 ? '-' : loots) :
+			players.length ? (players.find(p => p.coordinate === cell.coordinate) ? players.find(p => p.coordinate === cell.coordinate).username[0] : '-') :
+			(cell.coordinate === encampment ? 'C' : (cell.visible ? (cell.visited ? cell.zombies : cell.estimated.zombies) : '?'))}</button>
 		</form>
 	{:else if cell.visible}
-		{cell.coordinate === encampment ? 'C' : (cell.visited ? cell.zombies : cell.estimated.zombies)}
+		{coordinates.length ? (loots === 0 ? '-' : loots) :
+		players.length ? (players.find(p => p.coordinate === cell.coordinate) ? players.find(p => p.coordinate === cell.coordinate).username[0] : '-') :
+		(cell.coordinate === encampment ? 'C' : (cell.visited ? cell.zombies : cell.estimated.zombies))}
 	{/if}
 </td>
 
@@ -50,12 +66,13 @@
 		text-align: center;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 		text-shadow: 1px 0 0 #ddd, 1px 1px 0 #ddd, 0 1px 0 #ddd, -1px 1px 0 #ddd, -1px 0 0 #ddd, -1px -1px 0 #ddd, 0 -1px 0 #ddd, 1px -1px 0 #ddd;
-		transition: box-shadow ease 0.3s, text-shadow ease 0.6s;
+		transition: box-shadow ease 0.3s;
 	}
 	td.encampment {
 		color: #fff;
 		background-color: blue;
 		text-shadow: 1px 0 0 rgb(48, 48, 48), 1px 1px 0 rgb(48, 48, 48), 0 1px 0 rgb(48, 48, 48), -1px 1px 0 rgb(48, 48, 48), -1px 0 0 rgb(48, 48, 48), -1px -1px 0 rgb(48, 48, 48), 0 -1px 0 rgb(48, 48, 48), 1px -1px 0 rgb(48, 48, 48);
+		/* transition: text-shadow ease 0.6s */
 	}
 	td.current {
 		border: 3px double;
@@ -155,7 +172,7 @@
 		background-position: center;
 	}
 	td.inner.empty {
-		background-image: radial-gradient(green 1px, transparent 0);
+		background-image: radial-gradient(rgb(0, 128, 0) 1px, transparent 0);
 	}
 	td.inner.encampment.empty {
 		background-image: radial-gradient(rgb(96, 96, 255) 1px, transparent 0);
@@ -165,5 +182,19 @@
 	}
 	td.outer.empty {
 		background-image: radial-gradient(red 1px, transparent 0);
+	}
+	.show-coordinates {
+		border: 3px ridge rgb(255, 0, 0, 0.60);
+		box-shadow: 0 2px 6px rgb(255, 0, 0, 0.48), 0 0 10px rgb(255, 0, 0, 0.72);
+	}
+	.show-players {
+		border: 3px ridge rgb(0, 128, 0, 0.60);
+		box-shadow: 0 2px 6px rgb(0, 128, 0, 0.48), 0 0 10px rgb(0, 128, 0, 0.72);
+	}
+	.show-coordinates button,
+	.show-players button {
+		width: 20px;
+		height: 20px;
+		border: none;
 	}
 </style>

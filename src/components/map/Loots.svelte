@@ -1,16 +1,33 @@
 <script>
+	import { createEventDispatcher } from 'svelte';
+	import { flip } from 'svelte/animate';
 	import { sortItems } from '../../utils/tools';
 	import Item from '../game/Item.svelte';
 
 	export let map;
 
-	const statistics = {
-		credit: 'Freepik',
-		description: 'Statistiques de la carte',
-		icon: 'statistics',
-		id: 'ab4778ef-f84d-4e82-a43e-c97ede72c7c3',
-		rarity: 'commun',
-		type: 'misc',
+	const dispatch = createEventDispatcher();
+
+	function showLoots(coordinates) {
+		dispatch('showLoots', { coordinates });
+	}
+	function hideLoots() {
+		dispatch('hideLoots', '');
+	}
+	function showPlayers() {
+		dispatch('showPlayers', { players });
+	}
+	function hidePlayers() {
+		dispatch('hidePlayers', '');
+	}
+
+	const human = {
+		credit: "Freepik" ,
+		description: "Un petit joueur tout innocent" ,
+		icon: "human" ,
+		id: "68604984-3955-466c-bfd0-af3b2a5710a3" ,
+		rarity: "commun" ,
+		type: "misc" ,
 		unique: false
 	};
 
@@ -23,26 +40,44 @@
 			for (let loot of cell.items) {
 				quantity ++;
 				if (loots.find((i) => i.id === loot.id)) {
-					loots[loots.indexOf(loots.find((i) => i.id === loot.id))].coordinate.push(
-						cell.coordinate
-					);
+					loots[loots.indexOf(loots.find((i) => i.id === loot.id))].coordinates.push(cell.coordinate);
 				} else {
-					loot.coordinate = [cell.coordinate];
+					loot.coordinates = [cell.coordinate];
 					loots.push(loot);
 				}
 			}
 		}
 	}
+
+	$: players = [] || map;
+	$: for (let row of map.rows) {
+		for (let cell of row) {
+			for (let player of cell.players) {
+				players.push({
+					'username': player,
+					'coordinate': cell.coordinate
+				})
+			}
+		}
+	}
+
+	const getUsernames = (players) => {
+		let usernames = '';
+		for (let player of players) usernames += ('<br/>' + player.username + ` (${player.coordinate})`);
+		return usernames;
+	}
+	$: playersMap = `Joueurs sur la carte (${players.length}) :` + getUsernames(players);
 </script>
 
 <aside>
 	<span class="title">Objets sur la carte ({quantity}) :</span>
-	<Item item={statistics} />
+	<span on:mouseenter={showPlayers} on:mouseleave={hidePlayers}>
+		<Item item={human} quantity={players.length} substitute={playersMap} />
+	</span>
 	<span class="zombies" style={`background-color: rgb(255, 0, 0, ${zombies / 10000})`}>Total de zombies : {zombies}</span>
-	{#each sortItems(loots) as loot}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<span class="item" on:click={() => console.log(loot.coordinate)}>
-			<Item item={loot} quantity={loot.coordinate.length} />
+	{#each sortItems(loots) as loot (loot.id)}
+		<span class="item" on:mouseenter={() => showLoots(loot.coordinates)} on:mouseleave={hideLoots} animate:flip>
+			<Item item={loot} quantity={loot.coordinates.length} />
 		</span>
 	{/each}
 </aside>
@@ -55,6 +90,7 @@
 		display: grid;
 		grid-template-columns: repeat(17, 1fr);
 		gap: 1px 0;
+		overflow-y: auto;
 	}
 	.title,
 	.zombies {

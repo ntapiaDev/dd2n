@@ -257,6 +257,7 @@
         "icon": "crowbar",
         "id": "130975d5-b63f-4fc2-a918-6399de3e7e04",
         "rarity": "inhabituel",
+        "slot": "W1",
         "type": "weapon",
         "unique": false
     },
@@ -1113,6 +1114,15 @@
         "description": "Statistiques",
         "icon": "stats",
         "id": "dc030e8f-8b59-4fe5-8153-057ed1b38c17",
+        "rarity": "commun",
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "credit": "Freepik",
+        "description": "Statistiques de la carte",
+        "icon": "statistics",
+        "id": "ab4778ef-f84d-4e82-a43e-c97ede72c7c3",
         "rarity": "commun",
         "type": "misc",
         "unique": false

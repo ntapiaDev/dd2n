@@ -74,6 +74,21 @@
 		return usernames;
 	}
 	$: players = `Joueurs sur la case (${cell.players.length}) :` + getUsernames(cell);
+
+	let coordinates = [];
+	function showLoots(e) {
+		coordinates = e.detail.coordinates;
+	}
+	function hideLoots() {
+		coordinates = [];
+	}
+	let playersMap = [];
+	function showPlayers(e) {
+		playersMap = e.detail.players;
+	}
+	function hidePlayers() {
+		playersMap = [];
+	}
 </script>
 
 <aside>
@@ -83,8 +98,8 @@
 <h1>Vous êtes sur la case {user.location} :</h1>
 <section>
 	<div class="map">
-		<Map encampment={map.encampment} rows={map.rows} current={cell} />
-		<Loots {map} />
+		<Map encampment={map.encampment} rows={map.rows} current={cell} {coordinates} players={playersMap} />
+		<Loots {map} on:showLoots={showLoots} on:hideLoots={hideLoots} on:showPlayers={showPlayers} on:hidePlayers={hidePlayers} />
 	</div>
 	<div class="cell">
 		<div class={"people" + style}>
@@ -244,11 +259,14 @@
 		flex-basis: 50px;
 		overflow-y: hidden;
 	}
+	.map,
+	.cell {
+		display: flex;
+    	flex-direction: column;
+	}
 	.cell {
 		width: 50%;
 		margin-left: 1em;
-		display: flex;
-		flex-direction: column;
 		flex-grow: 1;
 	}
 	.people {

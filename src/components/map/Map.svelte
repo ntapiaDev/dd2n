@@ -2,8 +2,10 @@
 	import Caption from './Caption.svelte';
 	import Row from './Row.svelte';
 
+	export let coordinates;
 	export let current;
 	export let encampment;
+	export let players;
 	export let rows;
 
 	let clicked = false;
@@ -27,7 +29,7 @@
 			{/each}
 		</tr>
 		{#each rows as row}
-			<Row {row} {encampment} {current} />
+			<Row {row} {encampment} {current} {coordinates} {players} />
 		{/each}
 	</table>
 	<Caption {open} />

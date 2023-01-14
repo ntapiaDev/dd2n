@@ -107,7 +107,7 @@
 				log.log.weapon === "Une grenade incendiaire" ? 'brûlé vif' :
 				log.log.weapon === "Une grenade fumigène" ? 'enfumé' :
 				log.log.weapon === "Du C-4" ? 'exterminé' : 'tué'}
-			<span class="zombies">{log.log.zombies} {log.log.plus > 0 ? `(+${log.log.plus})` : ''} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="weapon">{firstLetterToLowerCase(log.log.weapon)}</span>.
+			<span class="zombies">{log.log.zombies} {log.log.plus > 0 ? `(+${log.log.plus})` : ''} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="zombies">{firstLetterToLowerCase(log.log.weapon)}</span>.
 			{#if log.log.critical}
 				<span>Un coup bien placé a permis de toucher <span class="zombies">{log.log.critical} zombie{log.log.critical > 1 ? 's' : ''}</span> supplémentaire{log.log.critical > 1 ? 's' : ''}.</span>
 			{/if}
@@ -222,9 +222,6 @@
 	.zombies {
 		color: red;
 	}
-	.weapon, .p4 {
-		color: orange;
-	}
 	.item {
 		display: flex;
 		align-items: center;
@@ -243,5 +240,8 @@
 	}
 	.p3 {
 		color: purple;
+	}
+	.p4 {
+		color: orange;
 	}
 </style>
