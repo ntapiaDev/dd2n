@@ -134,7 +134,6 @@ const building = async ({ locals }) => {
         const foundItem = pool[Math.floor(Math.random() * pool.length)];
         pool = pool.filter(i => i.id !== foundItem.id);
         if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
-        foundItem.quality = 50 + Math.round(Math.random() * 50);
         foundItem.uuid = crypto.randomUUID();
         // Objets +1,2,3,4
         if (['weapon', 'armour'].includes(foundItem.type)) {
@@ -208,7 +207,12 @@ const drop = async ({ locals, request }) => {
     const li = locals.user.i;
     const lj = locals.user.j;
     const slots = locals.user.slots;
-    if (['ammunition', 'explosive'].includes(item.type) && map.rows[li][lj].items.find(i => i.id === item.id)) map.rows[li][lj].items.find(i => i.id === item.id).quantity += item.quantity;
+    if (map.rows[li][lj].items.find(i => i.id === item.id)) {
+        if (!['weapon', 'armour'].includes(item.type)) map.rows[li][lj].items.find(i => i.id === item.id).quantity += item.quantity;
+        else if (item.type === 'armour' && map.rows[li][lj].items.find(i => i.id === item.id && i.plus === item.plus)) map.rows[li][lj].items.find(i => i.id === item.id && i.plus === item.plus).quantity += item.quantity;
+        else if (item.type === 'weapon' && map.rows[li][lj].items.find(i => i.id === item.id && i.plus === item.plus && i.durability === item.durability)) map.rows[li][lj].items.find(i => i.id === item.id && i.plus === item.plus && i.durability === item.durability).quantity += item.quantity;
+        else map.rows[li][lj].items.push(item);
+    } 
     else map.rows[li][lj].items.push(item);
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
     await addLog(locals.user.id, locals.user.location, locals.user.username, 'drop', { item }, locals.rethinkdb);
@@ -240,8 +244,11 @@ const pickUp = async ({ locals, request }) => {
     const getItem = () => {
         for (let item of map.rows[li][lj].items) {
             if (item.uuid === uuid) {
-                map.rows[li][lj].items.splice(map.rows[li][lj].items.indexOf(item), 1);
-                return item;
+                if (item.quantity > 1 && !['ammunition', 'explosive'].includes(item.type)) {
+                    item.quantity -= 1;
+                }
+                else map.rows[li][lj].items.splice(map.rows[li][lj].items.indexOf(item), 1);
+                return {...item};
             }
         }
     }
@@ -253,6 +260,8 @@ const pickUp = async ({ locals, request }) => {
     else {
         // On vérifie que l'inventaire n'est pas plein
         if (inventory.length === 10) return fail(400, { full: true });
+        if (!['ammunition', 'explosive'].includes(item.type)) item.quantity = 1;
+        item.uuid = crypto.randomUUID();
         inventory.push(item);
     }
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
@@ -313,7 +322,6 @@ const search = async ({ locals }) => {
             const foundItem = pool[Math.floor(Math.random() * pool.length)];
             pool = pool.filter(i => i.id !== foundItem.id);
             if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
-            foundItem.quality = 50 + Math.round(Math.random() * 50);
             foundItem.uuid = crypto.randomUUID();
             // Objets +1,2,3,4
             if (['weapon', 'armour'].includes(foundItem.type)) {
