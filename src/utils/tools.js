@@ -44,6 +44,8 @@ export const sortItems = (items) => {
     : a.description < b.description ? -1 
     : a.plus > b.plus ? 1 
     : a.plus < b.plus ? -1 
+    : a.durability > b.durability ? 1 
+    : a.durability < b.durability ? -1 
     : 0);
 }
 

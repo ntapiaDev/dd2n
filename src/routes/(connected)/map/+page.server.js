@@ -149,9 +149,13 @@ const building = async ({ locals }) => {
         }
         // Si l'item est une munition, on ajoute une quantité aléatoire
         if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
-        if (foundItem.type === 'explosive') foundItem.quantity = 1;
-        // Si la munition est déjà présente sur la case, on stack la munition
-        if (['ammunition', 'explosive'].includes(foundItem.type) && map.rows[li][lj].items.find(i => i.id === foundItem.id)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
+        else foundItem.quantity = 1;
+        if (map.rows[li][lj].items.find(i => i.id === foundItem.id)) {
+            if (!['weapon', 'armour'].includes(foundItem.type)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
+            else if (foundItem.type === 'armour' && map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus)) map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus).quantity += foundItem.quantity;
+            else if (foundItem.type === 'weapon' && map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus && i.durability === foundItem.durability)) map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus && i.durability === foundItem.durability).quantity += foundItem.quantity;
+            else map.rows[li][lj].items.push(foundItem);
+        }
         else {
             // On met l'item entier dans la case de la map
             map.rows[li][lj].items.push(foundItem);
@@ -324,9 +328,13 @@ const search = async ({ locals }) => {
             }
             // Si l'item est une munition, on ajoute une quantité aléatoire
             if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
-            if (foundItem.type === 'explosive') foundItem.quantity = 1;
-            // Si la munition est déjà présente sur la case, on stack la munition
-            if (['ammunition', 'explosive'].includes(foundItem.type) && map.rows[li][lj].items.find(i => i.id === foundItem.id)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
+            else foundItem.quantity = 1;
+            if (map.rows[li][lj].items.find(i => i.id === foundItem.id)) {
+                if (!['weapon', 'armour'].includes(foundItem.type)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
+                else if (foundItem.type === 'armour' && map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus)) map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus).quantity += foundItem.quantity;
+                else if (foundItem.type === 'weapon' && map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus && i.durability === foundItem.durability)) map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus && i.durability === foundItem.durability).quantity += foundItem.quantity;
+                else map.rows[li][lj].items.push(foundItem);
+            }
             else {
                 // On met l'item entier dans la case de la map
                 map.rows[li][lj].items.push(foundItem);

@@ -38,12 +38,12 @@
 		use:tooltip />
 	{#if item.unique}
 		<img src={$page.url.origin + '/star.png'} alt="Objet unique by Kemalmoe" class="unique" {title} use:tooltip />
-	{:else if quantity || item.quantity}
+	{:else if quantity > 1 || item.quantity > 1 || item.icon === 'human'}
 		<span class="quantity" {title} use:tooltip>
 			{quantity || item.quantity}
 		</span>
 	{/if}
-	{#if item.durability && quantity < 2}
+	{#if item.durability}
 		<div class="durability">
 			<div class="bar" style={`width: ${durability * 100}%; background-color: rgb(${x}, ${y}, 0)`} {title} use:tooltip></div>
 		</div>

@@ -38,17 +38,20 @@
 		for (let cell of row) {
 			zombies += cell.zombies;
 			for (let loot of cell.items) {
-				quantity ++;
+				quantity += loot.quantity;
 				let newLoot = {...loot};
 				if (loots.find((i) => i.id === newLoot.id)) {
-					loots[loots.indexOf(loots.find((i) => i.id === newLoot.id))].coordinates.push(cell.coordinate);
+					loots[loots.indexOf(loots.find((i) => i.id === newLoot.id))].coordinates.push({coordinates: cell.coordinate, quantity: newLoot.quantity});
+					loots[loots.indexOf(loots.find((i) => i.id === newLoot.id))].total += newLoot.quantity;
 				} else {
 					if (newLoot.plus) {
 						if (newLoot.type === 'weapon') newLoot.attack -= newLoot.plus;
 						else if (newLoot.type === 'armour') newLoot.defense -= newLoot.plus;
 						newLoot.plus = 0;
 					}
-					newLoot.coordinates = [cell.coordinate];
+					if (newLoot.durability) newLoot.durability = 0;
+					newLoot.coordinates = [{coordinates: cell.coordinate, quantity: newLoot.quantity}];
+					newLoot.total = newLoot.quantity;
 					loots.push(newLoot);
 				}
 			}
@@ -83,7 +86,7 @@
 	<span class="zombies" style={`background-color: rgb(255, 0, 0, ${zombies / 10000})`}>Total de zombies : {zombies}</span>
 	{#each sortItems(loots) as loot (loot.id)}
 		<span class="item" on:mouseenter={() => showLoots(loot.coordinates)} on:mouseleave={hideLoots} animate:flip>
-			<Item item={loot} quantity={loot.coordinates.length} />
+			<Item item={loot} quantity={loot.total} />
 		</span>
 	{/each}
 </aside>

@@ -11,16 +11,16 @@
 
 	let loots = 0
 	$: if (coordinates) loots = 0;
-	$: if (coordinates.includes(cell.coordinate)) {
-		for (let coordinate of coordinates) {
-			if (coordinate === cell.coordinate) loots++;
+	$: for (let coordinate of coordinates) {
+		if (coordinate.coordinates === cell.coordinate) {
+			loots += coordinate.quantity;
 		}
 	}
 
 	$: travel = canTravel($page.data.user.location, cell.coordinate, cell.layout.border)
 		&& $page.data.user.ap > 0
 		&& (current.zombies <= (($page.data.user.slots.A1.defense ?? 0) + ($page.data.user.slots.A2.defense ?? 0) + ($page.data.user.slots.A3.defense ?? 0)) || $page.data.user.force);
-	$: style = coordinates.includes(cell.coordinate) ? 'show-coordinates' :
+	$: style = coordinates.find(i => i.coordinates === cell.coordinate) ? 'show-coordinates' :
 	players.find(p => p.coordinate === cell.coordinate) ? 'show-players' :
 	((encampment === cell.coordinate ? 'encampment ' : '') +
 	($page.data.user.location === cell.coordinate ? 'current ' : '') +
