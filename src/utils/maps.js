@@ -45,11 +45,10 @@ export const generateMap = async (user_id, username, rethinkdb) => {
     });
     await r.table('users').filter(r.row("id").eq(user_id)).update({
         'days': 1, 'ap': 100, 'wound': 0, 'hunger': 75, 'thirst': 75, 'force': false, 'location': encampment, 'i': 7, 'j': 7, 'inventory': [{
-            "attack": 0,
+            "code": "b1",
             "credit": "Freepik",
-            "defense": 0,
             "description": "Une cuisse de poulet",
-            "icon": "poulet",
+            "icon": "chicken",
             "id": "41805ead-1cc7-4d58-8fc5-9dd1838ab331",
             "quantity": 1,
             "rarity": "commun",
@@ -58,9 +57,8 @@ export const generateMap = async (user_id, username, rethinkdb) => {
             "uuid": crypto.randomUUID(),
             "value": 20
         }, {
-            "attack": 0,
+            "code": "b1",
             "credit": "Tanahcon",
-            "defense": 0,
             "description": "Une canette de coca",
             "icon": "cola",
             "id": "f8384e81-5c25-4509-96a6-f57f40a2faef",
@@ -74,15 +72,11 @@ export const generateMap = async (user_id, username, rethinkdb) => {
             'W0': {
                 "attack": 1,
                 "credit": 'Freepik',
-                "defense": 0,
                 "description": 'Se battre à mains nues',
                 "icon": 'attack',
                 "id": 'd1a3d28e-bd5f-486a-b4fb-7d36254f4344',
-                "plus": 0,
-                "rarity": 'commun',
                 "slot": "W0",
                 "type": 'misc',
-                "unique": false
             },
             'W1': '',
             'W2': '',
@@ -90,7 +84,6 @@ export const generateMap = async (user_id, username, rethinkdb) => {
             'W4': '',
             'A1': '',
             'A2': {
-                "attack": 0,
                 "credit": "Freepik",
                 "defense": 1,
                 "description": "Une chemise hawaïenne",
@@ -105,7 +98,6 @@ export const generateMap = async (user_id, username, rethinkdb) => {
                 "uuid": crypto.randomUUID()
             },
             'A3': {
-                "attack": 0,
                 "credit": "Good Ware",
                 "defense": 1,
                 "description": "Un short en jean",

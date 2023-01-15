@@ -18,7 +18,7 @@
 		(item.defense > 0 ? ` (Protection : <span style="color:${plusColor}">${item.defense}</span>)` : '') +
 		(item.value ? ` (+${item.value}% et ${item.value / 10} PA)` : '') +
 		(item.wound ? ` (${item.wound})` : '') +
-		(item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
+		(item.rarity && item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '') +
 		// Affichage de la faim et de la soif dans la barre de joueur (à simplifier)
 		(['satiated', 'hungry', 'meal', 'hunger'].includes(item.icon) ? ` (${$page.data.user.hunger}%)` : '') +
@@ -38,7 +38,7 @@
 		use:tooltip />
 	{#if item.unique}
 		<img src={$page.url.origin + '/star.png'} alt="Objet unique by Kemalmoe" class="unique" {title} use:tooltip />
-	{:else if quantity > 1 || item.quantity > 1 || item.icon === 'human'}
+	{:else if quantity > 1 || item.quantity > 1 || (item.icon === 'human' && quantity > 0)}
 		<span class="quantity" {title} use:tooltip>
 			{quantity || item.quantity}
 		</span>

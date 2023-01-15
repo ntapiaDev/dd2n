@@ -65,14 +65,16 @@
 				<option value="blueprint">Plan</option>
 				<option value="misc">Divers</option>
 			</select>
-			<select name="rarity" required>
+			<select name="rarity">
+				<option value="">Rareré</option>
 				<option value="commun">Commun</option>
 				<option value="inhabituel">Inhabituel</option>
 				<option value="rare">Rare</option>
 				<option value="épique">Épique</option>
 				<option value="légendaire">Légendaire</option>
 			</select>
-			<select name="unique" required>
+			<select name="unique">
+				<option value="">Unicité</option>
 				<option value="not_unique">Non unique</option>
 				<option value="unique">Unique</option>
 			</select>
