@@ -7,7 +7,7 @@
 
 	export let items;
 
-    let size = 10; // Taille changeable si items de stockage (sac, etc) importés dans items.
+    let size = 10;
 </script>
 
 <span class="inventory">

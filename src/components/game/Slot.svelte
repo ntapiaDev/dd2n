@@ -10,99 +10,53 @@
 
 	const icons = {
 		W1: {
-			attack: 0,
 			credit: 'DinosoftLabs',
-			defense: 0,
 			description: 'Équiper une arme blanche',
-			disease: 0,
-			hunger: 0,
 			icon: 'baton',
 			id: 'e15f3c22-08eb-47e2-939f-a620d438efdb',
-			rarity: 'commun',
-			thirst: 0,
 			type: 'misc',
-			unique: false
 		},
 		W2: {
-			attack: 0,
 			credit: 'Freepik',
-			defense: 0,
 			description: 'Équiper une arme à feu',
-			disease: 0,
-			hunger: 0,
 			icon: 'pistol',
 			id: 'b0549187-ecc7-4e7c-9c4c-cca8ad2b057d',
-			rarity: 'commun',
-			thirst: 0,
 			type: 'misc',
-			unique: false
 		},
 		W3: {
-			attack: 0,
 			credit: 'manshagraphics',
-			defense: 0,
 			description: 'Équiper des munitions',
-			disease: 0,
-			hunger: 0,
 			icon: 'ammo',
 			id: '1c193330-a525-4ed3-b247-ac94472f5be0',
-			rarity: 'commun',
-			thirst: 0,
 			type: 'misc',
-			unique: false
 		},
 		W4: {
-			attack: 0,
 			credit: 'Smashicons',
-			defense: 0,
 			description: "Équiper de l'explosif",
 			icon: 'explosive',
 			id: '9e067be7-c438-40c3-9974-5d92582bb8c1',
-			rarity: 'commun',
 			type: 'misc',
-			unique: false
 		},
 		A1: {
-			attack: 0,
 			credit: 'iconixar',
-			defense: 0,
 			description: 'Équiper un casque',
-			disease: 0,
-			hunger: 0,
 			icon: 'helmet',
 			id: 'f4dfe943-c662-49bf-83c5-090203e30a08',
-			rarity: 'commun',
-			thirst: 0,
 			type: 'misc',
-			unique: false
 		},
 		A2: {
-			attack: 0,
 			credit: 'Freepik',
-			defense: 0,
 			description: 'Équiper un torse',
-			disease: 0,
-			hunger: 0,
 			icon: 'armour',
 			id: 'c9e9a022-1088-499a-9354-5e7f012f1517',
-			rarity: 'commun',
-			thirst: 0,
 			type: 'misc',
-			unique: false
 		},
 		A3: {
-			attack: 0,
 			credit: 'Good Ware',
-			defense: 0,
 			description: 'Équiper un pantalon',
-			disease: 0,
-			hunger: 0,
 			icon: 'pants',
 			id: '9a707225-a87a-4910-a919-3336ad4d94da',
-			rarity: 'commun',
-			thirst: 0,
 			type: 'misc',
-			unique: false
 		}
 	};
 

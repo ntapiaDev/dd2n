@@ -6,6 +6,14 @@
 
 	export let map;
 
+	const human = {
+		credit: "Freepik" ,
+		description: "Un petit joueur tout innocent" ,
+		icon: "human" ,
+		id: "68604984-3955-466c-bfd0-af3b2a5710a3" ,
+		type: "misc" ,
+	};
+
 	const dispatch = createEventDispatcher();
 
 	function showLoots(coordinates) {
@@ -20,16 +28,6 @@
 	function hidePlayers() {
 		dispatch('hidePlayers', '');
 	}
-
-	const human = {
-		credit: "Freepik" ,
-		description: "Un petit joueur tout innocent" ,
-		icon: "human" ,
-		id: "68604984-3955-466c-bfd0-af3b2a5710a3" ,
-		rarity: "commun" ,
-		type: "misc" ,
-		unique: false
-	};
 
 	$: loots = [] || map;
 	let quantity, zombies;

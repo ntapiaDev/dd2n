@@ -20,13 +20,6 @@ export const deleteLogs = async (user_id, rethinkdb) => {
     //     });
 }
 
-// export const getLogs = async (rethinkdb) => {
-//     return r.table('logs').run(rethinkdb)
-//         .then(function (result) {
-//             return result._responses[0]?.r;
-//         });
-// }
-
 export const getLogsByCoordinate = async (user_id, coordinate, rethinkdb) => {
     return r.table('logs').filter({ user_id, coordinate }).orderBy(r.desc('date')).run(rethinkdb)
         .then(function (result) {

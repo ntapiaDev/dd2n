@@ -72,7 +72,6 @@
 		color: #fff;
 		background-color: blue;
 		text-shadow: 1px 0 0 rgb(48, 48, 48), 1px 1px 0 rgb(48, 48, 48), 0 1px 0 rgb(48, 48, 48), -1px 1px 0 rgb(48, 48, 48), -1px 0 0 rgb(48, 48, 48), -1px -1px 0 rgb(48, 48, 48), 0 -1px 0 rgb(48, 48, 48), 1px -1px 0 rgb(48, 48, 48);
-		/* transition: text-shadow ease 0.6s */
 	}
 	td.current {
 		border: 3px double;

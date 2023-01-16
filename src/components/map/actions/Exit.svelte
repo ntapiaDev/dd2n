@@ -3,15 +3,11 @@
 	import Item from '../../game/Item.svelte';
 
 	const item = {
-		attack: 0,
 		credit: 'Freepik',
-		defense: 0,
 		description: 'Retourner au campement',
 		icon: 'exit',
 		id: '683c0989-6dbf-44ef-ab9c-1335db3421c6',
-		rarity: 'commun',
 		type: 'misc',
-		unique: false
 	};
 </script>
 

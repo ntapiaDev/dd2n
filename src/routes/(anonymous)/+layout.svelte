@@ -3,72 +3,54 @@
 
     const items = [
         {
-            "attack": 0 ,
             "credit": "Freepik" ,
-            "defense": 0 ,
             "description": "Un méchant zombie dévoreur de cerveau" ,
-            "disease": 0 ,
-            "hunger": 0 ,
             "icon": "zombie" ,
             "id": "09bbb34f-667a-48b8-afed-ce876ff4154c" ,
-            "rarity": "commun" ,
-            "thirst": 0 ,
             "type": "misc" ,
-            "unique": false
         },
         {
-            "attack": 1 ,
+            "code": "b1" ,
             "credit": "Freepik" ,
-            "defense": 0 ,
             "description": "Une bouteille d'eau minérale" ,
-            "disease": 0 ,
-            "hunger": 0 ,
             "icon": "water" ,
             "id": "95e76f54-8ca9-4528-bcc0-3c159dde7c8b" ,
             "rarity": "commun" ,
-            "thirst": 1 ,
             "type": "drink" ,
-            "unique": false
+            "unique": false ,
+            "value": 50
         },
         {
             "attack": 5 ,
+            "code": "b5" ,
             "credit": "kosonicon" ,
-            "defense": 0 ,
             "description": "Un pistolet de policier" ,
-            "disease": 0 ,
-            "hunger": 0 ,
             "icon": "gun" ,
             "id": "c278c863-00df-4e52-b283-d6affb244cda" ,
             "rarity": "inhabituel" ,
-            "thirst": 0 ,
+            "slot": "W2" ,
             "type": "weapon" ,
-            "unique": false
+            "unique": false ,
+            "weapon": "gun"
         },
         {
-            "attack": 1 ,
             "credit": "Smashicons" ,
             "defense": 2 ,
             "description": "Une veste en cuir" ,
-            "disease": 0 ,
-            "hunger": 0 ,
             "icon": "leather-jacket" ,
             "id": "9d8d44c9-6cb7-4b63-b820-8428785370c8" ,
             "rarity": "commun" ,
-            "thirst": 0 ,
+            "slot": "A2" ,
             "type": "armour" ,
             "unique": false
         },
         {
-            "attack": 1 ,
+            "code": "b2" ,
             "credit": "smashingstocks" ,
-            "defense": 0 ,
             "description": "Des planches de bois" ,
-            "disease": 0 ,
-            "hunger": 0 ,
             "icon": "wood-plank" ,
             "id": "a3eff481-3d59-40d4-b127-6a79ff748eb0" ,
             "rarity": "commun" ,
-            "thirst": 0 ,
             "type": "resource" ,
             "unique": false
         }

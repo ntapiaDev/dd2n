@@ -3,18 +3,11 @@
 	import Item from '../../game/Item.svelte';
 
 	const item = {
-		attack: 0,
 		credit: 'Freepik',
-		defense: 0,
 		description: 'Fouiller le bâtiment',
-		disease: 0,
-		hunger: 0,
 		icon: 'building',
 		id: 'ade8a391-a49f-40b6-9862-55f61c891e86',
-		rarity: 'commun',
-		thirst: 0,
 		type: 'misc',
-		unique: false
 	};
 </script>
 

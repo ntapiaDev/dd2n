@@ -5,15 +5,11 @@
 	import Item from '../../game/Item.svelte';
 
     const item = {
-		attack: 0,
 		credit: 'Freepik',
-		defense: 0,
 		description: 'Laisser un message',
 		icon: 'write',
 		id: 'e6f9dc67-f4e1-4b66-8192-0b27fccce49e',
-		rarity: 'commun',
 		type: 'misc',
-		unique: false
 	};
 
     let message = '';

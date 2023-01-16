@@ -3,34 +3,26 @@
 	import { page } from '$app/stores';
 	import Item from '../game/Item.svelte';
 
+	const calendar = {
+		credit: 'Erifqi Zetiawan',
+		description: 'Combien de jours tiendrez-vous ?',
+		icon: 'calendar',
+		id: 'be91cda3-39b6-44e9-89c0-bd70b534435e',
+		type: 'misc',
+	};
+	const stats = {
+		credit: 'smashingstocks',
+		description: 'Statistiques',
+		icon: 'stats',
+		id: 'dc030e8f-8b59-4fe5-8153-057ed1b38c17',
+		type: 'misc',
+	};
+
 	$: title = $page.data.user?.days ?
 		$page.data.user.days + ($page.data.user.days === 1 ? 'ère' : 'ème') + ' journée' :
 		'Combien de jours tiendrez-vous ?';
 
-	// Statistiques
 	$: substitute = 'Objets trouvés : ' + $page.data.user?.stats.items + '<br/>' + 'Zombies tués : ' + $page.data.user?.stats.zombies;
-	const calendar = {
-		attack: 0,
-		credit: 'Erifqi Zetiawan',
-		defense: 0,
-		description: 'Combien de jours tiendrez-vous ?',
-		icon: 'calendar',
-		id: 'be91cda3-39b6-44e9-89c0-bd70b534435e',
-		rarity: 'commun',
-		type: 'misc',
-		unique: false
-	};
-	const stats = {
-		attack: 0,
-		credit: 'smashingstocks',
-		defense: 0,
-		description: 'Statistiques',
-		icon: 'stats',
-		id: 'dc030e8f-8b59-4fe5-8153-057ed1b38c17',
-		rarity: 'commun',
-		type: 'misc',
-		unique: false
-	};
 </script>
 
 <svelte:head>

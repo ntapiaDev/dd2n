@@ -20,7 +20,6 @@ export const handle = async ({ event, resolve }) => {
     event.locals = { rethinkdb };
 
     let user;
-    // Récupération de la session et sécurisation des routes
     const SESSIONID = event.cookies.get('SESSIONID');
     if (SESSIONID) user = await getBySESSIONID(SESSIONID, rethinkdb);
 
@@ -46,7 +45,6 @@ export const handle = async ({ event, resolve }) => {
         return redirect('/map');
     }
 
-    // User dans locals
     if (user) event.locals.user = {
         id: user.id,
         username: user.username,
@@ -56,7 +54,6 @@ export const handle = async ({ event, resolve }) => {
         i: user.i,
         j: user.j,
         ap: user.ap,
-        life: user.life,
         hunger: user.hunger,
         thirst: user.thirst,
         wound: user.wound,

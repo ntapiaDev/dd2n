@@ -20,7 +20,7 @@
 		(item.wound ? ` (${item.wound})` : '') +
 		(item.rarity && item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '') +
-		// Affichage de la faim et de la soif dans la barre de joueur (à simplifier)
+		// Affichage de la faim et de la soif dans la barre de joueur
 		(['satiated', 'hungry', 'meal', 'hunger'].includes(item.icon) ? ` (${$page.data.user.hunger}%)` : '') +
 		(['hydrated', 'thirsty', 'drop', 'dehydrated'].includes(item.icon) ? ` (${$page.data.user.thirst}%)` : ''));
 
@@ -66,7 +66,6 @@
 		height: 20px;
 	}
 
-	/* Type */
 	.food {
 		background-color: rgb(205, 255, 205);
 	}
@@ -98,7 +97,6 @@
 		background-color: #EEE;
 	}
 
-	/* Rarity */
 	.inhabituel {
 		border: 1px solid green;
 	}
@@ -112,7 +110,6 @@
 		border: 1px solid orange;
 	}
 
-	/* Unique */
 	.unique {
 		width: 12px;
 		height: 12px;
@@ -121,7 +118,6 @@
 		right: 0px;
 	}
 
-	/* Quantity */
 	.quantity {
 		position: absolute;
 		top: -3px;
@@ -131,7 +127,6 @@
 		font-size: 0.9em;
 	}
 
-	/* Durability */
 	.durability {
 		width: 20px;
 		height: 3px;

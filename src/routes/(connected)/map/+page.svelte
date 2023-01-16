@@ -23,6 +23,21 @@
 	export let data;
 	export let form;
 
+	const human = {
+		credit: "Freepik" ,
+		description: "Un petit joueur tout innocent" ,
+		icon: "human" ,
+		id: "68604984-3955-466c-bfd0-af3b2a5710a3" ,
+		type: "misc" ,
+	};
+	const walking = {
+		credit: "surang" ,
+		description: "Vous n'avez plus rien à faire ici" ,
+		icon: "walking" ,
+		id: "55473765-045d-4882-a2ba-d82fe93f97ab" ,
+		type: "misc" ,
+	};
+
 	$: map = data.map;
 	$: logs = data.logs;
 	$: user = $page.data.user;
@@ -38,35 +53,6 @@
 
 	// Futur bouton de retour automatique
 	// $: distance = getDistance(user.location, map.encampment);
-
-	const human = {
-		attack: 0 ,
-		credit: "Freepik" ,
-		defense: 0 ,
-		description: "Un petit joueur tout innocent" ,
-		disease: 0 ,
-		hunger: 0 ,
-		icon: "human" ,
-		id: "68604984-3955-466c-bfd0-af3b2a5710a3" ,
-		rarity: "commun" ,
-		thirst: 0 ,
-		type: "misc" ,
-		unique: false
-	};
-	const walking = {
-		attack: 0 ,
-		credit: "surang" ,
-		defense: 0 ,
-		description: "Vous n'avez plus rien à faire ici" ,
-		disease: 0 ,
-		hunger: 0 ,
-		icon: "walking" ,
-		id: "55473765-045d-4882-a2ba-d82fe93f97ab" ,
-		rarity: "commun" ,
-		thirst: 0 ,
-		type: "misc" ,
-		unique: false
-	};
 
 	const getUsernames = (cell) => {
 		let usernames = '';

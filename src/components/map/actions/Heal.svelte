@@ -8,18 +8,11 @@
 	export let wound;
 
 	const item = {
-		attack: 0,
 		credit: 'Freepik',
-		defense: 0,
 		description: 'Se soigner',
-		disease: 0,
-		hunger: 0,
 		icon: 'heal',
 		id: 'eb8a1f18-adb1-47c3-8481-f8210966519f',
-		rarity: 'commun',
-		thirst: 0,
 		type: 'misc',
-		unique: false
 	};
 
 	let open = false;

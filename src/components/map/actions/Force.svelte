@@ -3,15 +3,11 @@
 	import Item from '../../game/Item.svelte';
 
 	const item = {
-		attack: 0,
 		credit: 'surang',
-		defense: 0,
 		description: 'Passage en force (blessure grave)',
 		icon: 'force',
 		id: 'cf45ff13-134b-489d-8afb-a06a42054018',
-		rarity: 'commun',
 		type: 'misc',
-		unique: false
 	};
 </script>
 
