@@ -4,6 +4,29 @@
 
 	export let log;
 
+	const feed = [
+		{
+			credit: 'Freepik',
+			description: 'Mort de faim',
+			icon: 'hunger',
+			id: '781741f2-56d8-4fba-8cb7-a79ea1ab1ca7',
+			type: 'misc',
+		},
+		{
+			credit: 'Freepik',
+			description: 'Mort de soif',
+			icon: 'dehydrated',
+			id: '9031ee03-0eb8-4f07-9bee-7218840ae2bc',
+			type: 'misc',
+		}
+	];
+	const rip = {
+		credit: "Eucalyp" ,
+		description: "Repose en paix" ,
+		icon: "rip" ,
+		id: "3912a66e-6e12-47a2-a10d-a2f350d01dad" ,
+		type: "misc"
+	}
 	const wounds = [
 		{
 			credit: 'Freepik',
@@ -40,7 +63,7 @@
 			id: "1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8" ,
 			type: "misc" ,
 		}
-	];
+	];	
 
 	const firstLetterToLowerCase = (word) => {
 		return word.charAt(0).toLowerCase() + word.slice(1);
@@ -59,10 +82,24 @@
 	<span class="date">{formatDate(log)}</span>
 	{#if log.action === 'in'}
 		<div>{log.player} est arrivé dans la zone.</div>
+		{#if log.log.warning === 'hunger'}
+			<div>{log.player} est <Item item={feed[0]} /></div>
+		{:else if log.log.warning === 'thirst'}
+			<div>{log.player} est <Item item={feed[1]} /></div>
+		{:else if log.log.warning === 'both'}
+			<div>{log.player} est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
+		{/if}
 	{:else if log.action === 'out'}
 		<div>{log.player} a quitté la zone.</div>
 	{:else if log.action === 'inTunnel'}
 		<div>{log.player} est sorti du passage souterrain.</div>
+		{#if log.log.warning === 'hunger'}
+			<div>{log.player} est <Item item={feed[0]} /></div>
+		{:else if log.log.warning === 'thirst'}
+			<div>{log.player} est <Item item={feed[1]} /></div>
+		{:else if log.log.warning === 'both'}
+			<div>{log.player} est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
+		{/if}
 	{:else if log.action === 'outTunnel'}
 		<div>{log.player} est entrée dans le passage souterrain.</div>
 	{:else if log.action === 'kill'}
@@ -95,6 +132,13 @@
 			{/if}
 			{#if log.log.weapon === "Une grenade fumigène"}
 				<div>Cette diversion lui permet de quitter la zone en toute sécurité.</div>
+			{/if}
+			{#if log.log.warning === 'hunger'}
+				<div>{log.player} est <Item item={feed[0]} /></div>
+			{:else if log.log.warning === 'thirst'}
+				<div>{log.player} est <Item item={feed[1]} /></div>
+			{:else if log.log.warning === 'both'}
+				<div>{log.player} est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
 			{/if}
 		</div>
 	{:else if ['loot', 'building'].includes(log.action)}
@@ -132,6 +176,13 @@
 		{:else if log.log.emptyBuilding}
 			<div>Le bâtiment a maintenant l'air totalement vide.</div>
 		{/if}
+		{#if log.log.warning === 'hunger'}
+			<div>{log.player} est <Item item={feed[0]} /></div>
+		{:else if log.log.warning === 'thirst'}
+			<div>{log.player} est <Item item={feed[1]} /></div>
+		{:else if log.log.warning === 'both'}
+			<div>{log.player} est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
+		{/if}
 	{:else if log.action === 'new'}
 		<div>L'agitation de la nuit a permis de dévoiler de nouvelles ressources...</div>
 	{:else if log.action === 'pickup'}
@@ -154,6 +205,16 @@
 		<div>Rassemblant son courage, {log.player} est passé en force et peut quitter la zone. Après une lutte acharnée, il est maintenant <Item item={wounds[2]} /></div>
 	{:else if log.action === 'tchat'}
 		<div>{log.player} : <i>{log.log.message}</i></div>
+	{:else if log.action === 'dead'}
+		{#if log.log.cause === 'zombies'}
+			<div>Ayant passé la nuit dehors loin des défenses de son campement, {log.player} s'est fait dévorer le cerveau par des zombies <Item item={rip} /></div>
+		{:else if log.log.cause === 'both'}
+			<div class="item">N'ayant rien mangé et rien bu, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
+		{:else if log.log.cause === 'hunger'}
+			<div class="item">Affamé après tous ses efforts, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
+		{:else if log.log.cause === 'thirst'}
+			<div class="item">N'ayant pu s'hydrater suffisamment, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
+		{/if}
 	{/if}
 </div>
 
@@ -189,6 +250,7 @@
 	.item {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
 	}
 	.item span:first-child {
 		margin-left: 4px;

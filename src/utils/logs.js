@@ -10,7 +10,7 @@ export const addLog = async (user_id, coordinate, player, action, log, rethinkdb
 export const deleteLogs = async (user_id, rethinkdb) => {
     await r.table('logs').filter({ user_id }).delete().run(rethinkdb);
     // Log par défaut d'arrivée sur la case du campement
-    return r.table('logs').insert({ user_id, coordinate: 'H8', player: 'Nicolas', action: 'in', 'date': Date.now() }).run(rethinkdb)
+    return r.table('logs').insert({ user_id, coordinate: 'H8', player: 'Nicolas', action: 'in', log: { warning: false }, 'date': Date.now() }).run(rethinkdb)
         .then(function (result) {
             return result;
         });

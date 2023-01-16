@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { canTravel, getIJ } from '../../../utils/tools';
+import { canTravel, checkHT, getIJ } from '../../../utils/tools';
 import { getItems, getItemsByCode, moveItem } from '../../../utils/items';
 import { addLog, deleteLogs, getLogsByCoordinate } from "../../../utils/logs";
 import { generateMap, getAttack, getMap, getMapTunnel, getNextDay, getSearch, getTravel, pushThrough } from "../../../utils/maps";
@@ -83,8 +83,10 @@ const attack = async ({ locals, request }) => {
         // Statistiques nombre de zombies tués
         const stats = locals.user.stats;
         stats.zombies += (killed + critical);
-        await getAttack(locals.user.id, map, slots, locals.user.ap, locals.user.hunger, locals.user.thirst, wound, force, stats, locals.rethinkdb)
-        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, woundedW0, woundedW1, critical }, locals.rethinkdb);
+        // Faim et soif capés à 1% la journée
+        const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+        await getAttack(locals.user.id, map, slots, locals.user.ap, hunger, thirst, wound, force, stats, locals.rethinkdb)
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, woundedW0, woundedW1, critical, warning }, locals.rethinkdb);
         throw redirect(303, '/map');
     } else return fail(400, { item: true });
 }
@@ -182,9 +184,11 @@ const building = async ({ locals }) => {
     const stats = locals.user.stats;
     stats.items += loots.length;
 
+    // Faim et soif capés à 1% la journée
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
     // Même fonction que pour la fouille de la zone
-    await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, stats, locals.rethinkdb);
-    await addLog(locals.user.id, locals.user.location, locals.user.username, 'building', { loots, plus, 'emptyBuilding': map.rows[li][lj].building.empty }, locals.rethinkdb);
+    await getSearch(locals.user.id, map, ap, hunger, thirst, stats, locals.rethinkdb);
+    await addLog(locals.user.id, locals.user.location, locals.user.username, 'building', { loots, plus, 'emptyBuilding': map.rows[li][lj].building.empty, warning }, locals.rethinkdb);
 }
 
 const drop = async ({ locals, request }) => {
@@ -216,7 +220,6 @@ const drop = async ({ locals, request }) => {
     else map.rows[li][lj].items.push(item);
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
     await addLog(locals.user.id, locals.user.location, locals.user.username, 'drop', { item }, locals.rethinkdb);
-    throw redirect(303, '/map');
 }
 
 const force = async ({ locals }) => {
@@ -229,7 +232,14 @@ const force = async ({ locals }) => {
 
 const nextday = async ({ locals }) => {
     await getNextDay(locals.user.id, locals.user.days, locals.user.location, locals.user.hunger, locals.user.thirst, locals.user.wound, locals.rethinkdb);
-    if (locals.user.wound > 0) await addLog(locals.user.id, locals.user.location, locals.user.username, 'wound', { 'wound': locals.user.wound }, locals.rethinkdb);
+    if (locals.user.location !== 'H8') await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'zombies' }, locals.rethinkdb);
+    else if (locals.user.hunger > 25 && locals.user.thirst > 25) {
+        if (locals.user.wound > 0) await addLog(locals.user.id, locals.user.location, locals.user.username, 'wound', { 'wound': locals.user.wound }, locals.rethinkdb);
+    } else {
+        if (locals.user.hunger <= 25 && locals.user.thirst <= 25) await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'both' }, locals.rethinkdb);
+        else if (locals.user.hunger <= 25) await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'hunger' }, locals.rethinkdb);
+        else if (locals.user.thirst <= 25) await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'thirst' }, locals.rethinkdb);
+    }
 }
 
 const pickUp = async ({ locals, request }) => {
@@ -366,8 +376,10 @@ const search = async ({ locals }) => {
         // Stats objets trouvés
         const stats = locals.user.stats;
         stats.items += loots.length;
-        await getSearch(locals.user.id, map, ap, locals.user.hunger, locals.user.thirst, stats, locals.rethinkdb)
-        await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots, plus, 'empty': map.rows[li][lj].empty }, locals.rethinkdb);
+        // Faim et soif capés à 1% la journée
+        const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+        await getSearch(locals.user.id, map, ap, hunger, thirst, stats, locals.rethinkdb)
+        await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots, plus, 'empty': map.rows[li][lj].empty, warning }, locals.rethinkdb);
     } else return fail(400, { exhausted: true })
 }
 
@@ -404,9 +416,11 @@ const travel = async ({ locals, request }) => {
             map.rows[ti][tj].players.push(locals.user.username);
             if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
             if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
-            await getTravel(locals.user.id, target, ti, tj, ap, locals.user.hunger, locals.user.thirst, map, locals.rethinkdb);
+            // Faim et soif capés à 1% la journée
+            const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+            await getTravel(locals.user.id, target, ti, tj, ap, hunger, thirst, map, locals.rethinkdb);
             await addLog(locals.user.id, location, locals.user.username, 'out', {}, locals.rethinkdb);
-            await addLog(locals.user.id, target, locals.user.username, 'in', {}, locals.rethinkdb);
+            await addLog(locals.user.id, target, locals.user.username, 'in', { warning }, locals.rethinkdb);
         } else return fail(400, { direction: true });
     } else return fail(400, { exhausted: true })
 }
@@ -429,9 +443,11 @@ const tunnel = async ({ locals }) => {
     map.rows[ti][tj].players.push(locals.user.username);
     if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
     if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
-    await getTravel(locals.user.id, exit, ti, tj, ap, locals.user.hunger, locals.user.thirst, map, locals.rethinkdb);
+    // Faim et soif capés à 1% la journée
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+    await getTravel(locals.user.id, exit, ti, tj, ap, hunger, thirst, map, locals.rethinkdb);
     await addLog(locals.user.id, location, locals.user.username, 'outTunnel', {}, locals.rethinkdb);
-    await addLog(locals.user.id, exit, locals.user.username, 'inTunnel', {}, locals.rethinkdb);
+    await addLog(locals.user.id, exit, locals.user.username, 'inTunnel', { warning }, locals.rethinkdb);
 }
 
 export const actions = { attack, building, drop, force, nextday, pickUp, reset, search, tchat, travel, tunnel };

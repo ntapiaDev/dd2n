@@ -883,19 +883,17 @@
         "type": "misc"
     },
     {
+        "credit": "Eucalyp",
+        "description": "Repose en paix",
+        "icon": "rip",
+        "id": "3912a66e-6e12-47a2-a10d-a2f350d01dad",
+        "type": "misc"
+    },
+    {
         "credit": "Freepik",
         "description": "Retourner au campement",
         "icon": "exit",
         "id": "683c0989-6dbf-44ef-ab9c-1335db3421c6",
-        "type": "misc"
-    },
-    {
-        "attack": 1,
-        "credit": "Freepik",
-        "description": "Se battre à mains nues",
-        "icon": "attack",
-        "id": "d1a3d28e-bd5f-486a-b4fb-7d36254f4344",
-        "slot": "W0",
         "type": "misc"
     },
     {
@@ -921,20 +919,6 @@
     },
     {
         "credit": "Freepik",
-        "description": "Un méchant zombie dévoreur de cerveau",
-        "icon": "zombie",
-        "id": "09bbb34f-667a-48b8-afed-ce876ff4154c",
-        "type": "misc"
-    },
-    {
-        "credit": "Freepik",
-        "description": "Un petit joueur tout innocent",
-        "icon": "human",
-        "id": "68604984-3955-466c-bfd0-af3b2a5710a3",
-        "type": "misc"
-    },
-    {
-        "credit": "Freepik",
         "defense": 1,
         "description": "Une chemise hawaïenne",
         "icon": "shirt",
@@ -956,6 +940,29 @@
         "slot": "A3",
         "type": "misc",
         "unique": false
+    },
+    {
+        "attack": 1,
+        "credit": "Freepik",
+        "description": "Se battre à mains nues",
+        "icon": "attack",
+        "id": "d1a3d28e-bd5f-486a-b4fb-7d36254f4344",
+        "slot": "W0",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Un méchant zombie dévoreur de cerveau",
+        "icon": "zombie",
+        "id": "09bbb34f-667a-48b8-afed-ce876ff4154c",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Un petit joueur tout innocent",
+        "icon": "human",
+        "id": "68604984-3955-466c-bfd0-af3b2a5710a3",
+        "type": "misc"
     },
     {
         "credit": "surang",
