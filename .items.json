@@ -737,13 +737,6 @@
     },
     {
         "credit": "Freepik",
-        "description": "Affamé",
-        "icon": "meal",
-        "id": "068033a5-e1c8-42d9-a16d-415ca7f8c5f6",
-        "type": "misc"
-    },
-    {
-        "credit": "Freepik",
         "description": "Boire",
         "icon": "drink",
         "id": "d0c278e8-c40b-4362-aea9-1e0b239c4ff8",
@@ -757,17 +750,10 @@
         "type": "misc"
     },
     {
-        "credit": "Smashicons",
+        "credit": "Freepik",
         "description": "Décédé",
         "icon": "dead",
         "id": "1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8",
-        "type": "misc"
-    },
-    {
-        "credit": "Freepik",
-        "description": "Déshydraté",
-        "icon": "drop",
-        "id": "20738a03-9c34-411e-b08b-1ade1cc927a6",
         "type": "misc"
     },
     {
@@ -799,10 +785,10 @@
         "type": "misc"
     },
     {
-        "credit": "kmg design",
+        "credit": "kosonicon",
         "description": "Hydraté",
         "icon": "hydrated",
-        "id": "0ba7eb83-93e3-4dee-8d70-ae0ca8f86292",
+        "id": "48d49017-6651-4be1-a38b-82767ac48250",
         "type": "misc"
     },
     {
@@ -876,7 +862,7 @@
         "type": "misc"
     },
     {
-        "credit": "manshagraphics",
+        "credit": "Smashicons",
         "description": "Rassasié",
         "icon": "satiated",
         "id": "7265569b-e8aa-427f-a325-65c2ebc5bc59",
@@ -919,6 +905,20 @@
     },
     {
         "credit": "Freepik",
+        "description": "Un méchant zombie dévoreur de cerveau",
+        "icon": "zombie",
+        "id": "09bbb34f-667a-48b8-afed-ce876ff4154c",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Un petit joueur tout innocent",
+        "icon": "human",
+        "id": "68604984-3955-466c-bfd0-af3b2a5710a3",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
         "defense": 1,
         "description": "Une chemise hawaïenne",
         "icon": "shirt",
@@ -948,20 +948,6 @@
         "icon": "attack",
         "id": "d1a3d28e-bd5f-486a-b4fb-7d36254f4344",
         "slot": "W0",
-        "type": "misc"
-    },
-    {
-        "credit": "Freepik",
-        "description": "Un méchant zombie dévoreur de cerveau",
-        "icon": "zombie",
-        "id": "09bbb34f-667a-48b8-afed-ce876ff4154c",
-        "type": "misc"
-    },
-    {
-        "credit": "Freepik",
-        "description": "Un petit joueur tout innocent",
-        "icon": "human",
-        "id": "68604984-3955-466c-bfd0-af3b2a5710a3",
         "type": "misc"
     },
     {

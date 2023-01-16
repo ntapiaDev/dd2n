@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { tooltip } from './tooltip';
 
+	export let background = undefined;
 	export let item;
 	export let quantity = 0;
 	export let substitute = undefined;
@@ -21,8 +22,8 @@
 		(item.rarity && item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '') +
 		// Affichage de la faim et de la soif dans la barre de joueur
-		(['satiated', 'hungry', 'meal', 'hunger'].includes(item.icon) ? ` (${$page.data.user.hunger}%)` : '') +
-		(['hydrated', 'thirsty', 'drop', 'dehydrated'].includes(item.icon) ? ` (${$page.data.user.thirst}%)` : ''));
+		(['satiated', 'hungry', 'hunger'].includes(item.icon) ? ` (${$page.data.user.hunger}%)` : '') +
+		(['hydrated', 'thirsty', 'dehydrated'].includes(item.icon) ? ` (${$page.data.user.thirst}%)` : ''));
 
 	$: durability =	!item.durability ? 1 : item.durability / item.durabilityMax;
 	$: x = durability > 0.5 ? 510 - (255 * 2 * durability) : 255;
@@ -30,7 +31,7 @@
 </script>
 
 <!-- ATTENTION : termes en français depuis DB (rarity) utilisés dans le nom des classes et options (à refaire si un jour site en anglais...) -->
-<span class="container {item.type} {item.rarity}">
+<span class="container {item.type} {item.rarity}" style={background ? `background-color: ${background}` : ''}>
 	<!-- Remplacer par BASEURI ou équivalent?? -->
 	<img src={$page.url.origin + '/icons/' + item.icon + '.png'}
 		alt={item.icon + ' icon by ' + item.credit}

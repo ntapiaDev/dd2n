@@ -32,13 +32,18 @@
 			type: 'misc',
 		},
 		{
-			credit: 'Smashicons',
+			credit: 'Freepik',
 			description: 'Décédé',
 			icon: 'dead',
 			id: '1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8',
 			type: 'misc',
 		}
 	];
+
+	$: background = $page.data.user.wound === 0 ? 'rgb(205, 255, 205)' :
+		$page.data.user.wound === 1 ? '#EEE' :
+		$page.data.user.wound === 2 ? 'rgb(255, 255, 205)' :
+		$page.data.user.wound === 3 ? 'rgb(255, 205, 205)' : 'rgb(255, 105, 105)';
 </script>
 
-<Item item={wounds[$page.data.user.wound]} />
+<Item item={wounds[$page.data.user.wound]} {background} />

@@ -14,6 +14,7 @@ export const generateMap = async (user_id, username, rethinkdb) => {
 
     // Génération de la nouvelle carte
     const tunnel = getTunnel();
+    console.log(tunnel);
     let map = { user_id, encampment, tunnel, 'uniques': [] }
     let rows = [];
     const buildings = getBuildings();

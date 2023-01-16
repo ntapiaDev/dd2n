@@ -78,10 +78,10 @@ export const getTunnel = () => [getCoord(middle), getCoord(outer)];
 
 export const checkHT = (hunger, thirst) => {
     let warning = false;
-    if (hunger > 25) hunger--;
-    if (thirst > 25) thirst--;
-    if (hunger <= 25 && thirst <= 25) warning = 'both';
-    else if (hunger <= 25) warning = 'hunger';
-    else if (thirst <= 25) warning = 'thirst';
+    if (hunger > 1) hunger--;
+    if (thirst > 1) thirst--;
+    if (hunger === 1 && thirst === 1) warning = 'both';
+    else if (hunger === 1) warning = 'hunger';
+    else if (thirst === 1) warning = 'thirst';
     return { hunger, thirst, warning };
 }

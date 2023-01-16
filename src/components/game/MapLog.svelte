@@ -57,11 +57,11 @@
 			type: 'misc',
 		},
 		{
-			credit: "Smashicons" ,
-			description: "Décédé" ,
-			icon: "dead" ,
-			id: "1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8" ,
-			type: "misc" ,
+			credit: 'Freepik',
+			description: 'Décédé',
+			icon: 'dead',
+			id: '1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8',
+			type: 'misc',
 		}
 	];	
 
@@ -83,22 +83,22 @@
 	{#if log.action === 'in'}
 		<div>{log.player} est arrivé dans la zone.</div>
 		{#if log.log.warning === 'hunger'}
-			<div>{log.player} est <Item item={feed[0]} /></div>
+			<div class="item">{log.player} est <span><Item item={feed[0]} /></span></div>
 		{:else if log.log.warning === 'thirst'}
-			<div>{log.player} est <Item item={feed[1]} /></div>
+			<div class="item">{log.player} est <span><Item item={feed[1]} /></span></div>
 		{:else if log.log.warning === 'both'}
-			<div>{log.player} est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
+			<div class="item">{log.player} est <span class="m4"><Item item={feed[0]} /></span> et <span class="m4"><Item item={feed[1]} /></span></div>
 		{/if}
 	{:else if log.action === 'out'}
 		<div>{log.player} a quitté la zone.</div>
 	{:else if log.action === 'inTunnel'}
 		<div>{log.player} est sorti du passage souterrain.</div>
 		{#if log.log.warning === 'hunger'}
-			<div>{log.player} est <Item item={feed[0]} /></div>
+			<div class="item">{log.player} est <span><Item item={feed[0]} /></span></div>
 		{:else if log.log.warning === 'thirst'}
-			<div>{log.player} est <Item item={feed[1]} /></div>
+			<div class="item">{log.player} est <span><Item item={feed[1]} /></span></div>
 		{:else if log.log.warning === 'both'}
-			<div>{log.player} est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
+			<div class="item">{log.player} est <span class="m4"><Item item={feed[0]} /></span> et <span class="m4"><Item item={feed[1]} /></span></div>
 		{/if}
 	{:else if log.action === 'outTunnel'}
 		<div>{log.player} est entrée dans le passage souterrain.</div>
@@ -119,26 +119,26 @@
 			{/if}
 			{#if log.log.woundedW0}
 				{#if log.log.woundedW0 === 1}
-					<div>À force de se battre à mains nues, {log.player} a maintenant <Item item={wounds[1]} /></div>
+					<div class="item">À force de se battre à mains nues, {log.player} a maintenant <span><Item item={wounds[1]} /></span></div>
 				{:else if log.log.woundedW0 === 2}
-					<div>À force de se battre à mains nues, {log.player} est maintenant <Item item={wounds[2]} /></div>
+					<div class="item">À force de se battre à mains nues, {log.player} est maintenant <span><Item item={wounds[2]} /></span></div>
 				{/if}
 			{:else if log.log.woundedW1}
 				{#if log.log.woundedW1 === 1}
-					<div>Un zombie s'est approché un peu trop près et {log.player} a maintenant <Item item={wounds[1]} /></div>
+					<div class="item">Un zombie s'est approché un peu trop près et {log.player} a maintenant <span><Item item={wounds[1]} /></span></div>
 				{:else if log.log.woundedW1 === 2}
-					<div>Après un accrochage avec un zombie, {log.player} est maintenant <Item item={wounds[2]} /></div>
+					<div class="item">Après un accrochage avec un zombie, {log.player} est maintenant <span><Item item={wounds[2]} /></span></div>
 				{/if}
 			{/if}
 			{#if log.log.weapon === "Une grenade fumigène"}
 				<div>Cette diversion lui permet de quitter la zone en toute sécurité.</div>
 			{/if}
 			{#if log.log.warning === 'hunger'}
-				<div>{log.player} est <Item item={feed[0]} /></div>
+				<div class="item">{log.player} est <span><Item item={feed[0]} /></span></div>
 			{:else if log.log.warning === 'thirst'}
-				<div>{log.player} est <Item item={feed[1]} /></div>
+				<div class="item">{log.player} est <span><Item item={feed[1]} /></span></div>
 			{:else if log.log.warning === 'both'}
-				<div>{log.player} est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
+				<div class="item">{log.player} est <span class="m4"><Item item={feed[0]} /></span> et <span class="m4"><Item item={feed[1]} /></span></div>
 			{/if}
 		</div>
 	{:else if ['loot', 'building'].includes(log.action)}
@@ -177,11 +177,11 @@
 			<div>Le bâtiment a maintenant l'air totalement vide.</div>
 		{/if}
 		{#if log.log.warning === 'hunger'}
-			<div>{log.player} est <Item item={feed[0]} /></div>
+			<div class="item">{log.player} est <span><Item item={feed[0]} /></span></div>
 		{:else if log.log.warning === 'thirst'}
-			<div>{log.player} est <Item item={feed[1]} /></div>
+			<div class="item">{log.player} est <span><Item item={feed[1]} /></span></div>
 		{:else if log.log.warning === 'both'}
-			<div>{log.player} est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
+			<div class="item">{log.player} est <span class="m4"><Item item={feed[0]} /></span> et <span class="m4"><Item item={feed[1]} /></span></div>
 		{/if}
 	{:else if log.action === 'new'}
 		<div>L'agitation de la nuit a permis de dévoiler de nouvelles ressources...</div>
@@ -202,12 +202,12 @@
 	{:else if log.action === 'feed'}
 		<div>{log.player} a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.</div>
 	{:else if log.action === 'force'}
-		<div>Rassemblant son courage, {log.player} est passé en force et peut quitter la zone. Après une lutte acharnée, il est maintenant <Item item={wounds[2]} /></div>
+		<div class="not-flex">Rassemblant son courage, {log.player} est passé en force et peut quitter la zone. Après une lutte acharnée, il est maintenant<span><Item item={wounds[2]} /></span></div>
 	{:else if log.action === 'tchat'}
 		<div>{log.player} : <i>{log.log.message}</i></div>
 	{:else if log.action === 'dead'}
 		{#if log.log.cause === 'zombies'}
-			<div>Ayant passé la nuit dehors loin des défenses de son campement, {log.player} s'est fait dévorer le cerveau par des zombies <Item item={rip} /></div>
+			<div class="not-flex">Ayant passé la nuit dehors loin des défenses de son campement, {log.player} s'est fait dévorer le cerveau par des zombies<span><Item item={rip} /></span></div>
 		{:else if log.log.cause === 'both'}
 			<div class="item">N'ayant rien mangé et rien bu, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
 		{:else if log.log.cause === 'hunger'}
@@ -258,6 +258,9 @@
 	.item span:last-child {
 		margin-right: 4px;
 	}
+	.m4 {
+		margin: 0 4px;
+	}
 	.food, .p1 {
 		color: green;
 	}
@@ -269,5 +272,15 @@
 	}
 	.p4 {
 		color: orange;
+	}
+	.not-flex {
+		margin-top: 4px;
+		padding-bottom: 5px;
+		line-height: 12px;
+	}
+	.not-flex span {
+		margin-left: 4px;
+		position: relative;
+		top: 4px;
 	}
 </style>
