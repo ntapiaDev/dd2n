@@ -7,6 +7,7 @@
 	import Drink from '../../../components/map/actions/Drink.svelte';
 	import Eat from '../../../components/map/actions/Eat.svelte';
 	import Encampment from '../../../components/map/actions/Encampment.svelte';
+	import Exit from '../../../components/map/actions/Exit.svelte';
 	import Force from '../../../components/map/actions/Force.svelte';
 	import Heal from '../../../components/map/actions/Heal.svelte';
 	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
@@ -19,7 +20,6 @@
 	import Search from '../../../components/map/actions/Search.svelte';
 	import Tchat from '../../../components/map/actions/Tchat.svelte';
 	import Tunnel from '../../../components/map/actions/Tunnel.svelte';
-	import Exit from '../../../components/map/actions/Exit.svelte';
 
 	export let data;
 	export let form;
@@ -63,13 +63,13 @@
 	$: players = `Joueurs sur la case (${cell.players.length}) :` + getUsernames(cell);
 
 	let coordinates = [];
+	let playersMap = [];
 	function showLoots(e) {
 		coordinates = e.detail.coordinates;
 	}
 	function hideLoots() {
 		coordinates = [];
 	}
-	let playersMap = [];
 	function showPlayers(e) {
 		playersMap = e.detail.players;
 	}
@@ -182,10 +182,10 @@
 		<div class="tchat">
 			<Tchat />
 		</div>
-		{#if form?.ammo}
-			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
-		{:else if form?.access}
+		{#if form?.access}
 			<p>Il y a trop de zombies pour fouiller le bâtiment.</p>
+		{:else if form?.ammo}
+			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
 		{:else if form?.blocked}
 			<p>Il y a trop de zombies pour pouvoir passer.</p>
 		{:else if form?.building}
@@ -206,10 +206,10 @@
 			<p>Votre inventaire est plein.</p>
 		{:else if form?.item}
 			<p>Vous ne possédez pas cette arme ou celle-ci n'est pas équipée.</p>
-		{:else if form?.long}
-			<p>Votre message est trop long (100 caractères maximum).</p>
 		{:else if form?.location}
 			<p>Vous n'êtes pas sur la bonne case.</p>
+		{:else if form?.long}
+			<p>Votre message est trop long (100 caractères maximum).</p>
 		{:else if form?.origin}
 			<p>Cet objet n'est pas présent sur la case ou dans votre inventaire.</p>
 		{:else if form?.searched}

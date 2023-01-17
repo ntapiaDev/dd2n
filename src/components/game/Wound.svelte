@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import Item from './Item.svelte';
 
-	const wounds = [
+	const items = [
 		{
 			credit: 'Freepik',
 			description: 'Indemne',
@@ -46,4 +46,4 @@
 		$page.data.user.wound === 3 ? 'rgb(255, 205, 205)' : 'rgb(255, 105, 105)';
 </script>
 
-<Item item={wounds[$page.data.user.wound]} {background} />
+<Item item={items[$page.data.user.wound]} {background} />

@@ -2,16 +2,14 @@ import r from 'rethinkdb';
 import { sortItems } from './tools';
 
 export const getAddItem = async (item, rethinkdb) => {
-    let item_id;
-    await r.table('items').insert(item).run(rethinkdb, function (err, result) {
-        if (err) throw err;
-        item_id = result.generated_keys[0];
-    });
-    return item_id;
+    return r.table('items').insert(item).run(rethinkdb)
+        .then(function (result) {
+            return result.generated_keys[0];
+        });
 }
 
 export const getEquip = async (user_id, inventory, slots, rethinkdb) => {
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ inventory, slots }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter({ id: user_id }).update({ inventory, slots }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }
@@ -32,10 +30,10 @@ export const getItemsByCode = async (code, rethinkdb) => {
 
 // Importance de l'ordre? Enlever l'item avant de le déplacer pour éviter les duplicas?
 export const moveItem = async (user_id, map, inventory, slots, rethinkdb) => {
-    await r.table('maps').filter(r.row("user_id").eq(user_id)).update(map).run(rethinkdb, function (err, result) {
+    await r.table('maps').filter({ user_id }).update(map).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').filter(r.row("id").eq(user_id)).update({ inventory, slots }).run(rethinkdb, function (err, result) {
+    await r.table('users').filter({ id: user_id }).update({ inventory, slots }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }

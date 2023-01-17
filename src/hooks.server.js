@@ -32,7 +32,7 @@ export const handle = async ({ event, resolve }) => {
         return response;
     }
 
-    if (user && (event.url.pathname === '/login' || event.url.pathname === '/register')) {
+    if (event.url.pathname === '/login' || event.url.pathname === '/register') {
         return redirect('/');
     }
     if (user.role !== 'admin' && event.url.pathname === '/admin') {
@@ -45,7 +45,7 @@ export const handle = async ({ event, resolve }) => {
         return redirect('/map');
     }
 
-    if (user) event.locals.user = {
+    event.locals.user = {
         id: user.id,
         username: user.username,
         role: user.role,

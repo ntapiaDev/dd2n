@@ -25,7 +25,6 @@
 
 <form method="POST" action="?/register" use:enhance>
 	<h1>Enregistrement</h1>
-	<!-- Flash message?? -->
 	{#if form?.invalid}
 		<p>Merci de remplir tous les champs.</p>
 	{:else if form?.user}
@@ -53,7 +52,7 @@
 		</div>
 		<input type="password" id="password" name="password" bind:value={password} />
 	</div>	
-	<button type="submit">Envoyer</button>
+	<button type="submit" disabled={testUsername || testPassword}>Envoyer</button>
 </form>
 
 <style>

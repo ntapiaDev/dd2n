@@ -6,7 +6,6 @@
 
 <form method="POST" action="?/login" use:enhance>
 	<h1>Connexion</h1>
-	<!-- Flash message?? -->
 	{#if form?.invalid}
 		<p>Merci de remplir tous les champs.</p>
 	{:else if form?.credentials}

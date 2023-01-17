@@ -25,12 +25,8 @@ const register = async ({ cookies, locals, request }) => {
     // Création de la carte du joueur
     await generateMap(user_id, username, locals.rethinkdb);
 
-    // Connexion automatique?
     setSession(cookies, SESSIONID);
     throw redirect(303, '/')
-
-    // Sinon message de succès (flash?) et redirect login
-    // throw redirect(303, '/login')
 }
 
 export const actions = { register };

@@ -4,8 +4,7 @@ import r from 'rethinkdb';
 export const addUser = async (user, rethinkdb) => {
     const hashedPassword = await bcrypt.hash(user.password, 10)
     const SESSIONID = crypto.randomUUID();
-    let user_id;
-    await r.table('users').insert({
+    const user_id = await r.table('users').insert({
         'username': user.username,
         'password': hashedPassword,
         'role': 'user',
@@ -32,10 +31,10 @@ export const addUser = async (user, rethinkdb) => {
             'zombies': 0
         },
         'tchat': []
-    }).run(rethinkdb, function (err, result) {
-        if (err) throw err;
-        user_id = result.generated_keys[0];
-    });
+    }).run(rethinkdb)
+        .then(function (result) {
+            return result.generated_keys[0];
+        });
     return { user_id, SESSIONID };
 }
 
@@ -47,23 +46,19 @@ export const getBySESSIONID = async (SESSIONID, rethinkdb) => {
 }
 
 export const getByUsername = async (username, rethinkdb) => {
-    let user;
-    await r.table('users').filter(r.row("username").eq(username)).run(rethinkdb, function (err, cursor) {
-        if (err) throw err;
-        cursor.toArray(function (err, result) {
-            if (err) throw err;
-            user = result[0];
+    return r.table('users').filter({ username: username }).run(rethinkdb)
+        .then(function (result) {
+            return result._responses[0]?.r[0];
         });
-    });
-    return user;
 }
 
 export const refreshSESSIONID = async (SESSIONID, rethinkdb) => {
     const NEW_SESSIONID = crypto.randomUUID();
-    await r.table('users').filter(r.row("sessionid").eq(SESSIONID)).update({ "sessionid": NEW_SESSIONID }).run(rethinkdb, function (err, result) {
-        if (err) throw err;
-    });
-    return NEW_SESSIONID;
+    const result = await r.table('users').filter({ sessionid: SESSIONID }).update({ sessionid: NEW_SESSIONID }).run(rethinkdb)
+        .then(function (result) {
+            return result;
+        });
+    if (result.replaced) return NEW_SESSIONID;
 }
 
 export const setSession = async (cookies, SESSIONID) => {

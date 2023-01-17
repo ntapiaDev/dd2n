@@ -4,9 +4,9 @@
 	import InteractiveItem from '../map/actions/InteractiveItem.svelte';
 	import Item from './Item.svelte';
 
+	export let items;
 	export let name;
 	export let slot;
-	export let items;
 
 	const icons = {
 		W1: {

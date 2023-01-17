@@ -3,9 +3,9 @@
 
 	export let coordinates;
 	export let current;
+	export let encampment;
 	export let players;
 	export let row;
-	export let encampment;
 </script>
 
 <tr>

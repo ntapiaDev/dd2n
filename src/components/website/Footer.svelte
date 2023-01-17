@@ -3,7 +3,7 @@
 </script>
 
 <footer>
-    <p>Tous droits réservés.</p>
+    <p>© 2023 Don't Die 2Nite - Tous droits réservés.</p>
 </footer>
 
 <style>

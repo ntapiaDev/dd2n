@@ -15,11 +15,12 @@
 	$: substitute = `Distance du campement : ${distance}PA`
 </script>
 
+<form>
 <!-- <form method="POST" action="/map?/exit" use:enhance> -->
 	<button>
 		<Item {item} {substitute} />
 	</button>
-<!-- </form> -->
+</form>
 
 <style>
 	form {

@@ -6,7 +6,7 @@
 
 	export let map;
 
-	const human = {
+	const item = {
 		credit: "Freepik" ,
 		description: "Un petit joueur tout innocent" ,
 		icon: "human" ,
@@ -79,7 +79,7 @@
 <aside>
 	<span class="title">Objets sur la carte ({quantity}) :</span>
 	<span on:mouseenter={showPlayers} on:mouseleave={hidePlayers}>
-		<Item item={human} quantity={players.length} substitute={playersMap} />
+		<Item item={item} quantity={players.length} substitute={playersMap} />
 	</span>
 	<span class="zombies" style={`background-color: rgb(255, 0, 0, ${zombies / 10000})`}>Total de zombies : {zombies}</span>
 	{#each sortItems(loots) as loot (loot.id)}

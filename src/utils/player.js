@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 
 export const addTchat = async (user_id, location, rethinkdb) => {
-    return r.table('users').filter({ 'id': user_id }).update({
+    return r.table('users').filter({ id: user_id }).update({
         'tchat': r.row('tchat').append(location)
     }).run(rethinkdb)
         .then(function (result) {
@@ -10,14 +10,14 @@ export const addTchat = async (user_id, location, rethinkdb) => {
 }
 
 export const getFeed = async (user_id, inventory, hunger, thirst, ap, rethinkdb) => {
-    return r.table('users').filter({ 'id': user_id }).update({ inventory, hunger, thirst, ap }).run(rethinkdb)
+    return r.table('users').filter({ id: user_id }).update({ inventory, hunger, thirst, ap }).run(rethinkdb)
         .then(function (result) {
             return result;
         });
 }
 
 export const getHeal = async (user_id, inventory, wound, rethinkdb) => {
-    return r.table('users').filter({ 'id': user_id }).update({ inventory, wound }).run(rethinkdb)
+    return r.table('users').filter({ id: user_id }).update({ inventory, wound }).run(rethinkdb)
         .then(function (result) {
             return result;
         });

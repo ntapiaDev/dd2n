@@ -8,8 +8,8 @@
 	$: items = sortItems(data.items);
 	$: console.log(items);
 
-	let type = '';
 	let slot = '';
+	let type = '';
 
 	const types = [
 		'Nourriture',

@@ -1,6 +1,6 @@
 <script>
-	import { page } from '$app/stores';
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import Item from '../../game/Item.svelte';
 
 	export let item = '';
