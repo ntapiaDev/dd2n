@@ -49,6 +49,7 @@ export const handle = async ({ event, resolve }) => {
         id: user.id,
         username: user.username,
         role: user.role,
+        game: user.game,
         days: user.days,
         location: user.location,
         i: user.i,

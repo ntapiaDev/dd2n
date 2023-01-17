@@ -1,7 +1,104 @@
 <script>
-	import Reset from "../../components/map/Reset.svelte";    
+	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
+
+	export let data;
+	export let form;
+
+	$: games = data.games;
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-<Reset />
+<h1>Sélectionner une partie :</h1>
+<section>
+	<table>
+		<tr>
+			<th>Jour</th>
+			<th>Joueurs</th>
+			<th>Action</th>
+		</tr>
+		{#each games as game}
+			<tr>
+				<td>{game.day}</td>
+				<td>
+					{#if game.players.length}
+						{#each game.players.sort() as player}
+							<div>{player}</div>
+						{/each}
+					{:else}
+						<div>En attente de joueurs</div>
+					{/if}
+				</td>
+				<td>
+					<form method="POST" action="?/joinGame" use:enhance>
+						<input type="text" name="id" value={game.id} hidden>
+						{#if !$page.data.user.game}
+							<button>Rejoindre la partie</button>
+						{:else if $page.data.user.game === game.id}
+							<button>Quitter la partie</button>
+						{/if}
+						{#if $page.data.user.role === 'admin'}
+							<form method="POST" action="?/deleteGame" use:enhance>
+								<input type="text" name="id" value={game.id} hidden>
+								<button>Supprimer</button>
+							</form>
+						{/if}
+					</form>
+				</td>
+			</tr>
+		{/each}
+	</table>
+	{#if $page.data.user.role === 'admin'}
+		<div class="admin">
+			<h2>Ajouter une partie :</h2>
+			<form method="POST" action="?/addGame" use:enhance>
+				<button>Ajouter une partie</button>
+			</form>
+		</div>
+	{/if}
+	{#if form?.admin}
+		<p>Vous devez être administrateur pour effectuer cette action.</p>
+	{:else if form?.already}
+		<p>Vous êtes déjà dans une partie.</p>
+	{/if}
+</section>
+
+<style>
+	h1 {
+		margin: 1em 0 0;
+		text-align: center;
+	}
+	section {
+		width: 50%;
+		margin: 1em auto;
+	}
+	table {
+		width: 100%;
+	}
+	th,
+	td {
+		padding: 0.5em 1em;
+		border: 1px solid #AAA;
+		text-align: center;
+	}
+	td:nth-child(1) {
+		width: 20%;
+	}
+	td:nth-child(2) {
+		width: 40%;
+	}
+	td:nth-child(3) {
+		width: 40%;
+	}
+	.admin {
+		margin-top: 1em;
+	}
+	p {
+		/* Inspiré de Bootstrap Alerts */
+		margin: 1rem 0 0;
+		padding: 0.75rem 1.25rem;
+		color: #721c24;
+		background-color: #f8d7da;
+		border: 1px solid #f5c6cb;
+		border-radius: 0.25rem;
+	}
+</style>

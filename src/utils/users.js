@@ -9,6 +9,7 @@ export const addUser = async (user, rethinkdb) => {
         'password': hashedPassword,
         'role': 'user',
         'sessionid': SESSIONID,
+        'game': '',
         'days': 1,
         'location': 'H8',
         'ap': 100,

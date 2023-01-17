@@ -107,7 +107,7 @@
 				{:else if user.force}
 					<span>Dépêchez-vous de partir d'ici avant de vous faire repérer !</span>
 				{/if}
-				{#if map.tunnel.includes(user.location)}
+				{#if cell.entrance}
 					<span>Cette zone abrite un <b>passage souterrain</b> menant vers une zone {cell.layout.danger === 2 ? 'dangereuse' : 'plus calme'}.</span>
 				{/if}
 			{/if}
@@ -119,7 +119,7 @@
 			<span class="title">Actions disponibles :</span>
 			{#if user.location === map.encampment}
 				<Encampment />
-			{:else if user.ap && map.tunnel.includes(user.location)}
+			{:else if user.ap && cell.entrance}
 				<Tunnel />
 			{/if}
 			{#if user.ap && !cell.searchedBy.includes(user.id) && !cell.empty}
