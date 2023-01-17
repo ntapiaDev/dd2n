@@ -2,6 +2,8 @@
 	import { enhance } from '$app/forms';
 	import Item from '../../game/Item.svelte';
 
+	export let distance;
+
 	const item = {
 		credit: 'Freepik',
 		description: 'Retourner au campement',
@@ -9,13 +11,15 @@
 		id: '683c0989-6dbf-44ef-ab9c-1335db3421c6',
 		type: 'misc',
 	};
+
+	$: substitute = `Distance du campement : ${distance}PA`
 </script>
 
-<form method="POST" action="/map?/exit" use:enhance>
+<!-- <form method="POST" action="/map?/exit" use:enhance> -->
 	<button>
-		<Item {item} />
+		<Item {item} {substitute} />
 	</button>
-</form>
+<!-- </form> -->
 
 <style>
 	form {
@@ -25,6 +29,6 @@
 	button {
 		border: none;
 		background-color: transparent;
-		cursor: pointer;
+		/* cursor: pointer; */
 	}
 </style>

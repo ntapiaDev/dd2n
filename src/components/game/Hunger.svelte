@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import Item from './Item.svelte';
 
-	const hunger = [
+	const items = [
 		{
 			credit: 'Freepik',
 			description: 'Rassasié',
@@ -39,14 +39,16 @@
 			type: 'misc',
 		}
 	];
-	$: index = Math.floor(4 - (4 * $page.data.user.hunger) / 100) < 5 ? Math.floor(4 - (4 * $page.data.user.hunger) / 100) : 4
+	$: hunger = $page.data.user.hunger;
+	$: index = Math.floor(4 - (4 * hunger) / 100) < 5 ? Math.floor(4 - (4 * hunger) / 100) : 4
 
-	$: opacity = $page.data.user.hunger > 75 ? (100 - (100 - $page.data.user.hunger) * 4) / 100 : ((75 - $page.data.user.hunger) * 4) / 100;
-	$: orange = 255 - ((50 - $page.data.user.hunger) * 2);
-	$: red = $page.data.user.hunger < 25 ? 205 - (25 - $page.data.user.hunger) * 2 : 205;
-	$: background = $page.data.user.hunger > 75 ? `rgb(205, 255, 205, ${opacity})` :
-		$page.data.user.hunger > 50 ? `rgb(255, 255, 205, ${opacity})` :
-		$page.data.user.hunger > 0 ? `rgb(255, ${orange}, ${red})` : 'rgb(255, 105, 105)';
+	$: r = hunger > 75 ? 205 : 255;
+	$: g = hunger > 75 ? 255 :
+		hunger > 25 ? 255 - (75 - hunger) :
+		hunger > 0 ? 205 - (25 - hunger) * 2 : 105;
+	$: b = hunger > 25 ? 205 :
+		hunger > 0 ? 205 - (25 - hunger) * 2 : 105;
+	$: background = hunger > 0 ? `rgb(${r}, ${g}, ${b})` : 'rgb(255, 105, 105)';
 </script>
 
-<Item item={hunger[index]} {background} />
+<Item item={items[index]} {background} />

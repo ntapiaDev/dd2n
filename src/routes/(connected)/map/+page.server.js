@@ -64,7 +64,7 @@ const attack = async ({ locals, request }) => {
             }
             if (item.description === 'Une grenade fumigène' && !force) force = true;
         }
-        let plus = item.plus;
+        let plus = item.plus ?? 0;
         // Gestion de la qualité de l'arme??
         const zombies = map.rows[li][lj].zombies;
         map.rows[li][lj].zombies -= item.attack;
@@ -233,7 +233,7 @@ const force = async ({ locals }) => {
 const nextday = async ({ locals }) => {
     await getNextDay(locals.user.id, locals.user.days, locals.user.location, locals.user.hunger, locals.user.thirst, locals.user.wound, locals.rethinkdb);
     if (locals.user.location !== 'H8') await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'zombies' }, locals.rethinkdb);
-    else if (locals.user.hunger > 25 && locals.user.thirst > 25) {
+    else if (locals.user.wound === 3 || (locals.user.hunger > 25 && locals.user.thirst > 25)) {
         if (locals.user.wound > 0) await addLog(locals.user.id, locals.user.location, locals.user.username, 'wound', { 'wound': locals.user.wound }, locals.rethinkdb);
     } else {
         if (locals.user.hunger <= 25 && locals.user.thirst <= 25) await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'both' }, locals.rethinkdb);

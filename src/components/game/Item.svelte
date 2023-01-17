@@ -86,10 +86,10 @@
 		background-color: rgb(255, 205, 205);
 	}
 	.armour {
-		background-color: rgb(255, 225, 205);
+		background-color: rgb(255, 230, 205);
 	}
 	.resource {
-		background-color: rgb(255, 225, 155);
+		background-color: rgb(255, 230, 155);
 	}
 	.blueprint {
 		background-color: rgb(255, 205, 255);

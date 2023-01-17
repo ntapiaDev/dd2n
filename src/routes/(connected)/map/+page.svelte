@@ -19,6 +19,7 @@
 	import Search from '../../../components/map/actions/Search.svelte';
 	import Tchat from '../../../components/map/actions/Tchat.svelte';
 	import Tunnel from '../../../components/map/actions/Tunnel.svelte';
+	import Exit from '../../../components/map/actions/Exit.svelte';
 
 	export let data;
 	export let form;
@@ -52,7 +53,7 @@
 		cell.zombies > 0 && cell.zombies > armour ? ' danger' : '';
 
 	// Futur bouton de retour automatique
-	// $: distance = getDistance(user.location, map.encampment);
+	$: distance = getDistance(user.location, map.encampment);
 
 	const getUsernames = (cell) => {
 		let usernames = '';
@@ -152,9 +153,13 @@
 			{#if (cell.zombies > ((user.slots.A1.defense ?? 0) + (user.slots.A2.defense ?? 0) + (user.slots.A3.defense ?? 0))) && !user.force && (user.wound < 2)}
 				<Force />
 			{/if}
-			<!-- Gérer le cas avec 0 PA en étant toujours sur la map -->
 			{#if (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && !cell.zombies}
 				<Item item={walking} />
+			{/if}
+			{#if user.location !== map.encampment}
+				<span class="exit">
+					<Exit {distance} />
+				</span>
 			{/if}
 			<span class="players">
 				<Item item={human} substitute={players} quantity={cell.players.length} />
@@ -282,9 +287,13 @@
 		grid-template-columns: repeat(22, 1fr);
 		gap: 1px 0;
 	}
+	.actions .exit,
 	.actions .players {
 		width: 25px;
 		height: 25px;
+		grid-column: 21 / 21;
+	}
+	.actions .players {
 		grid-column: 22 / 22;
 	}
 	.actions .title,
