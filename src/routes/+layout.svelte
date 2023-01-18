@@ -8,7 +8,7 @@
 
 <main>
 	<Header />
-	{#if data.user}
+	{#if data.user?.game_id}
 		<Player />
 	{/if}
 	<slot />

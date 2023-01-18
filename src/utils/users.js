@@ -4,39 +4,17 @@ import r from 'rethinkdb';
 export const addUser = async (user, rethinkdb) => {
     const hashedPassword = await bcrypt.hash(user.password, 10)
     const SESSIONID = crypto.randomUUID();
-    const user_id = await r.table('users').insert({
-        'username': user.username,
-        'password': hashedPassword,
-        'role': 'user',
-        'sessionid': SESSIONID,
-        'game': '',
-        'days': 1,
-        'location': 'H8',
-        'ap': 100,
-        'wound': 0,
-        'hunger': 100,
-        'thirst': 100,
-        'force': false,
-        'inventory': [],
-        'slots': {
-            'W1': {},
-            'W2': {},
-            'W3': {},
-            'W4': {},
-            'A1': {},
-            'A2': {},
-            'A3': {},
-        },
-        'stats': {
-            'items': 0,
-            'zombies': 0
-        },
-        'tchat': []
+    await r.table('users').insert({
+        username: user.username,
+        password: hashedPassword,
+        role: 'user',
+        sessionid: SESSIONID,
+        game_id: ''
     }).run(rethinkdb)
         .then(function (result) {
             return result.generated_keys[0];
         });
-    return { user_id, SESSIONID };
+    return SESSIONID;
 }
 
 export const getBySESSIONID = async (SESSIONID, rethinkdb) => {

@@ -66,11 +66,11 @@ const direction = (location, target) => {
 
 export const getBuildings = () => {  
     const buildings = {};
-    buildings[getCoord(inner)] = {type: 'Une épicerie', code: 'b1', searchedBy: [], empty: false};
-    buildings[getCoord(middle)] = {type: 'Un entrepot de bricolage', code: 'b2', searchedBy: [], empty: false};
-    buildings[getCoord(middle)] = {type: 'Une pharmacie', code: 'b3', searchedBy: [], empty: false};
-    buildings[getCoord(outer)] = {type: 'Un magasin de matériel informatique', code: 'b4', searchedBy: [], empty: false};
-    buildings[getCoord(outer)] = {type: 'Un commissariat de police', code: 'b5', searchedBy: [], empty: false};
+    buildings[getCoord(inner)] = { type: 'Une épicerie', code: 'b1', searchedBy: [], empty: false };
+    buildings[getCoord(middle)] = { type: 'Un entrepot de bricolage', code: 'b2', searchedBy: [], empty: false };
+    buildings[getCoord(middle)] = { type: 'Une pharmacie', code: 'b3', searchedBy: [], empty: false };
+    buildings[getCoord(outer)] = { type: 'Un magasin de matériel informatique', code: 'b4', searchedBy: [], empty: false };
+    buildings[getCoord(outer)] = { type: 'Un commissariat de police', code: 'b5', searchedBy: [], empty: false };
     return buildings;
 }
 
@@ -85,3 +85,13 @@ export const checkHT = (hunger, thirst) => {
     else if (thirst === 1) warning = 'thirst';
     return { hunger, thirst, warning };
 }
+
+export const getRandomName = () => {
+    const start = ['La caverne', 'La cité', 'La demeure', 'La fôret', 'La montagne', 'La plaine', 'La tanière', 'Le hameaux', 'Le havre', 'Le lac', 'Le refuge', 'Le terrier'];
+    const middle = ['des alpagas', 'des loups', 'des cochons', 'des escargots', 'des nains', 'des lapins', 'des orcs', 'des lézards', 'des bandits', 'des chevaliers', 'des voleurs', 'des princes'];
+    const end = ['mutants', 'masqués', 'alcooliques', 'malades', 'dépressifs', 'hypocondriaques', 'claustrophobes', 'enragés'];
+    const getRandom = (array) => array[Math.floor(Math.random() * array.length)];
+    return `${getRandom(start)} ${getRandom(middle)} ${getRandom(end)}`
+}
+
+export const getDefense = (slots) => (slots.A1.defense ?? 0) + (slots.A2.defense ?? 0) + (slots.A3.defense ?? 0);

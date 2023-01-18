@@ -1,14 +1,16 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { canTravel, checkHT, getIJ } from '../../../utils/tools';
+import { canTravel, checkHT, getDefense, getIJ } from '../../../utils/tools';
 import { getItems, getItemsByCode, moveItem } from '../../../utils/items';
-import { addLog, deleteLogs, getLogsByCoordinate } from "../../../utils/logs";
-import { generateMap, getAttack, getMap, getMapTunnel, getNextDay, getSearch, getTravel, pushThrough } from "../../../utils/maps";
-import { addTchat } from "../../../utils/player";
+import { add_log, deleteLogs, get_logs_by_coordinate } from "../../../utils/logs";
+import { generateMap, getAttack, getMapTunnel, getSearch, getTravel, pushThrough, _travel } from "../../../utils/maps";
+import { add_tchat } from "../../../utils/player";
+import { get_cell, get_map, next_day } from "../../../utils/cells";
 
 export async function load({ locals }) {
-    const map = await getMap(locals.user.id, locals.rethinkdb);
-    const logs = await getLogsByCoordinate(locals.user.id, locals.user.location, locals.rethinkdb);
-    return { map, logs };
+    const cell = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
+    const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
+    const map = await get_map(locals.user.game_id, locals.rethinkdb);
+    return { cell, logs, map };
 }
 
 const attack = async ({ locals, request }) => {
@@ -231,14 +233,10 @@ const force = async ({ locals }) => {
 }
 
 const nextday = async ({ locals }) => {
-    await getNextDay(locals.user.id, locals.user.days, locals.user.location, locals.user.hunger, locals.user.thirst, locals.user.wound, locals.rethinkdb);
-    if (locals.user.location !== 'H8') await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'zombies' }, locals.rethinkdb);
-    else if (locals.user.wound === 3 || (locals.user.hunger > 25 && locals.user.thirst > 25)) {
-        if (locals.user.wound > 0) await addLog(locals.user.id, locals.user.location, locals.user.username, 'wound', { 'wound': locals.user.wound }, locals.rethinkdb);
-    } else {
-        if (locals.user.hunger <= 25 && locals.user.thirst <= 25) await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'both' }, locals.rethinkdb);
-        else if (locals.user.hunger <= 25) await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'hunger' }, locals.rethinkdb);
-        else if (locals.user.thirst <= 25) await addLog(locals.user.id, locals.user.location, locals.user.username, 'dead', { 'cause': 'thirst' }, locals.rethinkdb);
+    const events = await next_day(locals.user.game_id, locals.user.id, locals.user.hunger, locals.user.thirst, locals.user.wound, locals.rethinkdb);
+    for (let event of events) {
+        if (event.action === 'dead') await add_log(locals.user.game_id, event.location, event.username, 'dead', { 'cause': event.cause }, locals.rethinkdb);
+        else if (event.action === 'wound') await add_log(locals.user.game_id, event.location, event.username, 'wound', { 'wound': event.wound }, locals.rethinkdb);
     }
 }
 
@@ -277,11 +275,6 @@ const pickUp = async ({ locals, request }) => {
     await moveItem(locals.user.id, map, inventory, slots, locals.rethinkdb);
     await addLog(locals.user.id, locals.user.location, locals.user.username, 'pickup', { item }, locals.rethinkdb);
     throw redirect(303, '/map');
-}
-
-const reset = async ({ locals }) => {
-    await generateMap(locals.user.id, locals.user.username, locals.rethinkdb);
-    await deleteLogs(locals.user.id, locals.rethinkdb);
 }
 
 const search = async ({ locals }) => {
@@ -389,40 +382,22 @@ const tchat = async ({ locals, request }) => {
     const message = data.get('message');
     if (message.length < 3) return fail(400, { short: true });
     if (message.length > 100) return fail(400, { long: true });
-    await addLog(locals.user.id, locals.user.location, locals.user.username, 'tchat', { message }, locals.rethinkdb);
-    await addTchat(locals.user.id, locals.user.location, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tchat', { message }, locals.rethinkdb);
+    await add_tchat(locals.user.id, locals.user.location, locals.rethinkdb);
 }
 
 const travel = async ({ locals, request }) => {
     const ap = locals.user.ap;
-    if (ap > 0) {
-        const location = locals.user.location;
-        const li = locals.user.i;
-        const lj = locals.user.j;
-        const data = await request.formData();
-        const target = data.get('target');
-        const ti = data.get('ti');
-        const tj = data.get('tj');
-        const map = await getMap(locals.user.id, locals.rethinkdb);
-        if (map.rows[ti][tj].coordinate !== target) return fail(400, { location: true });
-        if ((map.rows[li][lj].zombies > ((locals.user.slots.A1.defense ?? 0) + (locals.user.slots.A2.defense ?? 0) + (locals.user.slots.A3.defense ?? 0))) && !locals.user.force) return fail(400, { blocked: true });
-        // Refactoriser?? utilisé sur +page.svelte aussi
-        const border = map.rows[ti][tj].layout.border;
-        // Vérification de la possibilité de voyager (anti-triche)
-        if (canTravel(location, target, border)) {
-            map.rows[li][lj].estimated.zombies = map.rows[li][lj].zombies;
-            map.rows[li][lj].estimated.empty = map.rows[li][lj].empty;
-            map.rows[li][lj].players = map.rows[li][lj].players.filter(u => u !== locals.user.username);
-            map.rows[ti][tj].players.push(locals.user.username);
-            if (map.rows[ti][tj].visible !== true) map.rows[ti][tj].visible = true;
-            if (map.rows[ti][tj].visited !== true) map.rows[ti][tj].visited = true;
-            // Faim et soif capés à 1% la journée
-            const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
-            await getTravel(locals.user.id, target, ti, tj, ap, hunger, thirst, map, locals.rethinkdb);
-            await addLog(locals.user.id, location, locals.user.username, 'out', {}, locals.rethinkdb);
-            await addLog(locals.user.id, target, locals.user.username, 'in', { warning }, locals.rethinkdb);
-        } else return fail(400, { direction: true });
-    } else return fail(400, { exhausted: true })
+    if (ap === 0) return fail(400, { exhausted: true })
+    const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
+    const data = await request.formData();
+    const target = await get_cell(locals.user.game_id, data.get('target'), locals.rethinkdb);
+    if (location.zombies > getDefense(locals.user.slots) && !locals.user.force) return fail(400, { blocked: true });
+    const border = target.layout.border;
+    if (!canTravel(location.coordinate, target.coordinate, border)) return fail(400, { direction: true });
+    const warning = await _travel(locals.user, location, target, locals.rethinkdb);
+    await add_log(locals.user.game_id, location.coordinate, locals.user.username, 'out', '', locals.rethinkdb);
+    await add_log(locals.user.game_id, target.coordinate, locals.user.username, 'in', { warning }, locals.rethinkdb);
 }
 
 const tunnel = async ({ locals }) => {
@@ -450,4 +425,4 @@ const tunnel = async ({ locals }) => {
     await addLog(locals.user.id, exit, locals.user.username, 'inTunnel', { warning }, locals.rethinkdb);
 }
 
-export const actions = { attack, building, drop, force, nextday, pickUp, reset, search, tchat, travel, tunnel };
+export const actions = { attack, building, drop, force, nextday, pickUp, search, tchat, travel, tunnel };

@@ -192,11 +192,11 @@
 	{:else if log.action === 'heal'}
 		<div>{log.player} s'est soigné avec {firstLetterToLowerCase(log.log.drug)}.</div>
     {:else if log.action === 'wound'}
-        {#if log.log.wound === 1}
+        {#if log.log.wound === 0}
             <div class="item">En se réveillant ce matin, {log.player} était de nouveau <span><Item item={wounds[0]} /></span></div>
-        {:else if log.log.wound === 2}
-            <div class="item">En se réveillant ce matin, {log.player} se sentait <span><Item item={wounds[3]} /></span></div>
         {:else if log.log.wound === 3}
+            <div class="item">En se réveillant ce matin, {log.player} se sentait <span><Item item={wounds[3]} /></span></div>
+        {:else if log.log.wound === 4}
 			<div class="item">Gravement blessé, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
         {/if}
 	{:else if log.action === 'feed'}
@@ -215,6 +215,8 @@
 		{:else if log.log.cause === 'thirst'}
 			<div class="item">N'ayant pu s'hydrater suffisamment, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
 		{/if}
+	{:else if log.action === 'leave'}
+		<div>{log.player} a quitté la partie.</div>
 	{/if}
 </div>
 

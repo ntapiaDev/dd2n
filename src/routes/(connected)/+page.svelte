@@ -13,12 +13,14 @@
 	<table>
 		<tr>
 			<th>Jour</th>
+			<th>Nom</th>
 			<th>Joueurs</th>
 			<th>Action</th>
 		</tr>
 		{#each games as game}
 			<tr>
 				<td>{game.day}</td>
+				<td>{game.name}</td>
 				<td>
 					{#if game.players.length}
 						{#each game.players.sort() as player}
@@ -30,15 +32,15 @@
 				</td>
 				<td>
 					<form method="POST" action="?/joinGame" use:enhance>
-						<input type="text" name="id" value={game.id} hidden>
-						{#if !$page.data.user.game}
+						<input type="text" name="game_id" value={game.id} hidden />
+						{#if !$page.data.user.game_id}
 							<button>Rejoindre la partie</button>
-						{:else if $page.data.user.game === game.id}
+						{:else if $page.data.user.game_id === game.id}
 							<button>Quitter la partie</button>
 						{/if}
 						{#if $page.data.user.role === 'admin'}
 							<form method="POST" action="?/deleteGame" use:enhance>
-								<input type="text" name="id" value={game.id} hidden>
+								<input type="text" name="game_id" value={game.id} hidden />
 								<button>Supprimer</button>
 							</form>
 						{/if}
@@ -68,29 +70,36 @@
 		text-align: center;
 	}
 	section {
-		width: 50%;
+		width: 75%;
 		margin: 1em auto;
 	}
 	table {
 		width: 100%;
+		border-collapse: collapse;
 	}
 	th,
 	td {
 		padding: 0.5em 1em;
-		border: 1px solid #AAA;
+		border: 1px solid #aaa;
 		text-align: center;
 	}
-	td:nth-child(1) {
-		width: 20%;
+	th:nth-child(1) {
+		width: 5%;
 	}
-	td:nth-child(2) {
-		width: 40%;
+	th:nth-child(2) {
+		width: 45%;
 	}
-	td:nth-child(3) {
-		width: 40%;
+	th:nth-child(3) {
+		width: 25%;
+	}
+	th:nth-child(4) {
+		width: 25%;
 	}
 	.admin {
 		margin-top: 1em;
+	}
+	h2 {
+		margin-bottom: 0.5em;
 	}
 	p {
 		/* Inspiré de Bootstrap Alerts */

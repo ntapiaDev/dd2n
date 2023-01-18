@@ -18,8 +18,8 @@
 		type: 'misc',
 	};
 
-	$: title = $page.data.user?.days ?
-		$page.data.user.days + ($page.data.user.days === 1 ? 'ère' : 'ème') + ' journée' :
+	$: title = $page.data.user?.game_id ?
+		$page.data.user.day + ($page.data.user.day === 1 ? 'ère' : 'ème') + ' journée' :
 		'Combien de jours tiendrez-vous ?';
 
 	$: substitute = 'Objets trouvés : ' + $page.data.user?.stats.items + '<br/>' + 'Zombies tués : ' + $page.data.user?.stats.zombies;
@@ -32,9 +32,9 @@
 <header>
 	<span class="date">
 		<a href="/">Don't Die 2Nite.</a>
-		{#if $page.data.user?.days}
+		{#if $page.data.user?.game_id}
 			<span><Item item={calendar} /></span>
-			<b>{$page.data.user.days}{$page.data.user.days === 1 ? 'ère' : 'ème'} journée</b>
+			<b>{$page.data.user.day}{$page.data.user.day === 1 ? 'ère' : 'ème'} journée</b>
 		{/if}
 	</span>
 	<nav>
@@ -42,7 +42,9 @@
 			<a href="/login">Connexion</a>
 			<a href="/register">Enregistrement</a>
 		{:else if $page.data.user}
-			<a href="/map">Voir la carte</a>
+			{#if $page.data.user.game_id}
+				<a href="/map">Voir la carte</a>
+			{/if}
 			{#if $page.data.user.role === 'admin'}
 				<a href="/admin">Administrer le site</a>
 			{/if}

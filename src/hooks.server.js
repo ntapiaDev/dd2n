@@ -41,28 +41,29 @@ export const handle = async ({ event, resolve }) => {
 
     // Gestion des pages du jeu
     // Créer une variable in/out
-    if (user.role !== 'admin' && user.location !== 'H8' && (event.url.pathname === '/' || event.url.pathname === '/encampment')) {
-        return redirect('/map');
+    if (!user.game_id && event.url.pathname === '/map') {
+        return redirect('/');
     }
+    // if (user.role !== 'admin' && user.location !== 'H8' && (event.url.pathname === '/' || event.url.pathname === '/encampment')) {
+    //     return redirect('/map');
+    // }
 
     event.locals.user = {
         id: user.id,
         username: user.username,
         role: user.role,
-        game: user.game,
-        days: user.days,
-        location: user.location,
-        i: user.i,
-        j: user.j,
-        ap: user.ap,
-        hunger: user.hunger,
-        thirst: user.thirst,
-        wound: user.wound,
-        force: user.force,
-        inventory: user.inventory,
-        slots: user.slots,
-        stats: user.stats,
-        tchat: user.tchat
+        game_id: user.game_id,
+        day: user.day ?? '',
+        ap: user.ap ?? '',
+        location: user.location ?? '',
+        hunger: user.hunger ?? '',
+        thirst: user.thirst ?? '',
+        wound: user.wound ?? '',
+        force: user.force ?? '',
+        inventory: user.inventory ?? '',
+        slots: user.slots ?? '',
+        stats: user.stats ?? '',
+        tchat: user.tchat ?? ''
     }
 
     const response = await resolve(event);

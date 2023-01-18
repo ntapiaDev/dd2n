@@ -20,10 +20,7 @@ const register = async ({ cookies, locals, request }) => {
     if (!USER_REGEX.test(username)) return fail(400, { username: true });
     if (!PASSWORD_REGEX.test(password)) return fail(400, { password: true });
 
-    const { user_id, SESSIONID } = await addUser({ username, password }, locals.rethinkdb)
-
-    // Création de la carte du joueur
-    await generateMap(user_id, username, locals.rethinkdb);
+    const SESSIONID = await addUser({ username, password }, locals.rethinkdb)
 
     setSession(cookies, SESSIONID);
     throw redirect(303, '/')

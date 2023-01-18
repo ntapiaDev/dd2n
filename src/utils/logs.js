@@ -1,27 +1,21 @@
 import r from 'rethinkdb';
 
-export const addLog = async (user_id, coordinate, player, action, log, rethinkdb) => {
-    return r.table('logs').insert({ user_id, coordinate, player, action, log, 'date': Date.now() }).run(rethinkdb)
+export const add_log = async (game_id, coordinate, player, action, log, rethinkdb) => {
+    return r.table('logs').insert({ game_id, coordinate, player, action, log, 'date': Date.now() }).run(rethinkdb)
         .then(function (result) {
             return result;
         });
 }
 
-export const deleteLogs = async (user_id, rethinkdb) => {
-    await r.table('logs').filter({ user_id }).delete().run(rethinkdb);
-    // Log par défaut d'arrivée sur la case du campement
-    return r.table('logs').insert({ user_id, coordinate: 'H8', player: 'Nicolas', action: 'in', log: { warning: false }, 'date': Date.now() }).run(rethinkdb)
+export const delete_logs = async (game_id, rethinkdb) => {
+    return r.table('logs').filter({ game_id }).delete().run(rethinkdb)
         .then(function (result) {
             return result;
         });
-    // return r.table('logs').delete().run(rethinkdb)
-    //     .then(function (result) {
-    //         return result;
-    //     });
 }
 
-export const getLogsByCoordinate = async (user_id, coordinate, rethinkdb) => {
-    return r.table('logs').filter({ user_id, coordinate }).orderBy(r.desc('date')).run(rethinkdb)
+export const get_logs_by_coordinate = async (game_id, coordinate, rethinkdb) => {
+    return r.table('logs').filter({ game_id, coordinate }).orderBy(r.desc('date')).run(rethinkdb)
         .then(function (result) {
             return result;
         });

@@ -16,7 +16,6 @@
 	import Map from '../../../components/map/Map.svelte';
 	import MapLog from '../../../components/game/MapLog.svelte';
 	import NextDay from '../../../components/map/NextDay.svelte';
-	import Reset from '../../../components/map/Reset.svelte';
 	import Search from '../../../components/map/actions/Search.svelte';
 	import Tchat from '../../../components/map/actions/Tchat.svelte';
 	import Tunnel from '../../../components/map/actions/Tunnel.svelte';
@@ -39,10 +38,11 @@
 		type: "misc" ,
 	};
 
+	$: cell = data.cell;
+	$: logs = data.logs;	
 	$: map = data.map;
-	$: logs = data.logs;
 	$: user = $page.data.user;
-	$: cell = map.rows[user.i][user.j];
+	
 	$: armour =
 		(user.slots.A1.defense ?? 0) +
 		(user.slots.A2.defense ?? 0) +
@@ -78,10 +78,11 @@
 	}
 </script>
 
-<aside>
-	<NextDay />
-	<Reset />
-</aside>
+{#if user.role === 'admin'}
+	<aside>
+		<NextDay />
+	</aside>
+{/if}
 <h1>Vous êtes sur la case {user.location} :</h1>
 <section>
 	<div class="map">
@@ -206,8 +207,6 @@
 			<p>Votre inventaire est plein.</p>
 		{:else if form?.item}
 			<p>Vous ne possédez pas cette arme ou celle-ci n'est pas équipée.</p>
-		{:else if form?.location}
-			<p>Vous n'êtes pas sur la bonne case.</p>
 		{:else if form?.long}
 			<p>Votre message est trop long (100 caractères maximum).</p>
 		{:else if form?.origin}
