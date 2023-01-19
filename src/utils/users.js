@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import r from 'rethinkdb';
 
+const lobby = '80fcdf16-aaac-4cab-9b4b-7330132783d1';
+
 export const addUser = async (user, rethinkdb) => {
     const hashedPassword = await bcrypt.hash(user.password, 10)
     const SESSIONID = crypto.randomUUID();
@@ -9,7 +11,7 @@ export const addUser = async (user, rethinkdb) => {
         password: hashedPassword,
         role: 'user',
         sessionid: SESSIONID,
-        game_id: 'd95363b8-cf62-4115-8e02-4b1398f7d109'
+        game_id: lobby
     }).run(rethinkdb)
         .then(function (result) {
             return result.generated_keys[0];

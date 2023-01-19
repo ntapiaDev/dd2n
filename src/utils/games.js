@@ -6,7 +6,7 @@ const encampment = 'H8';
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O']; //15 * 15 = 225 cases
 const size = 15;
 
-const lobby = 'd95363b8-cf62-4115-8e02-4b1398f7d109';
+const lobby = '80fcdf16-aaac-4cab-9b4b-7330132783d1';
 
 export const add_game = async (rethinkdb) => {
     const game_id = await r.table('games').insert({

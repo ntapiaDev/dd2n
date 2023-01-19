@@ -8,7 +8,7 @@
 
 <main>
 	<Header />
-	{#if data.user?.game_id !== 'd95363b8-cf62-4115-8e02-4b1398f7d109' && data.user?.day}
+	{#if data.user?.game_id !== '80fcdf16-aaac-4cab-9b4b-7330132783d1' && data.user?.day}
 		<Player />
 	{/if}
 	<slot />
