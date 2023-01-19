@@ -18,7 +18,7 @@
 		type: 'misc',
 	};
 
-	$: title = $page.data.user?.game_id !== 'd95363b8-cf62-4115-8e02-4b1398f7d109' ?
+	$: title = $page.data.user?.game_id !== 'd95363b8-cf62-4115-8e02-4b1398f7d109' && $page.data.user?.day ?
 		$page.data.user.day + ($page.data.user.day === 1 ? 'ère' : 'ème') + ' journée' :
 		'Combien de jours tiendrez-vous ?';
 
