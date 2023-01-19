@@ -1,7 +1,7 @@
-import { getAddItem, getItems } from "../../../utils/items";
+import { getAddItem, get_items } from "../../../utils/items";
 
 export async function load ({ locals }) {
-    const items = await getItems(locals.rethinkdb);
+    const items = await get_items(locals.rethinkdb);
     return { items };
 }
 
