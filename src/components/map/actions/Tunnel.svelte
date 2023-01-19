@@ -11,7 +11,7 @@
 	};
 </script>
 
-<form method="POST" action="/map?/tunnel" use:enhance>
+<form method="POST" action="/map?/travel" use:enhance>
 	<button>
 		<Item {item} />
 	</button>

@@ -21,7 +21,7 @@ export const get_items = async (rethinkdb) => {
         });
 }
 
-export const getItemsByCode = async (code, rethinkdb) => {
+export const get_items_by_code = async (code, rethinkdb) => {
     return r.table('items').filter({ code }).run(rethinkdb)
         .then(function (result) {
             return sortItems(result._responses[0]?.r ?? []);
@@ -29,8 +29,8 @@ export const getItemsByCode = async (code, rethinkdb) => {
 }
 
 // Importance de l'ordre? Enlever l'item avant de le déplacer pour éviter les duplicas?
-export const moveItem = async (user_id, map, inventory, slots, rethinkdb) => {
-    await r.table('maps').filter({ user_id }).update(map).run(rethinkdb, function (err, result) {
+export const move_item = async (game_id, user_id, coordinate, items, inventory, slots, rethinkdb) => {
+    await r.table('cells').filter({ game_id, coordinate }).update({ items }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
     await r.table('users').filter({ id: user_id }).update({ inventory, slots }).run(rethinkdb, function (err, result) {

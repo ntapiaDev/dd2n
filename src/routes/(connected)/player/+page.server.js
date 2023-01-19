@@ -46,7 +46,7 @@ const feed = async ({ locals, request }) => {
     if (ap > 100) ap = 100;
     const value = ap - locals.user.ap;
     await getFeed(locals.user.id, inventory, hunger, thirst, ap, locals.rethinkdb);
-    await add_log(locals.user.id, locals.user.location, locals.user.username, 'feed', { 'feed': item.description, type, value }, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'feed', { 'feed': item.description, type, value }, locals.rethinkdb);
 }
 
 const heal = async ({ locals, request }) => {
@@ -73,7 +73,7 @@ const heal = async ({ locals, request }) => {
     if (wound === 1 || wound === 2 && item.rarity ==='rare' || item.rarity === 'épique') wound = 0;
     else return fail(400, { weak: true });
     await getHeal(locals.user.id, inventory, wound, locals.rethinkdb);
-    await add_log(locals.user.id, locals.user.location, locals.user.username, 'heal', { 'drug': item.description }, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'heal', { 'drug': item.description }, locals.rethinkdb);
 }
 
 export const actions = { feed, heal };

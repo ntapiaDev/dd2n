@@ -33,7 +33,7 @@ export const add_game = async (rethinkdb) => {
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
             const building = buildings[letters[i] + j] ?? '';
-            const entrance = tunnel.includes(letters[i] + j);
+            const entrance = tunnel.includes(letters[i] + j) ? tunnel.filter(c => c !== letters[i] + j)[0] : '';
             if (zombies < 0) zombies = 0;
             // Batiments avec +2 zombies? Ou zombies x2...?
             if (building) zombies += 2;

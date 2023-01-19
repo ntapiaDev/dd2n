@@ -136,7 +136,8 @@ export const hasPlus = (foundItem) => {
 
 export const getPool = (items, danger, uniques) => {
     const getItems = (danger) => {
-        if (danger === 1) {
+        if (danger === 0) return items;
+        else if (danger === 1) {
             return items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel'].includes(i.rarity));
         } else if (danger === 2) {
             return items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare'].includes(i.rarity));
@@ -166,10 +167,10 @@ export const getPool = (items, danger, uniques) => {
     return pool;
 }
 
-export const handleSearch = (items, pool) => {
+export const handleSearch = (items, pool, type) => {
     let loots = [];
     let uniques = [];
-    for (let i = 0; i < Math.ceil(Math.random() * 3); i++) {
+    for (let i = 0; i < (type === 'building' ? (Math.ceil(Math.random() * 4) + 1) : Math.ceil(Math.random() * 3)); i++) {
         let foundItem = pool[Math.floor(Math.random() * pool.length)];
         pool = pool.filter(i => i.id !== foundItem.id);
         if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
