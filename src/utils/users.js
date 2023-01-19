@@ -1,8 +1,6 @@
 import bcrypt from 'bcrypt';
 import r from 'rethinkdb';
 
-const lobby = '80fcdf16-aaac-4cab-9b4b-7330132783d1';
-
 export const addUser = async (user, rethinkdb) => {
     const hashedPassword = await bcrypt.hash(user.password, 10)
     const SESSIONID = crypto.randomUUID();
@@ -11,7 +9,7 @@ export const addUser = async (user, rethinkdb) => {
         password: hashedPassword,
         role: 'user',
         sessionid: SESSIONID,
-        game_id: lobby
+        game_id: ''
     }).run(rethinkdb)
         .then(function (result) {
             return result.generated_keys[0];
@@ -20,10 +18,15 @@ export const addUser = async (user, rethinkdb) => {
 }
 
 export const getBySESSIONID = async (SESSIONID, rethinkdb) => {
-    return r.table('users').filter({ sessionid: SESSIONID }).eqJoin("game_id", r.table("games")).run(rethinkdb)
+    let user = await r.table('users').filter({ sessionid: SESSIONID }).eqJoin("game_id", r.table("games")).run(rethinkdb)
         .then(function (result) {
             return result._responses[0]?.r[0];
         });
+    if (!user) user = await r.table('users').filter({ sessionid: SESSIONID }).run(rethinkdb)
+    .then(function (result) {
+        return result._responses[0]?.r[0];
+    });
+    return user;
 }
 
 export const getByUsername = async (username, rethinkdb) => {

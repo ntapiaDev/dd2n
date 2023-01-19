@@ -70,7 +70,6 @@ export const next_day = async (game_id, user_id, hunger, thirst, wound, rethinkd
     const events = [];
     for (let player of players) {
         player.ap = 100;
-        player.day++;
         player.force = false;
         player.hunger -= 25;
         player.tchat = [];

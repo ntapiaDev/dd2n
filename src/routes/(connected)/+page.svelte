@@ -34,7 +34,7 @@
 					<td>
 						<form method="POST" action="?/joinGame" use:enhance>
 							<input type="text" name="game_id" value={game.id} hidden />
-							{#if $page.data.user.game_id === '80fcdf16-aaac-4cab-9b4b-7330132783d1'}
+							{#if !$page.data.user.game_id}
 								<button>Rejoindre la partie</button>
 							{:else if $page.data.user.game_id === game.id}
 								<button>Quitter la partie</button>
