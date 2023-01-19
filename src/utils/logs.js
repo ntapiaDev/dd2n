@@ -7,6 +7,17 @@ export const add_log = async (game_id, coordinate, player, action, log, rethinkd
         });
 }
 
+export const add_logs = async (game_id, logs, rethinkdb) => {
+    for (let log of logs) {
+        log.game_id = game_id;
+        log.date = Date.now();
+    }
+    return r.table('logs').insert(logs).run(rethinkdb)
+        .then(function (result) {
+            return result;
+        });
+}
+
 export const delete_logs = async (game_id, rethinkdb) => {
     return r.table('logs').filter({ game_id }).delete().run(rethinkdb)
         .then(function (result) {

@@ -9,7 +9,7 @@ export const addUser = async (user, rethinkdb) => {
         password: hashedPassword,
         role: 'user',
         sessionid: SESSIONID,
-        game_id: ''
+        game_id: 'd95363b8-cf62-4115-8e02-4b1398f7d109'
     }).run(rethinkdb)
         .then(function (result) {
             return result.generated_keys[0];
@@ -18,7 +18,7 @@ export const addUser = async (user, rethinkdb) => {
 }
 
 export const getBySESSIONID = async (SESSIONID, rethinkdb) => {
-    return r.table('users').filter({ sessionid: SESSIONID }).run(rethinkdb)
+    return r.table('users').filter({ sessionid: SESSIONID }).eqJoin("game_id", r.table("games")).run(rethinkdb)
         .then(function (result) {
             return result._responses[0]?.r[0];
         });

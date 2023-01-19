@@ -1,9 +1,7 @@
 import r from 'rethinkdb';
 
 export const add_tchat = async (user_id, location, rethinkdb) => {
-    return r.table('users').filter({ id: user_id }).update({
-        'tchat': r.row('tchat').append(location)
-    }).run(rethinkdb)
+    return r.table('users').filter({ id: user_id }).update({ tchat: r.row('tchat').append(location) }).run(rethinkdb)
         .then(function (result) {
             return result;
         });

@@ -6,6 +6,8 @@ const encampment = 'H8';
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O']; //15 * 15 = 225 cases
 const size = 15;
 
+const lobby = 'd95363b8-cf62-4115-8e02-4b1398f7d109';
+
 export const add_game = async (rethinkdb) => {
     const game_id = await r.table('games').insert({
         date: Date.now(),
@@ -55,7 +57,7 @@ export const delete_game = async (game_id, rethinkdb) => {
         .then(function (result) {
             return result;
         });
-    return r.table('users').filter({ game_id }).update({ game_id: '' }).run(rethinkdb)
+    return r.table('users').filter({ game_id }).update({ game_id: lobby }).run(rethinkdb)
     .then(function (result) {
         return result;
     });
@@ -75,7 +77,7 @@ export const get_games = async (rethinkdb) => {
         });
 }
 
-export const join_game = async (game_id, day, username, rethinkdb) => {
+export const join_game = async (game_id, username, rethinkdb) => {
     await r.table('games').get(game_id).update({
         'players': r.row('players').append(username)
     }).run(rethinkdb)
@@ -88,7 +90,7 @@ export const join_game = async (game_id, day, username, rethinkdb) => {
         .then(function (result) {
             return result;
         });
-    await r.table('users').filter({ username }).update({ game_id, day, 'ap': 100, 'wound': 0, 'hunger': 75, 'thirst': 75, 'force': false, 'location': encampment, 'inventory': [{
+    await r.table('users').filter({ username }).update({ game_id, 'ap': 100, 'wound': 0, 'hunger': 75, 'thirst': 75, 'force': false, 'location': encampment, 'inventory': [{
         "code": "b1",
         "credit": "Freepik",
         "description": "Une cuisse de poulet",
@@ -180,7 +182,7 @@ export const leave_game = async (game_id, username, location, rethinkdb) => {
         .then(function (result) {
             return result;
         });
-    return r.table('users').filter({ username }).update({ game_id: '' }).run(rethinkdb)
+    return r.table('users').filter({ username }).update({ game_id: lobby }).run(rethinkdb)
     .then(function (result) {
         return result;
     });

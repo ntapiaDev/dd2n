@@ -12,15 +12,7 @@ export const get_cell = async (game_id, coordinate, rethinkdb) => {
 }
 
 export const get_map = async (game_id, rethinkdb) => {
-    const map = {};
-    const game = await get_game_by_id(game_id, rethinkdb);
-    if (!game) return [];
-    map.day = game.day;
-    map.encampment = game.encampment;
-    map.name = game.name;
-    map.players = game.players;
-    map.uniques = game.uniques;
-    const list = await r.table('cells').filter({ game_id }).orderBy(r.asc('code')).run(rethinkdb)
+    const map = await r.table('cells').filter({ game_id }).orderBy(r.asc('code')).run(rethinkdb)
         .then(function (result) {
             return result;
         });
@@ -29,13 +21,12 @@ export const get_map = async (game_id, rethinkdb) => {
     for (let i = 0; i < size; i++) {
         let cells = [];
         for (let j = 0; j < size; j++) {
-            cells.push(list[code]);
+            cells.push(map[code]);
             code++;
         }
         rows.push(cells);
     }
-    map.rows = rows;
-    return map;
+    return rows;
 }
 
 export const next_day = async (game_id, user_id, hunger, thirst, wound, rethinkdb) => {

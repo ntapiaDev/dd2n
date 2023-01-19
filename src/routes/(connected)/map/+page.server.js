@@ -1,16 +1,15 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { canTravel, checkHT, getDefense, getIJ } from '../../../utils/tools';
-import { getItems, getItemsByCode, moveItem } from '../../../utils/items';
-import { add_log, deleteLogs, get_logs_by_coordinate } from "../../../utils/logs";
-import { generateMap, getAttack, getMapTunnel, getSearch, getTravel, pushThrough, _travel } from "../../../utils/maps";
+import { canTravel, checkHT, getDefense, getIJ, getPool, handleEmpty, handlePlus, handleSearch, handleStack, hasPlus } from '../../../utils/tools';
+import { getItems, getItemsByCode, get_items, moveItem } from '../../../utils/items';
+import { add_log, add_logs, deleteLogs, get_logs_by_coordinate } from "../../../utils/logs";
+import { generateMap, getAttack, getMapTunnel, getSearch, getTravel, pushThrough, _search, _travel } from "../../../utils/maps";
 import { add_tchat } from "../../../utils/player";
 import { get_cell, get_map, next_day } from "../../../utils/cells";
 
 export async function load({ locals }) {
-    const cell = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
-    const map = await get_map(locals.user.game_id, locals.rethinkdb);
-    return { cell, logs, map };
+    const rows = await get_map(locals.user.game_id, locals.rethinkdb);
+    return { logs, rows };
 }
 
 const attack = async ({ locals, request }) => {
@@ -278,102 +277,21 @@ const pickUp = async ({ locals, request }) => {
 }
 
 const search = async ({ locals }) => {
-    const ap = locals.user.ap;
-    const li = locals.user.i;
-    const lj = locals.user.j;
-    const map = await getMap(locals.user.id, locals.rethinkdb);
-    const itemList = await getItems(locals.rethinkdb);
-    if (ap > 0) {
-        // Si la zone est vide, on renvoie une erreur
-        if (map.rows[li][lj].empty) return fail(400, { empty: true });
-        // Si la case a déjà été fouillée ce jour, on renvoie une erreur
-        if (map.rows[li][lj].searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
-        const danger = map.rows[li][lj].layout.danger;
-        // Gestion de la rareté de la case
-        // Faire 3 requêtes séparées??
-        const getItems = (danger) => {
-            if (danger === 1) {
-                return itemList.filter(i => i.type !== 'misc' && ['commun', 'inhabituel'].includes(i.rarity));
-            } else if (danger === 2) {
-                return itemList.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare'].includes(i.rarity));
-            } else if (danger === 3) {
-                return itemList.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare', 'épique'].includes(i.rarity));
-            }
-        }
-        const items = getItems(danger);
-        let pool = [];
-        for (let item of items) {
-            if (!item.unique || !map.uniques.includes(item.id)) {
-                // Probabilité en fonction du type
-                const type = item.type === 'resource' ? 10 :
-                    item.type === 'ammunition' ? 15 :
-                    item.type === 'explosive' ? 5 :
-                    ['food', 'drink'].includes(item.type) ? 3 :
-                    ['drug', 'weapon', 'armour'].includes(item.type) ? 2 : 1;
-                // Probabilité en fonction de la rareté
-                const rarity = item.rarity === 'commun' ? 5 :
-                    item.rarity === 'inhabituel' ? 3 :
-                    item.rarity === 'rare' ? 2 : 1;
-                for (let i = 0; i < (type * rarity); i++) {
-                    pool.push(item);
-                }
-            }
-        }
-        // Possibilité de trouver jusqu'à 3 objets à la fois
-        let loots = [];
-        for (let i = 0; i < Math.ceil(Math.random() * 3); i++) {
-            const foundItem = pool[Math.floor(Math.random() * pool.length)];
-            pool = pool.filter(i => i.id !== foundItem.id);
-            if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
-            foundItem.uuid = crypto.randomUUID();
-            // Objets +1,2,3,4
-            if (['weapon', 'armour'].includes(foundItem.type)) {
-                const random = Math.random();
-                foundItem.plus =
-                    random === 1 ? 4 :
-                    random > 0.95 ? 3 :
-                    random > 0.90 ? 2 :
-                    random > 0.75 ? 1 : 0
-                if (foundItem.type === 'weapon') foundItem.attack += foundItem.plus;
-                else if (foundItem.type === 'armour') foundItem.defense += foundItem.plus;
-            }
-            // Si l'item est une munition, on ajoute une quantité aléatoire
-            if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
-            else foundItem.quantity = 1;
-            if (map.rows[li][lj].items.find(i => i.id === foundItem.id)) {
-                if (!['weapon', 'armour'].includes(foundItem.type)) map.rows[li][lj].items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
-                else if (foundItem.type === 'armour' && map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus)) map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus).quantity += foundItem.quantity;
-                else if (foundItem.type === 'weapon' && map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus && i.durability === foundItem.durability)) map.rows[li][lj].items.find(i => i.id === foundItem.id && i.plus === foundItem.plus && i.durability === foundItem.durability).quantity += foundItem.quantity;
-                else map.rows[li][lj].items.push(foundItem);
-            }
-            else {
-                // On met l'item entier dans la case de la map
-                map.rows[li][lj].items.push(foundItem);
-                // Gestion des objets uniques
-                if (foundItem.unique) map.uniques.push(foundItem.id);
-            }
-            loots.push(foundItem);
-        }
-        // Nombre de plus pour les logs
-        let plus = { one: 0, two: 0, tree: 0, four: 0};
-        for (let loot of (loots)) {
-            if (loot.plus === 1) plus.one++;
-            else if (loot.plus === 2) plus.two++;
-            else if (loot.plus === 3) plus.tree++;
-            else if (loot.plus === 4) plus.four++;
-        }
-        map.rows[li][lj].searchedBy.push(locals.user.id);
-        map.rows[li][lj].empty = Math.random() > (danger === 1 ?
-            0.5 : danger === 2 ?
-            0.75 : 0.9);
-        // Stats objets trouvés
-        const stats = locals.user.stats;
-        stats.items += loots.length;
-        // Faim et soif capés à 1% la journée
-        const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
-        await getSearch(locals.user.id, map, ap, hunger, thirst, stats, locals.rethinkdb)
-        await addLog(locals.user.id, locals.user.location, locals.user.username, 'loot', { loots, plus, 'empty': map.rows[li][lj].empty, warning }, locals.rethinkdb);
-    } else return fail(400, { exhausted: true })
+    const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
+    const itemList = await get_items(locals.rethinkdb);
+    if (locals.user.ap < 0) return fail(400, { exhausted: true });
+    if (location.empty) return fail(400, { empty: true });
+    if (location.searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
+    const danger = location.layout.danger;
+    let pool = getPool(itemList, danger, locals.user.uniques);
+    const { items, loots, uniques } = handleSearch(location.items, pool);
+    let plus = handlePlus(loots);
+    let empty = Math.random() > (danger === 1 ? 0.5 : danger === 2 ? 0.75 : 0.9);
+    const stats = locals.user.stats;
+    stats.items += loots.length;
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+    await _search(locals.user.game_id, locals.user.id, location.coordinate, items, uniques, empty, locals.user.ap - 1, hunger, thirst, stats, locals.rethinkdb)
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { loots, plus, 'empty': empty, warning }, locals.rethinkdb);
 }
 
 const tchat = async ({ locals, request }) => {
@@ -387,17 +305,22 @@ const tchat = async ({ locals, request }) => {
 }
 
 const travel = async ({ locals, request }) => {
-    const ap = locals.user.ap;
-    if (ap === 0) return fail(400, { exhausted: true })
+    if (locals.user.ap === 0) return fail(400, { exhausted: true })
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
+    if (location.zombies > getDefense(locals.user.slots) && !locals.user.force) return fail(400, { blocked: true });
     const data = await request.formData();
     const target = await get_cell(locals.user.game_id, data.get('target'), locals.rethinkdb);
-    if (location.zombies > getDefense(locals.user.slots) && !locals.user.force) return fail(400, { blocked: true });
-    const border = target.layout.border;
-    if (!canTravel(location.coordinate, target.coordinate, border)) return fail(400, { direction: true });
-    const warning = await _travel(locals.user, location, target, locals.rethinkdb);
-    await add_log(locals.user.game_id, location.coordinate, locals.user.username, 'out', '', locals.rethinkdb);
-    await add_log(locals.user.game_id, target.coordinate, locals.user.username, 'in', { warning }, locals.rethinkdb);
+    if (!canTravel(location.coordinate, target.coordinate, target.layout.border)) return fail(400, { direction: true });
+    const estimated = {
+        empty: location.empty,
+        zombies: location.zombies
+    }
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+    await _travel(locals.user.game_id, locals.user.id, locals.user.username, location.coordinate, target.coordinate, estimated, locals.user.ap - 1, hunger, thirst, locals.rethinkdb);
+    await add_logs(locals.user.game_id, [
+        { coordinate: location.coordinate, player: locals.user.username, action: 'out', log: '' },
+        { coordinate: target.coordinate, player: locals.user.username, action: 'in', log: { warning } }
+    ], locals.rethinkdb);
 }
 
 const tunnel = async ({ locals }) => {

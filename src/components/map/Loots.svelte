@@ -4,7 +4,7 @@
 	import { sortItems } from '../../utils/tools';
 	import Item from '../game/Item.svelte';
 
-	export let map;
+	export let rows;
 
 	const item = {
 		credit: "Freepik" ,
@@ -29,10 +29,10 @@
 		dispatch('hidePlayers', '');
 	}
 
-	$: loots = [] || map;
+	$: loots = [] || rows;
 	let quantity, zombies;
-	$: if (map) quantity = zombies = 0;
-	$: for (let row of map.rows) {
+	$: if (rows) quantity = zombies = 0;
+	$: for (let row of rows) {
 		for (let cell of row) {
 			zombies += cell.zombies;
 			for (let loot of cell.items) {
@@ -56,8 +56,8 @@
 		}
 	}
 
-	$: players = [] || map;
-	$: for (let row of map.rows) {
+	$: players = [] || rows;
+	$: for (let row of rows) {
 		for (let cell of row) {
 			for (let player of cell.players) {
 				players.push({

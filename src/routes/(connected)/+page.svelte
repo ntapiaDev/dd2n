@@ -18,35 +18,37 @@
 			<th>Action</th>
 		</tr>
 		{#each games as game}
-			<tr>
-				<td>{game.day}</td>
-				<td>{game.name}</td>
-				<td>
-					{#if game.players.length}
-						{#each game.players.sort() as player}
-							<div>{player}</div>
-						{/each}
-					{:else}
-						<div>En attente de joueurs</div>
-					{/if}
-				</td>
-				<td>
-					<form method="POST" action="?/joinGame" use:enhance>
-						<input type="text" name="game_id" value={game.id} hidden />
-						{#if !$page.data.user.game_id}
-							<button>Rejoindre la partie</button>
-						{:else if $page.data.user.game_id === game.id}
-							<button>Quitter la partie</button>
+			{#if game.name !== 'Lobby'}
+				<tr>
+					<td>{game.day}</td>
+					<td>{game.name}</td>
+					<td>
+						{#if game.players.length}
+							{#each game.players.sort() as player}
+								<div>{player}</div>
+							{/each}
+						{:else}
+							<div>En attente de joueurs</div>
 						{/if}
-						{#if $page.data.user.role === 'admin'}
-							<form method="POST" action="?/deleteGame" use:enhance>
-								<input type="text" name="game_id" value={game.id} hidden />
-								<button>Supprimer</button>
-							</form>
-						{/if}
-					</form>
-				</td>
-			</tr>
+					</td>
+					<td>
+						<form method="POST" action="?/joinGame" use:enhance>
+							<input type="text" name="game_id" value={game.id} hidden />
+							{#if $page.data.user.game_id === 'd95363b8-cf62-4115-8e02-4b1398f7d109'}
+								<button>Rejoindre la partie</button>
+							{:else if $page.data.user.game_id === game.id}
+								<button>Quitter la partie</button>
+							{/if}
+							{#if $page.data.user.role === 'admin'}
+								<form method="POST" action="?/deleteGame" use:enhance>
+									<input type="text" name="game_id" value={game.id} hidden />
+									<button>Supprimer</button>
+								</form>
+							{/if}
+						</form>
+					</td>
+				</tr>
+			{/if}
 		{/each}
 	</table>
 	{#if $page.data.user.role === 'admin'}

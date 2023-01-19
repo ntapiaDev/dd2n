@@ -14,7 +14,7 @@ export const getEquip = async (user_id, inventory, slots, rethinkdb) => {
     });
 }
 
-export const getItems = async (rethinkdb) => {
+export const get_items = async (rethinkdb) => {
     return r.table('items').run(rethinkdb)
         .then(function (result) {
             return sortItems(result._responses[0]?.r);

@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { flip } from 'svelte/animate';
-	import { getDistance, sortItems } from '../../../utils/tools';
+	import { getDefense, getDistance, sortItems } from '../../../utils/tools';
 	import Attack from '../../../components/map/actions/Attack.svelte';
 	import Building from '../../../components/map/actions/Building.svelte';
 	import Drink from '../../../components/map/actions/Drink.svelte';
@@ -38,22 +38,21 @@
 		type: "misc" ,
 	};
 
-	$: cell = data.cell;
-	$: logs = data.logs;	
-	$: map = data.map;
+	$: rows = data.rows;
 	$: user = $page.data.user;
+	$: cell = rows.find(row => row.find(c => c.coordinate === user.location)).find(c => c.coordinate === user.location);
+	$: logs = data.logs;
+
+
 	
-	$: armour =
-		(user.slots.A1.defense ?? 0) +
-		(user.slots.A2.defense ?? 0) +
-		(user.slots.A3.defense ?? 0);
+	$: armour = getDefense(user.slots);
 	$: style =
 		cell.zombies === 0 ? ' safe' :
 		cell.zombies > 0 && cell.zombies <= armour ? ' warning' :
 		cell.zombies > 0 && cell.zombies > armour ? ' danger' : '';
 
 	// Futur bouton de retour automatique
-	$: distance = getDistance(user.location, map.encampment);
+	$: distance = getDistance(user.location, user.encampment);
 
 	const getUsernames = (cell) => {
 		let usernames = '';
@@ -86,12 +85,12 @@
 <h1>Vous êtes sur la case {user.location} :</h1>
 <section>
 	<div class="map">
-		<Map encampment={map.encampment} rows={map.rows} current={cell} {coordinates} players={playersMap} />
-		<Loots {map} on:showLoots={showLoots} on:hideLoots={hideLoots} on:showPlayers={showPlayers} on:hidePlayers={hidePlayers} />
+		<Map encampment={user.encampment} {rows} current={cell} {coordinates} players={playersMap} />
+		<Loots {rows} on:showLoots={showLoots} on:hideLoots={hideLoots} on:showPlayers={showPlayers} on:hidePlayers={hidePlayers} />
 	</div>
 	<div class="cell">
 		<div class={"people" + style}>
-			{#if cell.coordinate === map.encampment}
+			{#if cell.coordinate === user.encampment}
 				<span>Ceci est votre campement.</span>
 				<span>Il résiste aux hordes de zombies, pour le moment...</span>
 			{:else}
@@ -118,7 +117,7 @@
 		</div>
 		<div class="actions">
 			<span class="title">Actions disponibles :</span>
-			{#if user.location === map.encampment}
+			{#if user.location === user.encampment}
 				<Encampment />
 			{:else if user.ap && cell.entrance}
 				<Tunnel />
@@ -157,7 +156,7 @@
 			{#if (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && !cell.zombies}
 				<Item item={walking} />
 			{/if}
-			{#if user.location !== map.encampment}
+			{#if user.location !== user.encampment}
 				<span class="exit">
 					<Exit {distance} />
 				</span>

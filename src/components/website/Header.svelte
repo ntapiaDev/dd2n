@@ -18,7 +18,7 @@
 		type: 'misc',
 	};
 
-	$: title = $page.data.user?.game_id ?
+	$: title = $page.data.user?.game_id !== 'd95363b8-cf62-4115-8e02-4b1398f7d109' ?
 		$page.data.user.day + ($page.data.user.day === 1 ? 'ère' : 'ème') + ' journée' :
 		'Combien de jours tiendrez-vous ?';
 
@@ -34,7 +34,11 @@
 		<a href="/">Don't Die 2Nite.</a>
 		{#if $page.data.user?.game_id}
 			<span><Item item={calendar} /></span>
-			<b>{$page.data.user.day}{$page.data.user.day === 1 ? 'ère' : 'ème'} journée</b>
+			<b>{#if $page.data.user.day === 0}
+				En attente de partie
+			{:else}
+				{$page.data.user.day}{$page.data.user.day === 1 ? 'ère' : 'ème'} journée
+			{/if}</b>
 		{/if}
 	</span>
 	<nav>
