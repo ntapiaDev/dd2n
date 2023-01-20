@@ -1,6 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { generateMap } from '../../../utils/maps';
-import { addUser, getByUsername, setSession } from '../../../utils/users';
+import { add_user, get_by_username, setSession } from '$lib/server/users';
 
 // 3 à 16 caractères
 const USER_REGEX = /^[A-Za-z][A-Za-z0-9_]{2,15}$/;
@@ -14,13 +13,13 @@ const register = async ({ cookies, locals, request }) => {
 
     if (!username || !password) return fail(400, { invalid: true });
 
-    const user = await getByUsername(username, locals.rethinkdb);
+    const user = await get_by_username(username, locals.rethinkdb);
     if (user) return fail(400, { user: true });
 
     if (!USER_REGEX.test(username)) return fail(400, { username: true });
     if (!PASSWORD_REGEX.test(password)) return fail(400, { password: true });
 
-    const SESSIONID = await addUser({ username, password }, locals.rethinkdb)
+    const SESSIONID = await add_user({ username, password }, locals.rethinkdb)
 
     setSession(cookies, SESSIONID);
     throw redirect(303, '/')

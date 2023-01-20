@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
 import { HOST, PORT, DB, USER, PASSWORD } from '$env/static/private';
-import { getBySESSIONID } from './utils/users';
+import { get_by_SESSIONID } from '$lib/server/users';
 
 const redirect = (location) =>
     new Response(null, {
@@ -20,7 +20,7 @@ export const handle = async ({ event, resolve }) => {
 
     let user;
     const SESSIONID = event.cookies.get('SESSIONID');
-    if (SESSIONID) user = await getBySESSIONID(SESSIONID, rethinkdb);
+    if (SESSIONID) user = await get_by_SESSIONID(SESSIONID, rethinkdb);
 
     if (!user && (event.url.pathname !== '/login' && event.url.pathname !== '/register')) {
         return redirect('/login');
@@ -34,13 +34,13 @@ export const handle = async ({ event, resolve }) => {
     if (event.url.pathname === '/login' || event.url.pathname === '/register') {
         return redirect('/');
     }
-    if ((user.left?.role !== 'admin' && user.role !== 'admin') && event.url.pathname === '/admin') {
+    if ((user.role !== 'admin' && user.role !== 'admin') && event.url.pathname === '/admin') {
         return redirect('/');
     }
 
     // Gestion des pages du jeu
     // Créer une variable in/out
-    if (!user.left?.game_id && event.url.pathname === '/map') {
+    if (!user.game_id && event.url.pathname === '/map') {
         return redirect('/');
     }
     // if (user.role !== 'admin' && user.location !== 'H8' && (event.url.pathname === '/' || event.url.pathname === '/encampment')) {
@@ -48,24 +48,24 @@ export const handle = async ({ event, resolve }) => {
     // }
 
     event.locals.user = {
-        id: user.left?.id ?? user.id,
-        username: user.left?.username ?? user.username,
-        role: user.left?.role ?? user.role,
-        game_id: user.left?.game_id ?? '',
-        ap: user.left?.ap ?? '',
-        location: user.left?.location ?? '',
-        hunger: user.left?.hunger ?? '',
-        thirst: user.left?.thirst ?? '',
-        wound: user.left?.wound ?? '',
-        force: user.left?.force ?? '',
-        inventory: user.left?.inventory ?? '',
-        slots: user.left?.slots ?? '',
-        stats: user.left?.stats ?? '',
-        tchat: user.left?.tchat ?? '',
-        day: user.right?.day ?? '',
-        encampment: user.right?.encampment ?? '',
-        name: user.right?.name ?? '',
-        uniques: user.right?.uniques ?? ''
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        game_id: user.game_id ?? '',
+        ap: user.ap ?? '',
+        location: user.location ?? '',
+        hunger: user.hunger ?? '',
+        thirst: user.thirst ?? '',
+        wound: user.wound ?? '',
+        force: user.force ?? '',
+        inventory: user.inventory ?? '',
+        slots: user.slots ?? '',
+        stats: user.stats ?? '',
+        tchat: user.tchat ?? '',
+        day: user.day ?? '',
+        encampment: user.encampment ?? '',
+        name: user.name ?? '',
+        uniques: user.uniques ?? ''
     }
 
     const response = await resolve(event);

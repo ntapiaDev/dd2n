@@ -2,32 +2,6 @@ import r from 'rethinkdb';
 import { get_game_by_id } from './games';
 
 const encampment = 'H8';
-const size = 15;
-
-export const get_cell = async (game_id, coordinate, rethinkdb) => {
-    return r.table('cells').filter({ game_id, coordinate }).run(rethinkdb)
-    .then(function (result) {
-        return result._responses[0]?.r[0];
-    });
-}
-
-export const get_map = async (game_id, rethinkdb) => {
-    const map = await r.table('cells').filter({ game_id }).orderBy(r.asc('code')).run(rethinkdb)
-        .then(function (result) {
-            return result;
-        });
-    const rows = [];
-    let code = 0;
-    for (let i = 0; i < size; i++) {
-        let cells = [];
-        for (let j = 0; j < size; j++) {
-            cells.push(map[code]);
-            code++;
-        }
-        rows.push(cells);
-    }
-    return rows;
-}
 
 export const next_day = async (game_id, user_id, hunger, thirst, wound, rethinkdb) => {
     const game = await get_game_by_id(game_id, rethinkdb);

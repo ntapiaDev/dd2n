@@ -1,10 +1,11 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { canTravel, checkHT, getDefense, getPool, handlePlus, handleSearch, handleStack } from '../../../utils/tools';
 import { get_items, get_items_by_code, move_item } from '../../../utils/items';
-import { add_log, add_logs, get_logs_by_coordinate } from "../../../utils/logs";
 import { push_through, _attack, _building, _search, _travel } from "../../../utils/maps";
 import { add_tchat } from "../../../utils/player";
-import { get_cell, get_map, next_day } from "../../../utils/cells";
+import { get_cell, get_map } from "$lib/server/cells";
+import { get_logs_by_coordinate } from "$lib/server/logs";
+// import { next_day } from "../../../utils/cells";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
