@@ -32,12 +32,14 @@
 <header>
 	<span class="date">
 		<a href="/">Don't Die 2Nite.</a>
-		<span><Item item={calendar} /></span>
-		<b>{#if $page.data.user?.game_id}
-		{$page.data.user.day}{$page.data.user.day === 1 ? 'ère' : 'ème'} journée
-		{:else}
-			En attente de partie
-		{/if}</b>
+		{#if $page.data.user}
+			<span><Item item={calendar} /></span>
+			<b>{#if $page.data.user.game_id}
+				{$page.data.user.day}{$page.data.user.day === 1 ? 'ère' : 'ème'} journée
+			{:else}
+				En attente de partie
+			{/if}</b>
+		{/if}
 	</span>
 	<nav>
 		{#if !$page.data.user}

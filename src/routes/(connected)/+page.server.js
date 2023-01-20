@@ -24,7 +24,7 @@ const joinGame = async ({ locals, request }) => {
     const data = await request.formData();
     const game_id = data.get('game_id');
     const game = await get_game_by_id(game_id, locals.rethinkdb);
-    // if (locals.user.game_id !== 'd95363b8-cf62-4115-8e02-4b1398f7d109') return fail(400, { already: true });
+    if (locals.user.game_id && locals.user.game_id !== game_id) return fail(400, { already: true });
     if (locals.user.game_id === game_id) {
         await add_log(game_id, locals.user.location, locals.user.username, 'leave', '', locals.rethinkdb);
         await leave_game(game_id, locals.user.username, locals.user.location, locals.rethinkdb);

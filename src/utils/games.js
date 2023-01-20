@@ -76,15 +76,11 @@ export const get_games = async (rethinkdb) => {
 }
 
 export const join_game = async (game_id, username, rethinkdb) => {
-    await r.table('games').get(game_id).update({
-        'players': r.row('players').append(username)
-    }).run(rethinkdb)
+    await r.table('games').get(game_id).update({ 'players': r.row('players').append(username) }).run(rethinkdb)
         .then(function (result) {
             return result;
         });
-    await r.table('cells').filter({ game_id, coordinate: encampment }).update({
-        'players': r.row('players').append(username)
-    }).run(rethinkdb)
+    await r.table('cells').filter({ game_id, coordinate: encampment }).update({ 'players': r.row('players').append(username) }).run(rethinkdb)
         .then(function (result) {
             return result;
         });
@@ -168,15 +164,11 @@ export const join_game = async (game_id, username, rethinkdb) => {
 }
 
 export const leave_game = async (game_id, username, location, rethinkdb) => {
-    await r.table('games').get(game_id).update({
-        'players': r.row('players').difference([username])
-    }).run(rethinkdb)
+    await r.table('games').get(game_id).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb)
         .then(function (result) {
             return result;
         });
-    await r.table('cells').filter({ game_id, coordinate: location }).update({
-        'players': r.row('players').difference([username])
-    }).run(rethinkdb)
+    await r.table('cells').filter({ game_id, coordinate: location }).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb)
         .then(function (result) {
             return result;
         });

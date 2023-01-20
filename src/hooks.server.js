@@ -9,7 +9,6 @@ const redirect = (location) =>
     });
 
 export const handle = async ({ event, resolve }) => {
-    // Connexion à la base de données
     const rethinkdb = await r.connect({
         host: HOST,
         port: PORT,
