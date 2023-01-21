@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { canTravel, checkHT, getDefense, getPool, handlePlus, handleSearch, handleStack } from '../../../utils/tools';
+import { canTravel, checkHT, getDefense, getItem, getPool, handlePlus, handleSearch, handleStack } from '../../../utils/tools';
 import { get_items, get_items_by_code, move_item } from '../../../utils/items';
 import { push_through, _attack, _building, _search, _travel } from "../../../utils/maps";
 import { add_tchat, get_cell, get_map, update_cells } from "$lib/server/cells";
@@ -118,15 +118,7 @@ const drop = async ({ locals, request }) => {
     const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
-    const getItem = (inventory, uuid) => {
-        for (let item of inventory) {
-            if (item.uuid === uuid) {
-                inventory.splice(inventory.indexOf(item), 1);
-                return item;
-            }
-        }
-    }
-    const item = getItem(inventory, uuid);
+    const item = getItem(inventory, uuid, false);
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const items = handleStack(location.items, item);
     const slots = locals.user.slots;
@@ -155,18 +147,7 @@ const pickUp = async ({ locals, request }) => {
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const items = location.items;
     if (!items.some(i => i.uuid === uuid)) return fail(400, { origin: true });
-    const getItem = (items, uuid) => {
-        for (let item of items) {
-            if (item.uuid === uuid) {
-                if (item.quantity > 1 && !['ammunition', 'explosive'].includes(item.type)) {
-                    item.quantity -= 1;
-                }
-                else items.splice(items.indexOf(item), 1);
-                return {...item};
-            }
-        }
-    }
-    const item = getItem(items, uuid);
+    const item = getItem(items, uuid, true);
     const slots = locals.user.slots;
     const inventory = locals.user.inventory;
     if (['ammunition', 'explosive'].includes(item.type) && slots[item.slot].id === item.id) slots[item.slot].quantity += item.quantity;

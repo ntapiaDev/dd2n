@@ -18,7 +18,7 @@ export const add_one_day = async (game_id, rethinkdb) => {
 }
 
 export const add_user_to_game = async (game_id, username, rethinkdb) => {
-    await r.table('games').get(game_id).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
+    await r.table('games').get(game_id).update({ players: r.row('players').append(username) }).run(rethinkdb);
     return encampment;
 }
 
@@ -35,5 +35,5 @@ export const get_games = async (rethinkdb) => {
 }
 
 export const remove_user_from_game = async (game_id, username, rethinkdb) => {
-    return r.table('games').get(game_id).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb);
+    return r.table('games').get(game_id).update({ players: r.row('players').difference([username]) }).run(rethinkdb);
 }

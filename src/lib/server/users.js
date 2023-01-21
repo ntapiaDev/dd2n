@@ -101,6 +101,10 @@ export const add_user = async (user, rethinkdb) => {
     return SESSIONID;
 }
 
+export const _feed = async (user_id, item, ap, hunger, thirst, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]), hunger, thirst }).run(rethinkdb);
+}
+
 export const get_by_SESSIONID = async (SESSIONID, rethinkdb) => {
     let user = (await r.table('users').filter({ sessionid: SESSIONID }).eqJoin('game_id', r.table('games')).run(rethinkdb))._responses[0]?.r[0];
     if (!user) user = (await r.table('users').filter({ sessionid: SESSIONID }).run(rethinkdb))._responses[0]?.r[0];
@@ -109,6 +113,10 @@ export const get_by_SESSIONID = async (SESSIONID, rethinkdb) => {
 
 export const get_by_username = async (username, rethinkdb) => {
     return (await r.table('users').filter({ username: username }).run(rethinkdb))._responses[0]?.r[0]
+}
+
+export const _heal = async (user_id, item, rethinkdb) => {
+    return r.table('users').get(user_id).update({ inventory: r.row('inventory').difference([item]), wound: 0 }).run(rethinkdb);
 }
 
 export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {

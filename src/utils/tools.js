@@ -184,3 +184,15 @@ export const handleSearch = (items, pool, type) => {
     }
     return { items, loots, uniques };
 }
+
+export const getItem = (items, uuid, stack) => {
+    for (let item of items) {
+        if (item.uuid === uuid) {
+            if (stack && item.quantity > 1 && !['ammunition', 'explosive'].includes(item.type)) {
+                item.quantity -= 1;
+            }
+            else items.splice(items.indexOf(item), 1);
+            return {...item};
+        }
+    }
+}
