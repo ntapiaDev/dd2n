@@ -1,4 +1,4 @@
-import { getAddItem, get_items } from "../../../utils/items";
+import { add_item, get_items } from "$lib/server/items";
 
 export async function load ({ locals }) {
     const items = await get_items(locals.rethinkdb);
@@ -22,7 +22,7 @@ const addItem = async ({ locals, request }) => {
     if (data.get('defense')) item.defense = parseInt(data.get('defense'));
     if (data.get('wound')) item.wound = data.get('wound');
     if (data.get('code')) item.code = data.get('code');
-    await getAddItem(item, locals.rethinkdb);
+    await add_item(item, locals.rethinkdb);
 }
 
 export const actions = { addItem };

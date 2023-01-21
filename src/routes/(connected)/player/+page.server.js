@@ -12,7 +12,7 @@ const feed = async ({ locals, request }) => {
     const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });
-    const item = getItem(inventory, uuid, false);
+    const { item } = getItem(inventory, uuid, false);
     if (!['drink', 'food'].includes(item.type)) return fail(400, { type: true });
     let hunger = locals.user.hunger;
     let thirst = locals.user.thirst;
@@ -41,7 +41,7 @@ const heal = async ({ locals, request }) => {
     const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });
-    const item = getItem(inventory, uuid, false);
+    const { item } = getItem(inventory, uuid, false);
     if (item.type !== 'drug') return fail(400, { drug: true });    
     if (!(wound === 1 || wound === 2 && item.rarity ==='rare' || item.rarity === 'épique')) return fail(400, { weak: true });
     await _heal(locals.user.id, item, locals.rethinkdb);

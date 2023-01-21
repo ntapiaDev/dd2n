@@ -1,11 +1,12 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { canTravel, checkHT, getDefense, getItem, getPool, handlePlus, handleSearch, handleStack } from '../../../utils/tools';
-import { get_items, get_items_by_code, move_item } from '../../../utils/items';
-import { push_through, _attack, _building, _search, _travel } from "../../../utils/maps";
+import { move_item } from '../../../utils/items';
+import { _attack, _building, _search, _travel } from "../../../utils/maps";
 import { add_tchat, get_cell, get_map, update_cells } from "$lib/server/cells";
-import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
 import { add_one_day } from "$lib/server/games";
-import { update_users } from "$lib/server/users";
+import { get_items, get_items_by_code } from "$lib/server/items";
+import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
+import { _force, update_users } from "$lib/server/users";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
@@ -118,7 +119,7 @@ const drop = async ({ locals, request }) => {
     const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
-    const item = getItem(inventory, uuid, false);
+    const { item } = getItem(inventory, uuid, false);
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const items = handleStack(location.items, item);
     const slots = locals.user.slots;
@@ -130,8 +131,8 @@ const force = async ({ locals }) => {
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     if (location.zombies <= getDefense(locals.user.slots)) return fail(400, { clear: true });
     if (locals.user.wound > 1) return fail(400, { force: true });
-    await push_through(locals.user.id, locals.rethinkdb);
-    await add_log(locals.user.id, locals.user.location, locals.user.username, 'force', { wound: true }, locals.rethinkdb);
+    await _force(locals.user.id, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'force', { wound: true }, locals.rethinkdb);
 }
 
 const nextDay = async ({ locals }) => {
@@ -147,7 +148,7 @@ const pickUp = async ({ locals, request }) => {
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const items = location.items;
     if (!items.some(i => i.uuid === uuid)) return fail(400, { origin: true });
-    const item = getItem(items, uuid, true);
+    const { item } = getItem(items, uuid, true);
     const slots = locals.user.slots;
     const inventory = locals.user.inventory;
     if (['ammunition', 'explosive'].includes(item.type) && slots[item.slot].id === item.id) slots[item.slot].quantity += item.quantity;

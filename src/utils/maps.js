@@ -45,8 +45,3 @@ export const _travel = async (game_id, user_id, username, location, target, esti
     });
 }
 
-export const push_through = async (id, rethinkdb) => {
-    await r.table('users').filter({ id }).update({ force: true, wound: 2 }).run(rethinkdb, function (err, result) {
-        if (err) throw err;
-    });
-}

@@ -192,7 +192,7 @@ export const getItem = (items, uuid, stack) => {
                 item.quantity -= 1;
             }
             else items.splice(items.indexOf(item), 1);
-            return {...item};
+            return {item: {...item}, items};
         }
     }
 }

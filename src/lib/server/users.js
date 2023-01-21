@@ -101,8 +101,16 @@ export const add_user = async (user, rethinkdb) => {
     return SESSIONID;
 }
 
+export const _equip = async (user_id, inventory, slots, rethinkdb) => {
+    return r.table('users').get(user_id).update({ inventory, slots }).run(rethinkdb);
+}
+
 export const _feed = async (user_id, item, ap, hunger, thirst, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]), hunger, thirst }).run(rethinkdb);
+}
+
+export const _force = async (user_id, rethinkdb) => {
+    return r.table('users').get(user_id).update({ force: true, wound: 2 }).run(rethinkdb);
 }
 
 export const get_by_SESSIONID = async (SESSIONID, rethinkdb) => {
@@ -154,7 +162,6 @@ export const update_users = async (game_id, rethinkdb) => {
         player.ap = 100;
         player.force = false;
         player.hunger -= 25;
-        player.tchat = [];
         player.thirst -= 25;
         if (player.location !== encampment) {
             player.wound = 4;
