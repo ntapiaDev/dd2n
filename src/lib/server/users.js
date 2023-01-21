@@ -1,142 +1,132 @@
 import bcrypt from 'bcrypt';
 import r from 'rethinkdb';
 
-export const add_game_to_user = async (game_id, username, encampment, rethinkdb) => {
-    return r.table('users').filter({ username }).update({ game_id, 'ap': 100, 'wound': 0, 'hunger': 75, 'thirst': 75, 'force': false, 'location': encampment, 'inventory': [{
-        "code": "b1",
-        "credit": "Freepik",
-        "description": "Une cuisse de poulet",
-        "icon": "chicken",
-        "id": "41805ead-1cc7-4d58-8fc5-9dd1838ab331",
-        "quantity": 1,
-        "rarity": "commun",
-        "type": "food",
-        "unique": false,
-        "uuid": crypto.randomUUID(),
-        "value": 20
-    }, {
-        "code": "b1",
-        "credit": "Tanahcon",
-        "description": "Une canette de coca",
-        "icon": "cola",
-        "id": "f8384e81-5c25-4509-96a6-f57f40a2faef",
-        "quantity": 1,
-        "rarity": "commun",
-        "type": "drink",
-        "unique": false,
-        "uuid": crypto.randomUUID(),
-        "value": 20
-    }], 'slots': {
-        'W0': {
-            "attack": 1,
-            "credit": 'Freepik',
-            "description": 'Se battre à mains nues',
-            "icon": 'attack',
-            "id": 'd1a3d28e-bd5f-486a-b4fb-7d36254f4344',
-            "slot": "W0",
-            "type": 'misc',
+export const add_game_to_user = async (game_id, id, location, rethinkdb) => {
+    return r.table('users').get(id).update({
+        ap: 100,
+        force: false,
+        game_id,
+        hunger: 75,
+        inside: false,
+        location,
+        inventory: [{
+            code: 'b1',
+            credit: 'Freepik',
+            description: 'Une cuisse de poulet',
+            icon: 'chicken',
+            id: '41805ead-1cc7-4d58-8fc5-9dd1838ab331',
+            quantity: 1,
+            rarity: 'commun',
+            type: 'food',
+            unique: false,
+            uuid: crypto.randomUUID(),
+            value: 20
+        }, {
+            code: 'b1',
+            credit: 'Tanahcon',
+            description: 'Une canette de coca',
+            icon: 'cola',
+            id: 'f8384e81-5c25-4509-96a6-f57f40a2faef',
+            quantity: 1,
+            rarity: 'commun',
+            type: 'drink',
+            unique: false,
+            uuid: crypto.randomUUID(),
+            value: 20
+        }],
+        slots: {
+            W0: {
+                attack: 1,
+                credit: 'Freepik',
+                description: 'Se battre à mains nues',
+                icon: 'attack',
+                id: 'd1a3d28e-bd5f-486a-b4fb-7d36254f4344',
+                slot: "W0",
+                type: 'misc',
+            },
+            W1: '',
+            W2: '',
+            W3: '',
+            W4: '',
+            A1: '',
+            A2: {
+                credit: 'Freepik',
+                defense: 1,
+                description: 'Une chemise hawaïenne',
+                icon: 'shirt',
+                id: 'a032c050-a549-4e68-8eef-4a037efd6bef',
+                plus: 0,
+                quantity: 1,
+                rarity: 'commun',
+                slot: 'A2',
+                type: 'misc',
+                unique: false,
+                uuid: crypto.randomUUID()
+            },
+            A3: {
+                credit: 'Good Ware',
+                defense: 1,
+                description: 'Un short en jean',
+                icon: 'short',
+                id: 'cfbe3557-aa69-4bbf-bf91-befa5d814852',
+                plus: 0,
+                quantity: 1,
+                rarity: 'commun',
+                slot: 'A3',
+                type: 'misc',
+                unique: false,
+                uuid: crypto.randomUUID()
+            },
         },
-        'W1': '',
-        'W2': '',
-        'W3': '',
-        'W4': '',
-        'A1': '',
-        'A2': {
-            "credit": "Freepik",
-            "defense": 1,
-            "description": "Une chemise hawaïenne",
-            "icon": "shirt",
-            "id": "a032c050-a549-4e68-8eef-4a037efd6bef",
-            "plus": 0,
-            "quantity": 1,
-            "rarity": "commun",
-            "slot": "A2",
-            "type": "misc",
-            "unique": false,
-            "uuid": crypto.randomUUID()
+        stats: {
+            items: 0,
+            zombies: 0
         },
-        'A3': {
-            "credit": "Good Ware",
-            "defense": 1,
-            "description": "Un short en jean",
-            "icon": "short",
-            "id": "cfbe3557-aa69-4bbf-bf91-befa5d814852",
-            "plus": 0,
-            "quantity": 1,
-            "rarity": "commun",
-            "slot": "A3",
-            "type": "misc",
-            "unique": false,
-            "uuid": crypto.randomUUID()
-        },
-    }, 'stats': {
-        'items': 0,
-        'zombies': 0
-    },
-    'tchat': []
+        tchat: [],
+        thirst: 75,
+        wound: 0
     }).run(rethinkdb)
-        .then(function (result) {
-            return result;
-    });
 }
 
 export const add_user = async (user, rethinkdb) => {
     const hashedPassword = await bcrypt.hash(user.password, 10)
     const SESSIONID = crypto.randomUUID();
     await r.table('users').insert({
-        username: user.username,
+        gender: user.gender,
         password: hashedPassword,
         role: 'user',
         sessionid: SESSIONID,
-        game_id: ''
-    }).run(rethinkdb)
-        .then(function (result) {
-            return result.generated_keys[0];
-        });
+        username: user.username
+    }).run(rethinkdb);
     return SESSIONID;
 }
 
 export const get_by_SESSIONID = async (SESSIONID, rethinkdb) => {
-    const result = await r.table('users').filter({ sessionid: SESSIONID }).eqJoin("game_id", r.table("games")).run(rethinkdb)
-        .then(function (result) {
-            return result._responses[0]?.r[0];
-        });
-    let user = {...result?.right, ...result?.left}
-    if (!result) user = await r.table('users').filter({ sessionid: SESSIONID }).run(rethinkdb)
-    .then(function (result) {
-        return result._responses[0]?.r[0];
-    });
+    let user = (await r.table('users').filter({ sessionid: SESSIONID }).eqJoin('game_id', r.table('games')).run(rethinkdb))._responses[0]?.r[0];
+    if (!user) user = (await r.table('users').filter({ sessionid: SESSIONID }).run(rethinkdb))._responses[0]?.r[0];
     return user;
 }
 
 export const get_by_username = async (username, rethinkdb) => {
-    return r.table('users').filter({ username: username }).run(rethinkdb)
-        .then(function (result) {
-            return result._responses[0]?.r[0];
-        });
+    return (await r.table('users').filter({ username: username }).run(rethinkdb))._responses[0]?.r[0]
 }
 
 export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {
     const NEW_SESSIONID = crypto.randomUUID();
-    const result = await r.table('users').filter({ sessionid: SESSIONID }).update({ sessionid: NEW_SESSIONID }).run(rethinkdb)
-        .then(function (result) {
-            return result;
-        });
-    if (result.replaced) return NEW_SESSIONID;
+    await r.table('users').filter({ sessionid: SESSIONID }).update({ sessionid: NEW_SESSIONID }).run(rethinkdb);
+    return NEW_SESSIONID;
 }
 
-export const remove_game_to_user = async (username, rethinkdb) => {
-    return r.table('users').filter({ username }).update({ game_id: '' }).run(rethinkdb)
-    .then(function (result) {
-        return result;
-    });
+export const remove_game_from_user = async (username, rethinkdb) => {
+    return r.table('users').filter({ username }).replace(r.row.without(
+        'ap', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'tchat', 'thirst', 'wound'
+    )).run(rethinkdb);
 }
 
-export const remove_game_to_users = async (game_id, rethinkdb) => {
-    return r.table('users').filter({ game_id }).update({ game_id: '' }).run(rethinkdb)
-    .then(function (result) {
-        return result;
-    });
+export const remove_game_from_users = async (game_id, rethinkdb) => {
+    return r.table('users').filter({ game_id }).replace(r.row.without(
+        'ap', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'tchat', 'thirst', 'wound'
+    )).run(rethinkdb);
 }
 
 export const setSession = async (cookies, SESSIONID) => {
@@ -145,7 +135,6 @@ export const setSession = async (cookies, SESSIONID) => {
         httpOnly: true,
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
-        // 24 heures
         maxAge: 60 * 60 * 24
     })
 }

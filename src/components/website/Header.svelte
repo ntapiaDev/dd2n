@@ -19,10 +19,10 @@
 	};
 
 	$: title = $page.data.user?.game_id ?
-		$page.data.user.day + ($page.data.user.day === 1 ? 'ère' : 'ème') + ' journée' :
+		$page.data.game.day + ($page.data.game.day === 1 ? 'ère' : 'ème') + ' journée' :
 		'Combien de jours tiendrez-vous ?';
 
-	$: substitute = 'Objets trouvés : ' + $page.data.user?.stats.items + '<br/>' + 'Zombies tués : ' + $page.data.user?.stats.zombies;
+	$: substitute = 'Objets trouvés : ' + ($page.data.user?.stats?.items ?? 0) + '<br/>' + 'Zombies tués : ' + ($page.data.user?.stats?.zombies ?? 0);
 </script>
 
 <svelte:head>
@@ -35,7 +35,7 @@
 		{#if $page.data.user}
 			<span><Item item={calendar} /></span>
 			<b>{#if $page.data.user.game_id}
-				{$page.data.user.day}{$page.data.user.day === 1 ? 'ère' : 'ème'} journée
+				{$page.data.game.day}{$page.data.game.day === 1 ? 'ère' : 'ème'} journée
 			{:else}
 				En attente de partie
 			{/if}</b>
@@ -47,7 +47,11 @@
 			<a href="/register">Enregistrement</a>
 		{:else if $page.data.user}
 			{#if $page.data.user.game_id}
-				<a href="/map">Voir la carte</a>
+				{#if !$page.data.user.inside}
+					<a href="/map">Voir la carte</a>
+				{:else if $page.data.user.inside}
+					<a href="/encampment">Voir le campement</a>
+				{/if}
 			{/if}
 			{#if $page.data.user.role === 'admin'}
 				<a href="/admin">Administrer le site</a>

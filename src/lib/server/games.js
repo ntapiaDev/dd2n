@@ -46,7 +46,7 @@ export const get_games = async (rethinkdb) => {
         });
 }
 
-export const remove_user_to_game = async (game_id, username, rethinkdb) => {
+export const remove_user_from_game = async (game_id, username, rethinkdb) => {
     return r.table('games').get(game_id).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb)
         .then(function (result) {
             return result;

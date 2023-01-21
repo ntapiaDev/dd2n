@@ -38,6 +38,7 @@
 		type: "misc" ,
 	};
 
+	$: game = data.game;
 	$: rows = data.rows;
 	$: user = $page.data.user;
 	$: cell = rows.find(row => row.find(c => c.coordinate === user.location)).find(c => c.coordinate === user.location);
@@ -52,7 +53,7 @@
 		cell.zombies > 0 && cell.zombies > armour ? ' danger' : '';
 
 	// Futur bouton de retour automatique
-	$: distance = getDistance(user.location, user.encampment);
+	$: distance = getDistance(user.location, game.encampment);
 
 	const getUsernames = (cell) => {
 		let usernames = '';

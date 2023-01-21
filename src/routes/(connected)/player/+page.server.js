@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { addLog, add_log } from "../../../utils/logs";
+import { add_log } from "$lib/server/logs";
 import { getFeed, getHeal } from "../../../utils/player";
 
 export async function load() {

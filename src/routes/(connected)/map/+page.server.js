@@ -4,7 +4,7 @@ import { get_items, get_items_by_code, move_item } from '../../../utils/items';
 import { push_through, _attack, _building, _search, _travel } from "../../../utils/maps";
 import { add_tchat } from "../../../utils/player";
 import { get_cell, get_map } from "$lib/server/cells";
-import { get_logs_by_coordinate } from "$lib/server/logs";
+import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
 // import { next_day } from "../../../utils/cells";
 
 export async function load({ locals }) {

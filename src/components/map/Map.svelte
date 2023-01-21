@@ -1,4 +1,5 @@
 <script>
+	import { page } from '$app/stores';
 	import Caption from './Caption.svelte';
 	import Row from './Row.svelte';
 
@@ -31,6 +32,7 @@
 			<Row {row} {encampment} {current} {coordinates} {players} />
 		{/each}
 	</table>
+	<span><i>{$page.data.game.name} - Jour {$page.data.game.day}</i></span>
 	<Caption {open} />
 </div>
 
@@ -57,5 +59,10 @@
 	}
 	.clicked {
 		box-shadow: 0 2px 6px rgba(48, 48, 48, 0.48), 0 1px 4px rgba(96, 96, 96, 0.96);
+	}
+	span {
+		width: 100%;
+		display: inline-block;
+		text-align: center;
 	}
 </style>

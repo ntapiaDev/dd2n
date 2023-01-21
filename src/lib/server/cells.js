@@ -56,19 +56,16 @@ export const get_cell = async (game_id, coordinate, rethinkdb) => {
 }
 
 export const get_map = async (game_id, rethinkdb) => {
-    const map = await r.table('cells').filter({ game_id }).orderBy(r.asc('code')).run(rethinkdb)
-        .then(function (result) {
-            return result;
-        });
+    const cells = await r.table('cells').filter({ game_id }).orderBy(r.asc('code')).run(rethinkdb);        
     const rows = [];
     let code = 0;
     for (let i = 0; i < size; i++) {
-        let cells = [];
+        let row = [];
         for (let j = 0; j < size; j++) {
-            cells.push(map[code]);
+            row.push(cells[code]);
             code++;
         }
-        rows.push(cells);
+        rows.push(row);
     }
     return rows;
 }
