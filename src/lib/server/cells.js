@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import layout from '../../utils/layout';
+import layout from '$lib/layout';
 import { getBuildings, getTunnel } from '../../utils/tools';
 
 const encampment = 'H8';
@@ -75,4 +75,23 @@ export const remove_user_from_location = async (game_id, username, location, ret
         .then(function (result) {
             return result;
         });
+}
+
+export const update_cells = async (game_id, rethinkdb) => {
+    const cells = (await r.table('cells').filter({ game_id }).run(rethinkdb))._responses[0]?.r;
+    const logs = [];    
+    for (let cell of cells) {
+        if (cell.building) cell.building.searchedBy = [];        
+        cell.searchedBy = [];
+        if (cell.coordinate !== encampment) {
+            if (!cell.players.length) cell.visited = false;
+            cell.zombies = Math.round(cell.zombies * (1 + (cell.layout.danger / 10)) + (cell.building ? 2 : 1));
+        }
+        if (cell.empty && Math.random() > 0.9) {
+            cell.empty = false;
+            logs.push({ coordinate: cell.coordinate, action: 'new', log: '' });
+        }
+    }
+    await r.table('cells').insert(cells, {conflict: 'update'}).run(rethinkdb);
+    return logs;
 }

@@ -1,5 +1,4 @@
 <script>
-	import { page } from '$app/stores';
 	import { flip } from 'svelte/animate';
 	import { getDefense, getDistance, sortItems } from '../../../utils/tools';
 	import Attack from '../../../components/map/actions/Attack.svelte';
@@ -39,20 +38,16 @@
 	};
 
 	$: game = data.game;
-	$: rows = data.rows;
-	$: user = $page.data.user;
-	$: cell = rows.find(row => row.find(c => c.coordinate === user.location)).find(c => c.coordinate === user.location);
 	$: logs = data.logs;
+	$: rows = data.rows;
+	$: user = data.user;
 
-
-	
 	$: armour = getDefense(user.slots);
+	$: cell = rows.find(row => row.find(c => c.coordinate === user.location)).find(c => c.coordinate === user.location);	
 	$: style =
 		cell.zombies === 0 ? ' safe' :
 		cell.zombies > 0 && cell.zombies <= armour ? ' warning' :
 		cell.zombies > 0 && cell.zombies > armour ? ' danger' : '';
-
-	// Futur bouton de retour automatique
 	$: distance = getDistance(user.location, game.encampment);
 
 	const getUsernames = (cell) => {
@@ -60,10 +55,10 @@
 		for (let username of cell.players) usernames += ('<br/>' + username);
 		return usernames;
 	}
-	$: players = `Joueurs sur la case (${cell.players.length}) :` + getUsernames(cell);
+	$: substitute = `Joueurs sur la case (${cell.players.length}) :` + getUsernames(cell);
 
 	let coordinates = [];
-	let playersMap = [];
+	let players = [];
 	function showLoots(e) {
 		coordinates = e.detail.coordinates;
 	}
@@ -71,10 +66,10 @@
 		coordinates = [];
 	}
 	function showPlayers(e) {
-		playersMap = e.detail.players;
+		players = e.detail.players;
 	}
 	function hidePlayers() {
-		playersMap = [];
+		players = [];
 	}
 </script>
 
@@ -86,17 +81,17 @@
 <h1>Vous êtes sur la case {user.location} :</h1>
 <section>
 	<div class="map">
-		<Map encampment={user.encampment} {rows} current={cell} {coordinates} players={playersMap} />
+		<Map encampment={game.encampment} {rows} current={cell} {coordinates} {players} />
 		<Loots {rows} on:showLoots={showLoots} on:hideLoots={hideLoots} on:showPlayers={showPlayers} on:hidePlayers={hidePlayers} />
 	</div>
 	<div class="cell">
 		<div class={"people" + style}>
-			{#if cell.coordinate === user.encampment}
+			{#if cell.coordinate === game.encampment}
 				<span>Ceci est votre campement.</span>
 				<span>Il résiste aux hordes de zombies, pour le moment...</span>
 			{:else}
 				{#if cell.building}
-					<span>Vous remarquez <b>{cell.building.type.toLowerCase()}{cell.building.empty ? ' vide' : ''}</b> dans les parages{#if (cell.zombies > ((user.slots.A1.defense ?? 0) + (user.slots.A2.defense ?? 0) + (user.slots.A3.defense ?? 0))) && !cell.building.empty}{' mais son accès est bloqué par une horde de zombies'}{/if}.</span>
+					<span>Vous remarquez <b>{cell.building.type.toLowerCase()}{cell.building.empty ? ' vide' : ''}</b> dans les parages{#if (cell.zombies > armour) && !cell.building.empty}{' mais son accès est bloqué par une horde de zombies'}{/if}.</span>
 				{/if}
 				<span>Il y a actuellement <b>{cell.zombies}</b> zombie{cell.zombies > 1 ? 's' : ''} sur la zone.</span>
 				{#if cell.zombies === 0}
@@ -118,7 +113,7 @@
 		</div>
 		<div class="actions">
 			<span class="title">Actions disponibles :</span>
-			{#if user.location === user.encampment}
+			{#if user.location === game.encampment}
 				<Encampment />
 			{:else if user.ap && cell.entrance}
 				<Tunnel />
@@ -126,7 +121,7 @@
 			{#if user.ap && !cell.searchedBy.includes(user.id) && !cell.empty}
 				<Search />
 			{/if}
-			{#if user.ap && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty && (cell.zombies <= ((user.slots.A1.defense ?? 0) + (user.slots.A2.defense ?? 0) + (user.slots.A3.defense ?? 0)))}
+			{#if user.ap && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty && (cell.zombies <= armour)}
 				<Building />
 			{/if}
 			{#if user.hunger <= 75}
@@ -151,19 +146,19 @@
 					<Attack item={user.slots.W4} />
 				{/if}
 			{/if}
-			{#if (cell.zombies > ((user.slots.A1.defense ?? 0) + (user.slots.A2.defense ?? 0) + (user.slots.A3.defense ?? 0))) && !user.force && (user.wound < 2)}
+			{#if (cell.zombies > armour) && !user.force && (user.wound < 2)}
 				<Force />
 			{/if}
 			{#if (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && !cell.zombies}
 				<Item item={walking} />
 			{/if}
-			{#if user.location !== user.encampment}
+			{#if user.location !== game.encampment}
 				<span class="exit">
 					<Exit {distance} />
 				</span>
 			{/if}
 			<span class="players">
-				<Item item={human} substitute={players} quantity={cell.players.length} />
+				<Item item={human} {substitute} quantity={cell.players.length} />
 			</span>
 		</div>
 		<div class="items">

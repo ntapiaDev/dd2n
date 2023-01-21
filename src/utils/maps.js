@@ -40,7 +40,7 @@ export const _travel = async (game_id, user_id, username, location, target, esti
     await r.table('cells').filter({ game_id, coordinate: target }).update({ players: r.row('players').append(username), visible: true, visited: true }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
-    await r.table('users').get(user_id).update({ location: target, ap, hunger, thirst }).run(rethinkdb, function (err, result) {
+    await r.table('users').get(user_id).update({ location: target, ap, hunger, thirst, force: false }).run(rethinkdb, function (err, result) {
         if (err) throw err;
     });
 }

@@ -17,6 +17,10 @@ export const add_game = async (rethinkdb) => {
         });
 }
 
+export const add_one_day = async (game_id, rethinkdb) => {
+    return r.table('games').get( game_id ).update({ day: r.row('day').add(1) }).run(rethinkdb);
+}
+
 export const add_user_to_game = async (game_id, username, rethinkdb) => {
     await r.table('games').get(game_id).update({ 'players': r.row('players').append(username) }).run(rethinkdb)
         .then(function (result) {

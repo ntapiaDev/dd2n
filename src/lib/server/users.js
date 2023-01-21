@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import r from 'rethinkdb';
 
+const encampment = 'H8';
+
 export const add_game_to_user = async (game_id, id, location, rethinkdb) => {
     return r.table('users').get(id).update({
         ap: 100,
@@ -137,4 +139,34 @@ export const setSession = async (cookies, SESSIONID) => {
         secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 60 * 24
     })
+}
+
+export const update_users = async (game_id, rethinkdb) => {
+    const players = await r.table('users').filter({ game_id }).orderBy(r.asc('username')).run(rethinkdb);
+    const events = [];
+    for (let player of players) {
+        player.ap = 100;
+        player.force = false;
+        player.hunger -= 25;
+        player.tchat = [];
+        player.thirst -= 25;
+        if (player.location !== encampment) {
+            player.wound = 4;
+            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause: 'zombies' } });
+        } else if (player.wound === 3) {
+            player.wound = 4;
+            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound } });
+        } else if (player.hunger <= 0 || player.thirst <= 0) {
+            player.wound = 4;
+            const cause = player.hunger <= 0 && player.thirst <= 0 ? 'both' :
+                player.hunger <= 0 ? 'hunger' : 'thirst';
+            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause } });
+        } else if (player.wound) {
+            if (player.wound === 1) player.wound = 0;
+            else if (player.wound === 2) player.wound = 3;
+            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound } });
+        }
+    }
+    await r.table('users').insert(players, {conflict: 'update'}).run(rethinkdb);
+    return events;
 }

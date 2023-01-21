@@ -5,7 +5,9 @@ import { push_through, _attack, _building, _search, _travel } from "../../../uti
 import { add_tchat } from "../../../utils/player";
 import { get_cell, get_map } from "$lib/server/cells";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
-// import { next_day } from "../../../utils/cells";
+import { add_one_day } from "../../../lib/server/games";
+import { update_cells } from "../../../lib/server/cells";
+import { update_users } from "../../../lib/server/users";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
@@ -143,11 +145,10 @@ const force = async ({ locals }) => {
 }
 
 const nextday = async ({ locals }) => {
-    const events = await next_day(locals.user.game_id, locals.user.id, locals.user.hunger, locals.user.thirst, locals.user.wound, locals.rethinkdb);
-    for (let event of events) {
-        if (event.action === 'dead') await add_log(locals.user.game_id, event.location, event.username, 'dead', { 'cause': event.cause }, locals.rethinkdb);
-        else if (event.action === 'wound') await add_log(locals.user.game_id, event.location, event.username, 'wound', { 'wound': event.wound }, locals.rethinkdb);
-    }
+    await add_one_day(locals.user.game_id, locals.rethinkdb);
+    const logs = await update_cells(locals.user.game_id, locals.rethinkdb);
+    const events = await update_users(locals.user.game_id, locals.rethinkdb);
+    if ([...logs, ...events].length) await add_logs(locals.user.game_id, [...logs, ...events], locals.rethinkdb);
 }
 
 const pickUp = async ({ locals, request }) => {
