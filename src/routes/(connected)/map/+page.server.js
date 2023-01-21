@@ -2,12 +2,10 @@ import { fail, redirect } from "@sveltejs/kit";
 import { canTravel, checkHT, getDefense, getPool, handlePlus, handleSearch, handleStack } from '../../../utils/tools';
 import { get_items, get_items_by_code, move_item } from '../../../utils/items';
 import { push_through, _attack, _building, _search, _travel } from "../../../utils/maps";
-import { add_tchat } from "../../../utils/player";
-import { get_cell, get_map } from "$lib/server/cells";
+import { add_tchat, get_cell, get_map, update_cells } from "$lib/server/cells";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
-import { add_one_day } from "../../../lib/server/games";
-import { update_cells } from "../../../lib/server/cells";
-import { update_users } from "../../../lib/server/users";
+import { add_one_day } from "$lib/server/games";
+import { update_users } from "$lib/server/users";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
@@ -144,7 +142,7 @@ const force = async ({ locals }) => {
     await add_log(locals.user.id, locals.user.location, locals.user.username, 'force', { wound: true }, locals.rethinkdb);
 }
 
-const nextday = async ({ locals }) => {
+const nextDay = async ({ locals }) => {
     await add_one_day(locals.user.game_id, locals.rethinkdb);
     const logs = await update_cells(locals.user.game_id, locals.rethinkdb);
     const events = await update_users(locals.user.game_id, locals.rethinkdb);
@@ -203,13 +201,14 @@ const search = async ({ locals }) => {
 }
 
 const tchat = async ({ locals, request }) => {
-    if (locals.user.tchat.includes(locals.user.location)) return fail(400, { tchat: true });
+    const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
+    if (location.tchat.includes(locals.user.id)) return fail(400, { tchat: true });
     const data = await request.formData();
     const message = data.get('message');
     if (message.length < 3) return fail(400, { short: true });
     if (message.length > 100) return fail(400, { long: true });
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tchat', { message }, locals.rethinkdb);
-    await add_tchat(locals.user.id, locals.user.location, locals.rethinkdb);
+    await add_tchat(locals.user.game_id, locals.user.id, locals.user.location, locals.rethinkdb);
 }
 
 const travel = async ({ locals, request }) => {
@@ -239,4 +238,4 @@ const travel = async ({ locals, request }) => {
     ], locals.rethinkdb);
 }
 
-export const actions = { attack, building, drop, force, nextday, pickUp, search, tchat, travel };
+export const actions = { attack, building, drop, force, nextDay, pickUp, search, tchat, travel };

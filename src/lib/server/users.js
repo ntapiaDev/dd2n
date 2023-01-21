@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import r from 'rethinkdb';
-
-const encampment = 'H8';
+import { encampment } from '$lib/layout';
 
 export const add_game_to_user = async (game_id, id, location, rethinkdb) => {
     return r.table('users').get(id).update({
@@ -84,7 +83,6 @@ export const add_game_to_user = async (game_id, id, location, rethinkdb) => {
             items: 0,
             zombies: 0
         },
-        tchat: [],
         thirst: 75,
         wound: 0
     }).run(rethinkdb)
@@ -121,13 +119,13 @@ export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {
 
 export const remove_game_from_user = async (username, rethinkdb) => {
     return r.table('users').filter({ username }).replace(r.row.without(
-        'ap', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'tchat', 'thirst', 'wound'
+        'ap', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 
 export const remove_game_from_users = async (game_id, rethinkdb) => {
     return r.table('users').filter({ game_id }).replace(r.row.without(
-        'ap', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'tchat', 'thirst', 'wound'
+        'ap', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 

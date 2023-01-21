@@ -4,6 +4,8 @@
 	import { fade } from 'svelte/transition';
 	import Item from '../../game/Item.svelte';
 
+	export let cell;
+
     const item = {
 		credit: 'Freepik',
 		description: 'Laisser un message',
@@ -14,10 +16,10 @@
 
     let message = '';
     $: visible = (message.length >= 3) && (message.length <= 100);
-    $: if ($page.data.user.tchat.includes($page.data.user.location)) message = '';
+    $: if (cell.tchat.includes($page.data.user.id)) message = '';
 </script>
 
-{#if !$page.data.user.tchat.includes($page.data.user.location)}
+{#if !cell.tchat.includes($page.data.user.id)}
     <form method="POST" action="/map?/tchat" on:submit={() => visible = false} use:enhance>
         <input type="text" name="message" placeholder="Laisser un message pour la postérité (100 caractères maximum et 1 par jour)" minlength="3" maxlength="100" autocomplete="off" bind:value={message}>
         {#if visible}

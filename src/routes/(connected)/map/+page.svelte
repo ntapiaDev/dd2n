@@ -176,7 +176,7 @@
 			{/each}
 		</div>
 		<div class="tchat">
-			<Tchat />
+			<Tchat {cell} />
 		</div>
 		{#if form?.access}
 			<p>Il y a trop de zombies pour fouiller le bâtiment.</p>

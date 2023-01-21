@@ -1,4 +1,6 @@
-export default {
+export const encampment = 'H8';
+
+export const layout = {
     'A1': { 'danger': 3, 'border': [1, 4] },
     'A2': { 'danger': 3, 'border': [1] },
     'A3': { 'danger': 3, 'border': [1] },
@@ -225,3 +227,7 @@ export default {
     'O14': { 'danger': 3, 'border': [3] },
     'O15': { 'danger': 3, 'border': [2, 3] }
 }
+
+export const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
+
+export const size = 15;

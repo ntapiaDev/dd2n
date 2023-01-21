@@ -2,7 +2,7 @@
     import { enhance } from '$app/forms';
 </script>
 
-<form method="POST" action="/map?/nextday" use:enhance>
+<form method="POST" action="/map?/nextDay" use:enhance>
 	<button type="submit">Next day</button>
 </form>
 
