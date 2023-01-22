@@ -149,6 +149,10 @@ export const remove_game_from_users = async (game_id, rethinkdb) => {
     )).run(rethinkdb);
 }
 
+export const _search = async (user_id, ap, hunger, stats, thirst, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, hunger, stats, thirst }).run(rethinkdb);
+}
+
 export const setSession = async (cookies, SESSIONID) => {
     cookies.set('SESSIONID', SESSIONID, {
         path: '/',

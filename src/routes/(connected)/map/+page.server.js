@@ -1,12 +1,16 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { canTravel, checkHT, getDefense, getItem, getPool, handlePlus, handleSearch, handleStack } from '../../../utils/tools';
+import { canTravel } from '../../../utils/tools';
 import { move_item } from '../../../utils/items';
-import { _building, _search, _travel } from "../../../utils/maps";
+import { _building, _travel } from "../../../utils/maps";
 import { add_tchat, get_cell, get_map, kill_zombies, update_cells } from "$lib/server/cells";
 import { add_one_day } from "$lib/server/games";
 import { get_items, get_items_by_code } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
 import { _attack, _force, update_users } from "$lib/server/users";
+import { _search } from "../../../lib/server/users";
+import { add_loots } from "../../../lib/server/cells";
+import { getItem, getPool, handlePlus, handleSearch, handleStack } from "../../../lib/loots";
+import { checkHT, getDefense } from "../../../lib/player";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
@@ -166,18 +170,20 @@ const pickUp = async ({ locals, request }) => {
 const search = async ({ locals }) => {
     if (locals.user.ap === 0) return fail(400, { exhausted: true });
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
-    const itemList = await get_items(locals.rethinkdb);
     if (location.empty) return fail(400, { empty: true });
     if (location.searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
+    const itemList = await get_items(locals.rethinkdb);
     const danger = location.layout.danger;
-    let pool = getPool(itemList, danger, locals.user.uniques);
+    let pool = getPool(itemList, danger, locals.game.uniques);
     const { items, loots, uniques } = handleSearch(location.items, pool, 'search');
     let plus = handlePlus(loots);
     let empty = Math.random() > (danger === 1 ? 0.5 : danger === 2 ? 0.75 : 0.9);
     const stats = locals.user.stats;
     stats.items += loots.length;
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
-    await _search(locals.user.game_id, locals.user.id, location.coordinate, items, uniques, empty, locals.user.ap - 1, hunger, thirst, stats, locals.rethinkdb)
+    await add_loots(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb)
+    await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
+    if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { loots, plus, 'empty': empty, warning }, locals.rethinkdb);
 }
 

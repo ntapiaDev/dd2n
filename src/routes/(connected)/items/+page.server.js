@@ -1,6 +1,6 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { _equip } from "$lib/server/users";
-import { getItem } from "../../../utils/tools";
+import { getItem } from "$lib/loots";
 
 export async function load() {
     throw redirect(303, '/');

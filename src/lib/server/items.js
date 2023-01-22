@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import { sortItems } from '../../utils/tools';
+import { sortItems } from '$lib/loots';
 
 export const add_item = async (item, rethinkdb) => {
     return (await r.table('items').insert(item).run(rethinkdb)).generated_keys[0];

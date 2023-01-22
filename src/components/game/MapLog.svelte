@@ -1,5 +1,5 @@
 <script>
-	import { sortItems } from '../../utils/tools';
+	import { sortItems } from '$lib/loots';
 	import Item from './Item.svelte';
 
 	export let log;

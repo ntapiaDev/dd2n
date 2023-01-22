@@ -2,6 +2,10 @@ import r from 'rethinkdb';
 import { encampment, layout, letters, size } from '$lib/layout';
 import { getBuildings, getTunnel } from '../../utils/tools';
 
+export const add_loots = async (game_id, user_id, coordinate, items, empty, rethinkdb) => {
+    return r.table('cells').filter({ game_id, coordinate }).update({ empty, items, searchedBy: r.row('searchedBy').append(user_id) }).run(rethinkdb);
+}
+
 export const add_tchat = async (game_id, user_id, coordinate, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ tchat: r.row('tchat').append(user_id) }).run(rethinkdb);
 }

@@ -1,6 +1,8 @@
 <script>
 	import { flip } from 'svelte/animate';
-	import { getDefense, getDistance, sortItems } from '../../../utils/tools';
+	import { getDefense } from '../../../lib/player';
+	import { sortItems } from '$lib/loots';
+	import { getDistance } from '../../../utils/tools';
 	import Attack from '../../../components/map/actions/Attack.svelte';
 	import Building from '../../../components/map/actions/Building.svelte';
 	import Drink from '../../../components/map/actions/Drink.svelte';

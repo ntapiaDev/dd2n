@@ -1,7 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { sortItems } from '../../utils/tools';
+	import { sortItems } from '$lib/loots';
 	import Item from '../game/Item.svelte';
 
 	export let rows;

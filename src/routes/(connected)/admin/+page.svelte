@@ -1,7 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { flip } from 'svelte/animate';
-	import { sortItems } from '../../../utils/tools';
+	import { sortItems } from '$lib/loots';
 	import Item from '../../../components/game/Item.svelte';
 
 	export let data;
