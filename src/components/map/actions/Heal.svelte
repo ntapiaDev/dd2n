@@ -1,7 +1,7 @@
 <script>
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import InteractiveItem from './InteractiveItem.svelte';
+	import InteractiveItem from '../../game/InteractiveItem.svelte';
 	import Item from '../../game/Item.svelte';
 
 	export let items;

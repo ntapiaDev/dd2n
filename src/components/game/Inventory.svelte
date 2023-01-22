@@ -2,7 +2,7 @@
     import { page } from '$app/stores';
     import { flip } from 'svelte/animate';
     import { sortItems } from '$lib/loots';
-	import InteractiveItem from '../map/actions/InteractiveItem.svelte';
+	import InteractiveItem from './InteractiveItem.svelte';
 	import Item from './Item.svelte';
 
 	export let items;

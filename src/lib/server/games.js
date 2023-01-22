@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
+import { getRandomName } from '$lib/game';
 import { encampment } from '$lib/layout';
-import { getRandomName } from '../../utils/tools';
 
 export const add_game = async (rethinkdb) => {
     return (await r.table('games').insert({

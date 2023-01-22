@@ -1,6 +1,6 @@
 <script>
 	import { enhance } from '$app/forms';
-	import Item from '../../game/Item.svelte';
+	import Item from './Item.svelte';
 
 	export let item;
 	export let action;

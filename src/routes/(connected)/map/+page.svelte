@@ -1,8 +1,8 @@
 <script>
 	import { flip } from 'svelte/animate';
-	import { getDefense } from '../../../lib/player';
+	import { getDistance } from '$lib/game';
 	import { sortItems } from '$lib/loots';
-	import { getDistance } from '../../../utils/tools';
+	import { getDefense } from '$lib/player';
 	import Attack from '../../../components/map/actions/Attack.svelte';
 	import Building from '../../../components/map/actions/Building.svelte';
 	import Drink from '../../../components/map/actions/Drink.svelte';
@@ -11,15 +11,15 @@
 	import Exit from '../../../components/map/actions/Exit.svelte';
 	import Force from '../../../components/map/actions/Force.svelte';
 	import Heal from '../../../components/map/actions/Heal.svelte';
-	import InteractiveItem from '../../../components/map/actions/InteractiveItem.svelte';
-	import Item from '../../../components/game/Item.svelte';
-	import Loots from '../../../components/map/Loots.svelte';
-	import Map from '../../../components/map/Map.svelte';
-	import MapLog from '../../../components/game/MapLog.svelte';
-	import NextDay from '../../../components/map/NextDay.svelte';
 	import Search from '../../../components/map/actions/Search.svelte';
 	import Tchat from '../../../components/map/actions/Tchat.svelte';
 	import Tunnel from '../../../components/map/actions/Tunnel.svelte';
+	import Loots from '../../../components/map/Loots.svelte';
+	import Map from '../../../components/map/Map.svelte';
+	import MapLog from '../../../components/map/MapLog.svelte';
+	import NextDay from '../../../components/map/NextDay.svelte';
+	import InteractiveItem from '../../../components/game/InteractiveItem.svelte';
+	import Item from '../../../components/game/Item.svelte';
 
 	export let data;
 	export let form;

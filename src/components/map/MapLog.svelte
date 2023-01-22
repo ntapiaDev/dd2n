@@ -1,6 +1,6 @@
 <script>
 	import { sortItems } from '$lib/loots';
-	import Item from './Item.svelte';
+	import Item from '../game/Item.svelte';
 
 	export let log;
 

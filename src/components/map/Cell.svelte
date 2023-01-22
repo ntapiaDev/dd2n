@@ -1,7 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import { canTravel } from '../../utils/tools';
+	import { canTravel } from '$lib/game';
 
 	export let cell;
 	export let coordinates;

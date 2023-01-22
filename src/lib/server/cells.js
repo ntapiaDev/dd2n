@@ -1,10 +1,6 @@
 import r from 'rethinkdb';
+import { getBuildings, getTunnel } from '$lib/game';
 import { encampment, layout, letters, size } from '$lib/layout';
-import { getBuildings, getTunnel } from '../../utils/tools';
-
-export const add_loots = async (game_id, user_id, coordinate, items, empty, rethinkdb) => {
-    return r.table('cells').filter({ game_id, coordinate }).update({ empty, items, searchedBy: r.row('searchedBy').append(user_id) }).run(rethinkdb);
-}
 
 export const add_tchat = async (game_id, user_id, coordinate, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ tchat: r.row('tchat').append(user_id) }).run(rethinkdb);
@@ -84,6 +80,10 @@ export const remove_user_from_location = async (game_id, username, location, ret
     return r.table('cells').filter({ game_id, coordinate: location }).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb);
 }
 
+export const update_building = async (game_id, user_id, coordinate, items, empty, rethinkdb) => {
+    return r.table('cells').filter({ game_id, coordinate }).update({ building: { empty, searchedBy: r.row('searchedBy').append(user_id) }, items }).run(rethinkdb);
+}
+
 export const update_cells = async (game_id, rethinkdb) => {
     const cells = (await r.table('cells').filter({ game_id }).run(rethinkdb))._responses[0]?.r;
     const logs = [];    
@@ -102,4 +102,17 @@ export const update_cells = async (game_id, rethinkdb) => {
     }
     await r.table('cells').insert(cells, {conflict: 'update'}).run(rethinkdb);
     return logs;
+}
+
+export const update_items = async (game_id, coordinate, items, rethinkdb) => {
+    return r.table('cells').filter({ game_id, coordinate }).update({ items }).run(rethinkdb);
+}
+
+export const update_map = async (game_id, username, location, target, estimated, rethinkdb) => {
+    await r.table('cells').filter({ game_id, coordinate: location }).update({ players: r.row('players').difference([username]), estimated }).run(rethinkdb);
+    return r.table('cells').filter({ game_id, coordinate: target }).update({ players: r.row('players').append(username), visible: true, visited: true }).run(rethinkdb);
+}
+
+export const update_search = async (game_id, user_id, coordinate, items, empty, rethinkdb) => {
+    return r.table('cells').filter({ game_id, coordinate }).update({ empty, items, searchedBy: r.row('searchedBy').append(user_id) }).run(rethinkdb);
 }

@@ -1,16 +1,12 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { canTravel } from '../../../utils/tools';
-import { move_item } from '../../../utils/items';
-import { _building, _travel } from "../../../utils/maps";
-import { add_tchat, get_cell, get_map, kill_zombies, update_cells } from "$lib/server/cells";
-import { add_one_day } from "$lib/server/games";
+import { canTravel } from '$lib/game';
+import { getItem, getPool, handlePlus, handleSearch, handleStack } from "$lib/loots";
+import { checkHT, getDefense } from "$lib/player";
+import { add_tchat, get_cell, get_map, kill_zombies, update_building, update_cells, update_items, update_map, update_search } from "$lib/server/cells";
+import { add_one_day, add_unique } from "$lib/server/games";
 import { get_items, get_items_by_code } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
-import { _attack, _force, update_users } from "$lib/server/users";
-import { _search } from "../../../lib/server/users";
-import { add_loots } from "../../../lib/server/cells";
-import { getItem, getPool, handlePlus, handleSearch, handleStack } from "../../../lib/loots";
-import { checkHT, getDefense } from "../../../lib/player";
+import { _attack, _equip, _force, _search, _travel, update_users } from "$lib/server/users";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
@@ -100,21 +96,18 @@ const building = async ({ locals }) => {
     if (location.building.empty) return fail(400, { emptyBuilding: true });
     if (location.building.searchedBy.includes(locals.user.id)) return fail(400, { searchedBuilding: true });
     if (location.zombies > getDefense(locals.user.slots)) return fail(400, { access: true });
-
-    const code = location.building.code;
-    const itemList = await get_items_by_code(code, locals.rethinkdb);
-
+    const itemList = await get_items_by_code(location.building.code, locals.rethinkdb);
     let pool = getPool(itemList, 0, locals.user.uniques);
     const { items, loots, uniques } = handleSearch(location.items, pool, 'building');
     let plus = handlePlus(loots);
+    let empty = Math.random() > 0.9;
     const stats = locals.user.stats;
     stats.items += loots.length;
-    const building = location.building;
-    building.empty = Math.random() > 0.9;
-    building.searchedBy.push(locals.user.id);
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
-    await _building(locals.user.game_id, locals.user.id, location.coordinate, items, uniques, building, locals.user.ap - 1, hunger, thirst, stats, locals.rethinkdb)
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'building', { loots, plus, 'emptyBuilding': building.empty, warning }, locals.rethinkdb);
+    await update_building(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb);
+    await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
+    if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'building', { loots, plus, 'emptyBuilding': empty, warning }, locals.rethinkdb);
 }
 
 const drop = async ({ locals, request }) => {
@@ -126,7 +119,8 @@ const drop = async ({ locals, request }) => {
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const items = handleStack(location.items, item);
     const slots = locals.user.slots;
-    await move_item(locals.user.game_id, locals.user.id, locals.user.location, items, inventory, slots, locals.rethinkdb);
+    await update_items(locals.user.game_id, locals.user.location, items, locals.rethinkdb);
+    await _equip(locals.user.id, inventory, slots, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'drop', { item }, locals.rethinkdb);
 }
 
@@ -162,7 +156,8 @@ const pickUp = async ({ locals, request }) => {
         item.uuid = crypto.randomUUID();
         inventory.push(item);
     }
-    await move_item(locals.user.game_id, locals.user.id, locals.user.location, items, inventory, slots, locals.rethinkdb);
+    await update_items(locals.user.game_id, locals.user.location, items, locals.rethinkdb);
+    await _equip(locals.user.id, inventory, slots, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'pickup', { item }, locals.rethinkdb);
     throw redirect(303, '/map');
 }
@@ -181,7 +176,7 @@ const search = async ({ locals }) => {
     const stats = locals.user.stats;
     stats.items += loots.length;
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
-    await add_loots(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb)
+    await update_search(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb)
     await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { loots, plus, 'empty': empty, warning }, locals.rethinkdb);
@@ -218,7 +213,8 @@ const travel = async ({ locals, request }) => {
         zombies: location.zombies
     }
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
-    await _travel(locals.user.game_id, locals.user.id, locals.user.username, location.coordinate, target, estimated, locals.user.ap - 1, hunger, thirst, locals.rethinkdb);
+    await update_map(locals.user.game_id, locals.user.username, location.coordinate, target, estimated, locals.rethinkdb);
+    await _travel(locals.user.id, target, locals.user.ap - 1, hunger, thirst, locals.rethinkdb);
     await add_logs(locals.user.game_id, [
         { coordinate: location.coordinate, player: locals.user.username, action: 'out', log: '' },
         { coordinate: target, player: locals.user.username, action: 'in', log: { warning } }

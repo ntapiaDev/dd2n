@@ -1,7 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
+import { getItem } from "$lib/loots";
 import { add_log } from "$lib/server/logs";
 import { _feed, _heal } from "$lib/server/users";
-import { getItem } from "$lib/loots";
 
 export async function load() {
     throw redirect(303, '/');
