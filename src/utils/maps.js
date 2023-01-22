@@ -1,14 +1,5 @@
 import r from 'rethinkdb';
 
-export const _attack = async (game_id, user_id, coordinate, zombies, slots, ap, hunger, thirst, wound, force, stats, rethinkdb) => {
-    await r.table('cells').filter({ game_id, coordinate }).update({ zombies }).run(rethinkdb, function (err, result) {
-        if (err) throw err;
-    });
-    await r.table('users').get(user_id).update({ ap, hunger, thirst, slots, wound, force, stats }).run(rethinkdb, function (err, result) {
-        if (err) throw err;
-    });
-}
-
 export const _building = async (game_id, user_id, coordinate, items, uniques, building, ap, hunger, thirst, stats, rethinkdb) => {
     await r.table('cells').filter({ game_id, coordinate }).update({ items, building }).run(rethinkdb, function (err, result) {
         if (err) throw err;

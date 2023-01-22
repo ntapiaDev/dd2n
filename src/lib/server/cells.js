@@ -72,6 +72,10 @@ export const get_map = async (game_id, rethinkdb) => {
     return rows;
 }
 
+export const kill_zombies = async (game_id, coordinate, killed, rethinkdb) => {
+    return r.table('cells').filter({ game_id, coordinate }).update({ zombies: r.row('zombies').sub(killed) }).run(rethinkdb);
+}
+
 export const remove_user_from_location = async (game_id, username, location, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate: location }).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb);
 }

@@ -1,12 +1,12 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { canTravel, checkHT, getDefense, getItem, getPool, handlePlus, handleSearch, handleStack } from '../../../utils/tools';
 import { move_item } from '../../../utils/items';
-import { _attack, _building, _search, _travel } from "../../../utils/maps";
-import { add_tchat, get_cell, get_map, update_cells } from "$lib/server/cells";
+import { _building, _search, _travel } from "../../../utils/maps";
+import { add_tchat, get_cell, get_map, kill_zombies, update_cells } from "$lib/server/cells";
 import { add_one_day } from "$lib/server/games";
 import { get_items, get_items_by_code } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
-import { _force, update_users } from "$lib/server/users";
+import { _attack, _force, update_users } from "$lib/server/users";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
@@ -23,20 +23,20 @@ const attack = async ({ locals, request }) => {
     if (!item) return fail(400, { item: true });
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     if (location.zombies === 0) return fail(400, { zombies: true });
-    // On vérifie que le type de munitions correspond
     if (item.weapon && item.weapon !== slots.W3.weapon) return fail(400, { ammo: true });
     let wound = locals.user.wound;
     if (wound > 1 && !['W2', 'W4'].includes(item.slot)) return fail(400, { wounded: true });
     let ammo = false;
     let broken = false;
+    let force = locals.user.force;
     let woundedW0 = false;
     let woundedW1 = false;
-    let force = locals.user.force;
+    // Attaque sans arme
     if (item.slot === 'W0' && Math.random() > 0.75) {
         wound += 1;
         woundedW0 = wound;
     }
-    // Gestion de la casse de l'objet si non arme à feu
+    // Attaque à l'arme blanche
     else if (item.slot === 'W1') {
         item.durability -= 1;
         if (item.durability === 0) {
@@ -48,7 +48,7 @@ const attack = async ({ locals, request }) => {
             woundedW1 = wound;
         }
     }
-    // Gestion des munitions si arme à feu
+    // Attaque à l'arme à feu
     else if (item.slot === 'W2') {
         slots['W3'].quantity -= 1;
         if (slots['W3'].quantity === 0) {
@@ -56,7 +56,7 @@ const attack = async ({ locals, request }) => {
             ammo = true;
         }
     }
-    // Gestion des explosifs
+    // Attaque à l'explosif
     else if (item.slot === 'W4') {
         slots['W4'].quantity -= 1;
         if (slots['W4'].quantity === 0) {
@@ -64,8 +64,8 @@ const attack = async ({ locals, request }) => {
         }
         if (item.description === 'Une grenade fumigène' && !force) force = true;
     }
+    // Coup normal
     let plus = item.plus ?? 0;
-    // Gestion de la qualité de l'arme??
     const zombies = location.zombies;
     location.zombies -= item.attack;
     if (location.zombies < 0) {
@@ -80,12 +80,11 @@ const attack = async ({ locals, request }) => {
         if (location.zombies < 0) location.zombies = 0;
         critical = zombies - killed - location.zombies;
     }
-    // Statistiques nombre de zombies tués
     const stats = locals.user.stats;
     stats.zombies += (killed + critical);
-    // Faim et soif capés à 1% la journée
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
-    await _attack(locals.user.game_id, locals.user.id, location.coordinate, location.zombies, slots, locals.user.ap - 1, hunger, thirst, wound, force, stats, locals.rethinkdb)
+    await kill_zombies(locals.user.game_id, location.coordinate, killed + critical, locals.rethinkdb);
+    await _attack(locals.user.id, locals.user.ap - 1, force, hunger, slots, stats, thirst, wound, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, woundedW0, woundedW1, critical, warning }, locals.rethinkdb);
     throw redirect(303, '/map');
 }

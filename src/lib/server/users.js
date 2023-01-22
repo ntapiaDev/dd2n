@@ -101,6 +101,10 @@ export const add_user = async (user, rethinkdb) => {
     return SESSIONID;
 }
 
+export const _attack = async (user_id, ap, force, hunger, slots, stats, thirst, wound, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, force, hunger, slots, stats, thirst, wound }).run(rethinkdb);
+}
+
 export const _equip = async (user_id, inventory, slots, rethinkdb) => {
     return r.table('users').get(user_id).update({ inventory, slots }).run(rethinkdb);
 }
