@@ -38,7 +38,7 @@
 		use:tooltip />
 	{#if item.unique}
 		<img src={$page.url.origin + '/star.png'} alt="Objet unique by Kemalmoe" class="unique" {title} use:tooltip />
-	{:else if quantity > 1 || item.quantity > 1 || (item.icon === 'human' && quantity > 0)}
+	{:else if quantity > 1 || item.quantity > 1 && quantity !== 'none' || (item.icon === 'human' && quantity > 0)}
 		<span class="quantity" {title} use:tooltip>
 			{quantity || item.quantity}
 		</span>

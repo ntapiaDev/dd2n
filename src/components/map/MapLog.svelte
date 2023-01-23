@@ -148,6 +148,11 @@
 				<span><Item {item} /></span>
 			{/each}
 		</div>
+		{#if log.log.cache}
+			{#each sortItems(log.log.cache) as item}
+				<div class="item">{log.player} a repéré une cache avec <span><Item {item} /></span> supplémentaires !</div>
+			{/each}
+		{/if}
 		{#if log.log.plus.one || log.log.plus.two || log.log.plus.tree || log.log.plus.four}
 			{log.player} découvre
 			{#if log.log.plus.one}{log.log.plus.one} objet{log.log.plus.one > 1 ? 's' : ''} <span class="p1">hors du commun</span>{#if (log.log.plus.two && (log.log.plus.tree || log.log.plus.four)) || (log.log.plus.tree && log.log.plus.four)}

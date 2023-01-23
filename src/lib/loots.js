@@ -1,4 +1,4 @@
-import { ammunition, blueprint, commun, drug_weapon_armour, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quant_ammo, quant_items, rare, resource, épique } from "./config";
+import { ammunition, blueprint, commun, drug_weapon_armour, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, épique } from "./config";
 
 export const getItem = (items, uuid, stack) => {
     for (let item of items) {
@@ -55,6 +55,7 @@ export const handlePlus = (loots) => {
 }
 
 export const handleSearch = (items, pool, type) => {
+    let cache = [];
     let loots = [];
     let uniques = [];
     const hasPlus = (foundItem) => {
@@ -70,30 +71,36 @@ export const handleSearch = (items, pool, type) => {
         }
         return foundItem;
     }
-    for (let i = 0; i < (type === 'building' ? loot_building : loot_search); i++) {
+    for (let i = 0; i < (type === 'building' ? loot_building() : loot_search()); i++) {
         let foundItem = pool[Math.floor(Math.random() * pool.length)];
         pool = pool.filter(i => i.id !== foundItem.id);
         if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
         foundItem.uuid = crypto.randomUUID();
         foundItem = hasPlus(foundItem);
-        if (foundItem.type === 'ammunition') foundItem.quantity = quant_ammo;
+        if (foundItem.type === 'ammunition') foundItem.quantity = quant_ammo();
         else foundItem.quantity = quant_items;
-        items = handleStack(items, foundItem); 
+        items = handleStack(items, {...foundItem});
+        if (foundItem.type === 'resource' && !foundItem.unique && Math.random() > resource_cache) {
+            let cacheItem = {...foundItem};
+            cacheItem.quantity = quantity_cache();
+            items = handleStack(items, {...cacheItem});
+            cache.push(cacheItem);
+        }
         if (foundItem.unique) uniques.push(foundItem.id);
         loots.push(foundItem);
     }
-    return { items, loots, uniques };
+    return { cache, items, loots, uniques };
 }
 
-export const handleStack = (items, foundItem) => {
-    if (items.find(i => i.id === foundItem.id)) {
-        if (!['weapon', 'armour'].includes(foundItem.type)) items.find(i => i.id === foundItem.id).quantity += foundItem.quantity;
-        else if (foundItem.type === 'armour' && items.find(i => i.id === foundItem.id && i.plus === foundItem.plus)) items.find(i => i.id === foundItem.id && i.plus === foundItem.plus).quantity += foundItem.quantity;
-        else if (foundItem.type === 'weapon' && items.find(i => i.id === foundItem.id && i.plus === foundItem.plus && i.durability === foundItem.durability)) items.find(i => i.id === foundItem.id && i.plus === foundItem.plus && i.durability === foundItem.durability).quantity += foundItem.quantity;
-        else items.push(foundItem);
+export const handleStack = (items, item) => {
+    if (items.find(i => i.id === item.id)) {
+        if (!['weapon', 'armour'].includes(item.type)) items.find(i => i.id === item.id).quantity += item.quantity;
+        else if (item.type === 'armour' && items.find(i => i.id === item.id && i.plus === item.plus)) items.find(i => i.id === item.id && i.plus === item.plus).quantity += item.quantity;
+        else if (item.type === 'weapon' && items.find(i => i.id === item.id && i.plus === item.plus && i.durability === item.durability)) items.find(i => i.id === item.id && i.plus === item.plus && i.durability === item.durability).quantity += item.quantity;
+        else items.push(item);
     }
     else {
-        items.push(foundItem);
+        items.push(item);
     }
     return items;
 }

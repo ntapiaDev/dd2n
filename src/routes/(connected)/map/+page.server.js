@@ -99,7 +99,7 @@ const building = async ({ locals }) => {
     if (location.zombies > getDefense(locals.user.slots)) return fail(400, { access: true });
     const itemList = await get_items_by_code(location.building.code, locals.rethinkdb);
     let pool = getPool(itemList, 0, locals.user.uniques);
-    const { items, loots, uniques } = handleSearch(location.items, pool, 'building');
+    const { cache, items, loots, uniques } = handleSearch(location.items, pool, 'building');
     let plus = handlePlus(loots);
     let empty = Math.random() > empty_building;
     const stats = locals.user.stats;
@@ -108,7 +108,7 @@ const building = async ({ locals }) => {
     await update_building(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb);
     await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'building', { loots, plus, 'emptyBuilding': empty, warning }, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'building', { cache, loots, plus, 'emptyBuilding': empty, warning }, locals.rethinkdb);
 }
 
 const drop = async ({ locals, request }) => {
@@ -171,7 +171,7 @@ const search = async ({ locals }) => {
     const itemList = await get_items(locals.rethinkdb);
     const danger = location.layout.danger;
     let pool = getPool(itemList, danger, locals.game.uniques);
-    const { items, loots, uniques } = handleSearch(location.items, pool, 'search');
+    const { cache, items, loots, uniques } = handleSearch(location.items, pool, 'search');
     let plus = handlePlus(loots);
     let empty = Math.random() > (danger === 1 ? empty_1 : danger === 2 ? empty_2 : empty_3);
     const stats = locals.user.stats;
@@ -180,7 +180,7 @@ const search = async ({ locals }) => {
     await update_search(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb)
     await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { loots, plus, 'empty': empty, warning }, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { cache, loots, plus, 'empty': empty, warning }, locals.rethinkdb);
 }
 
 const tchat = async ({ locals, request }) => {
