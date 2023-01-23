@@ -81,7 +81,7 @@
 <div class="log">
 	<span class="date">{formatDate(log)}</span>
 	{#if log.action === 'in'}
-		<div>{log.player} est arrivé dans la zone.</div>
+		<div>{log.player} est arrivé{log.gender === 'female' ? 'e' : ''} dans la zone.</div>
 		{#if log.log.warning === 'hunger'}
 			<div class="item">{log.player} est <span><Item item={feed[0]} /></span></div>
 		{:else if log.log.warning === 'thirst'}
@@ -92,7 +92,7 @@
 	{:else if log.action === 'out'}
 		<div>{log.player} a quitté la zone.</div>
 	{:else if log.action === 'inTunnel'}
-		<div>{log.player} est sorti du passage souterrain.</div>
+		<div>{log.player} est sorti{log.gender === 'female' ? 'e' : ''} du passage souterrain.</div>
 		{#if log.log.warning === 'hunger'}
 			<div class="item">{log.player} est <span><Item item={feed[0]} /></span></div>
 		{:else if log.log.warning === 'thirst'}
@@ -101,7 +101,7 @@
 			<div class="item">{log.player} est <span class="m4"><Item item={feed[0]} /></span> et <span class="m4"><Item item={feed[1]} /></span></div>
 		{/if}
 	{:else if log.action === 'outTunnel'}
-		<div>{log.player} est entrée dans le passage souterrain.</div>
+		<div>{log.player} est entré{log.gender === 'female' ? 'e' : ''} dans le passage souterrain.</div>
 	{:else if log.action === 'kill'}
 		<div>{log.player} a
 			{log.log.weapon === "Une grenade explosive" ? 'fait sauter' :
@@ -115,7 +115,7 @@
 			{#if log.log.broken}
 				<div>Son arme s'est brisée sous le choc.</div>
 			{:else if log.log.ammo}
-				<div>Il n'a plus de munitions !</div>
+				<div>{log.gender === 'female' ? 'Elle' : 'Il'} n'a plus de munitions !</div>
 			{/if}
 			{#if log.log.woundedW0}
 				{#if log.log.woundedW0 === 1}
@@ -195,19 +195,19 @@
 	{:else if log.action === 'drop'}
 		<div class="item">{log.player} a déposé <span><Item item={log.log.item} /></span></div>
 	{:else if log.action === 'heal'}
-		<div>{log.player} s'est soigné avec {firstLetterToLowerCase(log.log.drug)}.</div>
+		<div>{log.player} s'est soigné{log.gender === 'female' ? 'e' : ''} avec {firstLetterToLowerCase(log.log.drug)}.</div>
     {:else if log.action === 'wound'}
         {#if log.log.wound === 0}
             <div class="item">En se réveillant ce matin, {log.player} était de nouveau <span><Item item={wounds[0]} /></span></div>
         {:else if log.log.wound === 3}
             <div class="item">En se réveillant ce matin, {log.player} se sentait <span><Item item={wounds[3]} /></span></div>
         {:else if log.log.wound === 4}
-			<div class="item">Gravement blessé, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
+			<div class="item">Gravement blessé{log.gender === 'female' ? 'e' : ''}, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
         {/if}
 	{:else if log.action === 'feed'}
 		<div>{log.player} a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.</div>
 	{:else if log.action === 'force'}
-		<div class="not-flex">Rassemblant son courage, {log.player} est passé en force et peut quitter la zone. Après une lutte acharnée, il est maintenant<span><Item item={wounds[2]} /></span></div>
+		<div class="not-flex">Rassemblant son courage, {log.player} est passé{log.gender === 'female' ? 'e' : ''} en force et peut quitter la zone. Après une lutte acharnée, {log.gender === 'female' ? 'elle' : 'il'} est maintenant<span><Item item={wounds[2]} /></span></div>
 	{:else if log.action === 'tchat'}
 		<div>{log.player} : <i>{log.log.message}</i></div>
 	{:else if log.action === 'dead'}
@@ -216,7 +216,7 @@
 		{:else if log.log.cause === 'both'}
 			<div class="item">N'ayant rien mangé et rien bu, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
 		{:else if log.log.cause === 'hunger'}
-			<div class="item">Affamé après tous ses efforts, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
+			<div class="item">Affamé{log.gender === 'female' ? 'e' : ''} après tous ses efforts, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
 		{:else if log.log.cause === 'thirst'}
 			<div class="item">N'ayant pu s'hydrater suffisamment, {log.player} est <span><Item item={wounds[4]} /></span> ce matin...</div>
 		{/if}

@@ -178,19 +178,19 @@ export const update_users = async (game_id, rethinkdb) => {
         player.thirst -= nextday_thirst;
         if (player.location !== encampment) {
             player.wound = 4;
-            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause: 'zombies' } });
+            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause: 'zombies' }, gender: player.gender });
         } else if (player.wound === 3) {
             player.wound = 4;
-            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound } });
+            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound }, gender: player.gender });
         } else if (player.hunger <= 0 || player.thirst <= 0) {
             player.wound = 4;
             const cause = player.hunger <= 0 && player.thirst <= 0 ? 'both' :
                 player.hunger <= 0 ? 'hunger' : 'thirst';
-            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause } });
+            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause }, gender: player.gender });
         } else if (player.wound) {
             if (player.wound === 1) player.wound = 0;
             else if (player.wound === 2) player.wound = 3;
-            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound } });
+            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound }, gender: player.gender });
         }
     }
     await r.table('users').insert(players, {conflict: 'update'}).run(rethinkdb);

@@ -34,7 +34,7 @@ const joinGame = async ({ locals, request }) => {
         await remove_user_from_game(game_id, locals.user.username, locals.rethinkdb);
         await remove_user_from_location(game_id, locals.user.username, locals.user.location, locals.rethinkdb);
         await remove_game_from_user(locals.user.username, locals.rethinkdb);
-        await add_log(game_id, locals.user.location, locals.user.username, 'leave', '', locals.rethinkdb);
+        await add_log(game_id, locals.user.location, locals.user.username, 'leave', '', locals.user.gender, locals.rethinkdb);
         throw redirect(303, '/');
     } else {
         // Vérifier que la partie n'est pas pleine / que la partie est J1?
@@ -42,7 +42,7 @@ const joinGame = async ({ locals, request }) => {
         const encampment = await add_user_to_game(game_id, locals.user.username, locals.rethinkdb);
         await add_user_to_encampment(game_id, locals.user.username, encampment, locals.rethinkdb);
         await add_game_to_user(game_id, locals.user.id, encampment, locals.rethinkdb);
-        await add_log(game_id, encampment, locals.user.username, 'in', { warning: false }, locals.rethinkdb);
+        await add_log(game_id, encampment, locals.user.username, 'in', { warning: false }, locals.user.gender, locals.rethinkdb);
         throw redirect(303, '/map');
     }
 }
