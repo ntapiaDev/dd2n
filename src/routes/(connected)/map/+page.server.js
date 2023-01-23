@@ -86,7 +86,7 @@ const attack = async ({ locals, request }) => {
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
     await kill_zombies(locals.user.game_id, location.coordinate, killed + critical, locals.rethinkdb);
     await _attack(locals.user.id, locals.user.ap - 1, force, hunger, slots, stats, thirst, wound, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, woundedW0, woundedW1, critical, warning }, locals.user.gender, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, woundedW0, woundedW1, critical, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
@@ -108,7 +108,7 @@ const building = async ({ locals }) => {
     await update_building(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb);
     await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'building', { cache, loots, plus, 'emptyBuilding': empty, warning }, locals.user.gender, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'building', { cache, loots, plus, 'emptyBuilding': empty, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const drop = async ({ locals, request }) => {
@@ -122,7 +122,7 @@ const drop = async ({ locals, request }) => {
     const slots = locals.user.slots;
     await update_items(locals.user.game_id, locals.user.location, items, locals.rethinkdb);
     await _equip(locals.user.id, inventory, slots, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'drop', { item }, locals.user.gender, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'drop', { item }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const force = async ({ locals }) => {
@@ -130,7 +130,7 @@ const force = async ({ locals }) => {
     if (location.zombies <= getDefense(locals.user.slots)) return fail(400, { clear: true });
     if (locals.user.wound > 1) return fail(400, { force: true });
     await _force(locals.user.id, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'force', { wound: true }, locals.user.gender, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'force', { wound: true }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const nextDay = async ({ locals }) => {
@@ -159,7 +159,7 @@ const pickUp = async ({ locals, request }) => {
     }
     await update_items(locals.user.game_id, locals.user.location, items, locals.rethinkdb);
     await _equip(locals.user.id, inventory, slots, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'pickup', { item }, locals.user.gender, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'pickup', { item }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
@@ -180,7 +180,7 @@ const search = async ({ locals }) => {
     await update_search(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb)
     await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { cache, loots, plus, 'empty': empty, warning }, locals.user.gender, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { cache, loots, plus, 'empty': empty, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const tchat = async ({ locals, request }) => {
@@ -190,7 +190,7 @@ const tchat = async ({ locals, request }) => {
     const message = data.get('message');
     if (message.length < 3) return fail(400, { short: true });
     if (message.length > 100) return fail(400, { long: true });
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tchat', { message }, locals.user.gender, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tchat', { message }, locals.user.gender, locals.user.color, locals.rethinkdb);
     await add_tchat(locals.user.game_id, locals.user.id, locals.user.location, locals.rethinkdb);
 }
 
@@ -217,8 +217,8 @@ const travel = async ({ locals, request }) => {
     await update_map(locals.user.game_id, locals.user.username, location.coordinate, target, estimated, locals.rethinkdb);
     await _travel(locals.user.id, target, locals.user.ap - 1, hunger, thirst, locals.rethinkdb);
     await add_logs(locals.user.game_id, [
-        { coordinate: location.coordinate, player: locals.user.username, action: 'out', log: '', gender: locals.user.gender },
-        { coordinate: target, player: locals.user.username, action: 'in', log: { warning }, gender: locals.user.gender }
+        { coordinate: location.coordinate, player: locals.user.username, action: 'out', log: '', gender: locals.user.gender, color: locals.user.color },
+        { coordinate: target, player: locals.user.username, action: 'in', log: { warning }, gender: locals.user.gender, color: locals.user.color }
     ], locals.rethinkdb);
 }
 

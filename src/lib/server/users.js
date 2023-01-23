@@ -3,9 +3,10 @@ import r from 'rethinkdb';
 import { nextday_hunger, nextday_thirst } from '$lib/config';
 import { encampment } from '$lib/layout';
 
-export const add_game_to_user = async (game_id, id, location, rethinkdb) => {
+export const add_game_to_user = async (game_id, id, color, location, rethinkdb) => {
     return r.table('users').get(id).update({
         ap: 100,
+        color,
         force: false,
         game_id,
         hunger: 75,
@@ -140,13 +141,13 @@ export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {
 
 export const remove_game_from_user = async (username, rethinkdb) => {
     return r.table('users').filter({ username }).replace(r.row.without(
-        'ap', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
+        'ap', 'color', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 
 export const remove_game_from_users = async (game_id, rethinkdb) => {
     return r.table('users').filter({ game_id }).replace(r.row.without(
-        'ap', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
+        'ap', 'color', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 
@@ -178,19 +179,19 @@ export const update_users = async (game_id, rethinkdb) => {
         player.thirst -= nextday_thirst;
         if (player.location !== encampment) {
             player.wound = 4;
-            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause: 'zombies' }, gender: player.gender });
+            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause: 'zombies' }, gender: player.gender, color: player.color });
         } else if (player.wound === 3) {
             player.wound = 4;
-            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound }, gender: player.gender });
+            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound }, gender: player.gender, color: player.color });
         } else if (player.hunger <= 0 || player.thirst <= 0) {
             player.wound = 4;
             const cause = player.hunger <= 0 && player.thirst <= 0 ? 'both' :
                 player.hunger <= 0 ? 'hunger' : 'thirst';
-            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause }, gender: player.gender });
+            events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause }, gender: player.gender, color: player.color });
         } else if (player.wound) {
             if (player.wound === 1) player.wound = 0;
             else if (player.wound === 2) player.wound = 3;
-            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound }, gender: player.gender });
+            events.push({ coordinate: player.location, player: player.username, action: 'wound', log: { wound: player.wound }, gender: player.gender, color: player.color });
         }
     }
     await r.table('users').insert(players, {conflict: 'update'}).run(rethinkdb);

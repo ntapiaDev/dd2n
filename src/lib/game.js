@@ -53,3 +53,9 @@ export const getRandomName = () => {
 }
 
 export const getTunnel = () => [getCoord(middle), getCoord(outer)];
+
+export const sortPlayers = (players) => {
+    return players = players.sort((a, b) => a.username > b.username ? 1
+    : a.username < b.username ? -1 
+    : 0);
+}

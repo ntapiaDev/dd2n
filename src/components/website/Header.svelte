@@ -1,6 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import PlayerName from '../map/PlayerName.svelte';
 	import Item from '../game/Item.svelte';
 
 	const calendar = {
@@ -57,7 +58,7 @@
 				<a href="/admin">Administrer le site</a>
 			{/if}
 			<form method="POST" action="/logout" use:enhance>
-				<button type="submit">Se déconnecter ({$page.data.user.username})</button>
+				<button type="submit">Se déconnecter ({#if $page.data.user.game_id}<PlayerName color={$page.data.user.color} username={$page.data.user.username} />{:else}{$page.data.user.username}{/if})</button>
 			</form>
 			<span class="stats"><Item item={stats} {substitute} /></span>
 		{/if}
