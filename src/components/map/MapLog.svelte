@@ -79,7 +79,7 @@
 	};
 </script>
 
-<div class="log">
+<div class="log" style={`background-color: ${log.color? log.color + '20' : ''}`}>
 	<span class="date">{formatDate(log)}</span>
 	{#if log.action === 'in'}
 		<div><PlayerName color={log.color} username={log.player} /> est arrivé{log.gender === 'female' ? 'e' : ''} dans la zone.</div>
@@ -212,7 +212,7 @@
 	{:else if log.action === 'force'}
 		<div class="not-flex">Rassemblant son courage, <PlayerName color={log.color} username={log.player} /> est passé{log.gender === 'female' ? 'e' : ''} en force et peut quitter la zone. Après une lutte acharnée, {log.gender === 'female' ? 'elle' : 'il'} est maintenant <span><Item item={wounds[2]} /></span></div>
 	{:else if log.action === 'tchat'}
-		<div><PlayerName color={log.color} username={log.player} /> : <i>{log.log.message}</i></div>
+		<PlayerName color={log.color} username={log.player} /> : <i><PlayerName color={log.color} username={log.log.message} /></i>
 	{:else if log.action === 'dead'}
 		{#if log.log.cause === 'zombies'}
 			<div class="not-flex">Ayant passé la nuit dehors loin des défenses de son campement, <PlayerName color={log.color} username={log.player} /> s'est fait dévorer le cerveau par des zombies <span><Item item={rip} /></span></div>

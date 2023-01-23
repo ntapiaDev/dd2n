@@ -1,18 +1,11 @@
 import r from 'rethinkdb';
+import { colors } from '$lib/config';
 import { getRandomName } from '$lib/game';
 import { encampment } from '$lib/layout';
 
 export const add_game = async (rethinkdb) => {
     return (await r.table('games').insert({
-        colors: [
-            { name: 'Violet', code: "#9400D3", taken: false },
-            { name: 'Indigo', code: "#4B0082", taken: false },
-            { name: 'Bleu', code: "#0000FF", taken: false },
-            { name: 'Vert', code: "#008000", taken: false },
-            { name: 'Orange', code: "#FF7F00", taken: false },
-            { name: 'Rouge', code: "#FF0000", taken: false },
-            { name: 'Marron', code: "#800000", taken: false }
-        ],
+        colors,
         date: Date.now(),
         day: 1,
         encampment,

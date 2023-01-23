@@ -11,6 +11,6 @@
 
 <style>
     span {
-        color: #EEE;
+        color: #FFF;
     }
 </style>

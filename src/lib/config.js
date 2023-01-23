@@ -1,3 +1,14 @@
+// Couleurs des joueurs :
+export let colors = [
+    { name: 'Violet', code: "#9400D3", taken: false },
+    { name: 'Indigo', code: "#4B0082", taken: false },
+    { name: 'Bleu', code: "#0000FF", taken: false },
+    { name: 'Vert', code: "#008000", taken: false },
+    { name: 'Orange', code: "#FF7F00", taken: false },
+    { name: 'Rouge', code: "#FF0000", taken: false },
+    { name: 'Marron', code: "#800000", taken: false }
+];
+
 // Multiplicateurs de loot:
 // TYPE : x quantité
 export const resource = 10;
