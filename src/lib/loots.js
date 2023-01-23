@@ -1,3 +1,5 @@
+import { ammunition, blueprint, commun, drug_weapon_armour, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quant_ammo, quant_items, rare, resource, épique } from "./config";
+
 export const getItem = (items, uuid, stack) => {
     for (let item of items) {
         if (item.uuid === uuid) {
@@ -25,14 +27,14 @@ export const getPool = (items, danger, uniques) => {
     let pool = [];
     for (let item of itemList) {
         if (!item.unique || !uniques.includes(item.id)) {
-            const type = item.type === 'resource' ? 10 :
-                item.type === 'ammunition' ? 15 :
-                item.type === 'explosive' ? 5 :
-                ['food', 'drink'].includes(item.type) ? 3 :
-                ['drug', 'weapon', 'armour'].includes(item.type) ? 2 : 1;
-            const rarity = item.rarity === 'commun' ? 5 :
-                item.rarity === 'inhabituel' ? 3 :
-                item.rarity === 'rare' ? 2 : 1;
+            const type = item.type === 'resource' ? resource :
+                item.type === 'ammunition' ? ammunition :
+                item.type === 'explosive' ? explosive :
+                ['food', 'drink'].includes(item.type) ? food_drink :
+                ['drug', 'weapon', 'armour'].includes(item.type) ? drug_weapon_armour : blueprint;
+            const rarity = item.rarity === 'commun' ? commun :
+                item.rarity === 'inhabituel' ? inhabituel :
+                item.rarity === 'rare' ? rare : épique;
             for (let i = 0; i < (type * rarity); i++) {
                 pool.push(item);
             }
@@ -59,23 +61,23 @@ export const handleSearch = (items, pool, type) => {
         if (['weapon', 'armour'].includes(foundItem.type)) {
             const random = Math.round(Math.random() * 100) / 100;
             foundItem.plus =
-                random === 1 ? 4 :
-                random > 0.95 ? 3 :
-                random > 0.90 ? 2 :
-                random > 0.75 ? 1 : 0
+                random === plus_four ? 4 :
+                random > plus_tree ? 3 :
+                random > plus_two ? 2 :
+                random > plus_one ? 1 : 0
             if (foundItem.type === 'weapon') foundItem.attack += foundItem.plus;
             else if (foundItem.type === 'armour') foundItem.defense += foundItem.plus;
         }
         return foundItem;
     }
-    for (let i = 0; i < (type === 'building' ? (Math.ceil(Math.random() * 4) + 1) : Math.ceil(Math.random() * 3)); i++) {
+    for (let i = 0; i < (type === 'building' ? loot_building : loot_search); i++) {
         let foundItem = pool[Math.floor(Math.random() * pool.length)];
         pool = pool.filter(i => i.id !== foundItem.id);
         if (foundItem.slot === "W1") foundItem.durability = Math.ceil(foundItem.durabilityMax * (50 + Math.round(Math.random() * 50)) / 100);
         foundItem.uuid = crypto.randomUUID();
         foundItem = hasPlus(foundItem);
-        if (foundItem.type === 'ammunition') foundItem.quantity = Math.ceil(Math.random() * 10);
-        else foundItem.quantity = 1;
+        if (foundItem.type === 'ammunition') foundItem.quantity = quant_ammo;
+        else foundItem.quantity = quant_items;
         items = handleStack(items, foundItem); 
         if (foundItem.unique) uniques.push(foundItem.id);
         loots.push(foundItem);

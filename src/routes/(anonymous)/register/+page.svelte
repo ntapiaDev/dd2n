@@ -33,7 +33,7 @@
 	{:else if form?.user}
 		<p>Ce nom d'utilisateur est déjà pris.</p>
 	{:else if form?.username}
-		<p>Votre nom d'utilisateur doit faire entre 3 et 16 caractères.</p>
+		<p>Votre nom d'utilisateur doit faire entre 3 et 16 caractères, sans caractères spéciaux.</p>
 	{:else if form?.password}
 		<p>Votre mot de passe doit comporter au minimum 8 caractères et contenir au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial.</p>
 	{:else if form?.repeat}
@@ -44,7 +44,7 @@
 	<label for="username">Nom d'utilisateur :</label>
 	<div class="username">
 		<div class="regex" class:testUsername>
-			<div class:testUsername>Doit faire entre 3 et 16 caractères.</div>
+			<div class:testUsername>Entre 3 et 16 caractères, sans caractères spéciaux.</div>
 		</div>
 		<input type="text" id="username" name="username" bind:value={username} />
 	</div>	

@@ -1,4 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
+import { critical_chance, empty_1, empty_2, empty_3, empty_building, wound_armed, wound_unarmed } from "$lib/config";
 import { canTravel } from '$lib/game';
 import { getItem, getPool, handlePlus, handleSearch, handleStack } from "$lib/loots";
 import { checkHT, getDefense } from "$lib/player";
@@ -32,7 +33,7 @@ const attack = async ({ locals, request }) => {
     let woundedW0 = false;
     let woundedW1 = false;
     // Attaque sans arme
-    if (item.slot === 'W0' && Math.random() > 0.75) {
+    if (item.slot === 'W0' && Math.random() > wound_unarmed) {
         wound += 1;
         woundedW0 = wound;
     }
@@ -43,7 +44,7 @@ const attack = async ({ locals, request }) => {
             slots['W1'] = '';
             broken = true;
         }
-        if (Math.random() > 0.99) {
+        if (Math.random() > wound_armed) {
             wound += 1;
             woundedW1 = wound;
         }
@@ -75,7 +76,7 @@ const attack = async ({ locals, request }) => {
     const killed = zombies - location.zombies;
     // Coup critique
     let critical = 0;
-    if (location.zombies > 0 && Math.random() > 0.9) {
+    if (location.zombies > 0 && Math.random() > critical_chance) {
         location.zombies -= (Math.ceil(item.attack * Math.random()));
         if (location.zombies < 0) location.zombies = 0;
         critical = zombies - killed - location.zombies;
@@ -100,7 +101,7 @@ const building = async ({ locals }) => {
     let pool = getPool(itemList, 0, locals.user.uniques);
     const { items, loots, uniques } = handleSearch(location.items, pool, 'building');
     let plus = handlePlus(loots);
-    let empty = Math.random() > 0.9;
+    let empty = Math.random() > empty_building;
     const stats = locals.user.stats;
     stats.items += loots.length;
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
@@ -172,7 +173,7 @@ const search = async ({ locals }) => {
     let pool = getPool(itemList, danger, locals.game.uniques);
     const { items, loots, uniques } = handleSearch(location.items, pool, 'search');
     let plus = handlePlus(loots);
-    let empty = Math.random() > (danger === 1 ? 0.5 : danger === 2 ? 0.75 : 0.9);
+    let empty = Math.random() > (danger === 1 ? empty_1 : danger === 2 ? empty_2 : empty_3);
     const stats = locals.user.stats;
     stats.items += loots.length;
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);

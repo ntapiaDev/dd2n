@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import r from 'rethinkdb';
+import { nextday_hunger, nextday_thirst } from '$lib/config';
 import { encampment } from '$lib/layout';
 
 export const add_game_to_user = async (game_id, id, location, rethinkdb) => {
@@ -173,8 +174,8 @@ export const update_users = async (game_id, rethinkdb) => {
     for (let player of players) {
         player.ap = 100;
         player.force = false;
-        player.hunger -= 25;
-        player.thirst -= 25;
+        player.hunger -= nextday_hunger;
+        player.thirst -= nextday_thirst;
         if (player.location !== encampment) {
             player.wound = 4;
             events.push({ coordinate: player.location, player: player.username, action: 'dead', log: { cause: 'zombies' } });
