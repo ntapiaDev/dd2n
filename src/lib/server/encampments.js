@@ -1,0 +1,24 @@
+import r from 'rethinkdb';
+
+export const add_user_to_encampment = (game_id, username, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
+}
+
+export const delete_encampment = (game_id, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).delete().run(rethinkdb);
+}
+
+export const generate_encampment = (game_id, rethinkdb) => {
+    return r.table('encampments').insert({
+        attack: 0,
+        bank: [],
+        blueprints: [],
+        game_id,
+        logs: [],
+        players: []
+    }).run(rethinkdb);
+}
+
+export const remove_user_from_encampment = (game_id, username, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb);
+}

@@ -4,6 +4,7 @@ import { canTravel } from '$lib/game';
 import { getItem, getPool, handlePlus, handleSearch, handleStack } from "$lib/loots";
 import { checkHT, getDefense } from "$lib/player";
 import { add_tchat, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_cells, update_items, update_map, update_search } from "$lib/server/cells";
+import { add_user_to_encampment } from "$lib/server/encampments";
 import { add_one_day, add_unique } from "$lib/server/games";
 import { get_items, get_items_by_code } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
@@ -128,6 +129,7 @@ const drop = async ({ locals, request }) => {
 const encampment = async ({ locals }) => {
     if (locals.user.location !== locals.game.encampment) return fail(400, { encampment: true });
     await remove_user_from_location(locals.user.game_id, locals.user.username, locals.user.location, locals.rethinkdb);
+    await add_user_to_encampment(locals.user.game_id, locals.user.username, locals.rethinkdb);
     await enter_encampment(locals.user.id, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'outEncampment', '', locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');

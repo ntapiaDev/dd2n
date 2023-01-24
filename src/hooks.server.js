@@ -33,8 +33,8 @@ export const handle = async ({ event, resolve }) => {
     if ((user.role !== 'admin' && user.left?.role !== 'admin') && event.url.pathname === '/admin') return redirect('/');
 
     if (!user.left?.game_id && (event.url.pathname === '/encampment' || event.url.pathname === '/map')) return redirect('/');
-    if (!user.left?.encampment && event.url.pathname === '/encampment') return redirect('/map');
-    else if (user.left?.encampment && event.url.pathname === '/map') return redirect('/encampment');
+    if (user.left?.location !== 'Encampment' && event.url.pathname === '/encampment') return redirect('/map');
+    else if (user.left?.location === 'Encampment' && event.url.pathname === '/map') return redirect('/encampment');
 
     if (!user.left) {
         const { password, sessionid, ...rest } = user;

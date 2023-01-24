@@ -48,10 +48,10 @@
 			<a href="/register">Enregistrement</a>
 		{:else if $page.data.user}
 			{#if $page.data.user.game_id}
-				{#if !$page.data.user.encampment}
-					<a href="/map">Voir la carte</a>
-				{:else if $page.data.user.encampment}
+				{#if $page.data.user.location === 'Encampment'}
 					<a href="/encampment">Voir le campement</a>
+				{:else if $page.data.user.location !== 'Encampment'}
+					<a href="/map">Voir la carte</a>
 				{/if}
 			{/if}
 			{#if $page.data.user.role === 'admin'}

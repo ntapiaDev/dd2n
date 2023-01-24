@@ -7,8 +7,8 @@ export const add_tchat = async (game_id, user_id, coordinate, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ tchat: r.row('tchat').append(user_id) }).run(rethinkdb);
 }
 
-export const add_user_to_encampment = async (game_id, username, encampment, rethinkdb) => {
-    return r.table('cells').filter({ game_id, coordinate: encampment }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
+export const add_user_to_location = async (game_id, username, coordinate, rethinkdb) => {
+    return r.table('cells').filter({ game_id, coordinate }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
 }
 
 export const delete_cells = async (game_id, rethinkdb) => {

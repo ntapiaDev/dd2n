@@ -34,8 +34,7 @@ export const add_user_to_game = async (game_id, username, color, rethinkdb) => {
             })
         }
     }).run(rethinkdb);
-    await r.table('games').get(game_id).update({ players: r.row('players').append({ color, username }) }).run(rethinkdb);
-    return encampment;
+    return r.table('games').get(game_id).update({ players: r.row('players').append({ color, username }) }).run(rethinkdb);
 }
 
 export const delete_game = async (game_id, rethinkdb) => {

@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/stores';
+	import Map from '../../../components/map/actions/Map.svelte';
 
 	export let data;
 	export let form;
@@ -7,7 +8,7 @@
 
 <h1>Vous êtes dans votre campement :</h1>
 <section>
-	
+	<Map />
 </section>
 
 <style>
