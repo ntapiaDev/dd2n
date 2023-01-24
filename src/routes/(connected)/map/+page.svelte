@@ -1,5 +1,6 @@
 <script>
 	import { flip } from 'svelte/animate';
+	import { page } from '$app/stores';
 	import { getDistance } from '$lib/game';
 	import { sortItems } from '$lib/loots';
 	import { getDefense } from '$lib/player';
@@ -54,7 +55,10 @@
 
 	const getUsernames = (cell) => {
 		let usernames = '';
-		for (let username of cell.players) usernames += ('<br/>' + username);
+		for (let username of cell.players.sort()) {
+			const color = ($page.data.game.players.find(p => p.username === username)).color;
+			usernames += (`<br/><span style="color: #FFF; text-shadow: 1px 0 0 ${color}, 1px 1px 0 ${color}, 0 1px 0 ${color}, -1px 1px 0 ${color}, -1px 0 0 ${color}, -1px -1px 0 ${color}, 0 -1px 0 ${color}, 1px -1px 0 ${color}">${username}</span>`);
+		}
 		return usernames;
 	}
 	$: substitute = `Joueurs sur la case (${cell.players.length}) :` + getUsernames(cell);

@@ -17,11 +17,14 @@
 		}
 	}
 
+	$: player = players.find(p => p.coordinate === cell.coordinate);
+	$: color = $page.data.game.players.find(p => p.username === player?.username)?.color;
+
 	$: travel = canTravel($page.data.user.location, cell.coordinate, cell.layout.border)
 		&& $page.data.user.ap > 0
 		&& (current.zombies <= (($page.data.user.slots.A1.defense ?? 0) + ($page.data.user.slots.A2.defense ?? 0) + ($page.data.user.slots.A3.defense ?? 0)) || $page.data.user.force);
 	$: style = coordinates.find(i => i.coordinates === cell.coordinate) ? 'show-coordinates' :
-	players.find(p => p.coordinate === cell.coordinate) ? 'show-players' :
+	color ? 'show-players' :
 	((encampment === cell.coordinate ? 'encampment ' : '') +
 	($page.data.user.location === cell.coordinate ? 'current ' : '') +
 	(travel ? 'travel ' : '') +
@@ -42,7 +45,8 @@
 </script>
 
 <td	class={style}
-	style={encampment !== cell.coordinate && cell.visible ? `background-color: rgb(255, 0, 0, ${cell.visited ? (cell.zombies / 32) : (cell.estimated.zombies / 32)})` : ''}>
+	style={color ? `border: 3px ridge ${color + '99'}; box-shadow: 0 2px 6px ${color + '7a'}, 0 0 10px ${color + 'b8'}` :
+	encampment !== cell.coordinate && cell.visible ? `background-color: rgb(255, 0, 0, ${cell.visited ? (cell.zombies / 32) : (cell.estimated.zombies / 32)})` : ''}>
 	{#if travel}
 		<form method="POST" action="?/travel" use:enhance>
 			<input type="text" name="target" value={cell.coordinate} hidden>
@@ -185,10 +189,6 @@
 	.show-coordinates {
 		border: 3px ridge rgb(255, 0, 0, 0.60);
 		box-shadow: 0 2px 6px rgb(255, 0, 0, 0.48), 0 0 10px rgb(255, 0, 0, 0.72);
-	}
-	.show-players {
-		border: 3px ridge rgb(0, 128, 0, 0.60);
-		box-shadow: 0 2px 6px rgb(0, 128, 0, 0.48), 0 0 10px rgb(0, 128, 0, 0.72);
 	}
 	.show-coordinates button,
 	.show-players button {

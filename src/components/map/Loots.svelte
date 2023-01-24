@@ -1,6 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import { page } from '$app/stores';
 	import { sortItems } from '$lib/loots';
 	import Item from '../game/Item.svelte';
 
@@ -70,16 +71,19 @@
 
 	const getUsernames = (players) => {
 		let usernames = '';
-		for (let player of players) usernames += ('<br/>' + player.username + ` (${player.coordinate})`);
+		for (let player of players) {
+			const color = ($page.data.game.players.find(p => p.username === player.username)).color;
+			usernames += (`<br/><span style="color: #FFF; text-shadow: 1px 0 0 ${color}, 1px 1px 0 ${color}, 0 1px 0 ${color}, -1px 1px 0 ${color}, -1px 0 0 ${color}, -1px -1px 0 ${color}, 0 -1px 0 ${color}, 1px -1px 0 ${color}">${player.username} (${player.coordinate})</span>`);
+		}
 		return usernames;
 	}
-	$: playersMap = `Joueurs sur la carte (${players.length}) :` + getUsernames(players);
+	$: substitute = `Joueurs sur la carte (${players.length}) :` + getUsernames(players);
 </script>
 
 <aside>
 	<span class="title">Objets sur la carte ({quantity}) :</span>
 	<span on:mouseenter={showPlayers} on:mouseleave={hidePlayers}>
-		<Item item={item} quantity={players.length} substitute={playersMap} />
+		<Item item={item} quantity={players.length} {substitute} />
 	</span>
 	<span class="zombies" style={`background-color: rgb(255, 0, 0, ${zombies / 10000})`}>Total de zombies : {zombies}</span>
 	{#each sortItems(loots) as loot (loot.id)}
