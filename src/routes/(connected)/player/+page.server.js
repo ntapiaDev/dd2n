@@ -1,10 +1,26 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { getItem } from "$lib/loots";
 import { add_log } from "$lib/server/logs";
-import { _feed, _heal } from "$lib/server/users";
+import { _boost, _feed, _heal } from "$lib/server/users";
 
 export async function load() {
     throw redirect(303, '/');
+}
+
+const boost = async ({ locals, request }) => {
+    let ap = locals.user.ap;
+    if (ap === 100) return fail(400, { full: true });
+    const data = await request.formData();
+    const uuid = data.get('uuid');
+    const inventory = locals.user.inventory;
+    if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });
+    const { item } = getItem(inventory, uuid, false);
+    if (!item.ap) return fail(400, { type: true });
+    ap += item.ap;
+    if (ap > 100) ap = 100;
+    const value = ap - locals.user.ap;
+    await _boost(locals.user.id, item, ap, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'boost', { boost: item.description, value }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const feed = async ({ locals, request }) => {
@@ -48,4 +64,4 @@ const heal = async ({ locals, request }) => {
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'heal', { 'drug': item.description }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
-export const actions = { feed, heal };
+export const actions = { boost, feed, heal };

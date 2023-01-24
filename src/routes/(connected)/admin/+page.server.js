@@ -15,12 +15,14 @@ const addItem = async ({ locals, request }) => {
     };
     if (data.get('rarity')) item.rarity = data.get('rarity');
     if (data.get('unique')) item.unique = data.get('unique') === "unique";
+    if (data.get('value')) item.value = parseInt(data.get('value'));
     if (data.get('slot')) item.slot = data.get('slot');
     if (data.get('attack')) item.attack = parseInt(data.get('attack'));
     if (data.get('durabilityMax')) item.durabilityMax = parseInt(data.get('durabilityMax'));
     if (data.get('weapon')) item.weapon = data.get('weapon');
     if (data.get('defense')) item.defense = parseInt(data.get('defense'));
     if (data.get('wound')) item.wound = data.get('wound');
+    if (data.get('ap')) item.ap = parseInt(data.get('ap'));
     if (data.get('code')) item.code = data.get('code');
     await add_item(item, locals.rethinkdb);
 }

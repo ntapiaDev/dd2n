@@ -208,7 +208,9 @@
 			<div class="item">Gravement blessé{log.gender === 'female' ? 'e' : ''}, <PlayerName color={log.color} username={log.player} /> est <Item item={wounds[4]} /> ce matin...</div>
         {/if}
 	{:else if log.action === 'feed'}
-		<div><PlayerName color={log.color} username={log.player} /> a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.</div>
+		<PlayerName color={log.color} username={log.player} /> a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.
+	{:else if log.action === 'boost'}
+		<PlayerName color={log.color} username={log.player} /> a pris <span class="boost">{log.log.boost.toLowerCase()}</span> et a regagné {log.log.value} PA.
 	{:else if log.action === 'force'}
 		<div class="not-flex">Rassemblant son courage, <PlayerName color={log.color} username={log.player} /> est passé{log.gender === 'female' ? 'e' : ''} en force et peut quitter la zone. Après une lutte acharnée, {log.gender === 'female' ? 'elle' : 'il'} est maintenant <span><Item item={wounds[2]} /></span></div>
 	{:else if log.action === 'tchat'}
@@ -263,15 +265,18 @@
 		flex-wrap: wrap;
 		gap: 4px;
 	}
-	.food, .p1 {
+	.food,
+	.p1 {
 		color: green;
 	}
-	.drink, .p2 {
+	.drink,
+	.p2 {
 		color: blue;
 	}
 	.p3 {
 		color: purple;
 	}
+	.boost,
 	.p4 {
 		color: orange;
 	}

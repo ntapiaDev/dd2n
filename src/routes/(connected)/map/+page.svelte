@@ -130,13 +130,13 @@
 			{#if user.ap && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty && (cell.zombies <= armour)}
 				<Building />
 			{/if}
-			{#if user.hunger <= 75}
+			{#if user.hunger <= 75 || (user.ap < 100 && user.inventory.some(i => i.ap && i.type ==='food'))}
 				<Eat items={user.inventory} />
 			{/if}
-			{#if user.thirst <= 75}
+			{#if user.thirst <= 75 || (user.ap < 100 && user.inventory.some(i => i.ap && i.type ==='drink'))}
 				<Drink items={user.inventory} />
 			{/if}
-			{#if user.wound}
+			{#if user.wound || (user.ap < 100 && user.inventory.some(i => i.ap && i.type ==='drug'))}
 				<Heal items={user.inventory} wound={user.wound} />
 			{/if}
 			{#if user.ap && cell.zombies }
@@ -155,7 +155,7 @@
 			{#if (cell.zombies > armour) && !user.force && (user.wound < 2)}
 				<Force />
 			{/if}
-			{#if (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && !user.wound && !cell.zombies}
+			{#if (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && (user.ap === 100 || !user.inventory.some(i => i.ap)) && !user.wound && !cell.zombies}
 				<Item item={walking} />
 			{/if}
 			{#if user.location !== game.encampment}

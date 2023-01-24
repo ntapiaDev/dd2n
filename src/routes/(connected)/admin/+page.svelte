@@ -80,6 +80,9 @@
 			</select>
 		</div>
 		<div class="stats">
+			{#if ['drink', 'food'].includes(type)}
+				<input type="number" min="1" max="100" name="value" placeholder="Valeur" />
+			{/if}
 			{#if ['weapon', 'ammunition', 'explosive', 'armour'].includes(type)}
 				<select name="slot" bind:value={slot} required>
 					<option value="">Slot</option>
@@ -114,12 +117,15 @@
 					</select>
 				{/if}
 			{:else if type === 'drug'}
-				<select name="wound" class="drug" required>
+				<select name="wound" class="drug">
 					<option value="">Blessures</option>
 					<option value="égratignures">Égratignures</option>
 					<option value="blessures graves">Blessures graves</option>
 					<option value="blessures mortelles">Blessures mortelles</option>
 				</select>
+			{/if}
+			{#if ['drink', 'drug', 'food'].includes(type)}
+				<input type="number" min="1" max="100" name="ap" placeholder="Ap" />
 			{/if}
 			<select name="code" class="code">
 				<option value="">Bâtiment</option>

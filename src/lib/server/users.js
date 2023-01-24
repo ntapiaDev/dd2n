@@ -107,6 +107,10 @@ export const _attack = async (user_id, ap, force, hunger, slots, stats, thirst, 
     return r.table('users').get(user_id).update({ ap, force, hunger, slots, stats, thirst, wound }).run(rethinkdb);
 }
 
+export const _boost = async (user_id, item, ap, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]) }).run(rethinkdb);
+}
+
 export const _equip = async (user_id, inventory, slots, rethinkdb) => {
     return r.table('users').get(user_id).update({ inventory, slots }).run(rethinkdb);
 }

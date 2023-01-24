@@ -1,6 +1,7 @@
 <script>
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { page } from '$app/stores';
 	import InteractiveItem from '../../game/InteractiveItem.svelte';
 	import Item from '../../game/Item.svelte';
 
@@ -23,8 +24,10 @@
 	{#if open}
 		<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
 			{#each items as item}
-				{#if item.type === 'food'}
+				{#if $page.data.user.hunger <= 75 && item.type === 'food' && !item.ap}
 					<InteractiveItem {item} action={'/player?/feed'} />
+				{:else if $page.data.user.ap < 100 && item.type === 'food' && item.ap}
+					<InteractiveItem {item} action={'/player?/boost'} />
 				{/if}
 			{/each}
 		</div>

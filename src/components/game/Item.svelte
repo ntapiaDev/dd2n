@@ -19,6 +19,7 @@
 		(item.defense > 0 ? ` (Protection : <span style="color:${plusColor}">${item.defense}</span>)` : '') +
 		(item.value ? ` (+${item.value}% et ${item.value / 10} PA)` : '') +
 		(item.wound ? ` (${item.wound})` : '') +
+		(item.ap ? ` (+${item.ap} PA)` : '') +
 		(item.rarity && item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
 		(item.unique ? ' (unique)' : '') +
 		(['satiated', 'hungry', 'hunger'].includes(item.icon) ? ` (${$page.data.user.hunger}%)` : '') +
