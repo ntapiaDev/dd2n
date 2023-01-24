@@ -10,7 +10,7 @@ export const add_game_to_user = async (game_id, id, color, location, rethinkdb) 
         force: false,
         game_id,
         hunger: 75,
-        inside: false,
+        encampment: false,
         location,
         inventory: [{
             code: 'b1',
@@ -111,6 +111,10 @@ export const _boost = async (user_id, item, ap, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]) }).run(rethinkdb);
 }
 
+export const enter_encampment = async (user_id, rethinkdb) => {
+    return r.table('users').get(user_id).update({ encampment: true }).run(rethinkdb);
+}
+
 export const _equip = async (user_id, inventory, slots, rethinkdb) => {
     return r.table('users').get(user_id).update({ inventory, slots }).run(rethinkdb);
 }
@@ -137,6 +141,10 @@ export const _heal = async (user_id, item, rethinkdb) => {
     return r.table('users').get(user_id).update({ inventory: r.row('inventory').difference([item]), wound: 0 }).run(rethinkdb);
 }
 
+export const leave_encampment = async (user_id, rethinkdb) => {
+    return r.table('users').get(user_id).update({ encampment: false }).run(rethinkdb);
+}
+
 export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {
     const NEW_SESSIONID = crypto.randomUUID();
     await r.table('users').filter({ sessionid: SESSIONID }).update({ sessionid: NEW_SESSIONID }).run(rethinkdb);
@@ -145,13 +153,13 @@ export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {
 
 export const remove_game_from_user = async (username, rethinkdb) => {
     return r.table('users').filter({ username }).replace(r.row.without(
-        'ap', 'color', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
+        'ap', 'color', 'encampment', 'force', 'game_id', 'hunger', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 
 export const remove_game_from_users = async (game_id, rethinkdb) => {
     return r.table('users').filter({ game_id }).replace(r.row.without(
-        'ap', 'color', 'force', 'game_id', 'hunger', 'inside', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
+        'ap', 'color', 'encampment', 'force', 'game_id', 'hunger', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 

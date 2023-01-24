@@ -11,8 +11,7 @@
 	};
 </script>
 
-<form>
-<!-- <form method="POST" action="/map?/encampment" use:enhance> -->
+<form method="POST" action="/map?/encampment" use:enhance>
 	<button>
 		<Item {item} />
 	</button>
@@ -26,6 +25,6 @@
 	button {
 		border: none;
 		background-color: transparent;
-		/* cursor: pointer; */
+		cursor: pointer;
 	}
 </style>

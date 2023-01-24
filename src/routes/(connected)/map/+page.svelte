@@ -200,6 +200,8 @@
 			<p>Cette zone est épuisée.</p>
 		{:else if form?.emptyBuilding}
 			<p>Ce bâtiment est vide.</p>
+		{:else if form?.encampment}
+			<p>Il n'y a pas de campement dans cette zone.</p>
 		{:else if form?.exhausted}
 			<p>Vous n'avez plus assez de points d'action.</p>
 		{:else if form?.force}

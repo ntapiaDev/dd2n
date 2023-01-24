@@ -90,8 +90,8 @@
 		{:else if log.log.warning === 'both'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
 		{/if}
-	{:else if log.action === 'out'}
-		<div><PlayerName color={log.color} username={log.player} /> a quitté la zone.</div>
+	{:else if log.action === 'inEncampment'}
+		<div><PlayerName color={log.color} username={log.player} /> est sorti{log.gender === 'female' ? 'e' : ''} du campement.</div>
 	{:else if log.action === 'inTunnel'}
 		<div><PlayerName color={log.color} username={log.player} /> est sorti{log.gender === 'female' ? 'e' : ''} du passage souterrain.</div>
 		{#if log.log.warning === 'hunger'}
@@ -101,6 +101,10 @@
 		{:else if log.log.warning === 'both'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
 		{/if}
+	{:else if log.action === 'out'}
+		<div><PlayerName color={log.color} username={log.player} /> a quitté la zone.</div>
+	{:else if log.action === 'outEncampment'}
+		<div><PlayerName color={log.color} username={log.player} /> est entré{log.gender === 'female' ? 'e' : ''} dans le campement.</div>
 	{:else if log.action === 'outTunnel'}
 		<div><PlayerName color={log.color} username={log.player} /> est entré{log.gender === 'female' ? 'e' : ''} dans le passage souterrain.</div>
 	{:else if log.action === 'kill'}

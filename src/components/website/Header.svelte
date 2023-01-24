@@ -48,9 +48,9 @@
 			<a href="/register">Enregistrement</a>
 		{:else if $page.data.user}
 			{#if $page.data.user.game_id}
-				{#if !$page.data.user.inside}
+				{#if !$page.data.user.encampment}
 					<a href="/map">Voir la carte</a>
-				{:else if $page.data.user.inside}
+				{:else if $page.data.user.encampment}
 					<a href="/encampment">Voir le campement</a>
 				{/if}
 			{/if}
