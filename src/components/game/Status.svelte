@@ -5,7 +5,7 @@
 </script>
 
 <span class="status">
-	<span class="title">Statut :</span>
+	<span class="title">Statuts</span>
 	<Wound />
 	<Hunger />
 	<Thirst />

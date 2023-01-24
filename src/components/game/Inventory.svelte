@@ -11,7 +11,7 @@
 </script>
 
 <span class="inventory">
-    <span class="title">Inventaire :</span>
+    <span class="title">Inventaire</span>
     {#each sortItems(items) as item (item.uuid)}
         <span class="animation" animate:flip>
             {#if $page.url.pathname === '/map'}

@@ -55,6 +55,17 @@
         "value": 50
     },
     {
+        "ap": 10,
+        "code": "b1",
+        "credit": "Freepik",
+        "description": "Une barre protéinée",
+        "icon": "protein",
+        "id": "c50f64ea-e448-4aeb-bf65-e4b6ec7fe558",
+        "rarity": "inhabituel",
+        "type": "food",
+        "unique": false
+    },
+    {
         "code": "b1",
         "credit": "Flat Icons",
         "description": "Un vieux pinot noir",
@@ -110,6 +121,17 @@
         "value": 50
     },
     {
+        "ap": 15,
+        "code": "b1",
+        "credit": "Eucalyp",
+        "description": "Une boisson énergétique",
+        "icon": "redbull",
+        "id": "121384a3-864a-4f1b-96b3-07b897dff0dd",
+        "rarity": "rare",
+        "type": "drink",
+        "unique": false
+    },
+    {
         "code": "b3",
         "credit": "Konkapp",
         "description": "Des pansements",
@@ -152,6 +174,17 @@
         "type": "drug",
         "unique": false,
         "wound": "blessures graves"
+    },
+    {
+        "ap": 25,
+        "code": "b3",
+        "credit": "Freepik",
+        "description": "Un shoot d'adrénaline",
+        "icon": "adrenaline",
+        "id": "644f7980-0185-459e-b407-136e01006e37",
+        "rarity": "épique",
+        "type": "drug",
+        "unique": false
     },
     {
         "code": "b3",
