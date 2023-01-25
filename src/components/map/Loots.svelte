@@ -36,22 +36,24 @@
 	$: for (let row of rows) {
 		for (let cell of row) {
 			zombies += cell.zombies;
-			for (let loot of cell.items) {
-				quantity += loot.quantity;
-				let newLoot = {...loot};
-				if (loots.find((i) => i.id === newLoot.id)) {
-					loots[loots.indexOf(loots.find((i) => i.id === newLoot.id))].coordinates.push({coordinates: cell.coordinate, quantity: newLoot.quantity});
-					loots[loots.indexOf(loots.find((i) => i.id === newLoot.id))].total += newLoot.quantity;
-				} else {
-					if (newLoot.plus) {
-						if (newLoot.type === 'weapon') newLoot.attack -= newLoot.plus;
-						else if (newLoot.type === 'armour') newLoot.defense -= newLoot.plus;
-						newLoot.plus = 0;
+			if (cell.visible) {
+				for (let loot of cell.items) {
+					quantity += loot.quantity;
+					let newLoot = {...loot};
+					if (loots.find((i) => i.id === newLoot.id)) {
+						loots[loots.indexOf(loots.find((i) => i.id === newLoot.id))].coordinates.push({coordinates: cell.coordinate, quantity: newLoot.quantity});
+						loots[loots.indexOf(loots.find((i) => i.id === newLoot.id))].total += newLoot.quantity;
+					} else {
+						if (newLoot.plus) {
+							if (newLoot.type === 'weapon') newLoot.attack -= newLoot.plus;
+							else if (newLoot.type === 'armour') newLoot.defense -= newLoot.plus;
+							newLoot.plus = 0;
+						}
+						if (newLoot.durability) newLoot.durability = 0;
+						newLoot.coordinates = [{coordinates: cell.coordinate, quantity: newLoot.quantity}];
+						newLoot.total = newLoot.quantity;
+						loots.push(newLoot);
 					}
-					if (newLoot.durability) newLoot.durability = 0;
-					newLoot.coordinates = [{coordinates: cell.coordinate, quantity: newLoot.quantity}];
-					newLoot.total = newLoot.quantity;
-					loots.push(newLoot);
 				}
 			}
 		}

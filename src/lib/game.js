@@ -1,5 +1,6 @@
 import { layout, letters } from './layout';
 
+const all = Object.keys(layout).filter(key => key !== 'H8');
 const inner = Object.keys(layout).filter(key => layout[key].danger === 1).filter(key => key !== 'H8');
 const middle = Object.keys(layout).filter(key => layout[key].danger === 2);
 const outer = Object.keys(layout).filter(key => layout[key].danger === 3);
@@ -50,6 +51,46 @@ export const getRandomName = () => {
     const end = ['mutants', 'masqués', 'alcooliques', 'malades', 'dépressifs', 'hypocondriaques', 'claustrophobes', 'enragés'];
     const getRandom = (array) => array[Math.floor(Math.random() * array.length)];
     return `${getRandom(start)} ${getRandom(middle)} ${getRandom(end)}`
+}
+
+export const getTeddies = () => {
+    const coords = {};
+    const teddies = [
+        {
+            class: 'teddy',
+            credit: 'Freepik',
+            description: 'Agnès',
+            icon: 'agnes',
+            id: 'e54b92bf-4bd6-4d62-9c51-01e122ec3419',
+            quantity: 1,
+            type: 'misc',
+            uuid: crypto.randomUUID()
+        },
+        {
+            class: 'teddy',
+            credit: 'Freepik',
+            description: 'Le Loup',
+            icon: 'loup',
+            id: 'b42833fb-a8ba-4aee-bd6c-d6d78e07667c',
+            quantity: 1,
+            type: 'misc',
+            uuid: crypto.randomUUID()
+        },
+        {
+            class: 'teddy',
+            credit: 'Hery Mery',
+            description: 'M. Ouink',
+            icon: 'ouink',
+            id: '5ff7adb3-80b2-4bcb-8813-5e254dc6dc41',
+            quantity: 1,
+            type: 'misc',
+            uuid: crypto.randomUUID()
+        }
+    ]
+    for (let i = 0; i <3; i++) {
+        coords[getCoord(all)] = teddies[i];
+    }
+    return coords;
 }
 
 export const getTunnel = () => [getCoord(middle), getCoord(outer)];

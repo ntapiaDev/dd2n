@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
 import { nextday_building, nextday_cell, nextday_empty, zombies_building } from '$lib/config';
-import { getBuildings, getTunnel } from '$lib/game';
+import { getBuildings, getTeddies, getTunnel } from '$lib/game';
 import { encampment, layout, letters, size } from '$lib/layout';
 
 export const add_tchat = async (game_id, user_id, coordinate, rethinkdb) => {
@@ -17,6 +17,7 @@ export const delete_cells = async (game_id, rethinkdb) => {
 
 export const generate_cells = async (game_id, rethinkdb) => {
     const buildings = getBuildings();
+    const teddies = getTeddies();
     const tunnel = getTunnel();
     let cells = [];
     let code = 1;
@@ -39,7 +40,7 @@ export const generate_cells = async (game_id, rethinkdb) => {
                 entrance,
                 estimated: { zombies: 0, empty: false },
                 game_id,
-                items: [],
+                items: Object.keys(teddies).includes(letters[i] + j) ? [teddies[letters[i] + j]] : [],
                 layout: layout[letters[i] + j],
                 players,
                 searchedBy: [],
@@ -51,7 +52,8 @@ export const generate_cells = async (game_id, rethinkdb) => {
             code++;
         }
     }
-    return r.table('cells').insert(cells).run(rethinkdb);
+    await r.table('cells').insert(cells).run(rethinkdb);
+    return Object.keys(teddies);
 }
 
 export const get_cell = async (game_id, coordinate, rethinkdb) => {

@@ -229,6 +229,8 @@
 		{:else if log.log.cause === 'thirst'}
 			<div class="item">N'ayant pu s'hydrater suffisamment, <PlayerName color={log.color} username={log.player} /> est <Item item={wounds[4]} /> ce matin...</div>
 		{/if}
+	{:else if log.action === 'teddy'}
+		Cette zone abrite une étrange créature...
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
