@@ -130,15 +130,9 @@
 			{#if user.ap && cell.building && !cell.building.searchedBy.includes(user.id) && !cell.building.empty && (cell.zombies <= armour)}
 				<Building />
 			{/if}
-			{#if user.hunger <= 75 || (user.ap < 100 && user.inventory.some(i => i.ap && i.type ==='food'))}
-				<Eat items={user.inventory} />
-			{/if}
-			{#if user.thirst <= 75 || (user.ap < 100 && user.inventory.some(i => i.ap && i.type ==='drink'))}
-				<Drink items={user.inventory} />
-			{/if}
-			{#if user.wound || (user.ap < 100 && user.inventory.some(i => i.ap && i.type ==='drug'))}
-				<Heal items={user.inventory} wound={user.wound} />
-			{/if}
+			<Eat {user} />
+			<Drink {user} />
+			<Heal {user} />
 			{#if user.ap && cell.zombies }
 				{#if user.slots.W1.attack && user.wound <2}
 					<Attack item={user.slots.W1} />

@@ -1,14 +1,26 @@
 <script>
 	import { page } from '$app/stores';
-	import Map from '../../../components/map/actions/Map.svelte';
+	import Actions from '../../../components/encampment/Actions.svelte';
+	import Attack from '../../../components/encampment/Attack.svelte';
+	import Navigate from '../../../components/encampment/Navigate.svelte';
 
 	export let data;
 	export let form;
+
+	$: user = $page.data.user;
+
+	let selected = 'place';
+
+	const open = (e) => selected = e.detail.open;
 </script>
 
 <h1>Vous êtes dans votre campement :</h1>
 <section>
-	<Map />
+	<div class="sidebar">
+		<Attack />
+		<Actions {user} />
+		<Navigate {selected} on:clicked={open}/>
+	</div>
 </section>
 
 <style>
@@ -19,9 +31,9 @@
 	section {
 		margin: 1em;
 		display: flex;
-		flex-grow: 1;
+		/* flex-grow: 1;
 		flex-basis: 50px;
-		overflow-y: hidden;
+		overflow-y: hidden; */
 	}
 	p {
 		/* Inspiré de Bootstrap Alerts */

@@ -1,12 +1,10 @@
 <script>
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { page } from '$app/stores';
 	import InteractiveItem from '../../game/InteractiveItem.svelte';
 	import Item from '../../game/Item.svelte';
 
-	export let items;
-	export let wound;
+	export let user;
 
 	const item = {
 		credit: 'Freepik',
@@ -19,21 +17,23 @@
 	let open = false;
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="item" on:mouseenter={() => (open = true)} on:mouseleave={() => (open = false)}>
-	<Item {item} />
-	{#if open}
-		<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
-			{#each items as item}
-				{#if item.type === 'drug' && (wound === 1 || wound === 2 && item.rarity === 'rare' || item.rarity === 'épique') && !item.ap}
-					<InteractiveItem {item} action={'/player?/heal'} />
-				{:else if $page.data.user.ap < 100 && item.type === 'drug' && item.ap}
-					<InteractiveItem {item} action={'/player?/boost'} />
-				{/if}
-			{/each}
-		</div>
-	{/if}
-</div>
+{#if user?.wound || (user?.ap < 100 && user?.inventory.some(i => i.ap && i.type ==='drug'))}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div class="item" on:mouseenter={() => (open = true)} on:mouseleave={() => (open = false)}>
+		<Item {item} />
+		{#if open}
+			<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
+				{#each user?.inventory as item}
+					{#if item.type === 'drug' && (user?.wound === 1 || user?.wound === 2 && item.rarity === 'rare' || item.rarity === 'épique') && !item.ap}
+						<InteractiveItem {item} action={'/player?/heal'} />
+					{:else if user?.ap < 100 && item.type === 'drug' && item.ap}
+						<InteractiveItem {item} action={'/player?/boost'} />
+					{/if}
+				{/each}
+			</div>
+		{/if}
+	</div>
+{/if}
 
 <style>
 	.item {

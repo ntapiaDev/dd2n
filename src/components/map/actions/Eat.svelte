@@ -1,11 +1,10 @@
 <script>
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { page } from '$app/stores';
 	import InteractiveItem from '../../game/InteractiveItem.svelte';
 	import Item from '../../game/Item.svelte';
 
-	export let items;
+	export let user;
 
 	const item = {
 		credit: 'Freepik',
@@ -18,21 +17,23 @@
 	let open = false;
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="item" on:mouseenter={() => (open = true)} on:mouseleave={() => (open = false)}>
-	<Item {item} />
-	{#if open}
-		<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
-			{#each items as item}
-				{#if $page.data.user.hunger <= 75 && item.type === 'food' && !item.ap}
-					<InteractiveItem {item} action={'/player?/feed'} />
-				{:else if $page.data.user.ap < 100 && item.type === 'food' && item.ap}
-					<InteractiveItem {item} action={'/player?/boost'} />
-				{/if}
-			{/each}
-		</div>
-	{/if}
-</div>
+{#if user?.hunger <= 75 || (user?.ap < 100 && user?.inventory.some(i => i.ap && i.type ==='food'))}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div class="item" on:mouseenter={() => (open = true)} on:mouseleave={() => (open = false)}>
+		<Item {item} />
+		{#if open}
+			<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
+				{#each user?.inventory as item}
+					{#if user?.hunger <= 75 && item.type === 'food' && !item.ap}
+						<InteractiveItem {item} action={'/player?/feed'} />
+					{:else if user?.ap < 100 && item.type === 'food' && item.ap}
+						<InteractiveItem {item} action={'/player?/boost'} />
+					{/if}
+				{/each}
+			</div>
+		{/if}
+	</div>
+{/if}
 
 <style>
 	.item {

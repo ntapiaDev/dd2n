@@ -1,8 +1,8 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import PlayerName from '../map/PlayerName.svelte';
 	import Item from '../game/Item.svelte';
+	import PlayerName from '../game/PlayerName.svelte';
 
 	const calendar = {
 		credit: 'Erifqi Zetiawan',

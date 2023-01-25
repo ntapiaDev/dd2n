@@ -2,7 +2,7 @@
     import { enhance } from '$app/forms';
     import { page } from '$app/stores';
     import { sortPlayers } from '$lib/game';
-	import PlayerName from "../map/PlayerName.svelte";
+	import PlayerName from "../game/PlayerName.svelte";
 
     export let game;
 
