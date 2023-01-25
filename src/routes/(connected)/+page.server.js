@@ -35,11 +35,10 @@ const joinGame = async ({ locals, request }) => {
     if (locals.user.game_id === game_id) {
         if (locals.user.location === 'Encampment') {
             await remove_user_from_encampment(game_id, locals.user.username, locals.rethinkdb);
-            // log de départ dans le campement
         } else {
             await remove_user_from_location(game_id, locals.user.username, locals.user.location, locals.rethinkdb);
-            await add_log(game_id, locals.user.location, locals.user.username, 'leave', '', locals.user.gender, locals.user.color, locals.rethinkdb);
         }
+        await add_log(game_id, locals.user.location, locals.user.username, 'leave', '', locals.user.gender, locals.user.color, locals.rethinkdb);
         await remove_user_from_game(game_id, locals.user.username, locals.user.color, locals.rethinkdb);
         await remove_game_from_user(locals.user.username, locals.rethinkdb);
         throw redirect(303, '/');
@@ -52,7 +51,7 @@ const joinGame = async ({ locals, request }) => {
         await add_user_to_encampment(game_id, locals.user.username, locals.rethinkdb);
         await add_user_to_game(game_id, locals.user.username, color, locals.rethinkdb);
         await add_game_to_user(game_id, locals.user.id, color, locals.rethinkdb);
-        // log d'arrivée dans le campement
+        await add_log(game_id, 'Encampment', locals.user.username, 'newGame', '', locals.user.gender, color, locals.rethinkdb);
         throw redirect(303, '/map');
     }
 }

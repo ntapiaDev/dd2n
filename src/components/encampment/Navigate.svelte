@@ -16,6 +16,9 @@
 <nav>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <ul>
+        <li on:click={() => open('register')}>
+            <Link selected={selected === 'register'} title="Registre" />
+        </li>
         <li on:click={() => open('place')}>
             <Link selected={selected === 'place'} title="Place du village" />
         </li>
@@ -26,7 +29,7 @@
             <Link selected={selected === 'worksites'} title="Chantiers de défense" />
         </li>
         <li on:click={() => open('workshop')}>
-            <Link selected={selected === 'workshop'} title="Atelier de transformation" />
+            <Link selected={selected === 'workshop'} title="Atelier de recyclage" />
         </li>
     </ul>
 </nav>

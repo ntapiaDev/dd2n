@@ -82,7 +82,7 @@
 <div class="log" style={`background-color: ${log.color? log.color + '20' : ''}`}>
 	<span class="date">{formatDate(log)}</span>
 	{#if log.action === 'in'}
-		<div><PlayerName color={log.color} username={log.player} /> est arrivé{log.gender === 'female' ? 'e' : ''} dans la zone.</div>
+		<PlayerName color={log.color} username={log.player} /> est arrivé{log.gender === 'female' ? 'e' : ''} dans la zone.
 		{#if log.log.warning === 'hunger'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} /></div>
 		{:else if log.log.warning === 'thirst'}
@@ -91,9 +91,9 @@
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
 		{/if}
 	{:else if log.action === 'inEncampment'}
-		<div><PlayerName color={log.color} username={log.player} /> est sorti{log.gender === 'female' ? 'e' : ''} du campement.</div>
+		<PlayerName color={log.color} username={log.player} /> est sorti{log.gender === 'female' ? 'e' : ''} du campement.
 	{:else if log.action === 'inTunnel'}
-		<div><PlayerName color={log.color} username={log.player} /> est sorti{log.gender === 'female' ? 'e' : ''} du passage souterrain.</div>
+		<PlayerName color={log.color} username={log.player} /> est sorti{log.gender === 'female' ? 'e' : ''} du passage souterrain.
 		{#if log.log.warning === 'hunger'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} /></div>
 		{:else if log.log.warning === 'thirst'}
@@ -102,13 +102,13 @@
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
 		{/if}
 	{:else if log.action === 'out'}
-		<div><PlayerName color={log.color} username={log.player} /> a quitté la zone.</div>
+		<PlayerName color={log.color} username={log.player} /> a quitté la zone.
 	{:else if log.action === 'outEncampment'}
-		<div><PlayerName color={log.color} username={log.player} /> est entré{log.gender === 'female' ? 'e' : ''} dans le campement.</div>
+		<PlayerName color={log.color} username={log.player} /> est entré{log.gender === 'female' ? 'e' : ''} dans le campement.
 	{:else if log.action === 'outTunnel'}
-		<div><PlayerName color={log.color} username={log.player} /> est entré{log.gender === 'female' ? 'e' : ''} dans le passage souterrain.</div>
+		<PlayerName color={log.color} username={log.player} /> est entré{log.gender === 'female' ? 'e' : ''} dans le passage souterrain.
 	{:else if log.action === 'kill'}
-		<div><PlayerName color={log.color} username={log.player} /> a
+		<PlayerName color={log.color} username={log.player} /> a
 			{log.log.weapon === "Une grenade explosive" ? 'fait sauter' :
 				log.log.weapon === "Une grenade incendiaire" ? 'brûlé vif' :
 				log.log.weapon === "Une grenade fumigène" ? 'enfumé' :
@@ -145,7 +145,7 @@
 			{:else if log.log.warning === 'both'}
 				<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
 			{/if}
-		</div>
+		
 	{:else if ['loot', 'building'].includes(log.action)}
 		<div class="item">
 			<PlayerName color={log.color} username={log.player} /> a trouvé {log.action === 'building' ? 'dans le bâtiment' : ''}
@@ -196,13 +196,13 @@
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} /> et <Item item={feed[1]} /></div>
 		{/if}
 	{:else if log.action === 'new'}
-		<div>L'agitation de la nuit a permis de dévoiler de nouvelles ressources...</div>
+		L'agitation de la nuit a permis de dévoiler de nouvelles ressources...
 	{:else if log.action === 'pickup'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a ramassé <Item item={log.log.item} /></div>
 	{:else if log.action === 'drop'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a déposé <Item item={log.log.item} /></div>
 	{:else if log.action === 'heal'}
-		<div><PlayerName color={log.color} username={log.player} /> s'est soigné{log.gender === 'female' ? 'e' : ''} avec {firstLetterToLowerCase(log.log.drug)}.</div>
+		<PlayerName color={log.color} username={log.player} /> s'est soigné{log.gender === 'female' ? 'e' : ''} avec {firstLetterToLowerCase(log.log.drug)}.
     {:else if log.action === 'wound'}
         {#if log.log.wound === 0}
             <div class="item">En se réveillant ce matin, <PlayerName color={log.color} username={log.player} /> était de nouveau <Item item={wounds[0]} /></div>
@@ -230,7 +230,7 @@
 			<div class="item">N'ayant pu s'hydrater suffisamment, <PlayerName color={log.color} username={log.player} /> est <Item item={wounds[4]} /> ce matin...</div>
 		{/if}
 	{:else if log.action === 'leave'}
-		<div><PlayerName color={log.color} username={log.player} /> a quitté la partie.</div>
+		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
 </div>
 

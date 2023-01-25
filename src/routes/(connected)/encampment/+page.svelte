@@ -3,7 +3,10 @@
 	import Actions from '../../../components/encampment/Actions.svelte';
 	import Attack from '../../../components/encampment/Attack.svelte';
 	import Navigate from '../../../components/encampment/Navigate.svelte';
+	import Place from '../../../components/encampment/Place.svelte';
 	import Players from '../../../components/encampment/Players.svelte';
+	import Register from '../../../components/encampment/Register.svelte';
+	import NextDay from '../../../components/map/NextDay.svelte';
 
 	export let data;
 	// export let form;
@@ -11,11 +14,16 @@
 	$: encampment = data.encampment;
 	$: user = $page.data.user;
 
-	let selected = 'place';
+	let selected = 'register';
 
 	const open = (e) => selected = e.detail.open;
 </script>
 
+{#if user.role === 'admin'}
+	<aside>
+		<NextDay />
+	</aside>
+{/if}
 <h1>Vous êtes dans votre campement :</h1>
 <section>
 	<div class="sidebar">
@@ -24,9 +32,22 @@
 		<Navigate {selected} on:clicked={open}/>
 		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />
 	</div>
+	{#if selected === 'register'}
+		<Register logs={data.logs} />
+	{:else if selected === 'place'}
+		<Place />
+	{/if}
 </section>
 
 <style>
+	aside {
+		padding: 1em;
+		position: absolute;
+		top: 25px;
+		left: 25px;
+		border-radius: 1em;
+		background-color: rgb(255, 255, 255, 0.25);
+	}
 	h1 {
 		margin: 1em 0 0;
 		text-align: center;
@@ -34,6 +55,7 @@
 	section {
 		margin: 1em;
 		display: flex;
+		flex-wrap: wrap;
 		/* flex-grow: 1;
 		flex-basis: 50px;
 		overflow-y: hidden; */

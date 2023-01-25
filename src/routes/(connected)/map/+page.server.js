@@ -131,7 +131,10 @@ const encampment = async ({ locals }) => {
     await remove_user_from_location(locals.user.game_id, locals.user.username, locals.user.location, locals.rethinkdb);
     await add_user_to_encampment(locals.user.game_id, locals.user.username, locals.rethinkdb);
     await enter_encampment(locals.user.id, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'outEncampment', '', locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_logs(locals.user.game_id, [
+        { coordinate: locals.game.encampment, player: locals.user.username, action: 'outEncampment', log: '', gender: locals.user.gender, color: locals.user.color },
+        { coordinate: 'Encampment', player: locals.user.username, action: 'inEncampment', log: '', gender: locals.user.gender, color: locals.user.color }
+    ], locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 
