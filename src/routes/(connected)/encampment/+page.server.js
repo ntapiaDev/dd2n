@@ -1,10 +1,9 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { getItem, handleStack } from "$lib/loots";
-import { add_user_to_location, update_cells } from "$lib/server/cells";
+import { add_user_to_location } from "$lib/server/cells";
 import { get_encampment, get_bank, remove_user_from_encampment, update_bank } from "$lib/server/encampments";
-import { add_one_day } from "$lib/server/games";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
-import { _equip, leave_encampment, update_users } from "$lib/server/users";
+import { _equip, leave_encampment } from "$lib/server/users";
 
 export const load = async ({ locals }) => {
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
@@ -38,13 +37,6 @@ const map = async ({ locals }) => {
     throw redirect(303, '/map');
 }
 
-const nextDay = async ({ locals }) => {
-    await add_one_day(locals.user.game_id, locals.rethinkdb);
-    const logs = await update_cells(locals.user.game_id, locals.rethinkdb);
-    const events = await update_users(locals.user.game_id, locals.rethinkdb);
-    if ([...logs, ...events].length) await add_logs(locals.user.game_id, [...logs, ...events], locals.rethinkdb);
-}
-
 const withdraw = async ({ locals, request }) => {
     const data = await request.formData();
     const uuid = data.get('uuid');
@@ -67,4 +59,4 @@ const withdraw = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { deposit, map, nextDay, withdraw };
+export const actions = { deposit, map, withdraw };

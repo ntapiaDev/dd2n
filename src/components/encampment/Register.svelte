@@ -6,7 +6,7 @@
 </script>
 
 <div in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
-    <h3>Registre :</h3>
+    <h3>Registre central :</h3>
     {#each logs as log}
         <EncampmentLog {log} />
     {/each}

@@ -17,13 +17,13 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <ul>
         <li on:click={() => open('register')}>
-            <Link selected={selected === 'register'} title="Registre" />
+            <Link selected={selected === 'register'} title="Registre central" />
         </li>
         <li on:click={() => open('place')}>
             <Link selected={selected === 'place'} title="Place du village" />
         </li>
         <li on:click={() => open('bank')}>
-            <Link selected={selected === 'bank'} title="Banque" />
+            <Link selected={selected === 'bank'} title="Banque commune" />
         </li>
         <li on:click={() => open('worksites')}>
             <Link selected={selected === 'worksites'} title="Chantiers de défense" />

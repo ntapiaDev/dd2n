@@ -30,24 +30,28 @@
                 row.push(item);
             }
         }
-        bank[type] = row;
+        if (type) bank[type] = row;
         return bank;
     };
     $: bank = getItems(items);
 </script>
 
 <div in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
-    <h3>Banque :</h3>
-    {#each Object.keys(types) as type}
-        {#if bank[type]}
-            <h3 class="type">{types[type]} :</h3>
-            {#each bank[type] as item (item.uuid)}
-                <span animate:flip>
-                    <InteractiveItem {item} action={'/encampment?/withdraw'} />
-                </span>
-            {/each}
-        {/if}
-    {/each}
+    <h3>Banque commune :</h3>
+    {#if !items.length}
+        <span>Les coffres du campement sont vides.</span>
+    {:else}
+        {#each Object.keys(types) as type}
+            {#if bank[type]}
+                <h3 class="type">{types[type]} :</h3>
+                {#each bank[type] as item (item.uuid)}
+                    <span animate:flip>
+                        <InteractiveItem {item} action={'/encampment?/withdraw'} />
+                    </span>
+                {/each}
+            {/if}
+        {/each}
+    {/if}
 </div>
 
 <style>

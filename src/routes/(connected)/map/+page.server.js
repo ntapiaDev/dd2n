@@ -3,12 +3,12 @@ import { critical_chance, empty_1, empty_2, empty_3, empty_building, wound_armed
 import { canTravel } from '$lib/game';
 import { getItem, getPool, handlePlus, handleSearch, handleStack } from "$lib/loots";
 import { checkHT, getDefense } from "$lib/player";
-import { add_tchat, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_cells, update_items, update_map, update_search } from "$lib/server/cells";
+import { add_tchat, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_items, update_map, update_search } from "$lib/server/cells";
 import { add_user_to_encampment } from "$lib/server/encampments";
-import { add_one_day, add_unique } from "$lib/server/games";
+import { add_unique } from "$lib/server/games";
 import { get_items, get_items_by_code } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
-import { _attack, enter_encampment, _equip, _force, _search, _travel, update_users } from "$lib/server/users";
+import { _attack, enter_encampment, _equip, _force, _search, _travel } from "$lib/server/users";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
@@ -146,13 +146,6 @@ const force = async ({ locals }) => {
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'force', { wound: true }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
-const nextDay = async ({ locals }) => {
-    await add_one_day(locals.user.game_id, locals.rethinkdb);
-    const logs = await update_cells(locals.user.game_id, locals.rethinkdb);
-    const events = await update_users(locals.user.game_id, locals.rethinkdb);
-    if ([...logs, ...events].length) await add_logs(locals.user.game_id, [...logs, ...events], locals.rethinkdb);
-}
-
 const pickUp = async ({ locals, request }) => {
     const data = await request.formData();
     const uuid = data.get('uuid');
@@ -241,4 +234,4 @@ const travel = async ({ locals, request }) => {
     ], locals.rethinkdb);
 }
 
-export const actions = { attack, building, drop, encampment, force, nextDay, pickUp, search, tchat, travel };
+export const actions = { attack, building, drop, encampment, force, pickUp, search, tchat, travel };

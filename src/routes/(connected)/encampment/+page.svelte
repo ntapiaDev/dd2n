@@ -9,10 +9,11 @@
 	import Place from '../../../components/encampment/Place.svelte';
 	import Players from '../../../components/encampment/Players.svelte';
 	import Register from '../../../components/encampment/Register.svelte';
-	import NextDay from '../../../components/map/NextDay.svelte';
+	import NextDay from '../../../components/game/NextDay.svelte';
 
 	export let data;
 	export let form;
+	$: form = {} || $sidebar;
 
 	$: encampment = data.encampment;
 	$: user = $page.data.user;

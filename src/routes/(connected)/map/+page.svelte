@@ -4,6 +4,12 @@
 	import { getDistance } from '$lib/game';
 	import { sortItems } from '$lib/loots';
 	import { getDefense } from '$lib/player';
+	import InteractiveItem from '../../../components/game/InteractiveItem.svelte';
+	import Item from '../../../components/game/Item.svelte';
+	import NextDay from '../../../components/game/NextDay.svelte';
+	import Loots from '../../../components/map/Loots.svelte';
+	import Map from '../../../components/map/Map.svelte';
+	import MapLog from '../../../components/map/MapLog.svelte';
 	import Attack from '../../../components/map/actions/Attack.svelte';
 	import Building from '../../../components/map/actions/Building.svelte';
 	import Drink from '../../../components/map/actions/Drink.svelte';
@@ -15,12 +21,6 @@
 	import Search from '../../../components/map/actions/Search.svelte';
 	import Tchat from '../../../components/map/actions/Tchat.svelte';
 	import Tunnel from '../../../components/map/actions/Tunnel.svelte';
-	import Loots from '../../../components/map/Loots.svelte';
-	import Map from '../../../components/map/Map.svelte';
-	import MapLog from '../../../components/map/MapLog.svelte';
-	import NextDay from '../../../components/map/NextDay.svelte';
-	import InteractiveItem from '../../../components/game/InteractiveItem.svelte';
-	import Item from '../../../components/game/Item.svelte';
 
 	export let data;
 	export let form;

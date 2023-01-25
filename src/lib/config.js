@@ -1,5 +1,6 @@
 // Couleurs des joueurs :
 export let colors = [
+    { name: 'Noir', code: "#000000", taken: false },
     { name: 'Violet', code: "#9400D3", taken: false },
     { name: 'Indigo', code: "#4B0082", taken: false },
     { name: 'Bleu', code: "#0000FF", taken: false },
