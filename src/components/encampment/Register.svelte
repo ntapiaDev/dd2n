@@ -14,12 +14,10 @@
 
 <style>
     div {
-        width: 50%;
-        margin-left: 1em;
 		padding: 0.5em;
-        flex-grow: 1;
         border: 1px solid #aaa;
-	}
+		overflow-y: auto;
+    }
     h3 {
         margin-bottom: 0.5em;
     }

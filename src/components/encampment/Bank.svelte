@@ -1,9 +1,12 @@
 <script>
 	import { fade } from "svelte/transition";
+
+    export let items;
+    $: console.log(items);
 </script>
 
 <div in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
-    <h3>Place du village :</h3>
+    <h3>Banque :</h3>
 </div>
 
 <style>

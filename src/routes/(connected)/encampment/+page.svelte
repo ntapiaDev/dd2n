@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import Actions from '../../../components/encampment/Actions.svelte';
 	import Attack from '../../../components/encampment/Attack.svelte';
+	import Bank from '../../../components/encampment/Bank.svelte';
 	import Navigate from '../../../components/encampment/Navigate.svelte';
 	import Place from '../../../components/encampment/Place.svelte';
 	import Players from '../../../components/encampment/Players.svelte';
@@ -32,11 +33,15 @@
 		<Navigate {selected} on:clicked={open}/>
 		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />
 	</div>
-	{#if selected === 'register'}
-		<Register logs={data.logs} />
-	{:else if selected === 'place'}
-		<Place />
-	{/if}
+	<div class="content">
+		{#if selected === 'register'}
+			<Register logs={data.logs} />
+		{:else if selected === 'place'}
+			<Place />
+		{:else if selected === 'bank'}
+			<Bank items={encampment.items} />
+		{/if}
+	</div>
 </section>
 
 <style>
@@ -55,10 +60,15 @@
 	section {
 		margin: 1em;
 		display: flex;
-		flex-wrap: wrap;
-		/* flex-grow: 1;
+		flex-grow: 1;
 		flex-basis: 50px;
-		overflow-y: hidden; */
+		overflow-y: hidden;
+	}
+	.content {
+		margin-left: 1em;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
 	}
 	/* p {
 		Inspiré de Bootstrap Alerts
