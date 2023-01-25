@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/stores';
+	import { sortItems } from '$lib/loots';
 	import { sidebar } from '../../../stores/sidebar';
 	import Actions from '../../../components/encampment/Actions.svelte';
 	import Attack from '../../../components/encampment/Attack.svelte';
@@ -11,7 +12,7 @@
 	import NextDay from '../../../components/map/NextDay.svelte';
 
 	export let data;
-	// export let form;
+	export let form;
 
 	$: encampment = data.encampment;
 	$: user = $page.data.user;
@@ -38,8 +39,15 @@
 		{:else if $sidebar === 'place'}
 			<Place />
 		{:else if $sidebar === 'bank'}
-			<Bank items={encampment.items} />
+			<Bank items={sortItems(encampment.items)} />
 		{/if}
+		<div class="error">
+			{#if form?.full}
+				<p>Votre inventaire est plein.</p>
+			{:else if form?.origin}
+				<p>Cet objet n'est pas présent dans la banque ou dans votre inventaire.</p>
+			{/if}
+		</div>
 	</div>
 </section>
 
@@ -69,13 +77,13 @@
 		flex-direction: column;
 		flex-grow: 1;
 	}
-	/* p {
-		Inspiré de Bootstrap Alerts
+	p {
+		/* Inspiré de Bootstrap Alerts */
 		margin: 1rem 0 0;
 		padding: 0.75rem 1.25rem;
 		color: #721c24;
 		background-color: #f8d7da;
 		border: 1px solid #f5c6cb;
 		border-radius: 0.25rem;
-	} */
+	}
 </style>

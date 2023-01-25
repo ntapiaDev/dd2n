@@ -105,7 +105,9 @@
 			<div class="item">N'ayant pu s'hydrater suffisamment, <PlayerName color={log.color} username={log.player} /> est <Item item={wounds[4]} /> ce matin...</div>
 		{/if}
 	{:else if log.action === 'deposit'}
-		<div class="item"><PlayerName color={log.color} username={log.player} /> a déposé <Item item={log.log.item} /> dans la banque.</div>
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a rangé <Item item={log.log.item} /> dans la banque.</div>
+	{:else if log.action === 'withdraw'}
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris <Item item={log.log.item} /> dans la banque.</div>
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
