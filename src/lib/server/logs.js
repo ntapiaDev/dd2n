@@ -16,6 +16,12 @@ export const delete_logs = async (game_id, rethinkdb) => {
     return r.table('logs').filter({ game_id }).delete().run(rethinkdb);
 }
 
+export const get_last_date = (game_id, players, rethinkdb) => {
+    return r.table("logs").filter(function(log) {
+        return r.expr(players).contains(log("player")).and(log("game_id").eq(game_id))
+    }).orderBy(r.desc("date")).group("player").nth(0)('date').run(rethinkdb);
+}
+
 export const get_logs_by_coordinate = async (game_id, coordinate, rethinkdb) => {
     return r.table('logs').filter({ game_id, coordinate }).orderBy(r.desc('date')).run(rethinkdb);
 }

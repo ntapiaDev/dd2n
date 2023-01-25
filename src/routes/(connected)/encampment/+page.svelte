@@ -3,10 +3,12 @@
 	import Actions from '../../../components/encampment/Actions.svelte';
 	import Attack from '../../../components/encampment/Attack.svelte';
 	import Navigate from '../../../components/encampment/Navigate.svelte';
+	import Players from '../../../components/encampment/Players.svelte';
 
 	export let data;
-	export let form;
+	// export let form;
 
+	$: encampment = data.encampment;
 	$: user = $page.data.user;
 
 	let selected = 'place';
@@ -20,6 +22,7 @@
 		<Attack />
 		<Actions {user} />
 		<Navigate {selected} on:clicked={open}/>
+		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />
 	</div>
 </section>
 
@@ -35,13 +38,13 @@
 		flex-basis: 50px;
 		overflow-y: hidden; */
 	}
-	p {
-		/* Inspiré de Bootstrap Alerts */
+	/* p {
+		Inspiré de Bootstrap Alerts
 		margin: 1rem 0 0;
 		padding: 0.75rem 1.25rem;
 		color: #721c24;
 		background-color: #f8d7da;
 		border: 1px solid #f5c6cb;
 		border-radius: 0.25rem;
-	}
+	} */
 </style>
