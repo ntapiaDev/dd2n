@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/stores';
+	import { sidebar } from '../../../stores/sidebar';
 	import Actions from '../../../components/encampment/Actions.svelte';
 	import Attack from '../../../components/encampment/Attack.svelte';
 	import Bank from '../../../components/encampment/Bank.svelte';
@@ -15,9 +16,7 @@
 	$: encampment = data.encampment;
 	$: user = $page.data.user;
 
-	let selected = 'register';
-
-	const open = (e) => selected = e.detail.open;
+	const open = (e) => sidebar.update(value => value = e.detail.open);
 </script>
 
 {#if user.role === 'admin'}
@@ -30,15 +29,15 @@
 	<div class="sidebar">
 		<Attack />
 		<Actions {user} />
-		<Navigate {selected} on:clicked={open}/>
+		<Navigate selected={$sidebar} on:clicked={open} />
 		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />
 	</div>
 	<div class="content">
-		{#if selected === 'register'}
+		{#if $sidebar === 'register'}
 			<Register logs={data.logs} />
-		{:else if selected === 'place'}
+		{:else if $sidebar === 'place'}
 			<Place />
-		{:else if selected === 'bank'}
+		{:else if $sidebar === 'bank'}
 			<Bank items={encampment.items} />
 		{/if}
 	</div>

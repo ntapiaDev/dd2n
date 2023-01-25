@@ -2,6 +2,7 @@
     import { page } from '$app/stores';
     import { flip } from 'svelte/animate';
     import { sortItems } from '$lib/loots';
+    import { sidebar } from '../../stores/sidebar';
 	import InteractiveItem from './InteractiveItem.svelte';
 	import Item from './Item.svelte';
 
@@ -16,6 +17,8 @@
         <span class="animation" animate:flip>
             {#if $page.url.pathname === '/map'}
                 <InteractiveItem {item} action={'/map?/drop'} /> 
+            {:else if $page.url.pathname === '/encampment' && $sidebar === 'bank'}
+                <InteractiveItem {item} action={'/encampment?/deposit'} />
             {:else}
                 <Item {item} />
             {/if}

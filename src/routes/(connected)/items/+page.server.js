@@ -11,11 +11,11 @@ const equip = async ({ locals, request }) => {
     const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     if (!inventory.find(i => i.uuid === uuid)) return fail(400, { item: true });
-    const { item, items } = getItem(inventory, uuid, false);
+    const { item } = getItem(inventory, uuid, false);
     const slots = locals.user.slots;
-    if (slots[item.slot]) items.push(slots[item.slot]);
+    if (slots[item.slot]) inventory.push(slots[item.slot]);
     slots[item.slot] = item;
-    await _equip(locals.user.id, items, slots, locals.rethinkdb);
+    await _equip(locals.user.id, inventory, slots, locals.rethinkdb);
 }
 
 const unequip = async ({ locals, request }) => {
