@@ -16,11 +16,11 @@ export const getPool = (items, danger, uniques) => {
     const getItems = (danger) => {
         if (danger === 0) return items;
         else if (danger === 1) {
-            return items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel'].includes(i.rarity));
+            return items.filter(i => ['commun', 'inhabituel'].includes(i.rarity));
         } else if (danger === 2) {
-            return items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare'].includes(i.rarity));
+            return items.filter(i => ['commun', 'inhabituel', 'rare'].includes(i.rarity));
         } else if (danger === 3) {
-            return items.filter(i => i.type !== 'misc' && ['commun', 'inhabituel', 'rare', 'épique'].includes(i.rarity));
+            return items.filter(i => ['commun', 'inhabituel', 'rare', 'épique'].includes(i.rarity));
         }
     }
     const itemList = getItems(danger);

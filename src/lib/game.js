@@ -18,6 +18,8 @@ export const canTravel = (location, target, border) => {
     return distance;
 }
 
+export const getAltar = () => getCoord(outer);
+
 export const getBuildings = () => {  
     const buildings = {};
     buildings[getCoord(inner)] = { type: 'Une épicerie', code: 'b1', searchedBy: [], empty: false };

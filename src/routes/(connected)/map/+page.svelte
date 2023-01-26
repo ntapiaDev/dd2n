@@ -10,6 +10,7 @@
 	import Loots from '../../../components/map/Loots.svelte';
 	import Map from '../../../components/map/Map.svelte';
 	import MapLog from '../../../components/map/MapLog.svelte';
+	import Altar from '../../../components/map/actions/Altar.svelte';
 	import Attack from '../../../components/map/actions/Attack.svelte';
 	import Building from '../../../components/map/actions/Building.svelte';
 	import Drink from '../../../components/map/actions/Drink.svelte';
@@ -112,6 +113,9 @@
 				{#if cell.entrance}
 					<span>Cette zone abrite un <b>passage souterrain</b> menant vers une zone {cell.layout.danger === 2 ? 'dangereuse' : 'plus calme'}.</span>
 				{/if}
+				{#if cell.altar}
+					<span>Un <b>étrange monument</b> attire votre attention...</span>
+				{/if}
 			{/if}
 			{#if cell.empty}
 				<span><b>Cette zone est maintenant épuisée...</b></span>
@@ -123,6 +127,9 @@
 				<Encampment />
 			{:else if user.ap && cell.entrance}
 				<Tunnel />
+			{/if}
+			{#if user.ap && cell.altar}
+				<Altar />
 			{/if}
 			{#if user.ap && !cell.searchedBy.includes(user.id) && !cell.empty}
 				<Search />
@@ -149,7 +156,7 @@
 			{#if (cell.zombies > armour) && !user.force && (user.wound < 2)}
 				<Force />
 			{/if}
-			{#if (cell.searchedBy.includes(user.id) || cell.empty) && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && (user.ap === 100 || !user.inventory.some(i => i.ap)) && !user.wound && !cell.zombies}
+			{#if (cell.searchedBy.includes(user.id) || cell.empty) && !cell.altar && (!cell.building || cell.building.searchedBy.includes(user.id) || cell.building.empty) && user.hunger > 75 && user.thirst > 75 && (user.ap === 100 || !user.inventory.some(i => i.ap)) && !user.wound && !cell.zombies}
 				<Item item={walking} />
 			{/if}
 			{#if user.location !== game.encampment}
@@ -180,6 +187,10 @@
 		</div>
 		{#if form?.access}
 			<p>Il y a trop de zombies pour fouiller le bâtiment.</p>
+		{:else if form?.accessAltar}
+			<p>Les zombies vous empêchent de vous approcher de l'autel sacrificiel.</p>
+		{:else if form?.altar}
+			<p>Il n'y a pas d'autel sacrificiel dans cette zone.</p>
 		{:else if form?.ammo}
 			<p>Vous avez besoin de munitions pour utiliser cette arme.</p>
 		{:else if form?.blocked}

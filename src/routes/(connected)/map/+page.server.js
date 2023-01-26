@@ -3,17 +3,34 @@ import { critical_chance, empty_1, empty_2, empty_3, empty_building, wound_armed
 import { canTravel } from '$lib/game';
 import { getItem, getPool, handlePlus, handleSearch, handleStack } from "$lib/loots";
 import { checkHT, getDefense } from "$lib/player";
-import { add_tchat, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_items, update_map, update_search } from "$lib/server/cells";
+import { add_tchat, altar_collapse, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_items, update_map, update_search } from "$lib/server/cells";
 import { add_user_to_encampment } from "$lib/server/encampments";
 import { add_unique } from "$lib/server/games";
-import { get_items, get_items_by_code } from "$lib/server/items";
+import { get_from_altar, get_items_by_code, get_loots } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
-import { _attack, enter_encampment, _equip, _force, _search, _travel } from "$lib/server/users";
+import { _attack, enter_encampment, _equip, _force, lose_ap, _search, _travel } from "$lib/server/users";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const rows = await get_map(locals.user.game_id, locals.rethinkdb);
     return { logs, rows };
+}
+
+const altar = async ({ locals }) => {
+    if (locals.user.ap === 0) return fail(400, { exhausted: true });
+    const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);    
+    if (!location.altar) return fail(400, { altar: true });
+    if (location.zombies > getDefense(locals.user.slots)) return fail(400, { accessAltar: true });
+    const teddies = location.items.filter(i => i.class === 'teddy');
+    let bp = '';
+    if (teddies.length === 3) {
+        bp = await get_from_altar(locals.rethinkdb);
+        bp.quantity = 1;
+        bp.uuid = crypto.randomUUID();
+        await altar_collapse(locals.user.game_id, locals.user.location, bp, locals.rethinkdb);
+    }
+    await lose_ap(locals.user.id, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'altar', { teddies, bp }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const attack = async ({ locals, request }) => {
@@ -174,7 +191,7 @@ const search = async ({ locals }) => {
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     if (location.empty) return fail(400, { empty: true });
     if (location.searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
-    const itemList = await get_items(locals.rethinkdb);
+    const itemList = await get_loots(locals.rethinkdb);
     const danger = location.layout.danger;
     let pool = getPool(itemList, danger, locals.game.uniques);
     const { cache, items, loots, uniques } = handleSearch(location.items, pool, 'search');
@@ -234,4 +251,4 @@ const travel = async ({ locals, request }) => {
     ], locals.rethinkdb);
 }
 
-export const actions = { attack, building, drop, encampment, force, pickUp, search, tchat, travel };
+export const actions = { altar, attack, building, drop, encampment, force, pickUp, search, tchat, travel };

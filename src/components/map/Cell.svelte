@@ -19,6 +19,7 @@
 
 	$: player = players.find(p => p.coordinate === cell.coordinate);
 	$: color = $page.data.game.players.find(p => p.username === player?.username)?.color;
+	$: zombies = cell.zombies >= 100 ? 'small' : '';
 
 	$: travel = canTravel($page.data.user.location, cell.coordinate, cell.layout.border)
 		&& $page.data.user.ap > 0
@@ -44,7 +45,7 @@
 	: 'fog'))
 </script>
 
-<td	class={style}
+<td	class={style + zombies}
 	style={color ? `border: 3px ridge ${color + '99'}; box-shadow: 0 2px 6px ${color + '7a'}, 0 0 10px ${color + 'b8'}` :
 	encampment !== cell.coordinate && cell.visible ? `background-color: rgb(255, 0, 0, ${cell.visited ? (cell.zombies / 32) : (cell.estimated.zombies / 32)})` : ''}>
 	{#if travel}
@@ -71,6 +72,9 @@
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 		text-shadow: 1px 0 0 #ddd, 1px 1px 0 #ddd, 0 1px 0 #ddd, -1px 1px 0 #ddd, -1px 0 0 #ddd, -1px -1px 0 #ddd, 0 -1px 0 #ddd, 1px -1px 0 #ddd;
 		transition: box-shadow ease 0.3s;
+	}
+	td.small {
+		font-size: 0.75em;
 	}
 	td.encampment {
 		color: #fff;

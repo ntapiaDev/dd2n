@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
 import { nextday_building, nextday_cell, nextday_empty, zombies_building } from '$lib/config';
-import { getBuildings, getTeddies, getTunnel } from '$lib/game';
+import { getAltar, getBuildings, getTeddies, getTunnel } from '$lib/game';
 import { encampment, layout, letters, size } from '$lib/layout';
 
 export const add_tchat = async (game_id, user_id, coordinate, rethinkdb) => {
@@ -11,11 +11,16 @@ export const add_user_to_location = async (game_id, username, coordinate, rethin
     return r.table('cells').filter({ game_id, coordinate }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
 }
 
+export const altar_collapse = async (game_id, coordinate, item, rethinkdb) => {
+    return r.table('cells').filter({ game_id, coordinate }).update({ altar: false, items: r.row('items').append(item) }).run(rethinkdb);
+}
+
 export const delete_cells = async (game_id, rethinkdb) => {
     return r.table('cells').filter({ game_id }).delete().run(rethinkdb);
 }
 
 export const generate_cells = async (game_id, rethinkdb) => {
+    const _altar = getAltar();
     const buildings = getBuildings();
     const teddies = getTeddies();
     const tunnel = getTunnel();
@@ -23,6 +28,7 @@ export const generate_cells = async (game_id, rethinkdb) => {
     let code = 1;
     for (let i = 0; i < size; i++) {
         for (let j = 1; j < size + 1; j++) {
+            const altar = letters[i] + j === _altar;
             const building = buildings[letters[i] + j] ?? '';
             const distance = Math.abs(i - letters.indexOf(encampment[0])) + Math.abs(encampment.substring(1) - j);
             const entrance = tunnel.includes(letters[i] + j) ? tunnel.filter(c => c !== letters[i] + j)[0] : '';
@@ -33,6 +39,7 @@ export const generate_cells = async (game_id, rethinkdb) => {
             if (zombies < 0) zombies = 0;
             if (building) zombies += zombies_building;
             cells.push({
+                altar,
                 building,
                 code,
                 coordinate: letters[i] + j,

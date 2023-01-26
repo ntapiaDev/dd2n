@@ -231,6 +231,21 @@
 		{/if}
 	{:else if log.action === 'teddy'}
 		Cette zone abrite une étrange créature...
+	{:else if log.action === 'altar'}
+		{#if log.log.teddies.length === 0}
+			<PlayerName color={log.color} username={log.player} /> s'approche de l'autel mais rien ne se passe.
+		{:else if log.log.teddies.length === 1}
+			<PlayerName color={log.color} username={log.player} /> s'approche de l'autel et ressent comme un courant d'air.
+		{:else if log.log.teddies.length === 2}
+			<PlayerName color={log.color} username={log.player} /> s'approche de l'autel et le sol commence à trembler.
+		{:else if log.log.teddies.length === 3}
+			<PlayerName color={log.color} username={log.player} /> s'approche de l'autel et voit surgir un éclair.
+			<div class="item">Dans un nuage de fumée, <PlayerName color={log.color} username={log.player} /> finit par distinguer <Item item={log.log.bp} /> sur le sol.</div>
+			L'autel s'effrondre violemment.
+			<div class="item">
+				<span class="teddies"><Item item={log.log.teddies[0]} /><Item item={log.log.teddies[1]} /><span>et</span><Item item={log.log.teddies[2]} /></span> se demandent ce qu'il se passe...
+			</div>
+		{/if}
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
@@ -294,5 +309,12 @@
 	.not-flex span {
 		position: relative;
 		top: 4px;
+	}
+	.teddies {
+		display: flex;
+		align-items: center;
+	}
+	.teddies span {
+		margin: 0 4px;
 	}
 </style>
