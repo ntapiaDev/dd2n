@@ -20,3 +20,7 @@ export const get_items_by_code = async (code, rethinkdb) => {
 export const get_loots = async (rethinkdb) => {
     return sortItems((await r.table('items').filter(r.row('type').ne('misc').and(r.row('rarity').ne('légendaire'))).run(rethinkdb))._responses[0]?.r);
 }
+
+export const get_resources = async (rethinkdb) => {
+    return sortItems((await r.table('items').filter({ type: 'resource' }).run(rethinkdb))._responses[0]?.r);
+}

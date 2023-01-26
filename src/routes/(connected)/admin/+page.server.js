@@ -1,8 +1,9 @@
-import { add_item, get_items } from "$lib/server/items";
+import { add_item, get_items, get_resources } from "$lib/server/items";
 
 export async function load ({ locals }) {
     const items = await get_items(locals.rethinkdb);
-    return { items };
+    const resources = await get_resources(locals.rethinkdb);
+    return { items, resources };
 }
 
 const addItem = async ({ locals, request }) => {
@@ -27,4 +28,25 @@ const addItem = async ({ locals, request }) => {
     await add_item(item, locals.rethinkdb);
 }
 
-export const actions = { addItem };
+const addWorksite = async ({ locals, request }) => {
+    const data = await request.formData();
+    const items = await get_items(locals.rethinkdb);
+    const resources = [];
+    for (let item of items) {
+        if (data.get(item.id)) {
+            const resource = { item, quantity: data.get(item.id) };
+            resources.push(resource);
+        };
+    };
+    const worksite = {
+        ap: data.get('ap'),
+        defense: data.get('defense'),
+        name: data.get('name'),
+        rarity: data.get('rarity'),
+        resources
+    }
+    if (data.get('parent')) worksite.parent = data.get('parent');
+    // Add to table worksites
+}
+
+export const actions = { addItem, addWorksite };
