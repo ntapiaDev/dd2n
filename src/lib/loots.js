@@ -106,11 +106,12 @@ export const handleStack = (items, item) => {
 }
 
 export const sortItems = (items) => {
-    const order = ['food', 'drink', 'drug', 'weapon', 'ammunition', 'explosive', 'armour', 'resource', 'blueprint', 'misc'];
-    return items = items.sort((a, b) => order.indexOf(a.type) > order.indexOf(b.type) ? 1
-    : order.indexOf(a.type) < order.indexOf(b.type) ? -1 
-    : a.rarity > b.rarity ? 1 
-    : a.rarity < b.rarity ? -1 
+    const rarity = ['commun', 'inhabituel', 'rare', 'épique', 'légendaire'];
+    const type = ['food', 'drink', 'drug', 'weapon', 'ammunition', 'explosive', 'armour', 'resource', 'blueprint', 'misc'];
+    return items = items.sort((a, b) => type.indexOf(a.type) > type.indexOf(b.type) ? 1
+    : type.indexOf(a.type) < type.indexOf(b.type) ? -1 
+    : rarity.indexOf(a.rarity) > rarity.indexOf(b.rarity) ? 1
+    : rarity.indexOf(a.rarity) < rarity.indexOf(b.rarity) ? -1 
     : a.type === 'weapon' && (a.attack - a.plus) > (b.attack - b.plus) ? 1 
     : a.type === 'weapon' && (a.attack - a.plus) < (b.attack - b.plus) ? -1 
     : a.type === 'armour' && (a.defense - a.plus) > (b.defense - b.plus) ? 1 

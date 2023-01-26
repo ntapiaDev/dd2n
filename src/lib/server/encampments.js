@@ -31,6 +31,6 @@ export const remove_user_from_encampment = (game_id, username, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb);
 }
 
-export const update_bank = async (game_id, items, rethinkdb) => {
+export const update_bank = (game_id, items, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update({ items }).run(rethinkdb);
 }

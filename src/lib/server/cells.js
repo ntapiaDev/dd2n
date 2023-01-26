@@ -3,19 +3,19 @@ import { nextday_building, nextday_cell, nextday_empty, zombies_building } from 
 import { getAltar, getBuildings, getTeddies, getTunnel } from '$lib/game';
 import { encampment, layout, letters, size } from '$lib/layout';
 
-export const add_tchat = async (game_id, user_id, coordinate, rethinkdb) => {
+export const add_tchat = (game_id, user_id, coordinate, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ tchat: r.row('tchat').append(user_id) }).run(rethinkdb);
 }
 
-export const add_user_to_location = async (game_id, username, coordinate, rethinkdb) => {
+export const add_user_to_location = (game_id, username, coordinate, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
 }
 
-export const altar_collapse = async (game_id, coordinate, item, rethinkdb) => {
+export const altar_collapse = (game_id, coordinate, item, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ altar: false, items: r.row('items').append(item) }).run(rethinkdb);
 }
 
-export const delete_cells = async (game_id, rethinkdb) => {
+export const delete_cells = (game_id, rethinkdb) => {
     return r.table('cells').filter({ game_id }).delete().run(rethinkdb);
 }
 
@@ -82,15 +82,15 @@ export const get_map = async (game_id, rethinkdb) => {
     return rows;
 }
 
-export const kill_zombies = async (game_id, coordinate, killed, rethinkdb) => {
+export const kill_zombies = (game_id, coordinate, killed, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ zombies: r.row('zombies').sub(killed) }).run(rethinkdb);
 }
 
-export const remove_user_from_location = async (game_id, username, location, rethinkdb) => {
+export const remove_user_from_location = (game_id, username, location, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate: location }).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb);
 }
 
-export const update_building = async (game_id, user_id, coordinate, items, empty, rethinkdb) => {
+export const update_building = (game_id, user_id, coordinate, items, empty, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ building: { empty, searchedBy: r.row('searchedBy').append(user_id) }, items }).run(rethinkdb);
 }
 
@@ -114,7 +114,7 @@ export const update_cells = async (game_id, rethinkdb) => {
     return logs;
 }
 
-export const update_items = async (game_id, coordinate, items, rethinkdb) => {
+export const update_items = (game_id, coordinate, items, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ items }).run(rethinkdb);
 }
 
@@ -123,6 +123,6 @@ export const update_map = async (game_id, username, location, target, estimated,
     return r.table('cells').filter({ game_id, coordinate: target }).update({ players: r.row('players').append(username), visible: true, visited: true }).run(rethinkdb);
 }
 
-export const update_search = async (game_id, user_id, coordinate, items, empty, rethinkdb) => {
+export const update_search = (game_id, user_id, coordinate, items, empty, rethinkdb) => {
     return r.table('cells').filter({ game_id, coordinate }).update({ empty, items, searchedBy: r.row('searchedBy').append(user_id) }).run(rethinkdb);
 }

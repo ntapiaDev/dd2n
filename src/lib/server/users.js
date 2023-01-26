@@ -3,7 +3,7 @@ import r from 'rethinkdb';
 import { nextday_hunger, nextday_thirst } from '$lib/config';
 import { encampment } from '$lib/layout';
 
-export const add_game_to_user = async (game_id, id, color, rethinkdb) => {
+export const add_game_to_user = (game_id, id, color, rethinkdb) => {
     return r.table('users').get(id).update({
         ap: 100,
         color,
@@ -102,27 +102,27 @@ export const add_user = async (user, rethinkdb) => {
     return SESSIONID;
 }
 
-export const _attack = async (user_id, ap, force, hunger, slots, stats, thirst, wound, rethinkdb) => {
+export const _attack = (user_id, ap, force, hunger, slots, stats, thirst, wound, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, force, hunger, slots, stats, thirst, wound }).run(rethinkdb);
 }
 
-export const _boost = async (user_id, item, ap, rethinkdb) => {
+export const _boost = (user_id, item, ap, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]) }).run(rethinkdb);
 }
 
-export const enter_encampment = async (user_id, rethinkdb) => {
+export const enter_encampment = (user_id, rethinkdb) => {
     return r.table('users').get(user_id).update({ location: 'Encampment' }).run(rethinkdb);
 }
 
-export const _equip = async (user_id, inventory, slots, rethinkdb) => {
+export const _equip = (user_id, inventory, slots, rethinkdb) => {
     return r.table('users').get(user_id).update({ inventory, slots }).run(rethinkdb);
 }
 
-export const _feed = async (user_id, item, ap, hunger, thirst, rethinkdb) => {
+export const _feed = (user_id, item, ap, hunger, thirst, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]), hunger, thirst }).run(rethinkdb);
 }
 
-export const _force = async (user_id, rethinkdb) => {
+export const _force = (user_id, rethinkdb) => {
     return r.table('users').get(user_id).update({ force: true, wound: 2 }).run(rethinkdb);
 }
 
@@ -136,15 +136,15 @@ export const get_by_username = async (username, rethinkdb) => {
     return (await r.table('users').filter({ username: username }).run(rethinkdb))._responses[0]?.r[0]
 }
 
-export const _heal = async (user_id, item, rethinkdb) => {
+export const _heal = (user_id, item, rethinkdb) => {
     return r.table('users').get(user_id).update({ inventory: r.row('inventory').difference([item]), wound: 0 }).run(rethinkdb);
 }
 
-export const leave_encampment = async (user_id, rethinkdb) => {
+export const leave_encampment = (user_id, rethinkdb) => {
     return r.table('users').get(user_id).update({ location: encampment }).run(rethinkdb);
 }
 
-export const lose_ap = async (user_id, rethinkdb) => {
+export const lose_ap = (user_id, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap: r.row('ap').sub(1) }).run(rethinkdb);
 }
 
@@ -154,23 +154,23 @@ export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {
     return NEW_SESSIONID;
 }
 
-export const remove_game_from_user = async (username, rethinkdb) => {
+export const remove_game_from_user = (username, rethinkdb) => {
     return r.table('users').filter({ username }).replace(r.row.without(
         'ap', 'color', 'force', 'game_id', 'hunger', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 
-export const remove_game_from_users = async (game_id, rethinkdb) => {
+export const remove_game_from_users = (game_id, rethinkdb) => {
     return r.table('users').filter({ game_id }).replace(r.row.without(
         'ap', 'color', 'force', 'game_id', 'hunger', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 
-export const _search = async (user_id, ap, hunger, stats, thirst, rethinkdb) => {
+export const _search = (user_id, ap, hunger, stats, thirst, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, hunger, stats, thirst }).run(rethinkdb);
 }
 
-export const setSession = async (cookies, SESSIONID) => {
+export const setSession = (cookies, SESSIONID) => {
     cookies.set('SESSIONID', SESSIONID, {
         path: '/',
         httpOnly: true,
@@ -180,8 +180,8 @@ export const setSession = async (cookies, SESSIONID) => {
     })
 }
 
-export const _travel = async (user_id, location, ap, hunger, thirst, rethinkdb) => {
-    await r.table('users').get(user_id).update({ ap, force: false, hunger, location, thirst }).run(rethinkdb);
+export const _travel = (user_id, location, ap, hunger, thirst, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, force: false, hunger, location, thirst }).run(rethinkdb);
 }
 
 export const update_users = async (game_id, rethinkdb) => {
