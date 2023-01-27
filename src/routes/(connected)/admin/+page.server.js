@@ -36,19 +36,19 @@ const addWorksite = async ({ locals, request }) => {
     const resources = [];
     for (let item of items) {
         if (data.get(item.id)) {
-            const resource = { item, quantity: data.get(item.id) };
+            const resource = { item, quantity: parseInt(data.get(item.id)) };
             resources.push(resource);
         };
     };
     const worksite = {
         completed: data.get('completed') === 'completed',
-        defense: data.get('defense'),
+        defense: parseInt(data.get('defense')),
         name: data.get('name'),
         rarity: data.get('rarity'),
         resources,
         unlocked: data.get('unlocked') === 'unlocked'
     }
-    if (data.get('ap')) worksite.ap = data.get('ap');
+    if (data.get('ap')) worksite.ap = parseInt(data.get('ap'));
     if (data.get('parent')) worksite.parent = data.get('parent');
     await add_worksite(worksite, locals.rethinkdb);
 }

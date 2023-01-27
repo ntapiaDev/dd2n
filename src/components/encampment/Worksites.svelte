@@ -18,10 +18,10 @@
         <span>DEF</span>
     </span>
     {#each worksites[0].reduction as parent}
-        {#if unlocked.includes(parent.id)}
+        {#if unlocked.includes(parent.id) || completed.includes(parent.id)}
             <Worksite completed={completed.includes(parent.id)} type="parent" worksite={parent} />
             {#each worksites.find(w => w.group === parent.id)?.reduction ?? [] as child}
-                <Worksite completed={completed.includes(child.id)} hidden={!unlocked.includes(child.id)} type="child" worksite={child} />
+                <Worksite completed={completed.includes(child.id)} hidden={!unlocked.includes(child.id) && !completed.includes(child.id)} type="child" worksite={child} />
             {/each}
         {/if}
     {/each}

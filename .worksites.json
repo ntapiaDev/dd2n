@@ -1,317 +1,302 @@
 [
     {
-        "group": null,
-        "reduction": [
+        "ap": 5,
+        "completed": false,
+        "defense": 5,
+        "id": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
+        "name": "Fossé",
+        "rarity": "commun",
+        "resources": [
             {
-                "completed": true,
-                "defense": "10",
-                "id": "d861d4f8-728b-4815-8d0d-0729772a61a0",
-                "name": "Mur en bois",
-                "rarity": "commun",
-                "resources": [],
-                "unlocked": true
-            },
-            {
-                "ap": "5",
-                "completed": false,
-                "defense": "5",
-                "id": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
-                "name": "Fossé",
-                "rarity": "commun",
-                "resources": [
-                    {
-                        "item": {
-                            "attack": 2,
-                            "credit": "monkik",
-                            "description": "Une pelle boueuse",
-                            "durabilityMax": 10,
-                            "icon": "shovel",
-                            "id": "1226715e-fc16-4d6c-9a25-0a7d2df099bd",
-                            "rarity": "commun",
-                            "slot": "W1",
-                            "type": "weapon",
-                            "unique": false
-                        },
-                        "quantity": "1"
-                    }
-                ],
-                "unlocked": false
-            },
-            {
-                "completed": true,
-                "defense": "5",
-                "id": "c8bf3b5c-af71-4440-ac26-dffde7d07510",
-                "name": "Porte en bois",
-                "rarity": "commun",
-                "resources": [],
-                "unlocked": true
+                "item": {
+                    "attack": 2,
+                    "credit": "monkik",
+                    "description": "Une pelle boueuse",
+                    "durabilityMax": 10,
+                    "icon": "shovel",
+                    "id": "1226715e-fc16-4d6c-9a25-0a7d2df099bd",
+                    "rarity": "commun",
+                    "slot": "W1",
+                    "type": "weapon",
+                    "unique": false
+                },
+                "quantity": 1
             }
-        ]
+        ],
+        "unlocked": false
     },
     {
-        "group": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
-        "reduction": [
-            {
-                "ap": "15",
-                "completed": false,
-                "defense": "15",
-                "id": "00bff452-a04b-43da-add4-d4a3839c8ffa",
-                "name": "Fossé profond",
-                "parent": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
-                "rarity": "inhabituel",
-                "resources": [
-                    {
-                        "item": {
-                            "attack": 2,
-                            "credit": "monkik",
-                            "description": "Une pelle boueuse",
-                            "durabilityMax": 10,
-                            "icon": "shovel",
-                            "id": "1226715e-fc16-4d6c-9a25-0a7d2df099bd",
-                            "rarity": "commun",
-                            "slot": "W1",
-                            "type": "weapon",
-                            "unique": false
-                        },
-                        "quantity": "4"
-                    }
-                ],
-                "unlocked": false
-            },
-            {
-                "ap": "30",
-                "completed": false,
-                "defense": "30",
-                "id": "8cba340b-f5e3-4df9-b61c-5634a5081484",
-                "name": "Fossé barbelé",
-                "parent": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
-                "rarity": "rare",
-                "resources": [
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "Smashicons",
-                            "description": "Du fil barbelé",
-                            "icon": "barbed-wire",
-                            "id": "6911f5a0-c1d8-4aa7-8634-c1f64118b96e",
-                            "rarity": "rare",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "10"
-                    }
-                ],
-                "unlocked": false
-            }
-        ]
+        "completed": true,
+        "defense": 5,
+        "id": "c8bf3b5c-af71-4440-ac26-dffde7d07510",
+        "name": "Porte en bois",
+        "rarity": "commun",
+        "resources": [],
+        "unlocked": true
     },
     {
-        "group": "d861d4f8-728b-4815-8d0d-0729772a61a0",
-        "reduction": [
+        "ap": 10,
+        "completed": false,
+        "defense": 10,
+        "id": "13dee052-d25e-4bc0-871c-67583674f288",
+        "name": "Mur en bois renforcé",
+        "parent": "d861d4f8-728b-4815-8d0d-0729772a61a0",
+        "rarity": "commun",
+        "resources": [
             {
-                "ap": "10",
-                "completed": false,
-                "defense": "10",
-                "id": "13dee052-d25e-4bc0-871c-67583674f288",
-                "name": "Mur en bois renforcé",
-                "parent": "d861d4f8-728b-4815-8d0d-0729772a61a0",
-                "rarity": "commun",
-                "resources": [
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "smashingstocks",
-                            "description": "Des planches de bois",
-                            "icon": "wood-plank",
-                            "id": "a3eff481-3d59-40d4-b127-6a79ff748eb0",
-                            "rarity": "commun",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "5"
-                    },
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "Mehwish",
-                            "description": "Une poignée de clous rouillés",
-                            "icon": "nails",
-                            "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
-                            "rarity": "commun",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "5"
-                    }
-                ],
-                "unlocked": true
+                "item": {
+                    "code": "b2",
+                    "credit": "smashingstocks",
+                    "description": "Des planches de bois",
+                    "icon": "wood-plank",
+                    "id": "a3eff481-3d59-40d4-b127-6a79ff748eb0",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
             },
             {
-                "ap": "20",
-                "completed": false,
-                "defense": "20",
-                "id": "0cb38f83-1328-44a1-9679-bea661e54af0",
-                "name": "Mur en métal",
-                "parent": "d861d4f8-728b-4815-8d0d-0729772a61a0",
-                "rarity": "commun",
-                "resources": [
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "surang",
-                            "description": "Des morceaux de ferraille",
-                            "icon": "scrap-metal",
-                            "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
-                            "rarity": "commun",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "10"
-                    },
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "smashingstocks",
-                            "description": "Des planches de bois",
-                            "icon": "wood-plank",
-                            "id": "a3eff481-3d59-40d4-b127-6a79ff748eb0",
-                            "rarity": "commun",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "5"
-                    },
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "Mehwish",
-                            "description": "Une poignée de clous rouillés",
-                            "icon": "nails",
-                            "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
-                            "rarity": "commun",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "5"
-                    }
-                ],
-                "unlocked": false
-            },
-            {
-                "ap": 30,
-                "completed": false,
-                "defense": 30,
-                "id": "dbd0e9bb-378c-48e3-935d-9f41fce5de53",
-                "name": "Mur en acier",
-                "parent": "d861d4f8-728b-4815-8d0d-0729772a61a0",
-                "rarity": "inhabituel",
-                "resources": [
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "Chanut-is-Industries",
-                            "description": "Quelques boulons et écrous",
-                            "icon": "bolts",
-                            "id": "18ba6820-fe6c-44ef-8194-1860679bd2c6",
-                            "rarity": "inhabituel",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "5"
-                    },
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "Design Circle",
-                            "description": "Une poutre en acier",
-                            "icon": "poutre",
-                            "id": "d94456fd-3275-4574-a151-c02dfe379af4",
-                            "rarity": "inhabituel",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "10"
-                    }
-                ],
-                "unlocked": false
-            },
-            {
-                "ap": "50",
-                "completed": false,
-                "defense": "50",
-                "id": "a41b56ca-51a1-477b-ad0f-c02e12554254",
-                "name": "Mur en acier renforcé",
-                "parent": "d861d4f8-728b-4815-8d0d-0729772a61a0",
-                "rarity": "rare",
-                "resources": [
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "surang",
-                            "description": "Des morceaux de ferraille",
-                            "icon": "scrap-metal",
-                            "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
-                            "rarity": "commun",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "20"
-                    },
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "Chanut-is-Industries",
-                            "description": "Quelques boulons et écrous",
-                            "icon": "bolts",
-                            "id": "18ba6820-fe6c-44ef-8194-1860679bd2c6",
-                            "rarity": "inhabituel",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "5"
-                    },
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "smashingstocks",
-                            "description": "Un bloc de béton",
-                            "icon": "concrete",
-                            "id": "1b56782b-8525-40f6-889c-45ed0d7594d9",
-                            "rarity": "inhabituel",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "10"
-                    },
-                    {
-                        "item": {
-                            "code": "b2",
-                            "credit": "Design Circle",
-                            "description": "Une poutre en acier",
-                            "icon": "poutre",
-                            "id": "d94456fd-3275-4574-a151-c02dfe379af4",
-                            "rarity": "inhabituel",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "10"
-                    },
-                    {
-                        "item": {
-                            "code": "b4",
-                            "credit": "ultimatearm",
-                            "description": "Une grosse vis",
-                            "icon": "screw",
-                            "id": "6c7bbac1-f3a3-4169-b653-4f66e12d7165",
-                            "rarity": "rare",
-                            "type": "resource",
-                            "unique": false
-                        },
-                        "quantity": "5"
-                    }
-                ],
-                "unlocked": false
+                "item": {
+                    "code": "b2",
+                    "credit": "Mehwish",
+                    "description": "Une poignée de clous rouillés",
+                    "icon": "nails",
+                    "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
             }
-        ]
+        ],
+        "unlocked": true
+    },
+    {
+        "completed": true,
+        "defense": 10,
+        "id": "d861d4f8-728b-4815-8d0d-0729772a61a0",
+        "name": "Mur en bois",
+        "rarity": "commun",
+        "resources": [],
+        "unlocked": true
+    },
+    {
+        "ap": 20,
+        "completed": false,
+        "defense": 20,
+        "id": "0cb38f83-1328-44a1-9679-bea661e54af0",
+        "name": "Mur en métal",
+        "parent": "d861d4f8-728b-4815-8d0d-0729772a61a0",
+        "rarity": "commun",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "smashingstocks",
+                    "description": "Des planches de bois",
+                    "icon": "wood-plank",
+                    "id": "a3eff481-3d59-40d4-b127-6a79ff748eb0",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Mehwish",
+                    "description": "Une poignée de clous rouillés",
+                    "icon": "nails",
+                    "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            }
+        ],
+        "unlocked": false
+    },
+    {
+        "ap": 15,
+        "completed": false,
+        "defense": 15,
+        "id": "00bff452-a04b-43da-add4-d4a3839c8ffa",
+        "name": "Fossé profond",
+        "parent": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "attack": 2,
+                    "credit": "monkik",
+                    "description": "Une pelle boueuse",
+                    "durabilityMax": 10,
+                    "icon": "shovel",
+                    "id": "1226715e-fc16-4d6c-9a25-0a7d2df099bd",
+                    "rarity": "commun",
+                    "slot": "W1",
+                    "type": "weapon",
+                    "unique": false
+                },
+                "quantity": 4
+            }
+        ],
+        "unlocked": false
+    },
+    {
+        "ap": 30,
+        "completed": false,
+        "defense": 30,
+        "id": "dbd0e9bb-378c-48e3-935d-9f41fce5de53",
+        "name": "Mur en acier",
+        "parent": "d861d4f8-728b-4815-8d0d-0729772a61a0",
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Chanut-is-Industries",
+                    "description": "Quelques boulons et écrous",
+                    "icon": "bolts",
+                    "id": "18ba6820-fe6c-44ef-8194-1860679bd2c6",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Design Circle",
+                    "description": "Une poutre en acier",
+                    "icon": "poutre",
+                    "id": "d94456fd-3275-4574-a151-c02dfe379af4",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            }
+        ],
+        "unlocked": false
+    },
+    {
+        "ap": 30,
+        "completed": false,
+        "defense": 30,
+        "id": "8cba340b-f5e3-4df9-b61c-5634a5081484",
+        "name": "Fossé barbelé",
+        "parent": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
+        "rarity": "rare",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Smashicons",
+                    "description": "Du fil barbelé",
+                    "icon": "barbed-wire",
+                    "id": "6911f5a0-c1d8-4aa7-8634-c1f64118b96e",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            }
+        ],
+        "unlocked": false
+    },
+    {
+        "ap": 50,
+        "completed": false,
+        "defense": 50,
+        "id": "a41b56ca-51a1-477b-ad0f-c02e12554254",
+        "name": "Mur en acier renforcé",
+        "parent": "d861d4f8-728b-4815-8d0d-0729772a61a0",
+        "rarity": "rare",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Chanut-is-Industries",
+                    "description": "Quelques boulons et écrous",
+                    "icon": "bolts",
+                    "id": "18ba6820-fe6c-44ef-8194-1860679bd2c6",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "smashingstocks",
+                    "description": "Un bloc de béton",
+                    "icon": "concrete",
+                    "id": "1b56782b-8525-40f6-889c-45ed0d7594d9",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Design Circle",
+                    "description": "Une poutre en acier",
+                    "icon": "poutre",
+                    "id": "d94456fd-3275-4574-a151-c02dfe379af4",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "ultimatearm",
+                    "description": "Une grosse vis",
+                    "icon": "screw",
+                    "id": "6c7bbac1-f3a3-4169-b653-4f66e12d7165",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            }
+        ],
+        "unlocked": false
     }
 ]

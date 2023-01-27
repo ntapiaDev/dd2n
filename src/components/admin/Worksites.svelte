@@ -43,7 +43,7 @@
             <input type="text" name="name" placeholder="Nom" required />
             <select name="parent">
                 <option value="">Parent</option>
-                {#each worksites[0].reduction as worksite}
+                {#each worksites.filter(w => !w.parent) as worksite}
                     <option value={worksite.id}>{worksite.name}</option>
                 {/each}
             </select>

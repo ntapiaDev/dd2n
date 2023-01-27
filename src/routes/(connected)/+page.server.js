@@ -15,7 +15,7 @@ const addGame = async ({ locals }) => {
     if (locals.user.role !== 'admin') return fail(400, { admin: true });
     const worksites = await get_worksites(locals.rethinkdb);
     const completed = worksites.filter(w => w.completed).map(w => w.id);
-    const unlocked = worksites.filter(w => w.unlocked).map(w => w.id);
+    const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(w => w.id);
     const game_id = await add_game(completed, unlocked, locals.rethinkdb);
     const teddies = await generate_cells(game_id, locals.rethinkdb);
     await generate_encampment(game_id, locals.rethinkdb);

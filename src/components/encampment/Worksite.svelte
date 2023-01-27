@@ -51,7 +51,7 @@
     }
 </script>
 
-<div class:completed class:hidden class={type + (!hidden ? (' ' + worksite.rarity) : '')}>
+<div class:completed class:hidden class={type + ' ' + worksite.rarity}>
     <span class="name" class:completed>{!hidden ? worksite.name : 'Chantier inconnu'}</span>
     <span class="resources">
         {#if !completed && !hidden}
@@ -161,10 +161,10 @@
     }
 
     .inhabituel {
-		border: 1px solid green;
+		box-shadow: 0 0 3px rgba(0, 128, 0, 0.50), 0 2px 4px rgba(0, 128, 0, 0.50);
 	}
 	.rare {
-		border: 1px solid blue;
+		box-shadow: 0 0 3px rgba(0, 0, 255, 0.50), 0 2px 4px rgba(0, 0, 255, 0.50);
 	}
 	.épique {
 		border: 1px solid purple;

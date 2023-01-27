@@ -5,5 +5,9 @@ export const add_worksite = async (worksite, rethinkdb) => {
 }
 
 export const get_worksites = async (rethinkdb) => {
-    return r.table('worksites').orderBy(r.asc('rarity'), r.asc('defense')).group("parent").run(rethinkdb);
+    return r.table('worksites').orderBy(r.asc('rarity'), r.asc('defense')).run(rethinkdb);
+}
+
+export const get_worksites_by_group = async (rethinkdb) => {
+    return r.table('worksites').group("parent").orderBy(r.asc('rarity'), r.asc('defense')).run(rethinkdb);
 }
