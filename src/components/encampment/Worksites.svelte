@@ -1,6 +1,6 @@
 <script>
-    import { page } from '$app/stores';
 	import { fade } from "svelte/transition";
+    import { getDefense } from "$lib/worksites";
 	import Worksite from './Worksite.svelte';
 
     export let encampment;
@@ -8,6 +8,8 @@
     
     $: completed = encampment.completed;
     $: unlocked = encampment.unlocked.map(w => w.id);
+
+    $: defense = getDefense(completed, worksites);
 </script>
 
 <div in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
@@ -33,6 +35,7 @@
             {/each}
         {/if}
     {/each}
+    <div class="defense">Total : <b>{defense}</b> DEF</div>
 </div>
 
 <style>
@@ -50,5 +53,8 @@
     }
     .header span {
         text-align: center;
+    }
+    .defense {
+        text-align: end;
     }
 </style>

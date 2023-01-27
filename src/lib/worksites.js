@@ -4,3 +4,15 @@ export const checkResources = (bank, resources) => {
     }
     return true;
 }
+
+export const getDefense = (completed, worksites) => {
+    let defense = 0;
+    for (let complete of completed) {
+        for (let group of worksites) {
+            for (let worksite of group.reduction) {
+                if (worksite.id === complete) defense += worksite.defense;
+            }
+        }
+    }
+    return defense;
+}

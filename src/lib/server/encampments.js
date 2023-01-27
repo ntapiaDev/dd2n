@@ -41,7 +41,7 @@ export const delete_encampment = (game_id, rethinkdb) => {
 
 export const generate_encampment = (game_id, completed, unlocked, rethinkdb) => {
     return r.table('encampments').insert({
-        attack: 0,
+        attack: 20,
         game_id,
         items: [],
         players: [],

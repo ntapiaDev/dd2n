@@ -132,6 +132,16 @@ export const get_by_SESSIONID = async (SESSIONID, rethinkdb) => {
     return user;
 }
 
+export const get_slots_by_game = async (game_id, rethinkdb) => {
+    return (await r.table('users').filter({ game_id }).map(function(user) {
+        return {
+            'A1': user('slots')('A1'),
+            'A2': user('slots')('A2'),
+            'A3': user('slots')('A3')
+        }
+    }).run(rethinkdb))._responses[0]?.r;
+}
+
 export const get_by_username = async (username, rethinkdb) => {
     return (await r.table('users').filter({ username: username }).run(rethinkdb))._responses[0]?.r[0]
 }
