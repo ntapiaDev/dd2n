@@ -4,18 +4,51 @@ export const add_user_to_encampment = (game_id, username, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
 }
 
+export const build = (game_id, ap, worksite_id, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            worksites: {
+                unlocked: doc("worksites")("unlocked").map(function(worksite) {
+                    return r.branch(
+                        worksite("id").eq(worksite_id),
+                        worksite.merge({"ap": worksite('ap').sub(ap)}),
+                        worksite
+                    );
+                })
+            }
+        };
+    }).run(rethinkdb);
+}
+
+export const built = (game_id, items, worksite_id, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            // Faire une requête plus propre en retirant la quatité via la requête ReQL
+            items,
+            worksites: {
+              completed: doc("worksites")("completed").append(worksite_id),
+                unlocked: doc("worksites")("unlocked").filter(function(worksite) {
+                    return worksite("id").ne(worksite_id)
+                })
+            }
+        }
+    }).run(rethinkdb);
+}
+
 export const delete_encampment = (game_id, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).delete().run(rethinkdb);
 }
 
-export const generate_encampment = (game_id, rethinkdb) => {
+export const generate_encampment = (game_id, completed, unlocked, rethinkdb) => {
     return r.table('encampments').insert({
         attack: 0,
-        blueprints: [],
         game_id,
         items: [],
-        logs: [],
-        players: []
+        players: [],
+        worksites: {
+            completed,
+            unlocked
+        }
     }).run(rethinkdb);
 }
 

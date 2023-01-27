@@ -4,6 +4,7 @@
     import { checkResources } from "$lib/worksites";
 	import Item from "../game/Item.svelte";
 
+    export let apLeft = 0;
     export let completed;
     export let hidden = false;
     export let type;
@@ -40,7 +41,8 @@
         }
     ]
 
-    let ap = 0;
+    let ap = apLeft;
+    $: if(apLeft) ap = apLeft;
 
     $: bank = $page.data.encampment.items;
 </script>
@@ -58,7 +60,7 @@
     </span>
     <span class="ap">
         {#if !completed && !hidden}
-            <input type="range" min="0" max={worksite.ap} bind:value={ap}>
+            <input type="range" min="0" max={apLeft} disabled={!checkResources(bank, worksite.resources)} bind:value={ap}>
             <span class={!ap ? '' : (ap <= $page.data.user.ap ? 'valid' : 'failed')}>
                 {ap}
             </span>
@@ -70,7 +72,7 @@
             <Item item={items[0]} />
         {:else if !hidden}
             {#if checkResources(bank, worksite.resources)}
-                <form method="POST" action="/encampment?/build" use:enhance>
+                <form method="POST" action="/encampment?/worksite" use:enhance>
                     <input type="text" name="ap" value={ap} hidden>
                     <input type="text" name="id" value={worksite.id} hidden>
                     <button>

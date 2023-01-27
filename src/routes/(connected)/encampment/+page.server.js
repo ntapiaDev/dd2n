@@ -1,10 +1,11 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { getItem, handleStack } from "$lib/loots";
+import { checkHT } from "$lib/player";
 import { checkResources } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
-import { get_encampment, get_bank, remove_user_from_encampment, update_bank } from "$lib/server/encampments";
+import { build, built, get_encampment, get_bank, remove_user_from_encampment, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
-import { _equip, leave_encampment } from "$lib/server/users";
+import { _equip, leave_encampment, update_stats } from "$lib/server/users";
 import { get_worksite, get_worksites_by_group } from "$lib/server/worksites";
 
 export const load = async ({ locals }) => {
@@ -13,21 +14,6 @@ export const load = async ({ locals }) => {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const worksites = await get_worksites_by_group(locals.rethinkdb);
     return { encampment, lastDate, logs, worksites };
-}
-
-const build = async ({ locals, request }) => {
-    const data = await request.formData();
-    const ap = parseInt(data.get('ap'));
-    if (!ap) return fail(400, { nothing: true });
-    else if (ap > locals.user.ap) return fail(400, { ap: true });
-    const id = data.get('id');
-    if (locals.game.worksites.completed.includes(id)) return fail(400, { completed: true });
-    else if (!locals.game.worksites.unlocked.includes(id)) return fail(400, { unlocked: true });
-    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
-    const worksite = await get_worksite(id, locals.rethinkdb);
-    if (!checkResources(encampment.items, worksite.resources)) return fail(400, { resources: true });
-
-    throw redirect(303, '/encampment');
 }
 
 const deposit = async ({ locals, request }) => {
@@ -77,4 +63,35 @@ const withdraw = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { build, deposit, map, withdraw };
+const worksite = async ({ locals, request }) => {
+    const data = await request.formData();
+    const ap = parseInt(data.get('ap'));
+    if (!ap) return fail(400, { nothing: true });
+    else if (ap > locals.user.ap) return fail(400, { ap: true });
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    const id = data.get('id');
+    const unlocked = encampment.worksites.unlocked;
+    if (encampment.worksites.completed.includes(id)) return fail(400, { completed: true });
+    else if (!unlocked.some(w => w.id === id)) return fail(400, { unlocked: true });
+    else if (unlocked.find(w => w.id === id).ap < ap) return fail(400, { toMuch: true });
+    const bank = encampment.items;
+    const worksite = await get_worksite(id, locals.rethinkdb);
+    if (!checkResources(bank, worksite.resources)) return fail(400, { resources: true });
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
+    await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
+    let completed = false;
+    if (unlocked.find(w => w.id === id).ap === ap) {
+        for (let resource of worksite.resources) {
+            bank.find(i => i.id === resource.item.id).quantity -= resource.quantity;
+        }
+        // Faire une requête plus propre en retirant la quatité via la requête ReQL
+        await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
+        completed = true;
+    } else {
+        await build(locals.user.game_id, ap, id, locals.rethinkdb);
+    }
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, warning, worksite }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    throw redirect(303, '/encampment');
+}
+
+export const actions = { deposit, map, withdraw, worksite };

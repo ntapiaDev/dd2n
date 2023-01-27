@@ -5,6 +5,13 @@
 
 	export let log;
 
+	const build = {
+		credit: 'Freepik',
+		description: 'Construire',
+		icon: 'build',
+		id: '2a8248fb-6e92-45a9-9e98-bcb9a658b5a0',
+		type: 'misc'
+	}
 	const feed = [
 		{
 			credit: 'Freepik',
@@ -57,7 +64,7 @@
 			id: '1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8',
 			type: 'misc',
 		}
-	];	
+	];
 
 	const firstLetterToLowerCase = (word) => {
 		return word.charAt(0).toLowerCase() + word.slice(1);
@@ -108,6 +115,29 @@
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a rangé <Item item={log.log.item} /> dans la banque.</div>
 	{:else if log.action === 'withdraw'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris <Item item={log.log.item} /> dans la banque.</div>
+	{:else if log.action === 'build'}
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} /> <b>{log.log.worksite.name}<span class="notb">.</span></b></div>
+		{#if log.log.completed}
+			Le chantier est maintenant terminé, le campement gagne {log.log.worksite.defense} DEF !
+			<div class="item">
+				<span class="build">
+					{#each log.log.worksite.resources as resource, i}
+						{#if log.log.worksite.resources.length === i + 1}
+							<span>et</span>
+						{/if}
+						<Item quantity={resource.quantity} item={resource.item} />
+					{/each}
+				</span>
+				ont été retirés de la banque.
+			</div>
+		{/if}
+		{#if log.log.warning === 'hunger'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /></div>
+		{:else if log.log.warning === 'thirst'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+		{:else if log.log.warning === 'both'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /> et <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+		{/if}
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
@@ -145,6 +175,11 @@
 		flex-wrap: wrap;
 		gap: 4px;
 	}
+	.item .build {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
 	.food {
 		color: green;
 	}
@@ -153,5 +188,8 @@
 	}
 	.boost {
 		color: orange;
+	}
+	.notb {
+		font-weight: normal;
 	}
 </style>

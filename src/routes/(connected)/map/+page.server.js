@@ -101,7 +101,7 @@ const attack = async ({ locals, request }) => {
     }
     const stats = locals.user.stats;
     stats.zombies += (killed + critical);
-    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await kill_zombies(locals.user.game_id, location.coordinate, killed + critical, locals.rethinkdb);
     await _attack(locals.user.id, locals.user.ap - 1, force, hunger, slots, stats, thirst, wound, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, woundedW0, woundedW1, critical, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
@@ -122,7 +122,7 @@ const building = async ({ locals }) => {
     let empty = Math.random() > empty_building;
     const stats = locals.user.stats;
     stats.items += loots.length;
-    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await update_building(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb);
     await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
@@ -199,7 +199,7 @@ const search = async ({ locals }) => {
     let empty = Math.random() > (danger === 1 ? empty_1 : danger === 2 ? empty_2 : empty_3);
     const stats = locals.user.stats;
     stats.items += loots.length;
-    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await update_search(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb)
     await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
@@ -242,7 +242,7 @@ const travel = async ({ locals, request }) => {
         empty: location.empty,
         zombies: location.zombies
     }
-    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst);
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await update_map(locals.user.game_id, locals.user.username, location.coordinate, target, estimated, locals.rethinkdb);
     await _travel(locals.user.id, target, locals.user.ap - 1, hunger, thirst, locals.rethinkdb);
     await add_logs(locals.user.game_id, [

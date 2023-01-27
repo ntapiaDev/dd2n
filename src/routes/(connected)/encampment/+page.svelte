@@ -43,7 +43,7 @@
 		{:else if $sidebar === 'bank'}
 			<Bank items={sortItems(encampment.items)} />
 		{:else if $sidebar === 'worksites'}
-			<Worksites worksites={data.worksites} />
+			<Worksites encampment={encampment.worksites} worksites={data.worksites} />
 		{/if}
 		<div class="error">
 			{#if form?.ap}
@@ -58,6 +58,8 @@
 				<p>Cet objet n'est pas présent dans la banque ou dans votre inventaire.</p>
 			{:else if form?.resources}
 				<p>Il n'y a pas assez de ressources pour construire ce chantier.</p>
+			{:else if form?.toMuch}
+				<p>Vous avez dépensé trop de points d'actions pour ce chantier.</p>
 			{:else if form?.unlocked}
 				<p>Ce chantier n'est pas encore débloqué.</p>
 			{/if}

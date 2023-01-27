@@ -3,7 +3,7 @@ import { colors } from '$lib/config';
 import { getRandomName } from '$lib/game';
 import { encampment } from '$lib/layout';
 
-export const add_game = async (completed, unlocked, rethinkdb) => {
+export const add_game = async (rethinkdb) => {
     return (await r.table('games').insert({
         colors,
         date: Date.now(),
@@ -12,10 +12,6 @@ export const add_game = async (completed, unlocked, rethinkdb) => {
         name: getRandomName(),
         players: [],
         uniques: [],
-        worksites: {
-            completed,
-            unlocked
-        }
     }).run(rethinkdb)).generated_keys[0];
 }
 
