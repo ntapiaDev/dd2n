@@ -4,6 +4,7 @@ import { add_user_to_encampment, delete_encampment, generate_encampment, remove_
 import { add_game, add_user_to_game, delete_game, get_games, get_game_by_id, remove_user_from_game } from "$lib/server/games"
 import { add_log, add_logs, delete_logs } from "$lib/server/logs";
 import { add_game_to_user, remove_game_from_user, remove_game_from_users } from "$lib/server/users";
+import { get_worksites } from "$lib/server/worksites";
 
 export const load = async ({ locals }) => {
     const games = await get_games(locals.rethinkdb);
@@ -12,7 +13,10 @@ export const load = async ({ locals }) => {
 
 const addGame = async ({ locals }) => {
     if (locals.user.role !== 'admin') return fail(400, { admin: true });
-    const game_id = await add_game(locals.rethinkdb);
+    const worksites = await get_worksites(locals.rethinkdb);
+    const completed = worksites.filter(w => w.completed).map(w => w.id);
+    const unlocked = worksites.filter(w => w.unlocked).map(w => w.id);
+    const game_id = await add_game(completed, unlocked, locals.rethinkdb);
     const teddies = await generate_cells(game_id, locals.rethinkdb);
     await generate_encampment(game_id, locals.rethinkdb);
     await add_logs(game_id, [

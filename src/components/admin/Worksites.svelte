@@ -5,6 +5,7 @@
 
     export let resources;
     export let worksites;
+    $: console.log(worksites);
 </script>
 
 <div class="worksites" in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
@@ -42,7 +43,7 @@
             <input type="text" name="name" placeholder="Nom" required />
             <select name="parent">
                 <option value="">Parent</option>
-                {#each worksites as worksite}
+                {#each worksites[0].reduction as worksite}
                     <option value={worksite.id}>{worksite.name}</option>
                 {/each}
             </select>

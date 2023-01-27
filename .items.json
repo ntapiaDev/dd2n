@@ -769,6 +769,31 @@
         "unique": true
     },
     {
+        "credit": "wanicon",
+        "description": "Plan: Autel des offrandes",
+        "icon": "blueprint",
+        "id": "f4392f6d-5cf6-4e8a-b9bf-c7ebca71e9f0",
+        "origin": "altar",
+        "rarity": "légendaire",
+        "type": "blueprint",
+        "unique": true
+    },
+    {
+        "class": "teddy",
+        "credit": "Freepik",
+        "description": "Agnès",
+        "icon": "agnes",
+        "id": "e54b92bf-4bd6-4d62-9c51-01e122ec3419",
+        "type": "misc"
+    },
+    {
+        "credit": "wanicon",
+        "description": "Ajouter un plan",
+        "icon": "blueprint",
+        "id": "944e4b59-b34f-46a7-81e1-997104cc2d04",
+        "type": "misc"
+    },
+    {
         "credit": "Freepik",
         "description": "Boire",
         "icon": "drink",
@@ -784,9 +809,23 @@
     },
     {
         "credit": "Freepik",
+        "description": "Construire",
+        "icon": "build",
+        "id": "2a8248fb-6e92-45a9-9e98-bcb9a658b5a0",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
         "description": "Décédé",
         "icon": "dead",
         "id": "1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8",
+        "type": "misc"
+    },
+    {
+        "credit": "winnievinzence",
+        "description": "En attente de ressources",
+        "icon": "waiting",
+        "id": "70fe012b-8ac9-401f-bc1a-96489885f1c8",
         "type": "misc"
     },
     {
@@ -836,6 +875,22 @@
         "description": "Laisser un message",
         "icon": "write",
         "id": "e6f9dc67-f4e1-4b66-8192-0b27fccce49e",
+        "type": "misc"
+    },
+    {
+        "class": "teddy",
+        "credit": "Freepik",
+        "description": "Le Loup",
+        "icon": "loup",
+        "id": "b42833fb-a8ba-4aee-bd6c-d6d78e07667c",
+        "type": "misc"
+    },
+    {
+        "class": "teddy",
+        "credit": "Hery Mery",
+        "description": "M. Ouink",
+        "icon": "ouink",
+        "id": "5ff7adb3-80b2-4bcb-8813-5e254dc6dc41",
         "type": "misc"
     },
     {
@@ -916,10 +971,26 @@
         "type": "misc"
     },
     {
+        "attack": 1,
+        "credit": "Freepik",
+        "description": "Se battre à mains nues",
+        "icon": "attack",
+        "id": "d1a3d28e-bd5f-486a-b4fb-7d36254f4344",
+        "slot": "W0",
+        "type": "misc"
+    },
+    {
         "credit": "Freepik",
         "description": "Se soigner",
         "icon": "heal",
         "id": "eb8a1f18-adb1-47c3-8481-f8210966519f",
+        "type": "misc"
+    },
+    {
+        "credit": "Eucalyp",
+        "description": "Sortir du campement",
+        "icon": "map",
+        "id": "aa8dfd8d-383a-4c8d-aa71-2a5e31a419f4",
         "type": "misc"
     },
     {
@@ -938,6 +1009,20 @@
     },
     {
         "credit": "Freepik",
+        "description": "Terminé",
+        "icon": "checked",
+        "id": "46cf5293-f0cb-4d7d-9ed6-d0ac58ba7d98",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Toucher l'autel sacrificiel",
+        "icon": "altar",
+        "id": "81c82050-de02-46da-a220-f558699a26f3",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
         "description": "Un méchant zombie dévoreur de cerveau",
         "icon": "zombie",
         "id": "09bbb34f-667a-48b8-afed-ce876ff4154c",
@@ -952,35 +1037,9 @@
     },
     {
         "credit": "Freepik",
-        "defense": 1,
-        "description": "Une chemise hawaïenne",
-        "icon": "shirt",
-        "id": "a032c050-a549-4e68-8eef-4a037efd6bef",
-        "plus": 0,
-        "rarity": "commun",
-        "slot": "A2",
-        "type": "misc",
-        "unique": false
-    },
-    {
-        "credit": "Good Ware",
-        "defense": 1,
-        "description": "Un short en jean",
-        "icon": "short",
-        "id": "cfbe3557-aa69-4bbf-bf91-befa5d814852",
-        "plus": 0,
-        "rarity": "commun",
-        "slot": "A3",
-        "type": "misc",
-        "unique": false
-    },
-    {
-        "attack": 1,
-        "credit": "Freepik",
-        "description": "Se battre à mains nues",
-        "icon": "attack",
-        "id": "d1a3d28e-bd5f-486a-b4fb-7d36254f4344",
-        "slot": "W0",
+        "description": "Verrouillé",
+        "icon": "locked",
+        "id": "83d4e547-37f9-4869-826c-97361a94f03d",
         "type": "misc"
     },
     {
@@ -1045,5 +1104,29 @@
         "icon": "pistol",
         "id": "b0549187-ecc7-4e7c-9c4c-cca8ad2b057d",
         "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "defense": 1,
+        "description": "Une chemise hawaïenne",
+        "icon": "shirt",
+        "id": "a032c050-a549-4e68-8eef-4a037efd6bef",
+        "plus": 0,
+        "rarity": "commun",
+        "slot": "A2",
+        "type": "misc",
+        "unique": false
+    },
+    {
+        "credit": "Good Ware",
+        "defense": 1,
+        "description": "Un short en jean",
+        "icon": "short",
+        "id": "cfbe3557-aa69-4bbf-bf91-befa5d814852",
+        "plus": 0,
+        "rarity": "commun",
+        "slot": "A3",
+        "type": "misc",
+        "unique": false
     }
 ]

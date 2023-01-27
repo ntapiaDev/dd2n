@@ -3,7 +3,8 @@
 </script>
 
 <aside>
-    <p>Nous estimons une attaque de 12 zombies.</p>
+    <p>Nous estimons une attaque de</p>
+    <div>0 zombies</div>
     <p>Votre campement a 20 DEF.</p>
     <p>Vous êtes en sécurité pour ce soir.</p>
 </aside>

@@ -1,0 +1,185 @@
+<script>
+    import { enhance } from '$app/forms';
+    import { page } from '$app/stores';
+	import Item from "../game/Item.svelte";
+
+    export let completed;
+    export let hidden = false;
+    export let type;
+    export let worksite;
+
+    const items = [
+        {
+            credit: 'Freepik',
+            description: 'Terminé',
+            icon: 'checked',
+            id: '46cf5293-f0cb-4d7d-9ed6-d0ac58ba7d98',
+            type: 'misc'
+        },
+        {
+            credit: 'Freepik',
+            description: 'Construire',
+            icon: 'build',
+            id: '2a8248fb-6e92-45a9-9e98-bcb9a658b5a0',
+            type: 'misc'
+        },
+        {
+            credit: 'winnievinzence',
+            description: 'En attente de ressources',
+            icon: 'waiting',
+            id: '70fe012b-8ac9-401f-bc1a-96489885f1c8',
+            type: 'misc'
+        },
+        {
+            credit: 'Freepik',
+            description: 'Verrouillé',
+            icon: 'locked',
+            id: '83d4e547-37f9-4869-826c-97361a94f03d',
+            type: 'misc'
+        }
+    ]
+
+    let ap = 0;
+
+    $: bank = $page.data.encampment.items;
+
+    const check = (resources) => {
+        for (let resource of resources) {
+            if (bank.find(i => i.id === resource.item.id)?.quantity < resource.quantity) return false;
+        }
+        return true;
+    }
+</script>
+
+<div class:completed class:hidden class={type + (!hidden ? (' ' + worksite.rarity) : '')}>
+    <span class="name" class:completed>{!hidden ? worksite.name : 'Chantier inconnu'}</span>
+    <span class="resources">
+        {#if !completed && !hidden}
+            {#each worksite.resources as resource}
+                <span class={bank.find(i => i.id === resource.item.id)?.quantity >= resource.quantity ? 'valid' : 'failed'}>
+                    {bank.find(i => i.id === resource.item.id)?.quantity ?? 0}/{resource.quantity} <Item item={resource.item} />
+                </span>
+            {/each}
+        {/if}
+    </span>
+    <span class="ap">
+        {#if !completed && !hidden}
+            <input type="range" min="0" max={worksite.ap} bind:value={ap}>
+            <span class={!ap ? '' : (ap <= $page.data.user.ap ? 'valid' : 'failed')}>
+                {ap}
+            </span>
+        {/if}
+    </span>
+    <span class="defense" class:completed>{!hidden ? worksite.defense : '??'}</span>
+    <span class="icon">
+        {#if completed}
+            <Item item={items[0]} />
+        {:else if !hidden}
+            {#if check(worksite.resources)}
+                <form method="POST" action="/encampment?/build" use:enhance>
+                    <button>
+                        <Item item={items[1]} />
+                    </button>
+                </form>
+            {:else}
+                <Item item={items[2]} />
+            {/if}
+        {:else}
+            <Item item={items[3]} />
+        {/if}
+    </span>
+</div>
+
+<style>
+    div {
+        height: 35px;
+        display: grid;
+        grid-template-columns: 5FR 11FR 3FR 1FR 1FR;
+        align-items: center;
+        background-color: #EEE;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+		border-radius: 0.25em;
+    }
+
+    .name,
+    .ap,
+    .defense {
+        display: flex;
+    }
+    .name {
+        margin-left: 0.5em;
+    }
+    .failed {
+        color: red;
+    }
+    .valid {
+        color: green;
+    }
+    .ap {
+        justify-content: space-between;
+        margin: 0 0.5em;
+    }
+    .ap input {
+        width: 56px;
+        margin-right: 0.5em;
+        cursor: pointer;
+    }
+    .defense {
+        justify-content: center;
+    }
+    .icon {
+        margin-right: 0.5em;
+    }
+
+    .resources {
+        display: grid;
+        grid-template-columns: repeat(5, 1FR);
+    }
+    .resources span {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 4px;
+    }
+
+    .completed {
+        background-color: rgb(255, 255, 205);
+    }
+    .defense.completed {
+        color: green;
+        font-weight: bold;
+    }
+    .hidden {
+        background: content-box radial-gradient(rgb(100, 100, 100), rgb(128, 128, 128));
+        color: #AAA;
+    }
+    .parent {
+        margin-top: 0.5em;
+    }
+    .child {
+        margin-top: 2px;
+    }
+
+    .inhabituel {
+		border: 1px solid green;
+	}
+	.rare {
+		border: 1px solid blue;
+	}
+	.épique {
+		border: 1px solid purple;
+	}
+	.légendaire {
+		border: 1px solid orange;
+	}
+
+    form {
+		width: 25px;
+		height: 25px;
+	}
+	button {
+		border: none;
+		background-color: transparent;
+		cursor: pointer;
+	}
+</style>

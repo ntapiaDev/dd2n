@@ -4,12 +4,14 @@ import { add_user_to_location } from "$lib/server/cells";
 import { get_encampment, get_bank, remove_user_from_encampment, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { _equip, leave_encampment } from "$lib/server/users";
+import { get_worksites } from "$lib/server/worksites";
 
 export const load = async ({ locals }) => {
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
     const lastDate = await get_last_date(locals.user.game_id, locals.game.players.map(p => p.username), locals.rethinkdb);
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
-    return { encampment, lastDate, logs };
+    const worksites = await get_worksites(locals.rethinkdb);
+    return { encampment, lastDate, logs, worksites };
 }
 
 const deposit = async ({ locals, request }) => {

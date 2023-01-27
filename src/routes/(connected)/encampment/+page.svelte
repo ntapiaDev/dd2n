@@ -9,6 +9,7 @@
 	import Place from '../../../components/encampment/Place.svelte';
 	import Players from '../../../components/encampment/Players.svelte';
 	import Register from '../../../components/encampment/Register.svelte';
+	import Worksites from '../../../components/encampment/Worksites.svelte';
 	import NextDay from '../../../components/game/NextDay.svelte';
 
 	export let data;
@@ -41,6 +42,8 @@
 			<Place />
 		{:else if $sidebar === 'bank'}
 			<Bank items={sortItems(encampment.items)} />
+		{:else if $sidebar === 'worksites'}
+			<Worksites worksites={data.worksites} />
 		{/if}
 		<div class="error">
 			{#if form?.full}
