@@ -1,7 +1,7 @@
 <script>
     import { enhance } from '$app/forms';
     import { page } from '$app/stores';
-    import { checkResources } from "$lib/worksites";
+    import { checkResources, getQuantity } from "$lib/worksites";
 	import Item from "../game/Item.svelte";
 
     export let apLeft = 0;
@@ -52,8 +52,8 @@
     <span class="resources">
         {#if !completed && !hidden}
             {#each worksite.resources as resource}
-                <span class={bank.find(i => i.id === resource.item.id)?.quantity >= resource.quantity ? 'valid' : 'failed'}>
-                    {bank.find(i => i.id === resource.item.id)?.quantity ?? 0}/{resource.quantity} <Item item={resource.item} />
+                <span class={getQuantity(bank, resource) >= resource.quantity ? 'valid' : 'failed'}>
+                    {getQuantity(bank, resource)}/{resource.quantity} <Item item={resource.item} />
                 </span>
             {/each}
         {/if}
@@ -159,10 +159,10 @@
     }
 
     .inhabituel {
-		box-shadow: 0 0 3px rgba(0, 128, 0, 0.50), 0 2px 4px rgba(0, 128, 0, 0.50);
+		box-shadow: 0 0 3px rgba(0, 128, 0, 0.66), 0 2px 4px rgba(0, 128, 0, 0.66);
 	}
 	.rare {
-		box-shadow: 0 0 3px rgba(0, 0, 255, 0.50), 0 2px 4px rgba(0, 0, 255, 0.50);
+		box-shadow: 0 0 3px rgba(0, 0, 255, 0.66), 0 2px 4px rgba(0, 0, 255, 0.66);
 	}
 	.épique {
 		border: 1px solid purple;

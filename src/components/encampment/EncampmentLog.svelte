@@ -116,19 +116,22 @@
 	{:else if log.action === 'withdraw'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris <Item item={log.log.item} /> dans la banque.</div>
 	{:else if log.action === 'build'}
-		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} /> <b>{log.log.worksite.name}<span class="notb">.</span></b></div>
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} /> <b>{log.log.name}<span class="notb">.</span></b></div>
 		{#if log.log.completed}
-			Le chantier est maintenant terminé, le campement gagne {log.log.worksite.defense} DEF !
+			Le chantier est maintenant terminé, le campement gagne {log.log.defense} DEF !
 			<div class="item">
 				<span class="build">
-					{#each log.log.worksite.resources as resource, i}
-						{#if log.log.worksite.resources.length === i + 1}
-							<span>et</span>
-						{/if}
-						<Item quantity={resource.quantity} item={resource.item} />
-					{/each}
+					{log.log.items.length === 1 && log.log.items[0].quantity === 1 ?
+						'L\'objet suivant a été retiré' : 'Les objets suivants ont été retirés'} de la banque :
+					<span>
+						{#each log.log.items as item, i}
+							{#if log.log.items.length > 1 && log.log.items.length === i + 1}
+								<span>et</span>
+							{/if}
+							<Item {item} />
+						{/each}
+					</span>
 				</span>
-				ont été retirés de la banque.
 			</div>
 		{/if}
 		{#if log.log.warning === 'hunger'}
@@ -179,6 +182,13 @@
 		display: flex;
 		align-items: center;
 		gap: 4px;
+	}
+	.item .build span {
+		display: flex;
+		align-items: center;
+	}
+	.item .build span span {
+		margin: 0 4px;
 	}
 	.food {
 		color: green;

@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { getItem, handleStack } from "$lib/loots";
+import { getItem, handleStack, sortItems } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
@@ -81,17 +81,24 @@ const worksite = async ({ locals, request }) => {
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
     await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
     let completed = false;
+    let items = [];
     if (unlocked.find(w => w.id === id).ap === ap) {
         for (let resource of worksite.resources) {
-            bank.find(i => i.id === resource.item.id).quantity -= resource.quantity;
+            let quantity = resource.quantity;
+            while (quantity > 0) {
+                let item = {...sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0)};
+                sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0).quantity -= quantity;
+                quantity -= item.quantity;
+                if (quantity < 0) item.quantity += quantity;
+                items.push(item)
+            }
         }
-        // Faire une requête plus propre en retirant la quatité via la requête ReQL
         await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
         completed = true;
     } else {
         await build(locals.user.game_id, ap, id, locals.rethinkdb);
     }
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, warning, worksite }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, defense: worksite.defense, items, name: worksite.name, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 

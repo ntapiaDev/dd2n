@@ -23,7 +23,6 @@ export const build = (game_id, ap, worksite_id, rethinkdb) => {
 export const built = (game_id, items, worksite_id, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update(function(doc) {
         return {
-            // Faire une requête plus propre en retirant la quatité via la requête ReQL
             items,
             worksites: {
               completed: doc("worksites")("completed").append(worksite_id),

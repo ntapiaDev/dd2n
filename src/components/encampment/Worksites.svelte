@@ -35,7 +35,7 @@
             {/each}
         {/if}
     {/each}
-    <div class="defense">Total : <b>{defense}</b> DEF</div>
+    <span class="defense">Total : <b>{defense}</b> DEF</span>
 </div>
 
 <style>
@@ -55,6 +55,8 @@
         text-align: center;
     }
     .defense {
+        margin: 0.5em 0.5em 0 0;
+        display: block;
         text-align: end;
     }
 </style>
