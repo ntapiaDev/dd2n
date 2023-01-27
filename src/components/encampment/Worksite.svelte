@@ -1,6 +1,7 @@
 <script>
     import { enhance } from '$app/forms';
     import { page } from '$app/stores';
+    import { checkResources } from "$lib/worksites";
 	import Item from "../game/Item.svelte";
 
     export let completed;
@@ -42,13 +43,6 @@
     let ap = 0;
 
     $: bank = $page.data.encampment.items;
-
-    const check = (resources) => {
-        for (let resource of resources) {
-            if (bank.find(i => i.id === resource.item.id)?.quantity < resource.quantity) return false;
-        }
-        return true;
-    }
 </script>
 
 <div class:completed class:hidden class={type + ' ' + worksite.rarity}>
@@ -75,8 +69,10 @@
         {#if completed}
             <Item item={items[0]} />
         {:else if !hidden}
-            {#if check(worksite.resources)}
+            {#if checkResources(bank, worksite.resources)}
                 <form method="POST" action="/encampment?/build" use:enhance>
+                    <input type="text" name="ap" value={ap} hidden>
+                    <input type="text" name="id" value={worksite.id} hidden>
                     <button>
                         <Item item={items[1]} />
                     </button>

@@ -1,10 +1,11 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { getItem, handleStack } from "$lib/loots";
+import { checkResources } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
 import { get_encampment, get_bank, remove_user_from_encampment, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { _equip, leave_encampment } from "$lib/server/users";
-import { get_worksites_by_group } from "$lib/server/worksites";
+import { get_worksite, get_worksites_by_group } from "$lib/server/worksites";
 
 export const load = async ({ locals }) => {
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
@@ -12,6 +13,21 @@ export const load = async ({ locals }) => {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const worksites = await get_worksites_by_group(locals.rethinkdb);
     return { encampment, lastDate, logs, worksites };
+}
+
+const build = async ({ locals, request }) => {
+    const data = await request.formData();
+    const ap = parseInt(data.get('ap'));
+    if (!ap) return fail(400, { nothing: true });
+    else if (ap > locals.user.ap) return fail(400, { ap: true });
+    const id = data.get('id');
+    if (locals.game.worksites.completed.includes(id)) return fail(400, { completed: true });
+    else if (!locals.game.worksites.unlocked.includes(id)) return fail(400, { unlocked: true });
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    const worksite = await get_worksite(id, locals.rethinkdb);
+    if (!checkResources(encampment.items, worksite.resources)) return fail(400, { resources: true });
+
+    throw redirect(303, '/encampment');
 }
 
 const deposit = async ({ locals, request }) => {
@@ -61,4 +77,4 @@ const withdraw = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { deposit, map, withdraw };
+export const actions = { build, deposit, map, withdraw };

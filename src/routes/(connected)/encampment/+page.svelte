@@ -46,10 +46,20 @@
 			<Worksites worksites={data.worksites} />
 		{/if}
 		<div class="error">
-			{#if form?.full}
+			{#if form?.ap}
+				<p>Vous n'avez pas assez de points d'action pour effectuer cette action.</p>
+			{:else if form?.completed}
+				<p>Ce chantier est déjà terminé.</p>
+			{:else if form?.full}
 				<p>Votre inventaire est plein.</p>
+			{:else if form?.nothing}
+				<p>Vous devez utiliser des points d'action pour construire ce chantier.</p>
 			{:else if form?.origin}
 				<p>Cet objet n'est pas présent dans la banque ou dans votre inventaire.</p>
+			{:else if form?.resources}
+				<p>Il n'y a pas assez de ressources pour construire ce chantier.</p>
+			{:else if form?.unlocked}
+				<p>Ce chantier n'est pas encore débloqué.</p>
 			{/if}
 		</div>
 	</div>

@@ -62,7 +62,7 @@
         <h1>Bienvenue sur Don't Die 2Nite!</h1>
         <p>Ce jeu est inpiré du jeu de survie <a href="http://www.die2nite.com" target="_blank" rel="noreferrer">Die2Nite</a> (<a href="http://www.hordes.fr" target="_blank" rel="noreferrer">Hordes</a> pour la version française) développé par Motion Twin en 2008.</p>
         <p>Le but du jeu : survivre le plus longtemps possible dans une ville envahie par les zombies <Item item={items[0]} /></p>
-        <p>Le jeu se déroule au tour par tour : vous disposez de 100 PA (points d'actions) afin d'explorer la zone qui vous entoure, ramasser de nouveaux objets (nourriture, armes, matériaux de construction) et mettre en place vos défenses. A la fin de chaque tour, une horde de zombies attaquera votre campement et vous devrez être bien préparé.</p>
+        <p>Le jeu se déroule au tour par tour : vous disposez de 100 PA (points d'action) afin d'explorer la zone qui vous entoure, ramasser de nouveaux objets (nourriture, armes, matériaux de construction) et mettre en place vos défenses. A la fin de chaque tour, une horde de zombies attaquera votre campement et vous devrez être bien préparé.</p>
         <p>Exemples d'objets que vous trouverez sur votre route : 
             <Item item={items[1]} />
             <Item item={items[2]} />
