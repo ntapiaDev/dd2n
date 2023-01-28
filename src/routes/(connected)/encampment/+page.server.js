@@ -1,7 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { getItem, handleStack, sortItems } from "$lib/loots";
 import { checkHT } from "$lib/player";
-import { checkResources } from "$lib/worksites";
+import { checkResources, isBlocked } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
 import { add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
@@ -92,7 +92,9 @@ const worksite = async ({ locals, request }) => {
     else if (!unlocked.some(w => w.id === id)) return fail(400, { unlocked: true });
     else if (unlocked.find(w => w.id === id).ap < ap) return fail(400, { toMuch: true });
     const bank = encampment.items;
-    const worksite = await get_worksite(id, locals.rethinkdb);
+    const worksites = await get_worksites_by_group(locals.rethinkdb);
+    const worksite = worksites.find(g => g.reduction.find(w => w.id === id)).reduction.find(w => w.id === id);
+    if (isBlocked(worksite, encampment.worksites.completed, worksites)) return fail(400, { unlocked: true });
     if (!checkResources(bank, worksite.resources)) return fail(400, { resources: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
     await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);

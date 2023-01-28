@@ -1,10 +1,15 @@
 <script>
 	import { fade } from "svelte/transition";
-    import { getDefense } from "$lib/worksites";
+    import { getDefense, isBlocked } from "$lib/worksites";
 	import Worksite from './Worksite.svelte';
 
     export let encampment;
     export let worksites;
+
+    const unlockedChild = (id, unlocked, worksites) => {
+        const children = worksites.find(w => w.group === id).reduction.map(w => w.id);
+        return children.some(w => unlocked.includes(w));
+    }
     
     $: completed = encampment.completed;
     $: unlocked = encampment.unlocked.map(w => w.id);
@@ -21,14 +26,16 @@
         <span>DEF</span>
     </span>
     {#each worksites[0].reduction as parent}
-        {#if unlocked.includes(parent.id) || completed.includes(parent.id)}
+        {#if unlocked.includes(parent.id) || completed.includes(parent.id) || unlockedChild(parent.id, unlocked, worksites)}
             <Worksite
                 apLeft={encampment.unlocked.find(w => w.id === parent.id)?.ap}
                 completed={completed.includes(parent.id)}
+                hidden={!unlocked.includes(parent.id) && !completed.includes(parent.id)}
                 type="parent" worksite={parent} />
             {#each worksites.find(w => w.group === parent.id)?.reduction ?? [] as child}
                 <Worksite
                     apLeft={encampment.unlocked.find(w => w.id === child.id)?.ap}
+                    blocked={isBlocked(child, completed, worksites)}
                     completed={completed.includes(child.id)}
                     hidden={!unlocked.includes(child.id) && !completed.includes(child.id)}
                     type="child" worksite={child} />

@@ -5,6 +5,7 @@
 	import Item from "../game/Item.svelte";
 
     export let apLeft = 0;
+    export let blocked = false;
     export let completed;
     export let hidden = false;
     export let type;
@@ -26,10 +27,17 @@
             type: 'misc'
         },
         {
-            credit: 'winnievinzence',
+            credit: 'Eucalyp',
             description: 'En attente de ressources',
-            icon: 'waiting',
+            icon: 'materials',
             id: '70fe012b-8ac9-401f-bc1a-96489885f1c8',
+            type: 'misc'
+        },
+        {
+            credit: 'Freepik',
+            description: 'Vous devez terminer le chantier précédent',
+            icon: 'waiting',
+            id: '277ab103-2da6-43d9-87c0-550fe2ddd920',
             type: 'misc'
         },
         {
@@ -47,12 +55,12 @@
     $: bank = $page.data.encampment.items;
 </script>
 
-<div class:completed class:hidden class={type + ' ' + worksite.rarity}>
-    <span class="name" class:completed>{!hidden ? worksite.name : 'Chantier inconnu'}</span>
+<div class:blocked class:completed class:hidden class={type + ' ' + worksite.rarity}>
+    <span class="name">{!hidden ? worksite.name : 'Chantier inconnu'}</span>
     <span class="resources">
         {#if !completed && !hidden}
             {#each worksite.resources as resource}
-                <span class={getQuantity(bank, resource) >= resource.quantity ? 'valid' : 'failed'}>
+                <span class={blocked? '' : (getQuantity(bank, resource) >= resource.quantity ? 'valid' : 'failed')}>
                     {getQuantity(bank, resource)}/{resource.quantity} <Item item={resource.item} />
                 </span>
             {/each}
@@ -60,8 +68,8 @@
     </span>
     <span class="ap">
         {#if !completed && !hidden}
-            <input type="range" min="0" max={apLeft} disabled={!checkResources(bank, worksite.resources)} bind:value={ap}>
-            <span class={!ap ? '' : (ap <= $page.data.user.ap ? 'valid' : 'failed')}>
+            <input type="range" min="0" max={apLeft} disabled={!checkResources(bank, worksite.resources) || blocked} bind:value={ap}>
+            <span class={!ap || blocked ? '' : (ap <= $page.data.user.ap ? 'valid' : 'failed')}>
                 {ap}
             </span>
         {/if}
@@ -71,7 +79,9 @@
         {#if completed}
             <Item item={items[0]} />
         {:else if !hidden}
-            {#if checkResources(bank, worksite.resources)}
+            {#if blocked}
+                <Item item={items[3]} />
+            {:else if checkResources(bank, worksite.resources)}
                 <form method="POST" action="/encampment?/worksite" use:enhance>
                     <input type="text" name="ap" value={ap} hidden>
                     <input type="text" name="id" value={worksite.id} hidden>
@@ -83,7 +93,7 @@
                 <Item item={items[2]} />
             {/if}
         {:else}
-            <Item item={items[3]} />
+            <Item item={items[4]} />
         {/if}
     </span>
 </div>
@@ -140,6 +150,10 @@
         gap: 4px;
     }
 
+    .blocked {
+        color: #DDD;
+        background-color: #AAA;
+    }
     .completed {
         background-color: rgb(255, 255, 205);
     }

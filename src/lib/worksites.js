@@ -24,3 +24,10 @@ export const getQuantity = (bank, resource) => {
     }
     return quantity;
 }
+
+export const isBlocked = (child, completed, worksites) => {
+    const group = worksites.find(g => g.reduction.some(w => w.id === child.id));
+    const previous = group.reduction.filter(w => w.defense < child.defense).map(w => w.id);
+    previous.push(group.group);
+    return !previous.every(w => completed.includes(w));
+}
