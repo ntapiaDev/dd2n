@@ -141,6 +141,8 @@
 		{:else if log.log.warning === 'both'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /> et <Item item={feed[1]} substitute={'Mort de soif'} /></div>
 		{/if}
+	{:else if log.action === 'blueprint'}
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a découvert le chantier <Item item={build} /> <b>{log.log.name}<span class="notb">.</span></b></div>
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}

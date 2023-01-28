@@ -4,6 +4,16 @@ export const add_user_to_encampment = (game_id, username, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
 }
 
+export const add_worksite = (game_id, ap, id, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            worksites: {
+                unlocked: doc("worksites")("unlocked").append({ ap, id })
+            }
+        }
+    }).run(rethinkdb);
+}
+
 export const build = (game_id, ap, worksite_id, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update(function(doc) {
         return {

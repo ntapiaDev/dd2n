@@ -226,3 +226,7 @@ export const update_users = async (game_id, rethinkdb) => {
     await r.table('users').insert(players, {conflict: 'update'}).run(rethinkdb);
     return events;
 }
+
+export const use_item = (user_id, item, rethinkdb) => {
+    return r.table('users').get(user_id).update({ inventory: r.row('inventory').difference([item]) }).run(rethinkdb);
+}

@@ -76,7 +76,7 @@
                     <input type="text" name="ap" value={ap} hidden>
                     <input type="text" name="id" value={worksite.id} hidden>
                     <button>
-                        <Item item={items[1]} />
+                        <Item item={items[1]} border={ap > $page.data.user.ap ? 'red' : ''} />
                     </button>
                 </form>
             {:else}

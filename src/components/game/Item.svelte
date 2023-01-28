@@ -3,6 +3,7 @@
 	import { tooltip } from './tooltip';
 
 	export let background = undefined;
+	export let border = undefined;
 	export let item;
 	export let quantity = 0;
 	export let substitute = undefined;
@@ -30,8 +31,7 @@
 	$: y = durability > 0.5 ? 202 - (74 * durability) : 330 * durability;
 </script>
 
-<!-- ATTENTION : termes en français depuis DB (rarity) utilisés dans le nom des classes et options (à refaire si un jour site en anglais...) -->
-<span class="container {item.type} {item.rarity}" style={background ? `background-color: ${background}` : ''}>
+<span class="container {item.type} {item.rarity ?? 'commun'}" style={background ? `background-color: ${background}` : border ? `border: 1px solid ${border}` : ''}>
 	<!-- Remplacer par BASEURI ou équivalent?? -->
 	<img src={$page.url.origin + '/icons/' + item.icon + '.png'}
 		alt={item.icon + ' icon by ' + item.credit}

@@ -47,7 +47,9 @@
 			<Worksites encampment={encampment.worksites} {worksites} />
 		{/if}
 		<div class="error">
-			{#if form?.ap}
+			{#if form?.already}
+				<p>Ce chantier est déjà débloqué.</p>
+			{:else if form?.ap}
 				<p>Vous n'avez pas assez de points d'action pour effectuer cette action.</p>
 			{:else if form?.completed}
 				<p>Ce chantier est déjà terminé.</p>

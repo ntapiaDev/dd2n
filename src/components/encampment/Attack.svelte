@@ -33,7 +33,7 @@
 <aside class:alert>
     <p>Nous estimons une attaque de :</p>
     <div>{attack} zombies</div>
-    <p>Votre campement dispose de :</p>
+    <p>Votre campement possède :</p>
     <div class="item">{defense + slots} (+{slots} <Item {item} />) DEF</div>
     {#if alert}
         <p>Vous devriez renforcer vos défense !</p>
