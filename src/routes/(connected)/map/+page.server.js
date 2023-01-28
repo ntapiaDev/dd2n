@@ -1,14 +1,15 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { critical_chance, empty_1, empty_2, empty_3, empty_building, wound_armed, wound_unarmed } from "$lib/config";
 import { canTravel } from '$lib/game';
-import { getItem, getPool, handlePlus, handleSearch, handleStack } from "$lib/loots";
+import { getBlueprints, getItem, getPool, handlePlus, handleSearch, handleStack } from "$lib/loots";
 import { checkHT, getDefense } from "$lib/player";
 import { add_tchat, altar_collapse, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_items, update_map, update_search } from "$lib/server/cells";
-import { add_user_to_encampment } from "$lib/server/encampments";
+import { add_user_to_encampment, get_encampment_worksites } from "$lib/server/encampments";
 import { add_unique } from "$lib/server/games";
 import { get_from_altar, get_items_by_code, get_loots } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
 import { _attack, enter_encampment, _equip, _force, lose_ap, _search, _travel } from "$lib/server/users";
+import { get_worksites_by_group } from "$lib/server/worksites";
 
 export async function load({ locals }) {
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
@@ -191,9 +192,12 @@ const search = async ({ locals }) => {
     const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     if (location.empty) return fail(400, { empty: true });
     if (location.searchedBy.includes(locals.user.id)) return fail(400, { searched: true });
-    const itemList = await get_loots(locals.rethinkdb);
     const danger = location.layout.danger;
-    let pool = getPool(itemList, danger, locals.game.uniques);
+    const encampment = await get_encampment_worksites(locals.user.game_id, locals.rethinkdb);
+    const itemList = await get_loots(locals.rethinkdb);
+    const worksites = await get_worksites_by_group(locals.rethinkdb);
+    const blueprints = getBlueprints(encampment, worksites);
+    let pool = getPool(itemList.concat(blueprints), danger, locals.game.uniques);
     const { cache, items, loots, uniques } = handleSearch(location.items, pool, 'search');
     let plus = handlePlus(loots);
     let empty = Math.random() > (danger === 1 ? empty_1 : danger === 2 ? empty_2 : empty_3);

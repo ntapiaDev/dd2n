@@ -1,5 +1,29 @@
 import { ammunition, blueprint, commun, drug_weapon_armour, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, épique } from "./config";
 
+export const getBlueprints = (encampment, worksites) => {
+    const models = [];
+    for (let group of worksites) {
+        if (!group.group || encampment.completed.includes(group.group) || encampment.unlocked.some(w => w.id === group.group))
+            for (let worksite of group.reduction)
+                if (!encampment.completed.includes(worksite.id) && !encampment.unlocked.some(w => w.id === worksite.id)) models.push(worksite)
+    }
+    const blueprints = [];
+    for (let worksite of models) {
+        const blueprint = {
+            credit: 'wanicon',
+            description: `Plan: ${worksite.name}`,
+            icon: 'blueprint',
+            id: `${worksite.id}`,
+            rarity: `${worksite.rarity}`,
+            type: 'blueprint',
+            unique: true,
+            worksite_id: `${worksite.id}`,
+        }
+        blueprints.push(blueprint);
+    }
+    return blueprints;
+}
+
 export const getItem = (items, uuid, stack) => {
     for (let item of items) {
         if (item.uuid === uuid) {
