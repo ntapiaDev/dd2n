@@ -9,6 +9,7 @@
 	import Place from '../../../components/encampment/Place.svelte';
 	import Players from '../../../components/encampment/Players.svelte';
 	import Register from '../../../components/encampment/Register.svelte';
+	import Workshop from '../../../components/encampment/Workshop.svelte';
 	import Worksites from '../../../components/encampment/Worksites.svelte';
 	import NextDay from '../../../components/game/NextDay.svelte';
 
@@ -45,6 +46,8 @@
 			<Bank items={sortItems(encampment.items)} />
 		{:else if $sidebar === 'worksites'}
 			<Worksites encampment={encampment.worksites} {worksites} />
+		{:else if $sidebar === 'workshop'}
+			<Workshop />
 		{/if}
 		<div class="error">
 			{#if form?.already}

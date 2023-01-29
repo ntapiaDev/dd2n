@@ -19,6 +19,7 @@
 
 <style>
     div {
+		width: 293px;
 		margin-top: 0.5em;
 		padding: 0.5em;
 		display: grid;

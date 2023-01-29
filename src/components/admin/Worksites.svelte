@@ -135,6 +135,7 @@
         width: 150px;
     }
     .list {
-        margin-bottom: 0.5em;
+        width: 735px;
+        padding: 0.5em;
     }
 </style>

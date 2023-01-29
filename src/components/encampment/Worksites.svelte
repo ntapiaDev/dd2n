@@ -14,6 +14,9 @@
 
 <div in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
     <h3>Chantiers de défense :</h3>
+    <p>Vous pouvez trouver ici la liste des chantiers de défenses de votre campement.<br>
+    Un chantier peut être construit si les ressources nécessaires sont entreposées dans la banque commune. Vous pourrez trouver de nouveaux plans au fil de vos aventures.
+    </p>
     <span class="header">
         <span>Nom</span>
         <span>Ressources nécessaires</span>
@@ -50,9 +53,14 @@
     h3 {
         margin-bottom: 0.5em;
     }
+    p {
+        color: rgb(100, 100, 100);
+        margin-bottom: 0.5em;
+    }
     .header {
         display: grid;
         grid-template-columns: 5FR 11FR 3FR 1FR 1FR;
+        font-weight: bold;
     }
     .header span {
         text-align: center;
