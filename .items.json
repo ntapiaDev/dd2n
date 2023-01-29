@@ -743,6 +743,13 @@
         "unique": true
     },
     {
+        "credit": "Freepik",
+        "description": "Affamé",
+        "icon": "hunger",
+        "id": "781741f2-56d8-4fba-8cb7-a79ea1ab1ca7",
+        "type": "misc"
+    },
+    {
         "class": "teddy",
         "credit": "Freepik",
         "description": "Agnès",
@@ -790,6 +797,13 @@
         "description": "Décédé",
         "icon": "dead",
         "id": "1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Déshydraté",
+        "icon": "dehydrated",
+        "id": "9031ee03-0eb8-4f07-9bee-7218840ae2bc",
         "type": "misc"
     },
     {
@@ -869,20 +883,6 @@
         "description": "Manger",
         "icon": "eat",
         "id": "17b06314-2f60-453c-98d5-a9ce0049dc51",
-        "type": "misc"
-    },
-    {
-        "credit": "Freepik",
-        "description": "Mort de faim",
-        "icon": "hunger",
-        "id": "781741f2-56d8-4fba-8cb7-a79ea1ab1ca7",
-        "type": "misc"
-    },
-    {
-        "credit": "Freepik",
-        "description": "Mort de soif",
-        "icon": "dehydrated",
-        "id": "9031ee03-0eb8-4f07-9bee-7218840ae2bc",
         "type": "misc"
     },
     {

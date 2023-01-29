@@ -12,7 +12,7 @@ export const getBlueprints = (encampment, worksites) => {
         const blueprint = {
             credit: 'wanicon',
             description: `Plan: ${worksite.name}`,
-            icon: 'blueprint',
+            icon: 'worksite',
             id: `${worksite.id}`,
             rarity: `${worksite.rarity}`,
             type: 'blueprint',

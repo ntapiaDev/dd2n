@@ -8,14 +8,14 @@
 	const feed = [
 		{
 			credit: 'Freepik',
-			description: 'Mort de faim',
+			description: 'Affamé',
 			icon: 'hunger',
 			id: '781741f2-56d8-4fba-8cb7-a79ea1ab1ca7',
 			type: 'misc',
 		},
 		{
 			credit: 'Freepik',
-			description: 'Mort de soif',
+			description: 'Déshydraté',
 			icon: 'dehydrated',
 			id: '9031ee03-0eb8-4f07-9bee-7218840ae2bc',
 			type: 'misc',
@@ -84,22 +84,22 @@
 	{#if log.action === 'in'}
 		<PlayerName color={log.color} username={log.player} /> est arrivé{log.gender === 'female' ? 'e' : ''} dans la zone.
 		{#if log.log.warning === 'hunger'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
 		{:else if log.log.warning === 'thirst'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{:else if log.log.warning === 'both'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /> et <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{/if}
 	{:else if log.action === 'inEncampment'}
 		<PlayerName color={log.color} username={log.player} /> est sorti{log.gender === 'female' ? 'e' : ''} du campement.
 	{:else if log.action === 'inTunnel'}
 		<PlayerName color={log.color} username={log.player} /> est sorti{log.gender === 'female' ? 'e' : ''} du passage souterrain.
 		{#if log.log.warning === 'hunger'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
 		{:else if log.log.warning === 'thirst'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{:else if log.log.warning === 'both'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /> et <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{/if}
 	{:else if log.action === 'out'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la zone.
@@ -139,11 +139,11 @@
 				<div>Cette diversion lui permet de quitter la zone en toute sécurité.</div>
 			{/if}
 			{#if log.log.warning === 'hunger'}
-				<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /></div>
+				<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
 			{:else if log.log.warning === 'thirst'}
-				<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+				<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 			{:else if log.log.warning === 'both'}
-				<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /> et <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+				<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 			{/if}
 	{:else if ['loot', 'building'].includes(log.action)}
 		<div class="item">
@@ -188,11 +188,11 @@
 			<div>Le bâtiment a maintenant l'air totalement vide.</div>
 		{/if}
 		{#if log.log.warning === 'hunger'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
 		{:else if log.log.warning === 'thirst'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{:else if log.log.warning === 'both'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Mort de faim'} /> et <Item item={feed[1]} substitute={'Mort de soif'} /></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{/if}
 	{:else if log.action === 'new'}
 		L'agitation de la nuit a permis de dévoiler de nouvelles ressources...

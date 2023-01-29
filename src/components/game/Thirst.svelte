@@ -19,14 +19,14 @@
 		},
 		{
 			credit: 'Good Ware',
-			description: 'Déshydraté',
+			description: 'Grosse soif',
 			icon: 'thirsty',
 			id: 'b8efc8bc-ba78-408b-932f-bc41c8e927f6',
 			type: 'misc',
 		},
 		{
 			credit: 'Freepik',
-			description: 'Mort de soif',
+			description: 'Déshydraté',
 			icon: 'dehydrated',
 			id: '9031ee03-0eb8-4f07-9bee-7218840ae2bc',
 			type: 'misc',

@@ -19,14 +19,14 @@
 		},
 		{
 			credit: 'Freepik',
-			description: 'Affamé',
+			description: 'Grosse faim',
 			icon: 'hungry',
 			id: '23a97671-c68a-4b55-82ed-338a43ec6737',
 			type: 'misc',
 		},
 		{
 			credit: 'Freepik',
-			description: 'Mort de faim',
+			description: 'Affamé',
 			icon: 'hunger',
 			id: '781741f2-56d8-4fba-8cb7-a79ea1ab1ca7',
 			type: 'misc',
