@@ -1,8 +1,10 @@
 <script>
     import { enhance } from '$app/forms';
 	import { fade } from "svelte/transition";
+	import Worksite from '../encampment/Worksite.svelte';
 	import Item from '../game/Item.svelte';
 
+    export let groups;
     export let resources;
     export let worksites;
     $: console.log(worksites);
@@ -71,8 +73,25 @@
             <button type="submit">Ajouter</button>
         </div>
     </form>
-    <h2>Liste des chantiers () :</h2>
-    <h3>Chantiers communs :</h3>
+    <h2>Liste des chantiers ({worksites.length}) :</h2>
+    <div class="list">
+        {#each groups[0].reduction as parent}
+            <Worksite
+                apLeft={parent.ap ?? 0}
+                completed={false}
+                type="parent"
+                worksite={parent} />
+            {#each groups.find(w => w.group === parent.id)?.reduction ?? [] as child}
+                <Worksite
+                    apLeft={child.ap}
+                    blocked={false}
+                    completed={false}
+                    hidden={false}
+                    type="child"
+                    worksite={child} />
+            {/each}
+        {/each}
+    </div>
 </div>
 
 <style>
@@ -115,7 +134,7 @@
     .infos select:nth-child(1) {
         width: 150px;
     }
-    h3 {
-		margin-top: 0.5em;
-	}
+    .list {
+        margin-bottom: 0.5em;
+    }
 </style>

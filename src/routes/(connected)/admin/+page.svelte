@@ -21,7 +21,7 @@
 		{#if selected === 'items'}
 			<Items items={sortItems(data.items)} />
 		{:else if selected === 'worksites'}
-			<Worksites resources={data.resources} worksites={data.worksites} />
+			<Worksites groups={data.groups} resources={data.resources} worksites={data.worksites} />
 		{:else if selected === 'workshop'}
 			<Workshop />
 		{/if}

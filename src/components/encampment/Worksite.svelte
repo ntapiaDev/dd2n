@@ -52,7 +52,7 @@
     let ap = apLeft;
     $: if(apLeft) ap = apLeft;
 
-    $: bank = $page.data.encampment.items;
+    $: bank = $page.data.encampment?.items ?? [];
 </script>
 
 <div class:blocked class:completed class:hidden class={type + ' ' + worksite.rarity}>
