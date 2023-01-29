@@ -56,6 +56,9 @@
 </script>
 
 <div class:blocked class:completed class:hidden class={type + ' ' + worksite.rarity}>
+    {#if type === 'parent'}
+        <span class="description">{worksite.description}</span>
+    {/if}
     <span class="name">{!hidden ? worksite.name : 'Chantier inconnu'}</span>
     <span class="resources">
         {#if !completed && !hidden}
@@ -101,12 +104,24 @@
 <style>
     div {
         height: 35px;
+        position: relative;
         display: grid;
-        grid-template-columns: 5FR 11FR 3FR 1FR 1FR;
+        grid-template-columns: 10FR 22FR 4FR 2FR 2FR;
         align-items: center;
         background-color: #EEE;
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 		border-radius: 0.25em;
+    }
+    .description {
+        width: 100%;
+		position: absolute;
+		top: -15px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
+		border-radius: 1em 1em 0 0;
+		font-size: 0.75em;
+		background-color: #ddd;
+        text-align: center;
+		z-index: 5;
     }
 
     .name,
@@ -128,15 +143,11 @@
         margin: 0 0.5em;
     }
     .ap input {
-        width: 56px;
-        margin-right: 0.5em;
+        width: 32px;
         cursor: pointer;
     }
     .defense {
         justify-content: center;
-    }
-    .icon {
-        margin-right: 0.5em;
     }
 
     .resources {
@@ -166,7 +177,8 @@
         color: #AAA;
     }
     .parent {
-        margin-top: 0.5em;
+        margin-top: 1.5em;
+        border-radius: 0 0 0.25em 0.25em;
     }
     .child {
         margin-top: 2px;

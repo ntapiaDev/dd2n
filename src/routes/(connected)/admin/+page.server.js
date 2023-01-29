@@ -49,6 +49,7 @@ const addWorksite = async ({ locals, request }) => {
         unlocked: data.get('unlocked') === 'unlocked'
     }
     if (data.get('ap')) worksite.ap = parseInt(data.get('ap'));
+    if (data.get('description')) worksite.description = data.get('description');
     if (data.get('parent')) worksite.parent = data.get('parent');
     await add_worksite(worksite, locals.rethinkdb);
 }

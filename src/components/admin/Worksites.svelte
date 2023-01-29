@@ -39,7 +39,7 @@
                 <Item {item} />
             {/each}
         </div>
-        <div class="description">
+        <div class="name">
             <input type="text" name="name" placeholder="Nom" required />
             <select name="parent">
                 <option value="">Parent</option>
@@ -48,6 +48,7 @@
                 {/each}
             </select>
         </div>
+        <input class="description" type="text" name="description" placeholder="Description" />
         <div class="infos">
             <select name="unlocked" required>
                 <option value="locked">À débloquer</option>
@@ -96,14 +97,19 @@
     input[type=number] {
         width: 50px;
     }
-    .description input,
-    .description select {
+    .name input,
+    .name select {
         width: 230px;
+    }
+    .description {
+        margin-top: 0.5em;
+        width: 567px;
     }
     .infos {
         margin-top: 0.5em;
     }
-    .infos select, button {
+    .infos select,
+    button {
         width: 100px;
     }
     .infos select:nth-child(1) {

@@ -3,6 +3,7 @@
         "ap": 5,
         "completed": false,
         "defense": 5,
+        "description": "En creusant un trou autour du campement, on devrait bien pouvoir arrêter quelques zombies.",
         "id": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
         "name": "Fossé",
         "rarity": "commun",
@@ -28,6 +29,7 @@
     {
         "completed": true,
         "defense": 5,
+        "description": "Cette porte garde l'entrée du campement, c'est le dernier obstacle entre vous et les zombies.",
         "id": "c8bf3b5c-af71-4440-ac26-dffde7d07510",
         "name": "Porte en bois",
         "rarity": "commun",
@@ -35,7 +37,55 @@
         "unlocked": true
     },
     {
-        "ap": 10,
+        "ap": 2,
+        "completed": false,
+        "defense": 5,
+        "id": "084f75dd-0939-4e61-b782-04d13c778484",
+        "name": "Porte en bois renforcée",
+        "parent": "c8bf3b5c-af71-4440-ac26-dffde7d07510",
+        "rarity": "commun",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "smashingstocks",
+                    "description": "Des planches de bois",
+                    "icon": "wood-plank",
+                    "id": "a3eff481-3d59-40d4-b127-6a79ff748eb0",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Mehwish",
+                    "description": "Une poignée de clous rouillés",
+                    "icon": "nails",
+                    "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            }
+        ],
+        "unlocked": false
+    },
+    {
+        "completed": true,
+        "defense": 10,
+        "description": "Un mur érigé tout autour du campement, vous ne voyez que lui à perte de vue.",
+        "id": "d861d4f8-728b-4815-8d0d-0729772a61a0",
+        "name": "Mur en bois",
+        "rarity": "commun",
+        "resources": [],
+        "unlocked": true
+    },
+    {
+        "ap": 5,
         "completed": false,
         "defense": 10,
         "id": "13dee052-d25e-4bc0-871c-67583674f288",
@@ -73,16 +123,58 @@
         "unlocked": true
     },
     {
-        "completed": true,
+        "ap": 5,
+        "completed": false,
         "defense": 10,
-        "id": "d861d4f8-728b-4815-8d0d-0729772a61a0",
-        "name": "Mur en bois",
+        "id": "1f214124-e040-4c0c-9d54-a2a3892d58de",
+        "name": "Porte en métal",
+        "parent": "c8bf3b5c-af71-4440-ac26-dffde7d07510",
         "rarity": "commun",
-        "resources": [],
-        "unlocked": true
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "smashingstocks",
+                    "description": "Des planches de bois",
+                    "icon": "wood-plank",
+                    "id": "a3eff481-3d59-40d4-b127-6a79ff748eb0",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Mehwish",
+                    "description": "Une poignée de clous rouillés",
+                    "icon": "nails",
+                    "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            }
+        ],
+        "unlocked": false
     },
     {
-        "ap": 20,
+        "ap": 10,
         "completed": false,
         "defense": 20,
         "id": "0cb38f83-1328-44a1-9679-bea661e54af0",
@@ -160,7 +252,7 @@
         "unlocked": false
     },
     {
-        "ap": 30,
+        "ap": 15,
         "completed": false,
         "defense": 30,
         "id": "dbd0e9bb-378c-48e3-935d-9f41fce5de53",
@@ -198,7 +290,7 @@
         "unlocked": false
     },
     {
-        "ap": 30,
+        "ap": 15,
         "completed": false,
         "defense": 30,
         "id": "8cba340b-f5e3-4df9-b61c-5634a5081484",
@@ -223,7 +315,7 @@
         "unlocked": false
     },
     {
-        "ap": 50,
+        "ap": 25,
         "completed": false,
         "defense": 50,
         "id": "a41b56ca-51a1-477b-ad0f-c02e12554254",

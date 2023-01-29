@@ -734,42 +734,6 @@
     },
     {
         "credit": "wanicon",
-        "description": "Plan: Atelier",
-        "icon": "blueprint",
-        "id": "f2205dbc-721f-42c9-84ed-0f28cd2b3efc",
-        "rarity": "commun",
-        "type": "blueprint",
-        "unique": true
-    },
-    {
-        "credit": "wanicon",
-        "description": "Plan: Barricade",
-        "icon": "blueprint",
-        "id": "03497480-7d19-4a2a-9e1f-f3751a40e232",
-        "rarity": "commun",
-        "type": "blueprint",
-        "unique": true
-    },
-    {
-        "credit": "wanicon",
-        "description": "Plan: Bombe artisanale",
-        "icon": "blueprint",
-        "id": "f98e512c-73b4-4636-849b-86bcc2235ddf",
-        "rarity": "commun",
-        "type": "blueprint",
-        "unique": true
-    },
-    {
-        "credit": "wanicon",
-        "description": "Plan: Fossé",
-        "icon": "blueprint",
-        "id": "6fe120ab-ed09-4dbe-a63c-6fd6433f351d",
-        "rarity": "commun",
-        "type": "blueprint",
-        "unique": true
-    },
-    {
-        "credit": "wanicon",
         "description": "Plan: Autel des offrandes",
         "icon": "blueprint",
         "id": "f4392f6d-5cf6-4e8a-b9bf-c7ebca71e9f0",
@@ -816,15 +780,22 @@
     },
     {
         "credit": "Freepik",
+        "description": "DEF des survivants",
+        "icon": "shield",
+        "id": "672a975f-9f82-446c-bef4-bd16d90d8075",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
         "description": "Décédé",
         "icon": "dead",
         "id": "1e0e9356-2734-4f7b-b1c6-d8c5cee0e7e8",
         "type": "misc"
     },
     {
-        "credit": "winnievinzence",
+        "credit": "Eucalyp",
         "description": "En attente de ressources",
-        "icon": "waiting",
+        "icon": "materials",
         "id": "70fe012b-8ac9-401f-bc1a-96489885f1c8",
         "type": "misc"
     },
@@ -1040,6 +1011,13 @@
         "description": "Verrouillé",
         "icon": "locked",
         "id": "83d4e547-37f9-4869-826c-97361a94f03d",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Vous devez terminer le chantier précédent",
+        "icon": "waiting",
+        "id": "277ab103-2da6-43d9-87c0-550fe2ddd920",
         "type": "misc"
     },
     {
