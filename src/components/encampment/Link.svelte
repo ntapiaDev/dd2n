@@ -1,12 +1,20 @@
 <script>
+	import { tooltip } from "../game/tooltip";
+
     export let locked = false;
     export let selected;
     export let title;
 </script>
 
-<span class:selected class:locked>
-    {title}
-</span>
+{#if locked}
+    <span class="locked" title="L'atelier n'est pas débloqué pour le moment" use:tooltip>
+        {title}
+    </span>
+{:else}
+    <span class:selected>
+        {title}
+    </span>
+{/if}
 
 <style>
     span {

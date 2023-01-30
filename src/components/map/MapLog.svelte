@@ -109,10 +109,10 @@
 		<PlayerName color={log.color} username={log.player} /> est entré{log.gender === 'female' ? 'e' : ''} dans le passage souterrain.
 	{:else if log.action === 'kill'}
 		<PlayerName color={log.color} username={log.player} /> a
-			{log.log.weapon === "Une grenade explosive" ? 'fait sauter' :
-				log.log.weapon === "Une grenade incendiaire" ? 'brûlé vif' :
-				log.log.weapon === "Une grenade fumigène" ? 'enfumé' :
-				log.log.weapon === "Du C-4" ? 'exterminé' : 'tué'}
+			{log.log.weapon === 'Une grenade explosive' ? 'fait sauter' :
+				['Un cocktail Molotov', 'Une grenade incendiaire'].includes(log.log.weapon) ? 'brûlé vif' :
+				log.log.weapon === 'Une grenade fumigène' ? 'enfumé' :
+				log.log.weapon === 'Du C-4' ? 'exterminé' : 'tué'}
 			<span class="zombies">{log.log.zombies} {log.log.plus > 0 ? `(+${log.log.plus})` : ''} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="zombies">{firstLetterToLowerCase(log.log.weapon)}</span>.
 			{#if log.log.critical}
 				<span>Un coup bien placé a permis de toucher <span class="zombies">{log.log.critical} zombie{log.log.critical > 1 ? 's' : ''}</span> supplémentaire{log.log.critical > 1 ? 's' : ''}.</span>
@@ -148,8 +148,11 @@
 	{:else if ['loot', 'building'].includes(log.action)}
 		<div class="item">
 			<PlayerName color={log.color} username={log.player} /> a trouvé {log.action === 'building' ? 'dans le bâtiment' : ''}
-			<span>
-				{#each sortItems(log.log.loots) as item}
+			<span class="loots">
+				{#each sortItems(log.log.loots) as item, i}
+					{#if log.log.loots.length > 1 && log.log.loots.length === i + 1}
+						<span>et</span>
+					{/if}
 					<Item {item} />
 				{/each}
 			</span>
@@ -160,7 +163,7 @@
 			{/each}
 		{/if}
 		{#if log.log.plus.one || log.log.plus.two || log.log.plus.tree || log.log.plus.four}
-			<PlayerName color={log.color} username={log.player} /> découvre
+			<div class="mt"><PlayerName color={log.color} username={log.player} /> découvre
 			{#if log.log.plus.one}{log.log.plus.one} objet{log.log.plus.one > 1 ? 's' : ''} <span class="p1">hors du commun</span>{#if (log.log.plus.two && (log.log.plus.tree || log.log.plus.four)) || (log.log.plus.tree && log.log.plus.four)}
 					{', '}
 				{:else if log.log.plus.two || log.log.plus.tree || log.log.plus.four}
@@ -180,12 +183,12 @@
 			{/if}
 			{#if log.log.plus.four}{log.log.plus.four} objet{log.log.plus.four > 1 ? 's' : ''} <span class="p4">fantastique{log.log.plus.four > 1 ? 's' : ''}</span>
 			{/if}
-				{' !'}
+				{' !'}</div>
 		{/if}
 		{#if log.log.empty}
-			<div>La zone ne semble plus contenir grand chose d'utile.</div>
+			<div class="mt">La zone ne semble plus contenir grand chose d'utile.</div>
 		{:else if log.log.emptyBuilding}
-			<div>Le bâtiment a maintenant l'air totalement vide.</div>
+			<div class="mt">Le bâtiment a maintenant l'air totalement vide.</div>
 		{/if}
 		{#if log.log.warning === 'hunger'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
@@ -246,7 +249,7 @@
 			</div>
 		{/if}
 	{:else if log.action === 'workshop'}
-		Un document mystérieux est posé au pied du batiment.
+		Un document mystérieux est posé non loin du batiment.
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
@@ -286,6 +289,16 @@
 		align-items: center;
 		flex-wrap: wrap;
 		gap: 4px;
+	}
+	.item .loots {
+		display: flex;
+		align-items: center;
+	}
+	.item .loots span {
+		margin: 0 4px;
+	}
+	.mt {
+		margin-top: 2px;
 	}
 	.food,
 	.p1 {

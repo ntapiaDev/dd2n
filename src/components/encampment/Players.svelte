@@ -11,7 +11,7 @@
 </script>
 
 <aside>
-    <p>Joueurs dans le campement :</p>
+    <p>Joueurs dans le campement ({ encampment.length }) :</p>
     <ul>
         {#each encampment.sort() as player}
             <li>
@@ -20,7 +20,7 @@
             </li>
         {/each}
     </ul>
-    <p>Joueurs dans la nature :</p>
+    <p>Joueurs dans la nature ({ game.filter(p => !encampment.includes(p.username)).length }) :</p>
     <ul>
         {#each sortPlayers(game.filter(p => !encampment.includes(p.username))) as player}
             <li>

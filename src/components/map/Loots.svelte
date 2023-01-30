@@ -103,6 +103,7 @@
 		display: grid;
 		grid-template-columns: repeat(17, 1fr);
 		gap: 1px 0;
+		overflow-x: hidden;
 		overflow-y: auto;
 	}
 	.title,

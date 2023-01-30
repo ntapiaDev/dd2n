@@ -7,13 +7,22 @@
     export let worksites;
     
     $: completed = encampment.completed;
+    $: defense = getDefense(completed, worksites);
     $: unlocked = encampment.unlocked.map(w => w.id);
 
-    $: defense = getDefense(completed, worksites);
+    let total = 0;
+    let totalUnlocked = 0;
+    $: if (encampment) {
+        total = totalUnlocked = 0;
+        for (let groups of worksites) for (let worksite of groups.reduction) {
+            total++;
+            if ((!worksite.parent || encampment.completed.includes(worksite.parent) || encampment.unlocked.find(w => w.id === worksite.parent)) && encampment.unlocked.find(w => w.id === worksite.id)) totalUnlocked++;
+        }
+    }
 </script>
 
-<div in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
-    <h3>Chantiers de défense :</h3>
+<div in:fade|local={{ delay: 150, duration: 300 }} out:fade|local={{ duration: 150 }}>
+    <h3>Chantiers de défense ({ `${encampment.completed.length} chantiers terminés, ${encampment.completed.length + totalUnlocked} chantiers sur ${total}` }) :</h3>
     <p>Vous pouvez trouver ici la liste des chantiers de défenses de votre campement.<br>
     Un chantier peut être construit si les ressources nécessaires sont entreposées dans la banque commune. Vous pourrez trouver de nouveaux plans au fil de vos aventures.
     </p>

@@ -1,12 +1,13 @@
 <script>
+    import { page } from '$app/stores';
 	import { fade } from "svelte/transition";
 	import EncampmentLog from "./EncampmentLog.svelte";
 
     export let logs;
 </script>
 
-<div in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
-    <h3>Registre central :</h3>
+<div in:fade|local={{ delay: 150, duration: 300 }} out:fade|local={{ duration: 150 }}>
+    <h3>Registre central ({$page.data.game.name} - jour {$page.data.game.day}) :</h3>
     <p>Toutes les actions qui ont lieu dans l'enceinte du campement sont répertoriées dans le registre central. Vous y trouverez également tous les jours le compte-rendu de l'attaque.</p>
     {#each logs as log}
         <EncampmentLog {log} />

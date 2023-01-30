@@ -257,6 +257,9 @@
 		flex-basis: 50px;
 		overflow-y: hidden;
 	}
+	.map {
+		width: 450px;
+	}
 	.map,
 	.cell {
 		display: flex;

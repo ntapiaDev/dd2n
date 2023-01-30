@@ -47,8 +47,8 @@
             <Item item={items[1]} background="#DDD" />
         {/if}
     </div>
-    <span class={'result ' + (recipe.ap <= $page.data.user.ap ? 'valid' : 'failed')}>
-        <Item item={recipe.result} /> {recipe.ap} PA
+    <span class="result">
+        <Item item={recipe.result} /><span class={recipe.ap <= $page.data.user.ap ? 'valid' : 'failed'}>{recipe.ap} PA</span>
     </span>
 </div>
 

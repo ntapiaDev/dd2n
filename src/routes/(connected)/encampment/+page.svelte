@@ -58,6 +58,12 @@
 				<p>Ce chantier est déjà terminé.</p>
 			{:else if form?.full}
 				<p>Votre inventaire est plein.</p>
+			{:else if form?.locked}
+				<p>L'atelier de recyclage n'a pas encore été débloqué.</p>
+			{:else if form?.materials}
+				<p>Il n'y a pas assez de ressources pour réaliser cette recette.</p>
+			{:else if form?.more}
+				<p>Davantage de points d'action sont nécessaires pour réaliser cette recette.</p>
 			{:else if form?.nothing}
 				<p>Vous devez utiliser des points d'action pour construire ce chantier.</p>
 			{:else if form?.origin}
@@ -68,6 +74,8 @@
 				<p>Il n'y a pas assez de ressources pour construire ce chantier.</p>
 			{:else if form?.toMuch}
 				<p>Vous avez dépensé trop de points d'actions pour ce chantier.</p>
+			{:else if form?.unknown}
+				<p>Cette recette n'est pas encore débloquée.</p>
 			{:else if form?.unlocked}
 				<p>Ce chantier n'est pas encore débloqué.</p>
 			{:else if form?.workshop}

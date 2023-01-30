@@ -148,6 +148,15 @@
 		{:else if log.log.warning === 'both'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{/if}
+	{:else if log.action === 'workshop'}
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a fabriqué <Item item={log.log.item} /> en <Item item={transform} substitute="Atelier" /> <b>recyclant</b> <span class="workshop">
+			{#each log.log.items as item, i}
+				{#if log.log.items.length > 1 && log.log.items.length === i + 1}
+					<span>et</span>
+				{/if}
+				<Item {item} />
+			{/each}
+		</span></div>
 	{:else if log.action === 'blueprint'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a découvert
 			{#if log.log.type === 'recipe'}
@@ -203,11 +212,13 @@
 		align-items: center;
 		gap: 4px;
 	}
-	.item .build span {
+	.item .build span,
+	.item .workshop {
 		display: flex;
 		align-items: center;
 	}
-	.item .build span span {
+	.item .build span span,
+	.item .workshop span {
 		margin: 0 4px;
 	}
 	.food {

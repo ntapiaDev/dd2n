@@ -7,8 +7,8 @@
     export let unlocked = false;
 </script>
 
-<div class="workshop" in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
-    <h3>Atelier de recyclage :</h3>
+<div class="workshop" in:fade|local={{ delay: 150, duration: 300 }} out:fade|local={{ duration: 150 }}>
+    <h3>Atelier de recyclage ({ `${encampment.length} recettes sur ${recipes.length}` }) :</h3>
     <p>Cet atelier de recyclage vous permet de transformer vos ressources inutiles en matériaux de meilleure qualité. Il existe de nombreuses recettes, à vous de les trouver.</p>
     {#if !unlocked}
         <span class="locked">L'atelier de recyclage n'a pas encore été débloqué.</span>

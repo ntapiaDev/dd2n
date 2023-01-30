@@ -108,6 +108,40 @@ const withdraw = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
+const workshop = async ({ locals, request }) => {
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    if (!encampment.workshop.unlocked) return fail(400, { locked: true });
+    const data = await request.formData();
+    const ap = parseInt(data.get('ap'));
+    if (ap > locals.user.ap) return fail(400, { ap: true });
+    const id = data.get('id');
+    if (!encampment.workshop.recipes.includes(id)) return fail(400, { unknown: true });
+    const recipe = await get_recipe(id, locals.rethinkdb);
+    if (ap < recipe.ap) return fail(400, { more: true });
+    const bank = encampment.items;
+    if (!checkResources(bank, recipe.resources)) return fail(400, { materials: true });
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
+    await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
+
+    // Refacto
+    let items = [];
+    for (let resource of recipe.resources) {
+        let quantity = resource.quantity;
+        while (quantity > 0) {
+            let item = {...sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0)};
+            sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0).quantity -= quantity;
+            quantity -= item.quantity;
+            if (quantity < 0) item.quantity += quantity;
+            items.push(item)
+        }
+    }
+    const product = recipe.result;
+    product.uuid = crypto.randomUUID();
+    await update_bank(locals.user.game_id, handleStack(bank.filter(i => i.quantity > 0), product), locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'workshop', { item: recipe.result, items, name: recipe.name, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    throw redirect(303, '/encampment');
+}
+
 const worksite = async ({ locals, request }) => {
     const data = await request.formData();
     const ap = parseInt(data.get('ap'));
@@ -122,7 +156,7 @@ const worksite = async ({ locals, request }) => {
     const bank = encampment.items;
     const worksites = await get_worksites_by_group(locals.rethinkdb);
     const worksite = worksites.find(g => g.reduction.find(w => w.id === id)).reduction.find(w => w.id === id);
-    if (isBlocked(worksite, encampment.worksites.completed, worksites)) return fail(400, { unlocked: true });
+    if (worksite.parent && isBlocked(worksite, encampment.worksites.completed, worksites)) return fail(400, { unlocked: true });
     if (!checkResources(bank, worksite.resources)) return fail(400, { resources: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
     await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
@@ -148,4 +182,4 @@ const worksite = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { blueprint, deposit, map, unlock, withdraw, worksite };
+export const actions = { blueprint, deposit, map, unlock, withdraw, workshop, worksite };
