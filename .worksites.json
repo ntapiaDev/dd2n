@@ -72,7 +72,7 @@
                 "quantity": 2
             }
         ],
-        "unlocked": false
+        "unlocked": true
     },
     {
         "completed": true,
@@ -249,6 +249,44 @@
                 "quantity": 4
             }
         ],
+        "unlocked": true
+    },
+    {
+        "ap": 10,
+        "completed": false,
+        "defense": 20,
+        "id": "30cb6b0a-4069-4013-a077-da6f8710599c",
+        "name": "Porte en acier",
+        "parent": "c8bf3b5c-af71-4440-ac26-dffde7d07510",
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Chanut-is-Industries",
+                    "description": "Quelques boulons et écrous",
+                    "icon": "bolts",
+                    "id": "18ba6820-fe6c-44ef-8194-1860679bd2c6",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Design Circle",
+                    "description": "Une poutre en acier",
+                    "icon": "poutre",
+                    "id": "d94456fd-3275-4574-a151-c02dfe379af4",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            }
+        ],
         "unlocked": false
     },
     {
@@ -383,6 +421,44 @@
                     "icon": "screw",
                     "id": "6c7bbac1-f3a3-4169-b653-4f66e12d7165",
                     "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            }
+        ],
+        "unlocked": false
+    },
+    {
+        "ap": 20,
+        "completed": false,
+        "defense": 40,
+        "id": "33b34fa9-8e07-4c1b-871c-0280c544a8fc",
+        "name": "Fossé à lames",
+        "parent": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
+        "rarity": "épique",
+        "resources": [
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "ultimatearm",
+                    "description": "Une grosse vis",
+                    "icon": "screw",
+                    "id": "6c7bbac1-f3a3-4169-b653-4f66e12d7165",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Flat Icons",
+                    "description": "Une lame de scie circulaire",
+                    "icon": "saw-blade",
+                    "id": "e94c077e-3b5f-4cc9-8e03-90f3210f11f5",
+                    "rarity": "épique",
                     "type": "resource",
                     "unique": false
                 },

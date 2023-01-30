@@ -3,6 +3,7 @@
 	import Link from "./Link.svelte";
 
     export let selected;
+    export let workshop;
 
     const dispatch = createEventDispatcher();
 
@@ -28,8 +29,8 @@
         <li on:click={() => open('worksites')}>
             <Link selected={selected === 'worksites'} title="Chantiers de défense" />
         </li>
-        <li on:click={() => open('workshop')}>
-            <Link selected={selected === 'workshop'} title="Atelier de recyclage" />
+        <li on:click={workshop ? () => open('workshop') : ''}>
+            <Link selected={selected === 'workshop'} title="Atelier de recyclage" locked={!workshop} />
         </li>
     </ul>
 </nav>

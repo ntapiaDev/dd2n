@@ -23,7 +23,7 @@
 		{:else if selected === 'worksites'}
 			<Worksites groups={data.groups} resources={data.resources} worksites={data.worksites} />
 		{:else if selected === 'workshop'}
-			<Workshop />
+			<Workshop recipes={data.recipes} resources={data.resources} />
 		{/if}
 	</div>
 </section>

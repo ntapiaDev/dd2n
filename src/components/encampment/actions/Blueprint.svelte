@@ -7,8 +7,8 @@
 	export let user;
 
 	const item = {
-		credit: 'wanicon',
-		description: 'Ajouter un plan',
+		credit: 'Freepik',
+		description: 'Ajouter un plan ou une recette',
 		icon: 'blueprint',
 		id: '944e4b59-b34f-46a7-81e1-997104cc2d04',
 		type: 'misc'
@@ -24,8 +24,10 @@
 		{#if open}
 			<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
 				{#each user?.inventory as item}
-					{#if item.type === 'blueprint'}
+					{#if item.type === 'blueprint' && !item.origin}
 						<InteractiveItem {item} action={'/encampment?/blueprint'} />
+					{:else if item.origin}
+						<InteractiveItem {item} action={'/encampment?/unlock'} />
 					{/if}
 				{/each}
 			</div>

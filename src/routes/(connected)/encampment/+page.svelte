@@ -34,7 +34,7 @@
 	<div class="sidebar">
 		<Attack attack={encampment.attack} completed={encampment.worksites.completed} slots={data.slots} {worksites} />
 		<Actions {user} />
-		<Navigate selected={$sidebar} on:clicked={open} />
+		<Navigate selected={$sidebar} on:clicked={open} workshop={encampment.workshop.unlocked} />
 		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />
 	</div>
 	<div class="content">
@@ -47,7 +47,7 @@
 		{:else if $sidebar === 'worksites'}
 			<Worksites encampment={encampment.worksites} {worksites} />
 		{:else if $sidebar === 'workshop'}
-			<Workshop />
+			<Workshop recipes={data.recipes} unlocked={encampment.workshop.unlocked} />
 		{/if}
 		<div class="error">
 			{#if form?.already}
@@ -68,6 +68,8 @@
 				<p>Vous avez dépensé trop de points d'actions pour ce chantier.</p>
 			{:else if form?.unlocked}
 				<p>Ce chantier n'est pas encore débloqué.</p>
+			{:else if form?.workshop}
+				<p>L'atelier est déjà débloqué.</p>
 			{/if}
 		</div>
 	</div>

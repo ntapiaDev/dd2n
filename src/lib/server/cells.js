@@ -19,7 +19,7 @@ export const delete_cells = (game_id, rethinkdb) => {
     return r.table('cells').filter({ game_id }).delete().run(rethinkdb);
 }
 
-export const generate_cells = async (game_id, rethinkdb) => {
+export const generate_cells = async (game_id, workshop, rethinkdb) => {
     const _altar = getAltar();
     const buildings = getBuildings();
     const teddies = getTeddies();
@@ -32,6 +32,9 @@ export const generate_cells = async (game_id, rethinkdb) => {
             const building = buildings[letters[i] + j] ?? '';
             const distance = Math.abs(i - letters.indexOf(encampment[0])) + Math.abs(encampment.substring(1) - j);
             const entrance = tunnel.includes(letters[i] + j) ? tunnel.filter(c => c !== letters[i] + j)[0] : '';
+            const items = [];
+            if (buildings[letters[i] + j]?.code === 'b2') items.push(workshop);
+            if (Object.keys(teddies).includes(letters[i] + j)) items.push(teddies[letters[i] + j]);
             const players = [];
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
@@ -47,7 +50,7 @@ export const generate_cells = async (game_id, rethinkdb) => {
                 entrance,
                 estimated: { zombies: 0, empty: false },
                 game_id,
-                items: Object.keys(teddies).includes(letters[i] + j) ? [teddies[letters[i] + j]] : [],
+                items,
                 layout: layout[letters[i] + j],
                 players,
                 searchedBy: [],
@@ -60,7 +63,7 @@ export const generate_cells = async (game_id, rethinkdb) => {
         }
     }
     await r.table('cells').insert(cells).run(rethinkdb);
-    return Object.keys(teddies);
+    return { teddies: Object.keys(teddies), ws: Object.entries(buildings).find(b => b[1].code === 'b2')[0] };
 }
 
 export const get_cell = async (game_id, coordinate, rethinkdb) => {

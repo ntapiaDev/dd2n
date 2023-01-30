@@ -28,6 +28,13 @@
 			type: 'misc',
 		}
 	];
+	const transform = {
+		credit: 'Freepik',
+		description: 'Transformer',
+		icon: 'transform',
+		id: '5617997b-dfca-4955-a8a7-724729fc8e9e',
+		type: 'misc'
+	}
 	const wounds = [
 		{
 			credit: 'Freepik',
@@ -116,7 +123,7 @@
 	{:else if log.action === 'withdraw'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris <Item item={log.log.item} /> dans la banque.</div>
 	{:else if log.action === 'build'}
-		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} /> <b>{log.log.name}<span class="notb">.</span></b></div>
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b></div>
 		{#if log.log.completed}
 			Le chantier est maintenant terminé, le campement gagne {log.log.defense} DEF !
 			<div class="item">
@@ -143,6 +150,11 @@
 		{/if}
 	{:else if log.action === 'blueprint'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a découvert le chantier <Item item={build} /> <b>{log.log.name}<span class="notb">.</span></b></div>
+	{:else if log.action === 'unlocked'}
+			{#if log.log.origin === 'workshop'}
+				<div class="item">Après avoir apporté et étudié avec attention les plans trouvés près de l'entrepot de bricolage, <PlayerName color={log.color} username={log.player} /> a débloqué <Item item={transform} substitute="Atelier" /> <b>Atelier de recyclage<span class="notb">.</span></b></div>
+				<div>Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
+			{/if}
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
@@ -178,7 +190,7 @@
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
-		gap: 4px;
+		gap: 0 4px;
 	}
 	.item .build {
 		display: flex;

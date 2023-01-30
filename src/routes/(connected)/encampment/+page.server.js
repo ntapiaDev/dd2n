@@ -3,18 +3,20 @@ import { getItem, handleStack, sortItems } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
-import { add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, update_bank } from "$lib/server/encampments";
+import { add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
 import { get_worksite, get_worksites_by_group } from "$lib/server/worksites";
+import { get_recipes } from "$lib/server/workshop";
 
 export const load = async ({ locals }) => {
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
     const lastDate = await get_last_date(locals.user.game_id, locals.game.players.map(p => p.username), locals.rethinkdb);
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
+    const recipes = await get_recipes(locals.rethinkdb);
     const slots = await get_slots_by_game(locals.user.game_id, locals.rethinkdb);
     const worksites = await get_worksites_by_group(locals.rethinkdb);
-    return { encampment, lastDate, logs, slots, worksites };
+    return { encampment, lastDate, logs, recipes, slots, worksites };
 }
 
 const blueprint = async ({ locals, request }) => {
@@ -56,6 +58,21 @@ const map = async ({ locals }) => {
         { coordinate: locals.game.encampment, player: locals.user.username, action: 'inEncampment', log: '', gender: locals.user.gender, color: locals.user.color }
     ], locals.rethinkdb);
     throw redirect(303, '/map');
+}
+
+const unlock = async ({ locals, request }) => {
+    const data = await request.formData();
+    const uuid = data.get('uuid');
+    const inventory = locals.user.inventory;
+    if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
+    const { item } = getItem(inventory, uuid, false);
+    if (item.origin === 'workshop') {
+        const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+        if (encampment.workshop.unlocked) return fail(400, { workshop: true });
+        await unlock_workshop(locals.user.game_id, locals.rethinkdb);
+    }
+    await use_item(locals.user.id, item, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'unlocked', { origin: item.origin }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const withdraw = async ({ locals, request }) => {
@@ -120,4 +137,4 @@ const worksite = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { blueprint, deposit, map, withdraw, worksite };
+export const actions = { blueprint, deposit, map, unlock, withdraw, worksite };

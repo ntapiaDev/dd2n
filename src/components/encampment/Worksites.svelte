@@ -41,7 +41,12 @@
             {/each}
         {/if}
     {/each}
-    <span class="defense">Total : <b>{defense}</b> DEF</span>
+    <span class="misc">
+        <span class="temporary">
+            <span class="mark">!</span> : chantier temporaire, ne résistera pas à la nuit
+        </span>
+        <span class="defense">Total : <b>{defense}</b> DEF</span>
+    </span>
 </div>
 
 <style>
@@ -65,9 +70,19 @@
     .header span {
         text-align: center;
     }
+    .misc {
+        display: flex;
+        justify-content: space-between;
+    }
+    .temporary {
+        margin: 0.5em 0 0 0.5em;
+        color: rgb(100, 100, 100);
+    }
+    .temporary span {
+        color: red;
+        font-weight: bold;
+    }
     .defense {
         margin: 0.5em 0.5em 0 0;
-        display: block;
-        text-align: end;
     }
 </style>

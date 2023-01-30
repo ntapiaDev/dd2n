@@ -1,9 +1,10 @@
 <script>
+    export let locked = false;
     export let selected;
     export let title;
 </script>
 
-<span class:selected>
+<span class:selected class:locked>
     {title}
 </span>
 
@@ -20,5 +21,10 @@
     }
     span.selected {
         box-shadow: 0 2px 6px rgba(48, 48, 48, 0.48), 0 1px 4px rgba(96, 96, 96, 0.96);
+    }
+    span.locked {
+        background-color: #DDD;
+        color: rgb(100, 100, 100);
+        cursor: default;
     }
 </style>

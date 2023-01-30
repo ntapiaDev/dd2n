@@ -47,7 +47,7 @@
             id: '83d4e547-37f9-4869-826c-97361a94f03d',
             type: 'misc'
         }
-    ]
+    ];
 
     let ap = apLeft;
     $: if(apLeft) ap = apLeft;
@@ -191,10 +191,10 @@
 		box-shadow: 0 0 3px rgba(0, 0, 255, 0.66), 0 2px 4px rgba(0, 0, 255, 0.66);
 	}
 	.épique {
-		border: 1px solid purple;
+		box-shadow: 0 0 3px rgba(128, 0, 128, 0.66), 0 2px 4px rgba(128, 0, 128, 0.66);
 	}
 	.légendaire {
-		border: 1px solid orange;
+		box-shadow: 0 0 3px rgba(255, 165, 0, 0.66), 0 2px 4px rgba(255, 165, 0, 0.66);
 	}
 
     form {

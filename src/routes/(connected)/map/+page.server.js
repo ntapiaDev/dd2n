@@ -6,7 +6,7 @@ import { checkHT, getDefense } from "$lib/player";
 import { add_tchat, altar_collapse, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_items, update_map, update_search } from "$lib/server/cells";
 import { add_user_to_encampment, get_encampment_worksites } from "$lib/server/encampments";
 import { add_unique } from "$lib/server/games";
-import { get_from_altar, get_items_by_code, get_loots } from "$lib/server/items";
+import { get_from, get_items_by_code, get_loots } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
 import { _attack, enter_encampment, _equip, _force, lose_ap, _search, _travel } from "$lib/server/users";
 import { get_worksites_by_group } from "$lib/server/worksites";
@@ -25,9 +25,7 @@ const altar = async ({ locals }) => {
     const teddies = location.items.filter(i => i.class === 'teddy');
     let bp = '';
     if (teddies.length === 3) {
-        bp = await get_from_altar(locals.rethinkdb);
-        bp.quantity = 1;
-        bp.uuid = crypto.randomUUID();
+        bp = await get_from('altar', locals.rethinkdb);
         await altar_collapse(locals.user.game_id, locals.user.location, bp, locals.rethinkdb);
     }
     await lose_ap(locals.user.id, locals.rethinkdb);

@@ -2,9 +2,11 @@ import { fail, redirect } from "@sveltejs/kit";
 import { generate_cells, delete_cells, remove_user_from_location } from "$lib/server/cells";
 import { add_user_to_encampment, delete_encampment, generate_encampment, remove_user_from_encampment } from "$lib/server/encampments";
 import { add_game, add_user_to_game, delete_game, get_games, get_game_by_id, remove_user_from_game } from "$lib/server/games"
+import { get_from } from "$lib/server/items";
 import { add_log, add_logs, delete_logs } from "$lib/server/logs";
 import { add_game_to_user, remove_game_from_user, remove_game_from_users } from "$lib/server/users";
 import { get_worksites } from "$lib/server/worksites";
+import { get_recipes } from "$lib/server/workshop";
 
 export const load = async ({ locals }) => {
     const games = await get_games(locals.rethinkdb);
@@ -16,13 +18,17 @@ const addGame = async ({ locals }) => {
     const worksites = await get_worksites(locals.rethinkdb);
     const completed = worksites.filter(w => w.completed).map(w => w.id);
     const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(({completed, defense, name, parent, rarity, resources, unlocked, ...rest}) => rest);
+    const workshop = await get_recipes(locals.rethinkdb);
+    const recipes = workshop.filter(w => w.unlocked).map(w => w.id);
+    const blueprint = await get_from('workshop', locals.rethinkdb);
     const game_id = await add_game(locals.rethinkdb);
-    const teddies = await generate_cells(game_id, locals.rethinkdb);
-    await generate_encampment(game_id, completed, unlocked, locals.rethinkdb);
+    const { teddies, ws } = await generate_cells(game_id, blueprint, locals.rethinkdb);
+    await generate_encampment(game_id, completed, unlocked, recipes, locals.rethinkdb);
     await add_logs(game_id, [
         { coordinate: teddies[0], player: '', action: 'teddy', log: '', gender: '', color: '' },
         { coordinate: teddies[1], player: '', action: 'teddy', log: '', gender: '', color: '' },
-        { coordinate: teddies[2], player: '', action: 'teddy', log: '', gender: '', color: '' }
+        { coordinate: teddies[2], player: '', action: 'teddy', log: '', gender: '', color: '' },
+        { coordinate: ws, player: '', action: 'workshop', log: '', gender: '', color: '' }
     ], locals.rethinkdb);
 }
 

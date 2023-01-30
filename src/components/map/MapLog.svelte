@@ -245,6 +245,8 @@
 				<span class="teddies"><Item item={log.log.teddies[0]} /><Item item={log.log.teddies[1]} /><span>et</span><Item item={log.log.teddies[2]} /></span> se demandent ce qu'il se passe...
 			</div>
 		{/if}
+	{:else if log.action === 'workshop'}
+		Un document mystérieux est posé au pied du batiment.
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
