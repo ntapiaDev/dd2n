@@ -1,13 +1,30 @@
 import { ammunition, blueprint, commun, drug_weapon_armour, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, épique } from "./config";
 
-export const getBlueprints = (encampment, worksites) => {
+export const getBlueprints = (encampment, recipes, worksites) => {
+    const blueprints = [];
+    if (encampment.workshop.unlocked) {
+        for (let recipe of recipes) {
+            if (!encampment.workshop.recipes.includes(recipe.id)) {
+                const blueprint = {
+                    credit: 'Freepik',
+                    description: `Recette: ${recipe.name}`,
+                    icon: 'workshop',
+                    id: `${recipe.id}`,
+                    rarity: `${recipe.rarity}`,
+                    recipe_id: `${recipe.id}`,
+                    type: 'blueprint',
+                    unique: true
+                }
+                blueprints.push(blueprint);
+            }
+        }
+    }
     const models = [];
     for (let group of worksites) {
-        if (!group.group || encampment.completed.includes(group.group) || encampment.unlocked.some(w => w.id === group.group))
+        if (!group.group || encampment.worksites.completed.includes(group.group) || encampment.worksites.unlocked.some(w => w.id === group.group))
             for (let worksite of group.reduction)
-                if (!encampment.completed.includes(worksite.id) && !encampment.unlocked.some(w => w.id === worksite.id)) models.push(worksite)
+                if (!encampment.worksites.completed.includes(worksite.id) && !encampment.worksites.unlocked.some(w => w.id === worksite.id)) models.push(worksite)
     }
-    const blueprints = [];
     for (let worksite of models) {
         const blueprint = {
             credit: 'wanicon',
@@ -17,7 +34,7 @@ export const getBlueprints = (encampment, worksites) => {
             rarity: `${worksite.rarity}`,
             type: 'blueprint',
             unique: true,
-            worksite_id: `${worksite.id}`,
+            worksite_id: `${worksite.id}`
         }
         blueprints.push(blueprint);
     }

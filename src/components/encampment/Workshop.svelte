@@ -2,6 +2,7 @@
 	import { fade } from "svelte/transition";
 	import Recipe from "./Recipe.svelte";
 
+    export let encampment;
     export let recipes;
     export let unlocked = false;
 </script>
@@ -14,7 +15,9 @@
     {:else}
         <div class="grid">
             {#each recipes as recipe}
-                <Recipe {recipe} />
+                {#if encampment.includes(recipe.id)}
+                    <Recipe {recipe} />
+                {/if}
             {/each}
         </div>
     {/if}
@@ -37,6 +40,7 @@
         font-weight: bold;
     }
     div.grid {
+        margin-top: 1em;
         display: grid;
         grid-template-columns: repeat(4, 1FR);
         gap: 2px;

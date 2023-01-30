@@ -149,7 +149,13 @@
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{/if}
 	{:else if log.action === 'blueprint'}
-		<div class="item"><PlayerName color={log.color} username={log.player} /> a découvert le chantier <Item item={build} /> <b>{log.log.name}<span class="notb">.</span></b></div>
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a découvert
+			{#if log.log.type === 'recipe'}
+				la recette <Item item={transform} substitute="Atelier" />
+			{:else if log.log.type === 'worksite'}
+				le chantier <Item item={build} substitute="Chantier" />
+			{/if}
+			<b>{log.log.name}<span class="notb">.</span></b></div>
 	{:else if log.action === 'unlocked'}
 			{#if log.log.origin === 'workshop'}
 				<div class="item">Après avoir apporté et étudié avec attention les plans trouvés près de l'entrepot de bricolage, <PlayerName color={log.color} username={log.player} /> a débloqué <Item item={transform} substitute="Atelier" /> <b>Atelier de recyclage<span class="notb">.</span></b></div>

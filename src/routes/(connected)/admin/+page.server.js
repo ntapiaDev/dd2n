@@ -1,6 +1,6 @@
 import { add_item, get_items, get_resources } from "$lib/server/items";
-import { add_worksite, get_worksites, get_worksites_by_group } from "$lib/server/worksites";
 import { add_recipe, get_recipes } from "$lib/server/workshop";
+import { add_worksite, get_worksites, get_worksites_by_group } from "$lib/server/worksites";
 
 export async function load ({ locals }) {
     const groups = await get_worksites_by_group(locals.rethinkdb);

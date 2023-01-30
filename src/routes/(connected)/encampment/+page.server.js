@@ -3,11 +3,11 @@ import { getItem, handleStack, sortItems } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
-import { add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
+import { add_recipe, add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
+import { get_recipe, get_recipes } from "$lib/server/workshop";
 import { get_worksite, get_worksites_by_group } from "$lib/server/worksites";
-import { get_recipes } from "$lib/server/workshop";
 
 export const load = async ({ locals }) => {
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
@@ -26,13 +26,24 @@ const blueprint = async ({ locals, request }) => {
     if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
     const { item } = getItem(inventory, uuid, false);
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
-    const id = item.worksite_id;
-    if (encampment.worksites.completed.includes(id)) return fail(400, { completed: true });
-    else if (encampment.worksites.unlocked.some(w => w.id === id)) return fail(400, { already: true });
-    const worksite = await get_worksite(id, locals.rethinkdb);
-    await add_worksite(locals.user.game_id, worksite.ap, id, locals.rethinkdb);
+    let unlocked;
+    if (item.recipe_id) {
+        const id = item.recipe_id;
+        if (encampment.workshop.recipes.includes(id)) return fail(400, { recipe: true });
+        unlocked = await get_recipe(id, locals.rethinkdb);
+        unlocked.type = 'recipe';
+        await add_recipe(locals.user.game_id, id, locals.rethinkdb);
+    }
+    else if (item.worksite_id) {
+        const id = item.worksite_id;
+        if (encampment.worksites.completed.includes(id)) return fail(400, { completed: true });
+        else if (encampment.worksites.unlocked.some(w => w.id === id)) return fail(400, { already: true });
+        unlocked = await get_worksite(id, locals.rethinkdb);
+        unlocked.type = 'worksite';
+        await add_worksite(locals.user.game_id, unlocked.ap, id, locals.rethinkdb);
+    }
     await use_item(locals.user.id, item, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'blueprint', { name: worksite.name }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'blueprint', { name: unlocked.name, type: unlocked.type }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const deposit = async ({ locals, request }) => {

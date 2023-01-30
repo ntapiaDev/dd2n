@@ -47,7 +47,7 @@
 		{:else if $sidebar === 'worksites'}
 			<Worksites encampment={encampment.worksites} {worksites} />
 		{:else if $sidebar === 'workshop'}
-			<Workshop recipes={data.recipes} unlocked={encampment.workshop.unlocked} />
+			<Workshop encampment={encampment.workshop.recipes} recipes={data.recipes} unlocked={encampment.workshop.unlocked} />
 		{/if}
 		<div class="error">
 			{#if form?.already}
@@ -62,6 +62,8 @@
 				<p>Vous devez utiliser des points d'action pour construire ce chantier.</p>
 			{:else if form?.origin}
 				<p>Cet objet n'est pas présent dans la banque ou dans votre inventaire.</p>
+			{:else if form?.recipe}
+				<p>Cette recette est déjà débloquée.</p>
 			{:else if form?.resources}
 				<p>Il n'y a pas assez de ressources pour construire ce chantier.</p>
 			{:else if form?.toMuch}
