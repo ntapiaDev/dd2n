@@ -15,7 +15,7 @@
     {:else}
         <div class="grid">
             {#each recipes as recipe}
-                {#if encampment.includes(recipe.id)}
+                {#if encampment.includes(recipe.left.id)}
                     <Recipe {recipe} />
                 {/if}
             {/each}

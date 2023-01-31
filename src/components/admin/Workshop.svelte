@@ -4,9 +4,10 @@
 	import Recipe from '../encampment/Recipe.svelte';
 	import Item from '../game/Item.svelte';
 
+    export let items;
     export let recipes;
-    export let resources;
-    $: console.log(recipes);
+    export let workshop;
+    $: console.log(workshop);
 </script>
 
 <div class="workshop" in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>
@@ -14,39 +15,48 @@
     <form method="POST" action="?/addRecipe" use:enhance>
         <h4>Ressources communes :</h4>
         <div class="resources">
-            {#each resources.filter(r => r.rarity === 'commun') as item}
-                <input type="number" min="1" max="100" name={item.id} placeholder="0" />
-                <Item {item} />
+            {#each items.filter(r => r.rarity === 'commun' && !r.origin) as item}
+                <span>
+                    <input type="number" min="1" max="100" name={item.id} placeholder="0" />
+                    <Item {item} />
+                </span>
             {/each}
         </div>
         <h4>Ressources inhabituelles :</h4>
         <div class="resources">
-            {#each resources.filter(r => r.rarity === 'inhabituel') as item}
-                <input type="number" min="1" max="100" name={item.id} placeholder="0" />
-                <Item {item} />
+            {#each items.filter(r => r.rarity === 'inhabituel' && !r.origin) as item}
+                <span>
+                    <input type="number" min="1" max="100" name={item.id} placeholder="0" />
+                    <Item {item} />
+                </span>
             {/each}
         </div>
         <h4>Ressources rares :</h4>
         <div class="resources">
-            {#each resources.filter(r => r.rarity === 'rare') as item}
-                <input type="number" min="1" max="100" name={item.id} placeholder="0" />
-                <Item {item} />
+            {#each items.filter(r => r.rarity === 'rare' && !r.origin) as item}
+                <span>
+                    <input type="number" min="1" max="100" name={item.id} placeholder="0" />
+                    <Item {item} />
+                </span>
             {/each}
         </div>
         <h4>Ressources épiques :</h4>
         <div class="resources">
-            {#each resources.filter(r => r.rarity === 'épique') as item}
-                <input type="number" min="1" max="100" name={item.id} placeholder="0" />
-                <Item {item} />
+            {#each items.filter(r => r.rarity === 'épique' && !r.origin) as item}
+                <span>
+                    <input type="number" min="1" max="100" name={item.id} placeholder="0" />
+                    <Item {item} />
+                </span>
             {/each}
         </div>
         <div class="recipe">
             <select name="result">
                 <option value="">Résultat</option>
-                {#each resources as resource}
-                    <option value={resource.id}>{resource.description}</option>
+                {#each items as item}
+                    <option value={item.id}>{item.description}</option>
                 {/each}
             </select>
+            <input type="number" min="1" max="100" name="quantity" placeholder="Quantité" />
             <select name="unlocked" required>
                 <option value="locked">À débloquer</option>
                 <option value="unlocked">Débloqué</option>
@@ -54,7 +64,7 @@
             <button type="submit">Ajouter</button>
         </div>
     </form>
-    <h2>Liste des recettes () :</h2>
+    <h2>Liste des recettes ({workshop.length}) :</h2>
     <div class="list">
         <div class="grid">
             {#each recipes as recipe}
@@ -79,21 +89,26 @@
         margin: 0.5em 0;
         display: flex;
         flex-wrap: wrap;
+        gap: 3px;
     }
-    .resources input:not(:first-child) {
-        margin-left: 3px;
+    .resources span {
+        display: flex;
+        align-items: center;
     }
     input[type=number] {
         width: 50px;
     }
+    .recipe input[type=number] {
+        width: 104px;
+    }
     select:first-of-type {
-        width: 230px;
+        width: 231px;
     }
     select {
-        width: 150px;
+        width: 152px;
     }
     button {
-        width: 100px;
+        width: 125px;
     }
     .list {
         width: 735px;

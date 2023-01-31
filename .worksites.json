@@ -29,7 +29,7 @@
     {
         "completed": true,
         "defense": 5,
-        "description": "Cette porte garde l'entrée du campement, c'est le dernier obstacle entre vous et les zombies.",
+        "description": "Cette porte garde l'entrée du campement, c'est le dernier obstacle entre vous et le monde extérieur.",
         "id": "c8bf3b5c-af71-4440-ac26-dffde7d07510",
         "name": "Porte en bois",
         "rarity": "commun",
@@ -77,7 +77,7 @@
     {
         "completed": true,
         "defense": 10,
-        "description": "Un mur érigé tout autour du campement, vous ne voyez que lui à perte de vue.",
+        "description": "Un mur érigé tout autour du campement, vous ne voyez que lui tout autour de vous.",
         "id": "d861d4f8-728b-4815-8d0d-0729772a61a0",
         "name": "Mur en bois",
         "rarity": "commun",

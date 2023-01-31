@@ -19,7 +19,7 @@ const addGame = async ({ locals }) => {
     const completed = worksites.filter(w => w.completed).map(w => w.id);
     const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(({completed, defense, name, parent, rarity, resources, unlocked, ...rest}) => rest);
     const workshop = await get_recipes(locals.rethinkdb);
-    const recipes = workshop.filter(w => w.unlocked).map(w => w.id);
+    const recipes = workshop.filter(w => w.left.unlocked).map(w => w.left.id);
     const blueprint = await get_from('workshop', locals.rethinkdb);
     const game_id = await add_game(locals.rethinkdb);
     const { teddies, ws } = await generate_cells(game_id, blueprint, locals.rethinkdb);

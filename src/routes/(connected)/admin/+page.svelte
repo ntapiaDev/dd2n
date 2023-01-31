@@ -23,7 +23,7 @@
 		{:else if selected === 'worksites'}
 			<Worksites groups={data.groups} resources={data.resources} worksites={data.worksites} />
 		{:else if selected === 'workshop'}
-			<Workshop recipes={data.recipes} resources={data.resources} />
+			<Workshop items={sortItems(data.items.filter(i => !['blueprint', 'misc'].includes(i.type)))} recipes={data.recipes} workshop={data.workshop} />
 		{/if}
 	</div>
 </section>

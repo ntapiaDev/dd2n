@@ -43,7 +43,7 @@ const blueprint = async ({ locals, request }) => {
         await add_worksite(locals.user.game_id, unlocked.ap, id, locals.rethinkdb);
     }
     await use_item(locals.user.id, item, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'blueprint', { name: unlocked.name, type: unlocked.type }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'blueprint', { name: unlocked.left.name, type: unlocked.type }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const deposit = async ({ locals, request }) => {
@@ -117,15 +117,16 @@ const workshop = async ({ locals, request }) => {
     const id = data.get('id');
     if (!encampment.workshop.recipes.includes(id)) return fail(400, { unknown: true });
     const recipe = await get_recipe(id, locals.rethinkdb);
-    if (ap < recipe.ap) return fail(400, { more: true });
-    if (!checkResources(encampment.items, recipe.resources)) return fail(400, { materials: true });
+    if (ap < recipe.left.ap) return fail(400, { more: true });
+    if (!checkResources(encampment.items, recipe.left.resources)) return fail(400, { materials: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
     await update_stats(locals.user.id, ap, hunger, thirst, 'workshop', locals.rethinkdb);
-    const [bank, items] = updateBank(recipe.resources, encampment.items);
-    const product = recipe.result;
+    const [bank, items] = updateBank(recipe.left.resources, encampment.items);
+    const product = recipe.right;
+    product.quantity = recipe.left.quantity;
     product.uuid = crypto.randomUUID();
     await update_bank(locals.user.game_id, handleStack(bank.filter(i => i.quantity > 0), product), locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'workshop', { item: recipe.result, items, name: recipe.name, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'workshop', { item: product, items, name: recipe.left.name, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 

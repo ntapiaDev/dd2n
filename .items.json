@@ -121,6 +121,17 @@
         "value": 50
     },
     {
+        "ap": 14,
+        "credit": "Freepik",
+        "description": "Un mélange protéiné",
+        "icon": "shake",
+        "id": "707aad5b-65ec-412c-bb60-f81048670a15",
+        "origin": "recipe",
+        "rarity": "inhabituel",
+        "type": "drink",
+        "unique": false
+    },
+    {
         "ap": 15,
         "code": "b1",
         "credit": "Eucalyp",
@@ -395,6 +406,18 @@
         "unique": false
     },
     {
+        "attack": 15,
+        "credit": "Freepik",
+        "description": "Un cocktail Molotov",
+        "icon": "molotov",
+        "id": "3f8e7765-f7c1-49a2-ac70-51b83548dbd9",
+        "origin": "recipe",
+        "rarity": "rare",
+        "slot": "W4",
+        "type": "explosive",
+        "unique": false
+    },
+    {
         "attack": 1,
         "code": "b5",
         "credit": "Smashicons",
@@ -579,7 +602,8 @@
         "icon": "cloth",
         "id": "6bf637b4-8a2e-4f75-b454-345083e0478d",
         "rarity": "commun",
-        "type": "resource"
+        "type": "resource",
+        "unique": false
     },
     {
         "code": "b2",
@@ -657,7 +681,8 @@
         "icon": "bottle",
         "id": "e437624b-ce76-4726-b194-ae5611c30a01",
         "rarity": "inhabituel",
-        "type": "resource"
+        "type": "resource",
+        "unique": false
     },
     {
         "code": "b4",
@@ -686,7 +711,8 @@
         "icon": "wood-beam",
         "id": "8fed04b8-9de0-448a-b6a4-fd454290d492",
         "rarity": "inhabituel",
-        "type": "resource"
+        "type": "resource",
+        "unique": false
     },
     {
         "code": "b2",
@@ -724,7 +750,8 @@
         "icon": "fuel",
         "id": "0f06f9f4-9c29-4c91-bfd2-77e8ed25b32c",
         "rarity": "rare",
-        "type": "resource"
+        "type": "resource",
+        "unique": false
     },
     {
         "code": "b4",

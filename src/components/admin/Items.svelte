@@ -20,18 +20,22 @@
 		'Armure',
 		'Ressource',
 		'Plan',
+        'Workshop',
 		'Divers'
 	];
 
 	let itemsArray = [];
+    let workshop = [];
 
 	$: if (items) {
 		let type = 'food';
 		let i = 0;
 		let row = [];
 		itemsArray = [];
+        workshop = [];
 		for (let item of items) {
-			if (item.type === type) row.push(item);
+            if (item.origin === 'recipe') workshop.push(item);
+			else if (item.type === type) row.push(item);
 			else {
 				itemsArray.push(row);
 				type = item.type;
@@ -41,6 +45,7 @@
 			}
 		}
 		itemsArray.push(row);
+        itemsArray.splice(9, 0, workshop);
 	}
 </script>
 
@@ -133,6 +138,7 @@
                 <option value="b4">Magasin de matériel informatique</option>
                 <option value="b5">Commissariat de police</option>
             </select>
+            <input type="text" name="origin" placeholder="Origine" />
             <input type="text" name="credit" placeholder="Auteur" required />
             <button type="submit">Ajouter</button>
         </div>

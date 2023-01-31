@@ -4,14 +4,14 @@ export const getBlueprints = (encampment, recipes, worksites) => {
     const blueprints = [];
     if (encampment.workshop.unlocked) {
         for (let recipe of recipes) {
-            if (!encampment.workshop.recipes.includes(recipe.id)) {
+            if (!encampment.workshop.recipes.includes(recipe.left.id)) {
                 const blueprint = {
                     credit: 'Freepik',
-                    description: `Recette: ${recipe.name}`,
+                    description: `Recette: ${recipe.left.name}`,
                     icon: 'workshop',
-                    id: `${recipe.id}`,
-                    rarity: `${recipe.rarity}`,
-                    recipe_id: `${recipe.id}`,
+                    id: `${recipe.left.id}`,
+                    rarity: `${recipe.left.rarity}`,
+                    recipe_id: `${recipe.left.id}`,
                     type: 'blueprint',
                     unique: true
                 }

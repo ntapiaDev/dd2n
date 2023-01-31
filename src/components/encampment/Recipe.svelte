@@ -26,21 +26,21 @@
     $: bank = $page.data.encampment?.items ?? [];
 </script>
 
-<div class={'recipe ' + recipe.rarity}>
+<div class={'recipe ' + recipe.left.rarity}>
     <span class="resources">
-        {#each recipe.resources as resource}
+        {#each recipe.left.resources as resource}
             <span class={'resource ' + (getQuantity(bank, resource) >= resource.quantity ? 'valid' : 'failed')}>
                 {getQuantity(bank, resource)}/{resource.quantity} <Item item={resource.item} />
             </span>
         {/each}
     </span>
     <div class="submit">
-        {#if checkResources(bank, recipe.resources)}
+        {#if checkResources(bank, recipe.left.resources)}
             <form method="POST" action="/encampment?/workshop" use:enhance>
-                <input type="text" name="ap" value={recipe.ap} hidden>
-                <input type="text" name="id" value={recipe.id} hidden>
+                <input type="text" name="ap" value={recipe.left.ap} hidden>
+                <input type="text" name="id" value={recipe.left.id} hidden>
                 <button>
-                    <Item item={items[0]} border={recipe.ap > $page.data.user.ap ? 'red' : ''} />
+                    <Item item={items[0]} border={recipe.left.ap > $page.data.user.ap ? 'red' : ''} />
                 </button>
             </form>
         {:else}
@@ -48,7 +48,7 @@
         {/if}
     </div>
     <span class="result">
-        <Item item={recipe.result} /><span class={recipe.ap <= $page.data.user.ap ? 'valid' : 'failed'}>{recipe.ap} PA</span>
+        <Item item={recipe.right} quantity={recipe.left.quantity} /><span class={recipe.left.ap <= $page.data.user.ap ? 'valid' : 'failed'}>{recipe.left.ap} PA</span>
     </span>
 </div>
 

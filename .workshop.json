@@ -1,8 +1,50 @@
 [
     {
         "ap": 1,
+        "id": "305011e1-9dfc-4762-a7b1-09918985dfef",
+        "item": "707aad5b-65ec-412c-bb60-f81048670a15",
+        "name": "Un mélange protéiné",
+        "quantity": "1",
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "code": "b1",
+                    "credit": "Freepik",
+                    "description": "Un steak saignant",
+                    "icon": "steak",
+                    "id": "df9fceef-f99a-483b-9453-0c02c091d6bd",
+                    "rarity": "commun",
+                    "type": "food",
+                    "unique": false,
+                    "value": 40
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "code": "b1",
+                    "credit": "Freepik",
+                    "description": "Du jus d'orange",
+                    "icon": "orange-juice",
+                    "id": "62adb1d3-298a-4458-bc25-aa997c3425ec",
+                    "rarity": "commun",
+                    "type": "drink",
+                    "unique": false,
+                    "value": 30
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "drink",
+        "unlocked": false
+    },
+    {
+        "ap": 1,
         "id": "d0d33f88-816a-4e3c-ae0e-8d064335ca59",
+        "item": "d7a906d0-a28a-43fe-8136-7acebe286828",
         "name": "Un rouleau de corde emmêlé",
+        "quantity": 1,
         "rarity": "inhabituel",
         "resources": [
             {
@@ -19,22 +61,15 @@
                 "quantity": 4
             }
         ],
-        "result": {
-            "code": "b2",
-            "credit": "Good Ware",
-            "description": "Un rouleau de corde emmêlé",
-            "icon": "rope",
-            "id": "d7a906d0-a28a-43fe-8136-7acebe286828",
-            "rarity": "inhabituel",
-            "type": "resource",
-            "unique": false
-        },
+        "type": "resource",
         "unlocked": true
     },
     {
         "ap": 1,
         "id": "a92c9e0b-929b-4f8a-a302-dd8cdad9c414",
+        "item": "d94456fd-3275-4574-a151-c02dfe379af4",
         "name": "Une poutre en acier",
+        "quantity": 1,
         "rarity": "inhabituel",
         "resources": [
             {
@@ -51,22 +86,15 @@
                 "quantity": 4
             }
         ],
-        "result": {
-            "code": "b2",
-            "credit": "Design Circle",
-            "description": "Une poutre en acier",
-            "icon": "poutre",
-            "id": "d94456fd-3275-4574-a151-c02dfe379af4",
-            "rarity": "inhabituel",
-            "type": "resource",
-            "unique": false
-        },
+        "type": "resource",
         "unlocked": true
     },
     {
         "ap": 1,
         "id": "d9bb0fd4-90cf-4157-9494-a63998dd842c",
+        "item": "8fed04b8-9de0-448a-b6a4-fd454290d492",
         "name": "Une poutre en bois",
+        "quantity": 1,
         "rarity": "inhabituel",
         "resources": [
             {
@@ -83,21 +111,102 @@
                 "quantity": 4
             }
         ],
-        "result": {
-            "code": "b2",
-            "credit": "Smashicons",
-            "description": "Une poutre en bois",
-            "icon": "wood-beam",
-            "id": "8fed04b8-9de0-448a-b6a4-fd454290d492",
-            "rarity": "inhabituel",
-            "type": "resource"
-        },
+        "type": "resource",
         "unlocked": true
     },
     {
         "ap": 2,
+        "id": "a6e4cdd2-564c-404d-928d-4de087e08e21",
+        "item": "ab108d32-6ff6-4112-8180-1e2d7c031aaa",
+        "name": "Munition pour fusil",
+        "quantity": "5",
+        "rarity": "rare",
+        "resources": [
+            {
+                "item": {
+                    "code": "b5",
+                    "credit": "Smashicons",
+                    "description": "Munition pour pistolet",
+                    "icon": "gun_ammo",
+                    "id": "06715e39-5d55-4ef5-9e21-fe6e77d29692",
+                    "rarity": "inhabituel",
+                    "slot": "W3",
+                    "type": "ammunition",
+                    "unique": false,
+                    "weapon": "gun"
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            }
+        ],
+        "unlocked": false
+    },
+    {
+        "ap": 2,
+        "id": "e2e2c6cd-a31c-4b0d-9699-eb8430b275a4",
+        "item": "3f8e7765-f7c1-49a2-ac70-51b83548dbd9",
+        "name": "Un cocktail Molotov",
+        "quantity": 3,
+        "rarity": "rare",
+        "resources": [
+            {
+                "item": {
+                    "credit": "shmai",
+                    "description": "Un vieux chiffon",
+                    "icon": "cloth",
+                    "id": "6bf637b4-8a2e-4f75-b454-345083e0478d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 3
+            },
+            {
+                "item": {
+                    "credit": "Vitaly Gorbachev",
+                    "description": "Une bouteille en verre",
+                    "icon": "bottle",
+                    "id": "e437624b-ce76-4726-b194-ae5611c30a01",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 3
+            },
+            {
+                "item": {
+                    "credit": "Freepik",
+                    "description": "Un jerrican d'essence",
+                    "icon": "fuel",
+                    "id": "0f06f9f4-9c29-4c91-bfd2-77e8ed25b32c",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "explosive",
+        "unlocked": false
+    },
+    {
+        "ap": 2,
         "id": "9bee0b64-c479-4c38-bb7e-fd55086db2a4",
+        "item": "6911f5a0-c1d8-4aa7-8634-c1f64118b96e",
         "name": "Du fil barbelé",
+        "quantity": 1,
         "rarity": "rare",
         "resources": [
             {
@@ -111,7 +220,7 @@
                     "type": "resource",
                     "unique": false
                 },
-                "quantity": 4
+                "quantity": 2
             },
             {
                 "item": {
@@ -127,70 +236,7 @@
                 "quantity": 4
             }
         ],
-        "result": {
-            "code": "b2",
-            "credit": "Smashicons",
-            "description": "Du fil barbelé",
-            "icon": "barbed-wire",
-            "id": "6911f5a0-c1d8-4aa7-8634-c1f64118b96e",
-            "rarity": "rare",
-            "type": "resource",
-            "unique": false
-        },
-        "unlocked": false
-    },
-    {
-        "ap": 2,
-        "id": "e2e2c6cd-a31c-4b0d-9699-eb8430b275a4",
-        "name": "Un cocktail Molotov",
-        "rarity": "rare",
-        "resources": [
-            {
-                "item": {
-                    "credit": "shmai",
-                    "description": "Un vieux chiffon",
-                    "icon": "cloth",
-                    "id": "6bf637b4-8a2e-4f75-b454-345083e0478d",
-                    "rarity": "commun",
-                    "type": "resource"
-                },
-                "quantity": 1
-            },
-            {
-                "item": {
-                    "credit": "Vitaly Gorbachev",
-                    "description": "Une bouteille en verre",
-                    "icon": "bottle",
-                    "id": "e437624b-ce76-4726-b194-ae5611c30a01",
-                    "rarity": "inhabituel",
-                    "type": "resource"
-                },
-                "quantity": 1
-            },
-            {
-                "item": {
-                    "credit": "Freepik",
-                    "description": "Un jerrican d'essence",
-                    "icon": "fuel",
-                    "id": "0f06f9f4-9c29-4c91-bfd2-77e8ed25b32c",
-                    "rarity": "rare",
-                    "type": "resource"
-                },
-                "quantity": 1
-            }
-        ],
-        "result": {
-            "attack": 35,
-            "code": "b4",
-            "credit": "Freepik",
-            "description": "Un cocktail Molotov",
-            "icon": "molotov",
-            "id": "bfc5d41f-0b4d-47cc-b6c2-313e3cd23bc6",
-            "rarity": "rare",
-            "slot": "W4",
-            "type": "explosive",
-            "unique": false
-        },
+        "type": "resource",
         "unlocked": false
     }
 ]
