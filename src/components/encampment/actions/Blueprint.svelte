@@ -1,6 +1,7 @@
 <script>
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { sidebar } from '../../../stores/sidebar';
 	import InteractiveItem from '../../game/InteractiveItem.svelte';
 	import Item from '../../game/Item.svelte';
 
@@ -25,7 +26,9 @@
 			<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
 				{#each user?.inventory as item}
 					{#if item.type === 'blueprint' && !item.origin}
-						<InteractiveItem {item} action={'/encampment?/blueprint'} />
+						<span on:click={() => sidebar.update(value => value = item.worksite_id ? 'worksites' : 'workshop')}>
+							<InteractiveItem {item} action={'/encampment?/blueprint'} />
+						</span>
 					{:else if item.origin}
 						<InteractiveItem {item} action={'/encampment?/unlock'} />
 					{/if}

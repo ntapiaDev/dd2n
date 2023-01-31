@@ -21,6 +21,7 @@
 	$: user = $page.data.user;
 	$: worksites = data.worksites;
 
+	$: if (!encampment.workshop.unlocked && $sidebar === 'workshop') sidebar.update(value => value = 'register');
 	const open = (e) => sidebar.update(value => value = e.detail.open);
 </script>
 
@@ -32,7 +33,7 @@
 <h1>Vous êtes dans votre campement :</h1>
 <section>
 	<div class="sidebar">
-		<Attack attack={encampment.attack} completed={encampment.worksites.completed} slots={data.slots} {worksites} />
+		<Attack attack={encampment.attack} completed={encampment.worksites.completed} players={encampment.players} slots={data.slots} {worksites} />
 		<Actions {user} />
 		<Navigate selected={$sidebar} on:clicked={open} workshop={encampment.workshop.unlocked} />
 		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />

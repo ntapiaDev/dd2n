@@ -5,6 +5,7 @@
 
     export let attack;
     export let completed;
+    export let players;
     export let slots;
     export let worksites;
 
@@ -21,7 +22,7 @@
     const getDefense = (slots) => {
         let defense = 0;
         for (let slot of slots) {
-            defense += gdp(slot);
+            if (players.includes(slot.username)) defense += gdp(slot);
         }
         return defense;
     }

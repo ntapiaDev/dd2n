@@ -1,6 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
     import { fade } from "svelte/transition";
+	import Recipe from '../encampment/Recipe.svelte';
 	import Item from '../game/Item.svelte';
 
     export let recipes;
@@ -55,7 +56,11 @@
     </form>
     <h2>Liste des recettes () :</h2>
     <div class="list">
-
+        <div class="grid">
+            {#each recipes as recipe}
+                <Recipe {recipe} />
+            {/each}
+        </div>
     </div>
 </div>
 
@@ -92,6 +97,13 @@
     }
     .list {
         width: 735px;
+        margin-top: 0.5em;
         padding: 0.5em;
+        border: 1px solid #aaa;
+    }
+    div.grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1FR);
+        gap: 2px;
     }
 </style>

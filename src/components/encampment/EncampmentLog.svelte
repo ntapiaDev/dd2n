@@ -125,11 +125,11 @@
 	{:else if log.action === 'build'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b></div>
 		{#if log.log.completed}
-			Le chantier est maintenant terminé, le campement gagne {log.log.defense} DEF !
+			<div class="mtb">Le chantier est maintenant terminé, le campement gagne {log.log.defense} DEF !</div>
 			<div class="item">
 				<span class="build">
 					{log.log.items.length === 1 && log.log.items[0].quantity === 1 ?
-						'L\'objet suivant a été retiré' : 'Les objets suivants ont été retirés'} de la banque :
+						'L\'objet suivant a été utilisé' : 'Les objets suivants ont été utilisés'} :
 					<span>
 						{#each log.log.items as item, i}
 							{#if log.log.items.length > 1 && log.log.items.length === i + 1}
@@ -157,6 +157,13 @@
 				<Item {item} />
 			{/each}
 		</span></div>
+		{#if log.log.warning === 'hunger'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
+		{:else if log.log.warning === 'thirst'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Déshydraté'} /></div>
+		{:else if log.log.warning === 'both'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
+		{/if}
 	{:else if log.action === 'blueprint'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a découvert
 			{#if log.log.type === 'recipe'}
@@ -168,7 +175,7 @@
 	{:else if log.action === 'unlocked'}
 			{#if log.log.origin === 'workshop'}
 				<div class="item">Après avoir apporté et étudié avec attention les plans trouvés près de l'entrepot de bricolage, <PlayerName color={log.color} username={log.player} /> a débloqué <Item item={transform} substitute="Atelier" /> <b>Atelier de recyclage<span class="notb">.</span></b></div>
-				<div>Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
+				<div class="mt">Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
 			{/if}
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
@@ -205,7 +212,7 @@
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
-		gap: 0 4px;
+		gap: 1px 4px;
 	}
 	.item .build {
 		display: flex;
@@ -220,6 +227,12 @@
 	.item .build span span,
 	.item .workshop span {
 		margin: 0 4px;
+	}
+	.mtb {
+		margin: 2px 0 1px;
+	}
+	.mt {
+		margin-top: 1px;
 	}
 	.food {
 		color: green;

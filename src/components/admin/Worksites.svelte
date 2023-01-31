@@ -136,6 +136,8 @@
     }
     .list {
         width: 735px;
-        padding: 0.5em;
+        margin-top: 0.5em;
+        padding: 0 0.5em 0.5em 0.5em;
+        border: 1px solid #aaa;
     }
 </style>
