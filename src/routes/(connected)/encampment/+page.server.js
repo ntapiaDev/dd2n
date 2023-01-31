@@ -120,7 +120,7 @@ const workshop = async ({ locals, request }) => {
     if (ap < recipe.ap) return fail(400, { more: true });
     if (!checkResources(encampment.items, recipe.resources)) return fail(400, { materials: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
-    await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
+    await update_stats(locals.user.id, ap, hunger, thirst, 'workshop', locals.rethinkdb);
     const [bank, items] = updateBank(recipe.resources, encampment.items);
     const product = recipe.result;
     product.uuid = crypto.randomUUID();
@@ -145,7 +145,7 @@ const worksite = async ({ locals, request }) => {
     if (worksite.parent && isBlocked(worksite, encampment.worksites.completed, worksites)) return fail(400, { unlocked: true });
     if (!checkResources(encampment.items, worksite.resources)) return fail(400, { resources: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
-    await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
+    await update_stats(locals.user.id, ap, hunger, thirst, 'worksite', locals.rethinkdb);
     let completed = false;
     let items = [];
     if (unlocked.find(w => w.id === id).ap === ap) {

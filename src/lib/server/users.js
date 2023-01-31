@@ -81,7 +81,14 @@ export const add_game_to_user = (game_id, id, color, rethinkdb) => {
             },
         },
         stats: {
+            blueprint: 0,
+            drink: 0,
+            drug: 0,
+            food: 0,
             items: 0,
+            recipe: 0,
+            workshop: 0,
+            worksite: 0,
             zombies: 0
         },
         thirst: 75,
@@ -107,7 +114,7 @@ export const _attack = (user_id, ap, force, hunger, slots, stats, thirst, wound,
 }
 
 export const _boost = (user_id, item, ap, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]) }).run(rethinkdb);
+    return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]), stats: { [item.type]: r.row('stats')(item.type).add(1) } }).run(rethinkdb);
 }
 
 export const enter_encampment = (user_id, rethinkdb) => {
@@ -119,7 +126,7 @@ export const _equip = (user_id, inventory, slots, rethinkdb) => {
 }
 
 export const _feed = (user_id, item, ap, hunger, thirst, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]), hunger, thirst }).run(rethinkdb);
+    return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]), hunger, stats: { [item.type]: r.row('stats')(item.type).add(1) }, thirst }).run(rethinkdb);
 }
 
 export const _force = (user_id, rethinkdb) => {
@@ -148,7 +155,7 @@ export const get_by_username = async (username, rethinkdb) => {
 }
 
 export const _heal = (user_id, item, rethinkdb) => {
-    return r.table('users').get(user_id).update({ inventory: r.row('inventory').difference([item]), wound: 0 }).run(rethinkdb);
+    return r.table('users').get(user_id).update({ inventory: r.row('inventory').difference([item]), stats: { ['drug']: r.row('stats')('drug').add(1) }, wound: 0 }).run(rethinkdb);
 }
 
 export const leave_encampment = (user_id, rethinkdb) => {
@@ -195,8 +202,8 @@ export const _travel = (user_id, location, ap, hunger, thirst, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, force: false, hunger, location, thirst }).run(rethinkdb);
 }
 
-export const update_stats = (user_id, ap, hunger, thirst, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap: r.row('ap').sub(ap), hunger, thirst }).run(rethinkdb);
+export const update_stats = (user_id, ap, hunger, thirst, stat, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap: r.row('ap').sub(ap), hunger, stats: { [stat]: r.row('stats')(stat).add(stat === 'worksite' ? ap : 1) }, thirst }).run(rethinkdb);
 }
 
 export const update_users = async (game_id, rethinkdb) => {

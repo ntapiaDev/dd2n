@@ -23,7 +23,16 @@
 		$page.data.game.day + ($page.data.game.day === 1 ? 'ère' : 'ème') + ' journée' :
 		'Combien de jours tiendrez-vous ?';
 
-	$: substitute = 'Objets trouvés : ' + ($page.data.user?.stats?.items ?? 0) + '<br/>' + 'Zombies tués : ' + ($page.data.user?.stats?.zombies ?? 0);
+	$: s = $page.data.user?.stats;
+	$: substitute = 'Repas avalé' + (s?.food > 1 ? 's' : '') + ' : ' + (s?.food ?? 0) + '<br/>' +
+		'Boisson' + (s?.drink > 1 ? 's' : '') + ' consommée' + (s?.drink > 1 ? 's' : '') + ' : ' + (s?.drink ?? 0) + '<br/>' +
+		'Médicament' + (s?.drug > 1 ? 's' : '') + ' utilisé' + (s?.drug > 1 ? 's' : '') + ' : ' + (s?.drug ?? 0) + '<br/>' +
+		'Participation aux chantiers : ' + (s?.worksite ?? 0) + ' PA<br/>' +
+		'Objet' + (s?.workshop > 1 ? 's' : '') + ' transformé' + (s?.workshop > 1 ? 's' : '') + ' : ' + (s?.workshop ?? 0) + '<br/>' +
+		'Objet' + (s?.items > 1 ? 's' : '') + ' trouvé' + (s?.items > 1 ? 's' : '') + ' : ' + (s?.items ?? 0) + '<br/>' +
+		'Plan' + (s?.blueprint > 1 ? 's' : '') + ' trouvé' + (s?.blueprint > 1 ? 's' : '') + ' : ' + (s?.blueprint ?? 0) + '<br/>' +
+		'Recette' + (s?.recipe > 1 ? 's' : '') + ' trouvée' + (s?.recipe > 1 ? 's' : '') + ' : ' + (s?.recipe ?? 0) + '<br/>' +
+		'Zombie' + (s?.zombies > 1 ? 's' : '') + ' tué' + (s?.zombies > 1 ? 's' : '') + ' : ' + (s?.zombies ?? 0)
 </script>
 
 <svelte:head>

@@ -203,6 +203,11 @@ const search = async ({ locals }) => {
     let empty = Math.random() > (danger === 1 ? empty_1 : danger === 2 ? empty_2 : empty_3);
     const stats = locals.user.stats;
     stats.items += loots.length;
+    if (loots.some(i => i.type === 'blueprint'))
+        for (let loot of loots.filter(i => i.type === 'blueprint')) {
+            if (loot.worksite_id) stats.blueprint += 1;
+            else stats.recipe += 1;
+        }
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await update_search(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb)
     await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);

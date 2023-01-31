@@ -251,6 +251,7 @@
 		text-align: center;
 	}
 	section {
+		min-height: 600px;
 		margin: 1em;
 		display: flex;
 		flex-grow: 1;
