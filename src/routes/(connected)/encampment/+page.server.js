@@ -1,7 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { getItem, handleStack, sortItems } from "$lib/loots";
+import { getItem, handleStack } from "$lib/loots";
 import { checkHT } from "$lib/player";
-import { checkResources, isBlocked } from "$lib/worksites";
+import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
 import { add_recipe, add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
@@ -118,23 +118,10 @@ const workshop = async ({ locals, request }) => {
     if (!encampment.workshop.recipes.includes(id)) return fail(400, { unknown: true });
     const recipe = await get_recipe(id, locals.rethinkdb);
     if (ap < recipe.ap) return fail(400, { more: true });
-    const bank = encampment.items;
-    if (!checkResources(bank, recipe.resources)) return fail(400, { materials: true });
+    if (!checkResources(encampment.items, recipe.resources)) return fail(400, { materials: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
     await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
-
-    // Refacto
-    let items = [];
-    for (let resource of recipe.resources) {
-        let quantity = resource.quantity;
-        while (quantity > 0) {
-            let item = {...sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0)};
-            sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0).quantity -= quantity;
-            quantity -= item.quantity;
-            if (quantity < 0) item.quantity += quantity;
-            items.push(item)
-        }
-    }
+    const [bank, items] = updateBank(recipe.resources, encampment.items);
     const product = recipe.result;
     product.uuid = crypto.randomUUID();
     await update_bank(locals.user.game_id, handleStack(bank.filter(i => i.quantity > 0), product), locals.rethinkdb);
@@ -153,28 +140,19 @@ const worksite = async ({ locals, request }) => {
     if (encampment.worksites.completed.includes(id)) return fail(400, { completed: true });
     else if (!unlocked.some(w => w.id === id)) return fail(400, { unlocked: true });
     else if (unlocked.find(w => w.id === id).ap < ap) return fail(400, { toMuch: true });
-    const bank = encampment.items;
     const worksites = await get_worksites_by_group(locals.rethinkdb);
     const worksite = worksites.find(g => g.reduction.find(w => w.id === id)).reduction.find(w => w.id === id);
     if (worksite.parent && isBlocked(worksite, encampment.worksites.completed, worksites)) return fail(400, { unlocked: true });
-    if (!checkResources(bank, worksite.resources)) return fail(400, { resources: true });
+    if (!checkResources(encampment.items, worksite.resources)) return fail(400, { resources: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
     await update_stats(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
     let completed = false;
     let items = [];
     if (unlocked.find(w => w.id === id).ap === ap) {
-        for (let resource of worksite.resources) {
-            let quantity = resource.quantity;
-            while (quantity > 0) {
-                let item = {...sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0)};
-                sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0).quantity -= quantity;
-                quantity -= item.quantity;
-                if (quantity < 0) item.quantity += quantity;
-                items.push(item)
-            }
-        }
-        await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
+        const [bank, i] = updateBank(worksite.resources, encampment.items);
         completed = true;
+        items = i;
+        await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
     } else {
         await build(locals.user.game_id, ap, id, locals.rethinkdb);
     }

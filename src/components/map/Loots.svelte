@@ -1,7 +1,7 @@
 <script>
+	import { page } from '$app/stores';
 	import { createEventDispatcher } from 'svelte';
 	import { flip } from 'svelte/animate';
-	import { page } from '$app/stores';
 	import { sortItems } from '$lib/loots';
 	import Item from '../game/Item.svelte';
 

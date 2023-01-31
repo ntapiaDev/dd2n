@@ -1,6 +1,6 @@
 <script>
-	import { flip } from 'svelte/animate';
 	import { page } from '$app/stores';
+	import { flip } from 'svelte/animate';
 	import { getDistance } from '$lib/game';
 	import { sortItems } from '$lib/loots';
 	import { getDefense } from '$lib/player';
