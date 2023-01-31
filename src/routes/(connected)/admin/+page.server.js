@@ -50,9 +50,10 @@ const addRecipe = async ({ locals, request }) => {
         ap: result.rarity === 'inhabituel' ? 1 : result.rarity === 'rare' ? 2 : 3,
         item: data.get('result'),
         name: result.description,
-        quantity: data.get('quantity'),
+        quantity: parseInt(data.get('quantity')),
         rarity: result.rarity,
         resources,
+        type: result.type,
         unlocked: data.get('unlocked') === 'unlocked'
     }
     await add_recipe(recipe, locals.rethinkdb);

@@ -38,7 +38,7 @@ export const updateBank = (resources, bank) => {
     let items = [];
     for (let resource of resources) {
         let quantity = resource.quantity;
-        while (quantity > 0) {
+        while (quantity > 0 && !resource.item.unique) {
             let item = {...sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0)};
             sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0).quantity -= quantity;
             quantity -= item.quantity;

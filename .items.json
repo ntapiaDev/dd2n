@@ -577,6 +577,16 @@
         "unique": true
     },
     {
+        "code": "b1",
+        "credit": "Freepik",
+        "description": "De l'alcool ménager",
+        "icon": "alcool",
+        "id": "33dd2967-48c7-486e-9870-01dd7a044d6d",
+        "rarity": "commun",
+        "type": "resource",
+        "unique": false
+    },
+    {
         "code": "b2",
         "credit": "surang",
         "description": "Des morceaux de ferraille",

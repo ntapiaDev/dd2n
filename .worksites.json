@@ -466,5 +466,81 @@
             }
         ],
         "unlocked": false
+    },
+    {
+        "ap": 30,
+        "completed": false,
+        "defense": 60,
+        "id": "d70d0e2c-7bbb-4e74-8935-d5189c5cdec1",
+        "name": "Fossé électrifié",
+        "parent": "a919b43d-6cd4-47b4-86ee-b16b11b2a20b",
+        "rarity": "épique",
+        "resources": [
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "Freepik",
+                    "description": "Du fil électrique",
+                    "icon": "electric-wire",
+                    "id": "a20689ce-2512-4085-93c8-1067ac7ba033",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "surang",
+                    "description": "Un circuit électronique",
+                    "icon": "circuit",
+                    "id": "a87f456b-c012-4462-8de3-b82a0e7bbfc2",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "ultimatearm",
+                    "description": "Une grosse vis",
+                    "icon": "screw",
+                    "id": "6c7bbac1-f3a3-4169-b653-4f66e12d7165",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "credit": "Freepik",
+                    "description": "Un groupe électrogène",
+                    "icon": "generator",
+                    "id": "7936d504-047a-4727-90de-9fbb9f83c012",
+                    "rarity": "épique",
+                    "type": "resource",
+                    "unique": true
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "Freepik",
+                    "description": "Un écran tactile",
+                    "icon": "tablet",
+                    "id": "502a0872-4351-4c07-9f83-62d7f48641fd",
+                    "rarity": "épique",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "unlocked": false
     }
 ]

@@ -4,7 +4,7 @@
         "id": "305011e1-9dfc-4762-a7b1-09918985dfef",
         "item": "707aad5b-65ec-412c-bb60-f81048670a15",
         "name": "Un mélange protéiné",
-        "quantity": "1",
+        "quantity": 1,
         "rarity": "inhabituel",
         "resources": [
             {
@@ -37,6 +37,43 @@
             }
         ],
         "type": "drink",
+        "unlocked": false
+    },
+    {
+        "ap": 1,
+        "id": "b3b3131b-cee5-4d8d-8963-d26df58efb86",
+        "item": "17777a5f-edc5-49c7-95b7-c744d962a12a",
+        "name": "Des pansements",
+        "quantity": 1,
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "code": "b1",
+                    "credit": "Freepik",
+                    "description": "De l'alcool ménager",
+                    "icon": "alcool",
+                    "id": "33dd2967-48c7-486e-9870-01dd7a044d6d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "credit": "shmai",
+                    "description": "Un vieux chiffon",
+                    "icon": "cloth",
+                    "id": "6bf637b4-8a2e-4f75-b454-345083e0478d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "drug",
         "unlocked": false
     },
     {
@@ -119,7 +156,7 @@
         "id": "a6e4cdd2-564c-404d-928d-4de087e08e21",
         "item": "ab108d32-6ff6-4112-8180-1e2d7c031aaa",
         "name": "Munition pour fusil",
-        "quantity": "5",
+        "quantity": 5,
         "rarity": "rare",
         "resources": [
             {
@@ -135,7 +172,7 @@
                     "unique": false,
                     "weapon": "gun"
                 },
-                "quantity": 10
+                "quantity": 6
             },
             {
                 "item": {
@@ -151,6 +188,47 @@
                 "quantity": 2
             }
         ],
+        "type": "ammunition",
+        "unlocked": false
+    },
+    {
+        "ap": 2,
+        "id": "b0215e12-8091-4d7d-aab9-f8d7095d5daa",
+        "item": "659a4740-48f2-4f31-bd34-bd08963a9365",
+        "name": "Munition pour fusil à pompe",
+        "quantity": 5,
+        "rarity": "rare",
+        "resources": [
+            {
+                "item": {
+                    "code": "b5",
+                    "credit": "Smashicons",
+                    "description": "Munition pour pistolet",
+                    "icon": "gun_ammo",
+                    "id": "06715e39-5d55-4ef5-9e21-fe6e77d29692",
+                    "rarity": "inhabituel",
+                    "slot": "W3",
+                    "type": "ammunition",
+                    "unique": false,
+                    "weapon": "gun"
+                },
+                "quantity": 8
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            }
+        ],
+        "type": "ammunition",
         "unlocked": false
     },
     {

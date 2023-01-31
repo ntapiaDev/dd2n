@@ -43,7 +43,7 @@ const blueprint = async ({ locals, request }) => {
         await add_worksite(locals.user.game_id, unlocked.ap, id, locals.rethinkdb);
     }
     await use_item(locals.user.id, item, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'blueprint', { name: unlocked.left.name, type: unlocked.type }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'blueprint', { name: unlocked.name ?? unlocked.left.name, type: unlocked.type }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const deposit = async ({ locals, request }) => {
