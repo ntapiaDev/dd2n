@@ -9,14 +9,18 @@ export const checkResources = (bank, resources) => {
 
 export const getDefense = (completed, worksites) => {
     let defense = 0;
+    let temporary = 0;
     for (let complete of completed) {
         for (let group of worksites) {
             for (let worksite of group.reduction) {
-                if (worksite.id === complete) defense += worksite.defense;
+                if (worksite.id === complete) {
+                    defense += worksite.defense;
+                    if (worksite.temporary) temporary += worksite.defense;
+                } 
             }
         }
     }
-    return defense;
+    return [defense, temporary];
 }
 
 export const getQuantity = (bank, resource) => {

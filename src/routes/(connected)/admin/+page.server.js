@@ -80,6 +80,7 @@ const addWorksite = async ({ locals, request }) => {
     if (data.get('ap')) worksite.ap = parseInt(data.get('ap'));
     if (data.get('description')) worksite.description = data.get('description');
     if (data.get('parent')) worksite.parent = data.get('parent');
+    if (data.get('temporary') === "temporary") worksite.temporary = true;
     await add_worksite(worksite, locals.rethinkdb);
 }
 

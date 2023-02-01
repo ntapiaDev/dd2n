@@ -49,6 +49,10 @@
                     <option value={worksite.id}>{worksite.name}</option>
                 {/each}
             </select>
+            <select name="temporary" required>
+                <option value="durable">Durable</option>
+                <option value="temporary">Temporaire</option>
+            </select>
         </div>
         <input class="description" type="text" name="description" placeholder="Description" />
         <div class="infos">
@@ -116,9 +120,14 @@
     input[type=number] {
         width: 50px;
     }
-    .name input,
-    .name select {
+    .name input {
         width: 230px;
+    }
+    .name select {
+        width: 200px;
+    }
+    .name select:nth-child(3) {
+        width: 130px;
     }
     .description {
         margin-top: 0.5em;

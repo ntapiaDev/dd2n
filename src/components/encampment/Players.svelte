@@ -7,7 +7,7 @@
     export let game;
     export let lastDate;
 
-    const online = (player) => (Date.now() - lastDate.find(p => p.group === player).reduction) / 1000 <= 300;
+    const online = (player) => (Date.now() - lastDate.find(p => p.group === player)?.reduction) / 1000 <= 300;
 </script>
 
 <aside>
@@ -16,7 +16,7 @@
         {#each encampment.sort() as player}
             <li>
                 <span class={online(player) ? 'online' : 'offline'} title={online(player) ? 'En ligne' : 'Inactif'} use:tooltip></span>
-                <PlayerName color={game.find(p => p.username === player).color} username={player} />
+                <PlayerName color={game.find(p => p.username === player)?.color} username={player} />
             </li>
         {/each}
     </ul>

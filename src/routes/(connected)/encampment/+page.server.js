@@ -123,6 +123,7 @@ const workshop = async ({ locals, request }) => {
     await update_stats(locals.user.id, ap, hunger, thirst, 'workshop', locals.rethinkdb);
     const [bank, items] = updateBank(recipe.left.resources, encampment.items);
     const product = recipe.right;
+    if (product.durabilityMax) product.durability = product.durabilityMax;
     product.quantity = recipe.left.quantity;
     product.uuid = crypto.randomUUID();
     await update_bank(locals.user.game_id, handleStack(bank.filter(i => i.quantity > 0), product), locals.rethinkdb);

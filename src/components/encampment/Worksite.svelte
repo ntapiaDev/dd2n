@@ -59,7 +59,12 @@
     {#if type === 'parent'}
         <span class="description">{worksite.description}</span>
     {/if}
-    <span class="name">{!hidden ? worksite.name : 'Chantier inconnu'}</span>
+    <span class="name">
+        {#if worksite.temporary}
+            <span class="temporary">!</span>
+        {/if}
+        {!hidden ? worksite.name : 'Chantier inconnu'}
+    </span>
     <span class="resources">
         {#if !completed && !hidden}
             {#each worksite.resources as resource}
@@ -182,6 +187,17 @@
     }
     .child {
         margin-top: 2px;
+    }
+    .temporary {
+        margin-right: 4px;
+        color: red;
+        font-weight: bold;
+    }
+    .blocked .temporary {
+        color: #DDD;
+    }
+    .hidden .temporary {
+        color: #AAA;
     }
 
     .inhabituel {

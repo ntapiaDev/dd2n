@@ -1,6 +1,6 @@
 <script>
-    import { getDefense as gdp } from "$lib/player";
-    import { getDefense as gdw } from "$lib/worksites";
+    import { getDefenseAll } from "$lib/player";
+    import { getDefense } from "$lib/worksites";
 	import Item from "../game/Item.svelte";
 
     export let attack;
@@ -17,17 +17,8 @@
         type: 'misc'
     }
 
-    $: defense = gdw(completed, worksites);
-
-    const getDefense = (slots) => {
-        let defense = 0;
-        for (let slot of slots) {
-            if (players.includes(slot.username)) defense += gdp(slot);
-        }
-        return defense;
-    }
-    $: slots = getDefense(slots);
-
+    $: [defense] = getDefense(completed, worksites);
+    $: slots = getDefenseAll(slots, players);
     $: alert = attack > defense + slots;
 </script>
 

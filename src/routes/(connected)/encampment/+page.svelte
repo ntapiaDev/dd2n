@@ -1,4 +1,5 @@
 <script>
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { sortItems } from '$lib/loots';
 	import { sidebar } from '../../../stores/sidebar';
@@ -22,7 +23,10 @@
 	$: worksites = data.worksites;
 
 	$: if (!encampment.workshop.unlocked && $sidebar === 'workshop') sidebar.update(value => value = 'register');
-	const open = (e) => sidebar.update(value => value = e.detail.open);
+	const open = (e) => {
+		sidebar.update(value => value = e.detail.open);
+		invalidateAll();
+	}
 </script>
 
 {#if user.role === 'admin'}

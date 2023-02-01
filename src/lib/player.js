@@ -11,3 +11,11 @@ export const checkHT = (hunger, thirst, value) => {
 }
 
 export const getDefense = (slots) => (slots.A1.defense ?? 0) + (slots.A2.defense ?? 0) + (slots.A3.defense ?? 0);
+
+export const getDefenseAll = (slots, players) => {
+    let defense = 0;
+    for (let slot of slots) {
+        if (players.includes(slot.username)) defense += getDefense(slot);
+    }
+    return defense;
+}

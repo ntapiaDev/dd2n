@@ -7,7 +7,7 @@
     export let worksites;
     
     $: completed = encampment.completed;
-    $: defense = getDefense(completed, worksites);
+    $: [defense, temporary] = getDefense(completed, worksites);
     $: unlocked = encampment.unlocked.map(w => w.id);
 
     let total = 0;
@@ -54,7 +54,11 @@
         <span class="temporary">
             <span class="mark">!</span> : chantier temporaire, ne résistera pas à la nuit
         </span>
-        <span class="defense">Total : <b>{defense}</b> DEF</span>
+        <span class="defense">Total : <b>{defense}</b>
+            {#if temporary}
+                (+{temporary} <span class="mark">! </span>)
+            {/if}
+            DEF</span>
     </span>
 </div>
 
@@ -87,7 +91,8 @@
         margin: 0.5em 0 0 0.5em;
         color: rgb(100, 100, 100);
     }
-    .temporary span {
+    .temporary span,
+    .defense span {
         color: red;
         font-weight: bold;
     }

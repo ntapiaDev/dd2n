@@ -7,7 +7,7 @@ export const add_log = (game_id, coordinate, player, action, log, gender, color,
 export const add_logs = (game_id, logs, rethinkdb) => {
     for (let log of logs) {
         log.game_id = game_id;
-        log.date = Date.now();
+        log.date = log.action === 'nextday' ? Date.now() + 10 : Date.now();
     }
     return r.table('logs').insert(logs).run(rethinkdb);
 }

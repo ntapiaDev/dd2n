@@ -72,6 +72,13 @@
 			type: 'misc',
 		}
 	];
+	const zombie = {
+		credit: 'Freepik',
+		description: 'Un méchant zombie dévoreur de cerveau',
+		icon: 'zombie',
+		id: '09bbb34f-667a-48b8-afed-ce876ff4154c',
+		type: 'misc'
+	}
 
 	const firstLetterToLowerCase = (word) => {
 		return word.charAt(0).toLowerCase() + word.slice(1);
@@ -177,6 +184,38 @@
 				<div class="item">Après avoir apporté et étudié avec attention les plans trouvés près de l'entrepot de bricolage, <PlayerName color={log.color} username={log.player} /> a débloqué <Item item={transform} substitute="Atelier" /> <b>Atelier de recyclage<span class="notb">.</span></b></div>
 				<div class="mt">Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
 			{/if}
+	{:else if log.action === 'nextday' && log.log.survived}
+		<div class="nextday">
+			<div>Une horde de <span class="success">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
+			<div>Grace à vos defenses de <span class="success">{log.log.defense} DEF</span>, votre campement a résisté à l'attaque.</div>
+			<div>Environ <span class={(log.log.defense - log.log.lostDef) >= log.log.zombies ? 'success' : 'alert'}>{log.log.zombies} zombies</span> sont attendus la nuit prochaine.</div>
+			{#if log.log.broken.length}
+				<div>Les chantiers suivants ont été détruits pendant l'assaut :</div>
+				<ul>
+					{#each log.log.broken as worksite}
+						<li><Item item={build} substitute="Chantier" /> {worksite.name} (<b>-{worksite.defense} DEF</b>)</li>
+					{/each}
+				</ul>
+			{/if}
+			<div class="survived">
+				{#if log.log.dead.length}
+					{#each log.log.dead as player, i}
+						{#if i > 0 && log.log.dead.length > 1 && log.log.dead.length > i + 1}
+							,
+						{:else if log.log.dead.length > 1 && log.log.dead.length === i + 1}
+							<span class="ml">et</span>
+						{/if}
+						<PlayerName color={player.color} username={player.player} />
+					{/each}
+					<span class="alert">{log.log.dead.length > 1 ? 'n\'ont' : 'n\'a'} pas survécu à la nuit.</span>
+				{:else}
+					<span class="success">Tout le monde a survécu à la nuit.</span>
+				{/if}
+			</div>
+		</div>
+	{:else if log.action === 'nextday' && !log.log.survived}
+		<div>Une horde de <span class="alert">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
+		<div class="not-flex">Vos défenses de <span class="alert">{log.log.defense} DEF</span> n'ont pas suffit à arrêter cet assault et tout le monde s'est fait dévorer le cerveau dans d'attroces souffrances... <span class="not-flex-item"><Item item={zombie} /></span></div>
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
@@ -228,13 +267,38 @@
 	.item .workshop span {
 		margin: 0 4px;
 	}
+	.nextday div {
+		margin-top: 3px;
+	}
+	.nextday li {
+		margin-top: 1px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		list-style: none;
+	}
+	.nextday b {
+		margin: 0 -4px;
+	}
+	.nextday .survived {
+		margin-top: 2px;
+	}
 	.mtb {
 		margin: 2px 0 1px;
 	}
 	.mt {
 		margin-top: 1px;
 	}
-	.food {
+	.ml {
+		margin-left: 4px;
+	}
+	.alert,
+	.success {
+		color: red;
+		font-weight: bold;
+	}
+	.food,
+	.success {
 		color: green;
 	}
 	.drink {
@@ -245,5 +309,14 @@
 	}
 	.notb {
 		font-weight: normal;
+	}
+	.not-flex {
+		margin-top: 8px;
+		padding-bottom: 4px;
+		line-height: 12px;
+	}
+	.not-flex-item {
+		position: relative;
+		top: 4px;
 	}
 </style>
