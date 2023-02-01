@@ -35,6 +35,13 @@
 		id: '5617997b-dfca-4955-a8a7-724729fc8e9e',
 		type: 'misc'
 	}
+	const what = {
+		credit: 'Freepik',
+		description: 'Réveil difficile',
+		icon: 'what',
+		id: 'e6b2dc84-9821-4fed-a4a0-24879e38d5a9',
+		type: 'misc'
+	}
 	const wounds = [
 		{
 			credit: 'Freepik',
@@ -91,9 +98,11 @@
 		};
 		return `Le ${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()} à ${addZero(date.getHours())}:${addZero(date.getMinutes())}:${addZero(date.getSeconds())}`;
 	};
+
+	const gamelog = ['gamestart', 'nextday'].includes(log.action);
 </script>
 
-<div class="log" style={`background-color: ${log.color? log.color + '20' : ''}`}>
+<div class="log" style={`background-color: ${log.color? log.color + '20' : ''}`} class:gamelog>
 	<span class="date">{formatDate(log)}</span>
 	{#if log.action === 'newGame'}
 		<PlayerName color={log.color} username={log.player} /> a rejoint la partie.
@@ -216,7 +225,13 @@
 		</div>
 	{:else if log.action === 'nextday' && !log.log.survived}
 		<div>Une horde de <span class="alert">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
-		<div class="not-flex">Vos défenses de <span class="alert">{log.log.defense} DEF</span> n'ont pas suffit à arrêter cet assault et tout le monde s'est fait dévorer le cerveau dans d'attroces souffrances... <span class="not-flex-item"><Item item={zombie} /></span></div>
+		<div class="not-flex">Vos défenses de <span class="alert">{log.log.defense} DEF</span> n'ont pas suffit à arrêter cet assault et tout le monde s'est fait dévorer le cerveau dans d'attroces souffrances par des zombies affamés... <span class="not-flex-item"><Item item={zombie} /></span></div>
+	{:else if log.action === 'gamestart'}
+		<div class="item">Vous vous reveillez avec un affreux mal de crâne. <b>Que s'est-il passé hier soir?</b> Vous n'en avez plus aucune idée <Item item={what} /></div>
+		<div class="gamestart">
+			Le monde autour de vous parait maintenant <b>dévasté</b> et vous trouvez refuge parmi un <b>petit groupe de survivants</b> dans un <b>campement abandonné</b>.<br>
+			Il va falloir trouver de meilleurs vêtements, de la nourriture, des ressources, et de quoi vous défendre aussi. <b>Qui sait ce qui rode dehors une fois la nuit tombée?</b>
+		</div>
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.
 	{/if}
@@ -248,6 +263,9 @@
 		background-color: #ddd;
 		z-index: 5;
 	}
+	.gamelog {
+		border: 3px double #AAA;
+	}
 	.item {
 		display: flex;
 		align-items: center;
@@ -268,7 +286,8 @@
 	.item .workshop span {
 		margin: 0 4px;
 	}
-	.nextday div {
+	.nextday div,
+	.gamestart {
 		line-height: 24px;
 	}
 	.nextday li {

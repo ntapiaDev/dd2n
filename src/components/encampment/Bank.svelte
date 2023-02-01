@@ -48,7 +48,7 @@
 </script>
 
 <div in:fade|local={{ delay: 150, duration: 300 }} out:fade|local={{ duration: 150 }}>
-    <h3>Banque commune ({ `${total} objet${total > 1 ? 's' : ''} entreposé${total > 1 ? 's' : ''}` }) :</h3>
+    <h3>Banque commune ({ `${total === 0 ? 'Aucun' : total} objet${total > 1 ? 's' : ''} entreposé${total > 1 ? 's' : ''}` }) :</h3>
     <p>Vous pouvez entreposer ici tous les objets de votre campement.<br>
     Les ressources de la banque commune sont automatiquement utilisées lors de la construction d'un chantier de défense ou pour les transformations dans l'atelier de recyclage.</p>
     {#if !items.length}

@@ -25,6 +25,7 @@ const addGame = async ({ locals }) => {
     const { teddies, ws } = await generate_cells(game_id, blueprint, locals.rethinkdb);
     await generate_encampment(game_id, completed, unlocked, recipes, locals.rethinkdb);
     await add_logs(game_id, [
+        { coordinate: 'Encampment', player: '', action: 'gamestart', log: '', gender: '', color: '' },
         { coordinate: teddies[0], player: '', action: 'teddy', log: '', gender: '', color: '' },
         { coordinate: teddies[1], player: '', action: 'teddy', log: '', gender: '', color: '' },
         { coordinate: teddies[2], player: '', action: 'teddy', log: '', gender: '', color: '' },
