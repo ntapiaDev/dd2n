@@ -188,7 +188,7 @@
 		<div class="nextday">
 			<div>Une horde de <span class="success">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
 			<div>Grace à vos defenses de <span class="success">{log.log.defense} DEF</span>, votre campement a résisté à l'attaque.</div>
-			<div>Environ <span class={(log.log.defense - log.log.lostDef) >= log.log.zombies ? 'success' : 'alert'}>{log.log.zombies} zombies</span> sont attendus la nuit prochaine.</div>
+			<div>Environ <span class={(log.log.defense - log.log.lostDef) >= log.log.next ? 'success' : 'alert'}>{log.log.next} zombies</span> sont attendus la nuit prochaine et <span class="alert">{log.log.zombies} nouveaux zombies</span> ont été repérés aux environs du campement.</div>
 			{#if log.log.broken.length}
 				<div>Les chantiers suivants ont été détruits pendant l'assaut :</div>
 				<ul>
@@ -212,6 +212,7 @@
 					<span class="success">Tout le monde a survécu à la nuit.</span>
 				{/if}
 			</div>
+			<div>De nouvelles ressources ont été repérées dans {log.log.regenerated} zone{log.log.regenerated > 1 ? 's' : ''} environnante{log.log.regenerated > 1 ? 's' : ''}...</div>
 		</div>
 	{:else if log.action === 'nextday' && !log.log.survived}
 		<div>Une horde de <span class="alert">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
@@ -268,7 +269,7 @@
 		margin: 0 4px;
 	}
 	.nextday div {
-		margin-top: 3px;
+		line-height: 24px;
 	}
 	.nextday li {
 		margin-top: 1px;
@@ -280,8 +281,8 @@
 	.nextday b {
 		margin: 0 -4px;
 	}
-	.nextday .survived {
-		margin-top: 2px;
+	.survived .alert {
+		margin-left: 1px;
 	}
 	.mtb {
 		margin: 2px 0 1px;

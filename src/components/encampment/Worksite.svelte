@@ -21,6 +21,13 @@
         },
         {
             credit: 'Freepik',
+            description: 'Temporaire',
+            icon: 'temporary',
+            id: 'd3280ca6-e585-4183-a831-df089eebaa20',
+            type: 'misc'
+        },
+        {
+            credit: 'Freepik',
             description: 'Construire',
             icon: 'build',
             id: '2a8248fb-6e92-45a9-9e98-bcb9a658b5a0',
@@ -52,10 +59,12 @@
     let ap = apLeft;
     $: if(apLeft) ap = apLeft;
 
+    $: temp = worksite.temporary;
+
     $: bank = $page.data.encampment?.items ?? [];
 </script>
 
-<div class:blocked class:completed class:hidden class={type + ' ' + worksite.rarity}>
+<div class:blocked class:completed class:temp class:hidden class={type + ' ' + worksite.rarity}>
     {#if type === 'parent'}
         <span class="description">{worksite.description}</span>
     {/if}
@@ -82,26 +91,28 @@
             </span>
         {/if}
     </span>
-    <span class="defense" class:completed>{!hidden ? worksite.defense : '??'}</span>
+    <span class={'defense ' + (completed ? (worksite.temporary ? 'temporary' : 'completed') : '')}>{!hidden ? worksite.defense : '??'}</span>
     <span class="icon">
-        {#if completed}
+        {#if completed && !worksite.temporary}
             <Item item={items[0]} />
+        {:else if completed && worksite.temporary}
+            <Item item={items[1]} />
         {:else if !hidden}
             {#if blocked}
-                <Item item={items[3]} />
+                <Item item={items[4]} />
             {:else if checkResources(bank, worksite.resources)}
                 <form method="POST" action="/encampment?/worksite" use:enhance>
                     <input type="text" name="ap" value={ap} hidden>
                     <input type="text" name="id" value={worksite.id} hidden>
                     <button>
-                        <Item item={items[1]} border={ap > $page.data.user.ap ? 'red' : ''} />
+                        <Item item={items[2]} border={ap > $page.data.user.ap ? 'red' : ''} />
                     </button>
                 </form>
             {:else}
-                <Item item={items[2]} />
+                <Item item={items[3]} />
             {/if}
         {:else}
-            <Item item={items[4]} />
+            <Item item={items[5]} />
         {/if}
     </span>
 </div>
@@ -173,6 +184,9 @@
     .completed {
         background-color: rgb(255, 255, 205);
     }
+    .completed.temp {
+        background-color: rgb(255, 230, 205);
+    }
     .defense.completed {
         color: green;
         font-weight: bold;
@@ -192,6 +206,9 @@
         margin-right: 4px;
         color: red;
         font-weight: bold;
+    }
+    .defense.temporary {
+        margin-right: 0;
     }
     .blocked .temporary {
         color: #DDD;

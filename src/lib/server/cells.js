@@ -99,14 +99,17 @@ export const update_building = (game_id, user_id, coordinate, items, empty, reth
 
 export const update_cells = async (game_id, rethinkdb) => {
     const cells = (await r.table('cells').filter({ game_id }).run(rethinkdb))._responses[0]?.r;
-    const logs = [];    
+    const logs = [];  
+    let zombies = 0;  
     for (let cell of cells) {
         if (cell.building) cell.building.searchedBy = [];        
         cell.searchedBy = [];
         cell.tchat = [];
         if (cell.coordinate !== encampment) {
             if (!cell.players.length) cell.visited = false;
+            const old = cell.zombies;
             cell.zombies = Math.round(cell.zombies * (1 + (cell.layout.danger / 10)) + (cell.building ? nextday_building : nextday_cell));
+            zombies += (cell.zombies - old);
         }
         if (cell.empty && Math.random() > nextday_empty) {
             cell.empty = false;
@@ -114,7 +117,7 @@ export const update_cells = async (game_id, rethinkdb) => {
         }
     }
     await r.table('cells').insert(cells, {conflict: 'update'}).run(rethinkdb);
-    return logs;
+    return { logs, zombies };
 }
 
 export const update_items = (game_id, coordinate, items, rethinkdb) => {

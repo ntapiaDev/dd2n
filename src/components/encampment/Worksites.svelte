@@ -52,11 +52,11 @@
     {/each}
     <span class="misc">
         <span class="temporary">
-            <span class="mark">!</span> : chantier temporaire, ne résistera pas à la nuit
+            <span class="mark">!</span> : chantier temporaire, ne résistera pas à l'attaque
         </span>
         <span class="defense">Total : <b>{defense}</b>
             {#if temporary}
-                (+{temporary} <span class="mark">! </span>)
+                (<span class="mark">+{temporary} ! </span>)
             {/if}
             DEF</span>
     </span>
