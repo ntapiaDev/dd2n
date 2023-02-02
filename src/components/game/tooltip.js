@@ -40,16 +40,16 @@ export function tooltip(element) {
     }
 
     // if (element.getAttribute('title')) {
-        // element.addEventListener('mouseenter', mouseOver);
-        element.addEventListener('mouseover', mouseOver);
+        element.addEventListener('mouseenter', mouseOver);
+        // element.addEventListener('mouseover', mouseOver);
         element.addEventListener('mouseleave', mouseLeave);
         element.addEventListener('mousemove', mouseMove);
     // }
     
     return {
         destroy() {
-            // element.removeEventListener('mouseenter', mouseOver);
-            element.removeEventListener('mouseover', mouseOver);
+            element.removeEventListener('mouseenter', mouseOver);
+            // element.removeEventListener('mouseover', mouseOver);
             element.removeEventListener('mouseleave', mouseLeave);
             element.removeEventListener('mousemove', mouseMove);
             // Pour faire disparaitre le tooltip...

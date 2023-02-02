@@ -1,68 +1,80 @@
 <script>
-    import { enhance } from '$app/forms';
-	import { fade } from 'svelte/transition';
-	import Item from '../game/Item.svelte';
+    import { page } from '$app/stores';
+    import { createEventDispatcher } from 'svelte';
+    import { tooltip } from '../game/tooltip';
 	import Task from './Task.svelte';
 
     export let tasks;
 
-    const item = {
-		credit: 'Freepik',
-		description: 'Écrire un message',
-		icon: 'write',
-		id: 'e6f9dc67-f4e1-4b66-8192-0b27fccce49e',
-		type: 'misc',
-	};
+    const dispatch = createEventDispatcher();
 
-    let category = '';
-    let id = undefined;
-    let mode = 'add';
-
-    let message = '';
-    $: visible = (message.length >= 3) && (message.length <= 200);
-
-    $: if (mode === 'edit') category = mode;
+    const handleClick = (id) => {
+		dispatch('clicked', { id });
+	}
 </script>
 
 <div class="container">
     <div class="bank">
         <h4>Banque</h4>
-        {#each tasks.filter(t => t.category === 'bank') as task}
-            <Task {task} />
-        {/each}
+        {#if tasks.filter(t => t.category === 'bank').length}
+            {#each tasks.filter(t => t.category === 'bank') as task}
+                {#if $page.data.user.username === task.username}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <span class="owner" title="Modifier" on:click={() => handleClick(task.id)} use:tooltip>
+                        <Task {task} />
+                    </span>
+                {:else}
+                    <Task {task} />
+                {/if}
+            {/each}
+        {:else}
+            <div class="empty" title="Ajouter une tache" use:tooltip>
+                <span class="info">Cliquez pour ajouter une tache</span>
+                Aucune tache en attente.
+            </div>
+        {/if}
     </div>
     <div class="worksites">
         <h4>Chantiers</h4>
-        {#each tasks.filter(t => t.category === 'worksites') as task}
-            <Task {task} />
-        {/each}
+        {#if tasks.filter(t => t.category === 'worksites').length}
+            {#each tasks.filter(t => t.category === 'worksites') as task}
+                {#if $page.data.user.username === task.username}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <span class="owner" title="Modifier" on:click={() => handleClick(task.id)} use:tooltip>
+                        <Task {task} />
+                    </span>
+                {:else}
+                    <Task {task} />
+                {/if}
+            {/each}
+        {:else}
+            <div class="empty" title="Ajouter une tache" use:tooltip>
+                <span class="info">Cliquez pour ajouter une tache</span>
+                Aucune tache en attente.
+            </div>
+        {/if}
     </div>
     <div class="workshop">
         <h4>Atelier</h4>
-        {#each tasks.filter(t => t.category === 'workshop') as task}
-            <Task {task} />
-        {/each}
+        {#if tasks.filter(t => t.category === 'workshop').length}
+            {#each tasks.filter(t => t.category === 'workshop') as task}
+                {#if $page.data.user.username === task.username}
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <span class="owner" title="Modifier" on:click={() => handleClick(task.id)} use:tooltip>
+                        <Task {task} />
+                    </span>
+                {:else}
+                    <Task {task} />
+                {/if}
+            {/each}
+        {:else}
+            <div class="empty" title="Ajouter une tache" use:tooltip>
+                <span class="info">Cliquez pour ajouter une tache</span>
+                Aucune tache en attente.
+            </div>
+        {/if}
     </div>
 </div>
-<form method="POST" action="/encampment?/square" on:submit={() => visible = false} use:enhance>
-    <select name="category" bind:value={category} required>
-        <option value="">Catégorie</option>
-        <option value="bank">Banque</option>
-        <option value="worksites">Chantiers</option>
-        <option value="workshop">Atelier</option>
-        <option value="urgent">Urgent</option>
-        {#if mode === 'edit'}
-            <option value="edit">Édition</option>
-        {/if}
-    </select>
-    <input type="text" name="id" bind:value={id} hidden>
-    <input type="text" name="message" placeholder="Écrire un message (200 caractères maximum, 3 maximum par catégorie et 1 urgent)" minlength="3" maxlength="200" autocomplete="off" bind:value={message} required>
-    {#if visible}
-        <button transition:fade={{ duration: 500 }}>
-            <Item {item} />
-        </button>
-    {/if}
-</form>
 
 <style>
     .container {
@@ -74,27 +86,29 @@
     h4 {
         text-align: center;
     }
-    form {
-        margin-top: 1em;
-		width: 100%;
-		height: 25px;
-        display: flex;
-        align-items: center;
-	}
-    select {
-        border: 1px solid #AAA;
+    .owner {
+        cursor: pointer;
     }
-    input {
-		padding: 0.1em 0.5em;
-		flex-grow: 1;
-		border: none;
-		border-bottom: 1px solid #AAA;
-		outline: none;
-	}
-	button {
-        margin-left: 0.5em;
-		border: none;
-		background-color: transparent;
-		cursor: pointer;
+    .empty {
+        margin-top: 1.5em;
+        position: relative;
+		padding: 0.5em;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+		border-radius: 0 0 0.5em 0.5em;
+		background-color: #eee;
+        text-align: center;
+        cursor: pointer;
+    }
+    .info {
+		width: 100%;
+		position: absolute;
+		top: -15px;
+        left: 0;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.12);
+		border-radius: 1em 1em 0 0;
+		font-size: 0.75em;
+		background-color: #ddd;
+        text-align: center;
+		z-index: 5;
 	}
 </style>

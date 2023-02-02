@@ -79,12 +79,16 @@
 				<p>Vous devez utiliser des points d'action pour construire ce chantier.</p>
 			{:else if form?.origin}
 				<p>Cet objet n'est pas présent dans la banque ou dans votre inventaire.</p>
+			{:else if form?.owner}
+				<p>Vous ne pouvez pas modifier cette tache.</p>
 			{:else if form?.recipe}
 				<p>Cette recette est déjà débloquée.</p>
 			{:else if form?.resources}
 				<p>Il n'y a pas assez de ressources pour construire ce chantier.</p>
 			{:else if form?.short}
 				<p>Votre message est trop court (3 caractères minimum).</p>
+			{:else if form?.square}
+				<p>Cette tache n'existe pas.</p>
 			{:else if form?.toMany}
 				<p>Vous avez déjà écrit le maximum de messages dans cette catégorie, vous pouvez éditer ou supprimer un ancien message.</p>
 			{:else if form?.toMuch}

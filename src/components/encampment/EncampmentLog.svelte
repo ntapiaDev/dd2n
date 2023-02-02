@@ -201,23 +201,31 @@
 			<div class="mt">Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
 		{/if}
 	{:else if log.action === 'square'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> a laissé une nouvelle instruction
-				{#if log.log.category === 'motd'}
-					<b>journalière</b>
-				{:else if log.log.category === 'urgent'}
-					<span class="alert">urgente</span>
-				{:else if log.log.category === 'worksites'}
-					de <b>chantier</b>
-				{:else if log.log.category === 'workshop'}
-					d'<b class="mlneg">atelier</b>
-				{/if}
-				sur <Item item={square} substitute="Place du village" /> <b>Place du village</b>
-					{#if log.log.category === 'bank'}
-						concernant la banque.
-					{:else}
-						<span class="mlneg">.</span>
-					{/if}
-				</div>
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a 
+			{#if log.log.mode === 'add'}
+				laissé une nouvelle
+			{:else if log.log.mode === 'edit'}
+				modifié une
+			{:else if log.log.mode === 'delete'}
+				supprimé une
+			{/if}
+			instruction
+			{#if log.log.category === 'motd'}
+				<b>journalière</b>
+			{:else if log.log.category === 'urgent'}
+				<span class="alert">urgente</span>
+			{:else if log.log.category === 'worksites'}
+				de <b>chantier</b>
+			{:else if log.log.category === 'workshop'}
+				d'<b class="mlneg">atelier</b>
+			{/if}
+			sur <Item item={square} substitute="Place du village" /> <b>Place du village</b>
+			{#if log.log.category === 'bank'}
+				concernant la <b>banque<span class="notb">.</span></b>
+			{:else}
+				<span class="mlneg">.</span>
+			{/if}
+		</div>
 	{:else if log.action === 'nextday' && log.log.survived}
 		<div class="nextday">
 			<div>Une horde de <span class="success">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>

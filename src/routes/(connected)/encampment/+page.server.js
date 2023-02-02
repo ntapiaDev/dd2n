@@ -5,7 +5,7 @@ import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
 import { add_recipe, add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
-import { add_square, get_square } from "$lib/server/square";
+import { add_square, delete_square_by_id, edit_square, get_square, get_square_by_id } from "$lib/server/square";
 import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
 import { get_recipe, get_recipes } from "$lib/server/workshop";
 import { get_worksite, get_worksites_by_group } from "$lib/server/worksites";
@@ -75,21 +75,34 @@ const map = async ({ locals }) => {
 
 const square = async ({ locals, request }) => {
     const data = await request.formData();
-    const category = data.get('category');
+    let category = data.get('category');
     if (!category) return fail(400, { category: true });
     else if (!['motd', 'urgent', 'bank', 'worksites', 'workshop', 'edit'].includes(category)) return fail(400, { invalid: true });
     const message = data.get('message');
     if (message.length < 3) return fail(400, { short: true });
     if (message.length > 200) return fail(400, { long: true });
-    const square = await get_square(locals.user.game_id, locals.rethinkdb);
-
-    //edit
-
-    const messages = square.filter(m => m.username === locals.user.username && m.category === category);
-    if (['motd', 'urgent'].includes(category) && messages.length > 0
-        || ['bank', 'worksites', 'workshop'].includes(category) && messages.length > 2) return fail(400, { toMany: true });
-    await add_square(locals.user.game_id, locals.user.color, category, message, locals.user.username, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'square', { category }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    const id = data.get('id');
+    let mode = 'add';
+    if (id) {
+        const square = await get_square_by_id(id, locals.rethinkdb);
+        if (!square) return fail(400, { square: true });
+        if (square.username !== locals.user.username) return fail(400, { owner: true });
+        category = square.category;
+        if (data.get('delete') === 'true') {
+            await delete_square_by_id(id, locals.rethinkdb);
+            mode = 'delete';
+        } else {
+            await edit_square(id, message, locals.rethinkdb);
+            mode = 'edit';
+        }
+    } else {
+        const square = await get_square(locals.user.game_id, locals.rethinkdb);
+        const messages = square.filter(m => m.username === locals.user.username && m.category === category);
+        if (['motd', 'urgent'].includes(category) && messages.length > 0
+            || ['bank', 'worksites', 'workshop'].includes(category) && messages.length > 2) return fail(400, { toMany: true });
+        await add_square(locals.user.game_id, locals.user.color, category, message, locals.user.username, locals.rethinkdb);
+    }
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'square', { category, mode }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const unlock = async ({ locals, request }) => {
