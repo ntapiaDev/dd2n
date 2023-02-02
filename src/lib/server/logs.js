@@ -1,7 +1,7 @@
 import r from 'rethinkdb';
 
 export const add_log = (game_id, coordinate, player, action, log, gender, color, rethinkdb) => {
-    return r.table('logs').insert({ game_id, coordinate, player, action, log, gender, color, 'date': Date.now() }).run(rethinkdb);
+    return r.table('logs').insert({ game_id, coordinate, player, action, log, gender, color, date: Date.now() }).run(rethinkdb);
 }
 
 export const add_logs = (game_id, logs, rethinkdb) => {

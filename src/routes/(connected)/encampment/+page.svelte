@@ -39,14 +39,14 @@
 	<div class="sidebar">
 		<Attack attack={encampment.attack} completed={encampment.worksites.completed} players={encampment.players} slots={data.slots} {worksites} />
 		<Actions {user} />
-		<Navigate selected={$sidebar} on:clicked={open} workshop={encampment.workshop.unlocked} />
+		<Navigate selected={$sidebar} urgent={data.square.filter(m => m.category === 'urgent')} workshop={encampment.workshop.unlocked} on:clicked={open} />
 		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />
 	</div>
 	<div class="content">
 		{#if $sidebar === 'register'}
 			<Register logs={data.logs} />
 		{:else if $sidebar === 'place'}
-			<Place />
+			<Place square={data.square} />
 		{:else if $sidebar === 'bank'}
 			<Bank items={sortItems(encampment.items)} />
 		{:else if $sidebar === 'worksites'}
@@ -59,12 +59,18 @@
 				<p>Ce chantier est déjà débloqué.</p>
 			{:else if form?.ap}
 				<p>Vous n'avez pas assez de points d'action pour effectuer cette action.</p>
+			{:else if form?.category}
+				<p>Vous devez choisir une catégorie.</p>
 			{:else if form?.completed}
 				<p>Ce chantier est déjà terminé.</p>
 			{:else if form?.full}
 				<p>Votre inventaire est plein.</p>
+			{:else if form?.invalid}
+				<p>Vous devez choisir une catégorie valide.</p>
 			{:else if form?.locked}
 				<p>L'atelier de recyclage n'a pas encore été débloqué.</p>
+			{:else if form?.long}
+				<p>Votre message est trop long (200 caractères maximum).</p>
 			{:else if form?.materials}
 				<p>Il n'y a pas assez de ressources pour réaliser cette recette.</p>
 			{:else if form?.more}
@@ -77,6 +83,10 @@
 				<p>Cette recette est déjà débloquée.</p>
 			{:else if form?.resources}
 				<p>Il n'y a pas assez de ressources pour construire ce chantier.</p>
+			{:else if form?.short}
+				<p>Votre message est trop court (3 caractères minimum).</p>
+			{:else if form?.toMany}
+				<p>Vous avez déjà écrit le maximum de messages dans cette catégorie, vous pouvez éditer ou supprimer un ancien message.</p>
 			{:else if form?.toMuch}
 				<p>Vous avez dépensé trop de points d'actions pour ce chantier.</p>
 			{:else if form?.unknown}

@@ -5,6 +5,7 @@ import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
 import { add_recipe, add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
+import { add_square, get_square } from "$lib/server/square";
 import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
 import { get_recipe, get_recipes } from "$lib/server/workshop";
 import { get_worksite, get_worksites_by_group } from "$lib/server/worksites";
@@ -14,9 +15,10 @@ export const load = async ({ locals }) => {
     const lastDate = await get_last_date(locals.user.game_id, locals.game.players.map(p => p.username), locals.rethinkdb);
     const logs = await get_logs_by_coordinate(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const recipes = await get_recipes(locals.rethinkdb);
+    const square = await get_square(locals.user.game_id, locals.rethinkdb);
     const slots = await get_slots_by_game(locals.user.game_id, locals.rethinkdb);
     const worksites = await get_worksites_by_group(locals.rethinkdb);
-    return { encampment, lastDate, logs, recipes, slots, worksites };
+    return { encampment, lastDate, logs, recipes, square, slots, worksites };
 }
 
 const blueprint = async ({ locals, request }) => {
@@ -69,6 +71,25 @@ const map = async ({ locals }) => {
         { coordinate: locals.game.encampment, player: locals.user.username, action: 'inEncampment', log: '', gender: locals.user.gender, color: locals.user.color }
     ], locals.rethinkdb);
     throw redirect(303, '/map');
+}
+
+const square = async ({ locals, request }) => {
+    const data = await request.formData();
+    const category = data.get('category');
+    if (!category) return fail(400, { category: true });
+    else if (!['motd', 'urgent', 'bank', 'worksites', 'workshop', 'edit'].includes(category)) return fail(400, { invalid: true });
+    const message = data.get('message');
+    if (message.length < 3) return fail(400, { short: true });
+    if (message.length > 200) return fail(400, { long: true });
+    const square = await get_square(locals.user.game_id, locals.rethinkdb);
+
+    //edit
+
+    const messages = square.filter(m => m.username === locals.user.username && m.category === category);
+    if (['motd', 'urgent'].includes(category) && messages.length > 0
+        || ['bank', 'worksites', 'workshop'].includes(category) && messages.length > 2) return fail(400, { toMany: true });
+    await add_square(locals.user.game_id, locals.user.color, category, message, locals.user.username, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'square', { category }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const unlock = async ({ locals, request }) => {
@@ -162,4 +183,4 @@ const worksite = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { blueprint, deposit, map, unlock, withdraw, workshop, worksite };
+export const actions = { blueprint, deposit, map, square, unlock, withdraw, workshop, worksite };

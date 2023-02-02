@@ -41,7 +41,7 @@
 	}
     input {
 		padding: 0.1em 0.25em;
-		flex-grow: 2;
+		flex-grow: 1;
 		border: none;
 		border-bottom: 1px solid #AAA;
 		outline: none;

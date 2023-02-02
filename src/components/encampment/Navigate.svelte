@@ -3,6 +3,7 @@
 	import Link from "./Link.svelte";
 
     export let selected;
+    export let urgent;
     export let workshop;
 
     const dispatch = createEventDispatcher();
@@ -21,7 +22,7 @@
             <Link selected={selected === 'register'} title="Registre central" />
         </li>
         <li on:click={() => open('place')}>
-            <Link selected={selected === 'place'} title="Place du village" />
+            <Link selected={selected === 'place'} {urgent} title="Place du village" />
         </li>
         <li on:click={() => open('bank')}>
             <Link selected={selected === 'bank'} title="Banque commune" />

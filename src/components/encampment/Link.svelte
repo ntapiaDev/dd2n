@@ -3,6 +3,7 @@
 
     export let locked = false;
     export let selected;
+    export let urgent = undefined;
     export let title;
 </script>
 
@@ -13,11 +14,14 @@
 {:else}
     <span class:selected>
         {title}
+        {#if urgent?.length}
+            <span class="urgent">{`(+${urgent.length})`}</span>
+        {/if}
     </span>
 {/if}
 
 <style>
-    span {
+    span:not(.urgent) {
         height: 25px;
         display: flex;
 		align-items: center;
@@ -34,5 +38,10 @@
         background-color: #DDD;
         color: rgb(100, 100, 100);
         cursor: default;
+    }
+    .urgent {
+        margin-left: 4px;
+        color: red;
+        font-weight: bold;
     }
 </style>

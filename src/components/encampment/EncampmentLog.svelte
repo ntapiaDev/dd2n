@@ -28,6 +28,13 @@
 			type: 'misc',
 		}
 	];
+	const square = {
+		credit: 'Freepik',
+		description: 'Laisser un message',
+		icon: 'write',
+		id: 'e6f9dc67-f4e1-4b66-8192-0b27fccce49e',
+		type: 'misc',
+	};
 	const transform = {
 		credit: 'Freepik',
 		description: 'Transformer',
@@ -189,10 +196,28 @@
 			{/if}
 			<b>{log.log.name}<span class="notb">.</span></b></div>
 	{:else if log.action === 'unlocked'}
-			{#if log.log.origin === 'workshop'}
-				<div class="item">Après avoir apporté et étudié avec attention les plans trouvés près de l'entrepot de bricolage, <PlayerName color={log.color} username={log.player} /> a débloqué <Item item={transform} substitute="Atelier" /> <b>Atelier de recyclage<span class="notb">.</span></b></div>
-				<div class="mt">Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
-			{/if}
+		{#if log.log.origin === 'workshop'}
+			<div class="item">Après avoir apporté et étudié avec attention les plans trouvés près de l'entrepot de bricolage, <PlayerName color={log.color} username={log.player} /> a débloqué <Item item={transform} substitute="Atelier" /> <b>Atelier de recyclage<span class="notb">.</span></b></div>
+			<div class="mt">Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
+		{/if}
+	{:else if log.action === 'square'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> a laissé une nouvelle instruction
+				{#if log.log.category === 'motd'}
+					<b>journalière</b>
+				{:else if log.log.category === 'urgent'}
+					<span class="alert">urgente</span>
+				{:else if log.log.category === 'worksites'}
+					de <b>chantier</b>
+				{:else if log.log.category === 'workshop'}
+					d'<b class="mlneg">atelier</b>
+				{/if}
+				sur <Item item={square} substitute="Place du village" /> <b>Place du village</b>
+					{#if log.log.category === 'bank'}
+						concernant la banque.
+					{:else}
+						<span class="mlneg">.</span>
+					{/if}
+				</div>
 	{:else if log.action === 'nextday' && log.log.survived}
 		<div class="nextday">
 			<div>Une horde de <span class="success">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
@@ -268,6 +293,9 @@
 	.gamelog {
 		border: 3px double #AAA;
 	}
+	.gamelog .date {
+		top: -10px;
+	}
 	.item {
 		display: flex;
 		align-items: center;
@@ -331,6 +359,9 @@
 	}
 	.notb {
 		font-weight: normal;
+	}
+	.mlneg {
+		margin-left: -4px;
 	}
 	.not-flex {
 		margin-top: 8px;

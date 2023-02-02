@@ -286,6 +286,9 @@
 	.gamelog {
 		border: 3px double #AAA;
 	}
+	.gamelog .date {
+		top: -10px;
+	}
 	.zombies {
 		color: red;
 	}
