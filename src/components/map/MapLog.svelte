@@ -77,9 +77,11 @@
 		};
 		return `Le ${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()} à ${addZero(date.getHours())}:${addZero(date.getMinutes())}:${addZero(date.getSeconds())}`;
 	};
+
+	$: gamelog = ['new', 'teddy', 'workshop'].includes(log.action);
 </script>
 
-<div class="log" style={`background-color: ${log.color? log.color + '20' : ''}`}>
+<div class="log" style={`background-color: ${log.color? log.color + '20' : ''}`} class:gamelog>
 	<span class="date">{formatDate(log)}</span>
 	{#if log.action === 'in'}
 		<PlayerName color={log.color} username={log.player} /> est arrivé{log.gender === 'female' ? 'e' : ''} dans la zone.
@@ -280,6 +282,9 @@
 		font-size: 0.75em;
 		background-color: #ddd;
 		z-index: 5;
+	}
+	.gamelog {
+		border: 3px double #AAA;
 	}
 	.zombies {
 		color: red;

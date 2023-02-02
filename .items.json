@@ -258,6 +258,19 @@
         "unique": false
     },
     {
+        "attack": 4,
+        "credit": "Smashicons",
+        "description": "Un gourdin à pics",
+        "durabilityMax": 15,
+        "icon": "cudgel",
+        "id": "abcb0bac-1124-4030-8e28-dc9dd14a3584",
+        "origin": "recipe",
+        "rarity": "inhabituel",
+        "slot": "W1",
+        "type": "weapon",
+        "unique": false
+    },
+    {
         "attack": 8,
         "code": "b2",
         "credit": "Freepik",
@@ -1029,6 +1042,13 @@
         "type": "misc"
     },
     {
+        "credit": "Freepik",
+        "description": "Réveil difficile",
+        "icon": "what",
+        "id": "e6b2dc84-9821-4fed-a4a0-24879e38d5a9",
+        "type": "misc"
+    },
+    {
         "attack": 1,
         "credit": "Freepik",
         "description": "Se battre à mains nues",
@@ -1063,6 +1083,13 @@
         "description": "Statistiques de la carte",
         "icon": "statistics",
         "id": "ab4778ef-f84d-4e82-a43e-c97ede72c7c3",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Temporaire",
+        "icon": "temporary",
+        "id": "d3280ca6-e585-4183-a831-df089eebaa20",
         "type": "misc"
     },
     {

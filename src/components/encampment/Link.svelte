@@ -7,7 +7,7 @@
 </script>
 
 {#if locked}
-    <span class="locked" title="L'atelier n'est pas débloqué pour le moment" use:tooltip>
+    <span class="locked" title="L'atelier n'a pas encore été débloqué" use:tooltip>
         {title}
     </span>
 {:else}

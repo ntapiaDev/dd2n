@@ -174,6 +174,58 @@
         "unlocked": false
     },
     {
+        "ap": 5,
+        "completed": false,
+        "defense": 20,
+        "description": "Bruyants et visibles de loin, ces pièges devraient occuper les zombies pendant un moment.",
+        "id": "3c574619-a051-4139-840f-d7c257c7d780",
+        "name": "Leurre en plastique",
+        "rarity": "commun",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Icongeek26",
+                    "description": "Une bobine de ficelle",
+                    "icon": "string",
+                    "id": "d25617b7-3ca9-4012-a424-3a195ad7216b",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "juicy_fish",
+                    "description": "Une bouteille en plastique vide",
+                    "icon": "plastic-bottle",
+                    "id": "6cfc2a58-8bb1-4f64-9b12-d5aa360e2eaf",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Freepik",
+                    "description": "Une paire d'élastiques",
+                    "icon": "elastics",
+                    "id": "64347602-bb40-4a93-862d-a2ee3cd21187",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            }
+        ],
+        "temporary": true,
+        "unlocked": true
+    },
+    {
         "ap": 10,
         "completed": false,
         "defense": 20,
@@ -328,6 +380,135 @@
         "unlocked": false
     },
     {
+        "ap": 10,
+        "completed": false,
+        "defense": 40,
+        "id": "c3b519a1-a05a-48d5-94e1-e59aca466475",
+        "name": "Leurre en verre",
+        "parent": "3c574619-a051-4139-840f-d7c257c7d780",
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Freepik",
+                    "description": "Une paire d'élastiques",
+                    "icon": "elastics",
+                    "id": "64347602-bb40-4a93-862d-a2ee3cd21187",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Good Ware",
+                    "description": "Un rouleau de corde emmêlé",
+                    "icon": "rope",
+                    "id": "d7a906d0-a28a-43fe-8136-7acebe286828",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            },
+            {
+                "item": {
+                    "credit": "Vitaly Gorbachev",
+                    "description": "Une bouteille en verre",
+                    "icon": "bottle",
+                    "id": "e437624b-ce76-4726-b194-ae5611c30a01",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            }
+        ],
+        "temporary": true,
+        "unlocked": true
+    },
+    {
+        "ap": 15,
+        "completed": false,
+        "defense": 60,
+        "id": "f63a1b9f-02d2-447d-ba1d-3b8ab0a3e003",
+        "name": "Leurre explosif",
+        "parent": "3c574619-a051-4139-840f-d7c257c7d780",
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "code": "b1",
+                    "credit": "Freepik",
+                    "description": "De l'alcool ménager",
+                    "icon": "alcool",
+                    "id": "33dd2967-48c7-486e-9870-01dd7a044d6d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "juicy_fish",
+                    "description": "Une bouteille en plastique vide",
+                    "icon": "plastic-bottle",
+                    "id": "6cfc2a58-8bb1-4f64-9b12-d5aa360e2eaf",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Freepik",
+                    "description": "Une paire d'élastiques",
+                    "icon": "elastics",
+                    "id": "64347602-bb40-4a93-862d-a2ee3cd21187",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Mehwish",
+                    "description": "Une poignée de clous rouillés",
+                    "icon": "nails",
+                    "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Good Ware",
+                    "description": "Un rouleau de corde emmêlé",
+                    "icon": "rope",
+                    "id": "d7a906d0-a28a-43fe-8136-7acebe286828",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            }
+        ],
+        "temporary": true,
+        "unlocked": true
+    },
+    {
         "ap": 15,
         "completed": false,
         "defense": 30,
@@ -427,6 +608,69 @@
                 "quantity": 5
             }
         ],
+        "unlocked": false
+    },
+    {
+        "ap": 20,
+        "completed": false,
+        "defense": 80,
+        "id": "15dd7766-f4a9-4569-aa36-621e9412e1c2",
+        "name": "Leurre incendiaire",
+        "parent": "3c574619-a051-4139-840f-d7c257c7d780",
+        "rarity": "rare",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Freepik",
+                    "description": "Une paire d'élastiques",
+                    "icon": "elastics",
+                    "id": "64347602-bb40-4a93-862d-a2ee3cd21187",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Good Ware",
+                    "description": "Un rouleau de corde emmêlé",
+                    "icon": "rope",
+                    "id": "d7a906d0-a28a-43fe-8136-7acebe286828",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "credit": "Vitaly Gorbachev",
+                    "description": "Une bouteille en verre",
+                    "icon": "bottle",
+                    "id": "e437624b-ce76-4726-b194-ae5611c30a01",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "credit": "Freepik",
+                    "description": "Un jerrican d'essence",
+                    "icon": "fuel",
+                    "id": "0f06f9f4-9c29-4c91-bfd2-77e8ed25b32c",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            }
+        ],
+        "temporary": true,
         "unlocked": false
     },
     {
@@ -541,6 +785,85 @@
                 "quantity": 1
             }
         ],
+        "unlocked": false
+    },
+    {
+        "ap": 25,
+        "completed": false,
+        "defense": 100,
+        "id": "b982489f-0061-4e5f-b5f4-2668d7be7f65",
+        "name": "Leurre destructeur",
+        "parent": "3c574619-a051-4139-840f-d7c257c7d780",
+        "rarity": "épique",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "juicy_fish",
+                    "description": "Une bouteille en plastique vide",
+                    "icon": "plastic-bottle",
+                    "id": "6cfc2a58-8bb1-4f64-9b12-d5aa360e2eaf",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Freepik",
+                    "description": "Une paire d'élastiques",
+                    "icon": "elastics",
+                    "id": "64347602-bb40-4a93-862d-a2ee3cd21187",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Good Ware",
+                    "description": "Un rouleau de corde emmêlé",
+                    "icon": "rope",
+                    "id": "d7a906d0-a28a-43fe-8136-7acebe286828",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "credit": "Vitaly Gorbachev",
+                    "description": "Une bouteille en verre",
+                    "icon": "bottle",
+                    "id": "e437624b-ce76-4726-b194-ae5611c30a01",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 4
+            },
+            {
+                "item": {
+                    "attack": 100,
+                    "code": "b5",
+                    "credit": "max.icons",
+                    "description": "Du C-4",
+                    "icon": "c4",
+                    "id": "517b3f81-547e-4d0b-9eed-5a6c3f8d4b93",
+                    "rarity": "épique",
+                    "slot": "W4",
+                    "type": "explosive",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "temporary": true,
         "unlocked": false
     }
 ]

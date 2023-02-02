@@ -46,6 +46,14 @@
 	$: rows = data.rows;
 	$: user = data.user;
 
+	let offset = 15;
+	$: logsToShow = logs.slice(0, offset);
+
+    const loadLogs = (e) => {
+        const { scrollTop, clientHeight, scrollHeight } = e.target;
+        if (scrollTop + clientHeight === scrollHeight) offset += 5;
+    }
+
 	$: armour = getDefense(user.slots);
 	$: cell = rows.find(row => row.find(c => c.coordinate === user.location)).find(c => c.coordinate === user.location);	
 	$: style =
@@ -176,9 +184,9 @@
 				</span>
 			{/each}
 		</div>
-		<div class="log">
+		<div class="log" on:scroll={loadLogs}>
 			<span class="title">Historique de la zone :</span>
-			{#each logs as log}
+			{#each logsToShow as log}
 				<MapLog {log} />
 			{/each}
 		</div>

@@ -99,7 +99,7 @@
 		return `Le ${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()} à ${addZero(date.getHours())}:${addZero(date.getMinutes())}:${addZero(date.getSeconds())}`;
 	};
 
-	const gamelog = ['gamestart', 'nextday'].includes(log.action);
+	$: gamelog = ['gamestart', 'nextday'].includes(log.action);
 </script>
 
 <div class="log" style={`background-color: ${log.color? log.color + '20' : ''}`} class:gamelog>
@@ -221,11 +221,13 @@
 					<span class="success">Tout le monde a survécu à la nuit.</span>
 				{/if}
 			</div>
-			<div>De nouvelles ressources ont été repérées dans {log.log.regenerated} zone{log.log.regenerated > 1 ? 's' : ''} environnante{log.log.regenerated > 1 ? 's' : ''}...</div>
+			{#if log.log.regenerated}
+				<div>De nouvelles ressources ont été repérées dans {log.log.regenerated} zone{log.log.regenerated > 1 ? 's' : ''} environnante{log.log.regenerated > 1 ? 's' : ''}...</div>
+			{/if}
 		</div>
 	{:else if log.action === 'nextday' && !log.log.survived}
 		<div>Une horde de <span class="alert">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
-		<div class="not-flex">Vos défenses de <span class="alert">{log.log.defense} DEF</span> n'ont pas suffit à arrêter cet assault et tout le monde s'est fait dévorer le cerveau dans d'attroces souffrances par des zombies affamés... <span class="not-flex-item"><Item item={zombie} /></span></div>
+		<div class="not-flex">Vos défenses de <span class="alert">{log.log.defense} DEF</span> n'ont pas suffit à arrêter cet assault et tout le monde s'est fait dévorer le cerveau dans d'attroces souffrances par une bande d'affreux zombies affamés... <span class="not-flex-item"><Item item={zombie} /></span></div>
 	{:else if log.action === 'gamestart'}
 		<div class="item">Vous vous reveillez avec un affreux mal de crâne. <b>Que s'est-il passé hier soir?</b> Vous n'en avez plus aucune idée <Item item={what} /></div>
 		<div class="gamestart">

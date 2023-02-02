@@ -152,6 +152,47 @@
         "unlocked": true
     },
     {
+        "ap": 1,
+        "id": "6c15d547-a320-4ab6-92ae-381f5c1c19c0",
+        "item": "abcb0bac-1124-4030-8e28-dc9dd14a3584",
+        "name": "Un gourdin à pics",
+        "quantity": 1,
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "attack": 2,
+                    "code": "b5",
+                    "credit": "Freepik",
+                    "description": "Une batte de baseball",
+                    "durabilityMax": 20,
+                    "icon": "baseball",
+                    "id": "55e376a5-7cbb-47d1-81a6-a29f0cc191f7",
+                    "rarity": "commun",
+                    "slot": "W1",
+                    "type": "weapon",
+                    "unique": false
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Mehwish",
+                    "description": "Une poignée de clous rouillés",
+                    "icon": "nails",
+                    "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            }
+        ],
+        "type": "weapon",
+        "unlocked": false
+    },
+    {
         "ap": 2,
         "id": "a6e4cdd2-564c-404d-928d-4de087e08e21",
         "item": "ab108d32-6ff6-4112-8180-1e2d7c031aaa",
@@ -315,6 +356,6 @@
             }
         ],
         "type": "resource",
-        "unlocked": false
+        "unlocked": true
     }
 ]
