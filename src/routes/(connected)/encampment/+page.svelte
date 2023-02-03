@@ -63,6 +63,8 @@
 				<p>Vous devez choisir une catégorie.</p>
 			{:else if form?.completed}
 				<p>Ce chantier est déjà terminé.</p>
+			{:else if form?.edit}
+				<p>Vous ne pouvez pas éditer ce message mais vous pouvez le supprimer.</p>
 			{:else if form?.full}
 				<p>Votre inventaire est plein.</p>
 			{:else if form?.invalid}
@@ -75,6 +77,8 @@
 				<p>Il n'y a pas assez de ressources pour réaliser cette recette.</p>
 			{:else if form?.more}
 				<p>Davantage de points d'action sont nécessaires pour réaliser cette recette.</p>
+			{:else if form?.motd}
+				<p>Vous ne pouvez pas supprimer ce message mais vous pouvez l'éditer.</p>
 			{:else if form?.nothing}
 				<p>Vous devez utiliser des points d'action pour construire ce chantier.</p>
 			{:else if form?.origin}
@@ -90,7 +94,7 @@
 			{:else if form?.square}
 				<p>Cette tache n'existe pas.</p>
 			{:else if form?.toMany}
-				<p>Vous avez déjà écrit le maximum de messages dans cette catégorie, vous pouvez éditer ou supprimer un ancien message.</p>
+				<p>Vous avez déjà écrit le maximum de messages dans cette catégorie mais vous pouvez éditer ou supprimer un ancien message.</p>
 			{:else if form?.toMuch}
 				<p>Vous avez dépensé trop de points d'actions pour ce chantier.</p>
 			{:else if form?.unknown}

@@ -113,6 +113,7 @@
                 {#if ['W2', 'W3'].includes(slot)}
                     <select name="weapon" required>
                         <option value="">Arme</option>
+                        <option value="bow">Bow</option>
                         <option value="gun">Gun</option>
                         <option value="rifle">Rifle</option>
                         <option value="shotgun">Shotgun</option>

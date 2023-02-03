@@ -218,8 +218,8 @@
 				de <b>chantier</b>
 			{:else if log.log.category === 'workshop'}
 				d'<b class="mlneg">atelier</b>
-			{/if}
-			sur <Item item={square} substitute="Place du village" /> <b>Place du village</b>
+			{/if}sur
+			<Item item={square} substitute="Place du village" /> <b>Place du village</b>
 			{#if log.log.category === 'bank'}
 				concernant la <b>banque<span class="notb">.</span></b>
 			{:else}

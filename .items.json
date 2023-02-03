@@ -284,6 +284,19 @@
         "unique": false
     },
     {
+        "attack": 3,
+        "credit": "kliwir art",
+        "description": "Un arc improvisé",
+        "icon": "bow",
+        "id": "93e97b31-988e-4e77-bb7b-13954d836c39",
+        "origin": "recipe",
+        "rarity": "inhabituel",
+        "slot": "W2",
+        "type": "weapon",
+        "unique": false,
+        "weapon": "bow"
+    },
+    {
         "attack": 5,
         "code": "b5",
         "credit": "kosonicon",
@@ -358,6 +371,18 @@
         "type": "weapon",
         "unique": true,
         "weapon": "machine-gun"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Flèche en bois",
+        "icon": "arrow",
+        "id": "b4859618-60fd-4630-ba5f-5329ba1a044a",
+        "origin": "recipe",
+        "rarity": "inhabituel",
+        "slot": "W3",
+        "type": "ammunition",
+        "unique": false,
+        "weapon": "bow"
     },
     {
         "code": "b5",
@@ -624,6 +649,15 @@
         "description": "Un vieux chiffon",
         "icon": "cloth",
         "id": "6bf637b4-8a2e-4f75-b454-345083e0478d",
+        "rarity": "commun",
+        "type": "resource",
+        "unique": false
+    },
+    {
+        "credit": "Freepik",
+        "description": "Une belle branche d'arbre",
+        "icon": "branch",
+        "id": "e57f72ab-2846-4339-a9c7-f36bc5d81caa",
         "rarity": "commun",
         "type": "resource",
         "unique": false
@@ -1083,6 +1117,13 @@
         "description": "Statistiques de la carte",
         "icon": "statistics",
         "id": "ab4778ef-f84d-4e82-a43e-c97ede72c7c3",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Supprimer",
+        "icon": "delete",
+        "id": "ee0b8712-8b2c-422b-9212-ec828042b3ef",
         "type": "misc"
     },
     {

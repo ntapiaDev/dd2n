@@ -1,6 +1,30 @@
 [
     {
         "ap": 1,
+        "id": "f1507012-3b1b-44d6-ba31-da2dbd85a5c1",
+        "item": "b4859618-60fd-4630-ba5f-5329ba1a044a",
+        "name": "Flèche en bois",
+        "quantity": 3,
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "credit": "Freepik",
+                    "description": "Une belle branche d'arbre",
+                    "icon": "branch",
+                    "id": "e57f72ab-2846-4339-a9c7-f36bc5d81caa",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "ammunition",
+        "unlocked": true
+    },
+    {
+        "ap": 1,
         "id": "305011e1-9dfc-4762-a7b1-09918985dfef",
         "item": "707aad5b-65ec-412c-bb60-f81048670a15",
         "name": "Un mélange protéiné",
@@ -153,6 +177,56 @@
     },
     {
         "ap": 1,
+        "id": "2342dfdf-9d7d-4777-9c3f-c1f72cab2a7e",
+        "item": "93e97b31-988e-4e77-bb7b-13954d836c39",
+        "name": "Un arc improvisé",
+        "quantity": 1,
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "credit": "Freepik",
+                    "description": "Une belle branche d'arbre",
+                    "icon": "branch",
+                    "id": "e57f72ab-2846-4339-a9c7-f36bc5d81caa",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Icongeek26",
+                    "description": "Une bobine de ficelle",
+                    "icon": "string",
+                    "id": "d25617b7-3ca9-4012-a424-3a195ad7216b",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Freepik",
+                    "description": "Une paire d'élastiques",
+                    "icon": "elastics",
+                    "id": "64347602-bb40-4a93-862d-a2ee3cd21187",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            }
+        ],
+        "type": "weapon",
+        "unlocked": true
+    },
+    {
+        "ap": 1,
         "id": "6c15d547-a320-4ab6-92ae-381f5c1c19c0",
         "item": "abcb0bac-1124-4030-8e28-dc9dd14a3584",
         "name": "Un gourdin à pics",
@@ -190,7 +264,7 @@
             }
         ],
         "type": "weapon",
-        "unlocked": false
+        "unlocked": true
     },
     {
         "ap": 2,

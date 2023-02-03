@@ -86,13 +86,15 @@ const square = async ({ locals, request }) => {
     if (id) {
         const square = await get_square_by_id(id, locals.rethinkdb);
         if (!square) return fail(400, { square: true });
-        if (square.username !== locals.user.username) return fail(400, { owner: true });
+        if (square.category === 'motd' && data.get('delete') === 'true') return fail(400, { motd: true });
+        else if (square.category !== 'motd' && square.username === 'Gardien' && data.get('delete') === 'false') return fail(400, { edit: true });
+        else if (square.category !== 'motd' && square.username !== locals.user.username && square.username !== 'Gardien') return fail(400, { owner: true });
         category = square.category;
         if (data.get('delete') === 'true') {
             await delete_square_by_id(id, locals.rethinkdb);
             mode = 'delete';
         } else {
-            await edit_square(id, message, locals.rethinkdb);
+            await edit_square(id, locals.user.color, message, locals.user.username, locals.rethinkdb);
             mode = 'edit';
         }
     } else {

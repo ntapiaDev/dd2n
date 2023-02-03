@@ -8,6 +8,9 @@
 
     const dispatch = createEventDispatcher();
 
+    const add = (category) => {
+        dispatch('add', { category });
+    }
     const handleClick = (id) => {
 		dispatch('clicked', { id });
 	}
@@ -18,7 +21,7 @@
         <h4>Banque</h4>
         {#if tasks.filter(t => t.category === 'bank').length}
             {#each tasks.filter(t => t.category === 'bank') as task}
-                {#if $page.data.user.username === task.username}
+                {#if $page.data.user.username === task.username || task.username === 'Gardien'}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span class="owner" title="Modifier" on:click={() => handleClick(task.id)} use:tooltip>
                         <Task {task} />
@@ -28,7 +31,8 @@
                 {/if}
             {/each}
         {:else}
-            <div class="empty" title="Ajouter une tache" use:tooltip>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="empty" title="Ajouter une tache" on:click={() => add('bank')} use:tooltip>
                 <span class="info">Cliquez pour ajouter une tache</span>
                 Aucune tache en attente.
             </div>
@@ -38,7 +42,7 @@
         <h4>Chantiers</h4>
         {#if tasks.filter(t => t.category === 'worksites').length}
             {#each tasks.filter(t => t.category === 'worksites') as task}
-                {#if $page.data.user.username === task.username}
+                {#if $page.data.user.username === task.username || task.username === 'Gardien'}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span class="owner" title="Modifier" on:click={() => handleClick(task.id)} use:tooltip>
                         <Task {task} />
@@ -48,7 +52,8 @@
                 {/if}
             {/each}
         {:else}
-            <div class="empty" title="Ajouter une tache" use:tooltip>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="empty" title="Ajouter une tache" on:click={() => add('worksites')} use:tooltip>
                 <span class="info">Cliquez pour ajouter une tache</span>
                 Aucune tache en attente.
             </div>
@@ -58,7 +63,7 @@
         <h4>Atelier</h4>
         {#if tasks.filter(t => t.category === 'workshop').length}
             {#each tasks.filter(t => t.category === 'workshop') as task}
-                {#if $page.data.user.username === task.username}
+                {#if $page.data.user.username === task.username || task.username === 'Gardien'}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
                     <span class="owner" title="Modifier" on:click={() => handleClick(task.id)} use:tooltip>
                         <Task {task} />
@@ -68,7 +73,8 @@
                 {/if}
             {/each}
         {:else}
-            <div class="empty" title="Ajouter une tache" use:tooltip>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <div class="empty" title="Ajouter une tache" on:click={() => add('workshop')} use:tooltip>
                 <span class="info">Cliquez pour ajouter une tache</span>
                 Aucune tache en attente.
             </div>

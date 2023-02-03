@@ -28,22 +28,32 @@
     let category = '';
     let deleteTask = false;
     let id = '';
+    let input;
     let message = '';
     let mode = '';
 
     $: substitute = mode === 'edit' ? 'Modifier le message' : 'Écrire un message';
     $: visible = (message.length >= 3) && (message.length <= 200);
 
+    const add = (e) => {
+        category = e.detail.category;
+        id = '';
+        input.focus();
+        message = '';
+        mode = category;
+    }
     const edit = (e) => {
-        id = e.detail.id;
-        message = square.find(m => m.id === id).message;
-        mode = 'edit';
         category = 'edit';
+        id = e.detail.id;
+        input.focus();
+        message = square.find(m => m.id === id).message;
+        mode = category;
         visible = true;
     }
     const handleChange = () => {
-        if (mode === 'edit') message = '';
         id = '';
+        input.focus();
+        if (mode === 'edit') message = '';
         mode = category;
     }
     const reset = () => {
@@ -63,7 +73,7 @@
     <p>Bienvenue sur la Place du village !<br>
     C'est ici que vous pourrez communiquer entre survivants et définir vos plans d'action.</p>
     <MOTD message={square.find(m => m.category === 'motd')} urgent={square.filter(m => m.category === 'urgent')} on:clicked={edit} />
-    <Trello {tasks} on:clicked={edit} />
+    <Trello {tasks} on:add={add} on:clicked={edit} />
     <form method="POST" action="/encampment?/square" use:enhance={reset}>
         <select name="category" bind:value={category} on:change={handleChange} required>
             <option value="">Catégorie</option>
@@ -77,13 +87,13 @@
         </select>
         <input type="text" name="id" bind:value={id} hidden>
         <input type="text" name="delete" bind:value={deleteTask} hidden>
-        <input type="text" name="message" placeholder="Écrire un message (200 caractères maximum, 3 maximum par catégorie et 1 urgent)" minlength="3" maxlength="200" autocomplete="off" bind:value={message} required>
-        {#if visible}
+        <input type="text" name="message" placeholder="Écrire un message (200 caractères maximum, 3 maximum par catégorie et 1 urgent)" minlength="3" maxlength="200" autocomplete="off" bind:value={message} bind:this={input} required>
+        {#if visible && (square.find(m => m.id === id)?.username !== 'Gardien' || square.find(m => m.id === id)?.category === 'motd')}
             <button transition:fade={{ duration: 500 }}>
                 <Item item={items[0]} {substitute} />
             </button>
         {/if}
-        {#if mode === 'edit'}
+        {#if mode === 'edit' && square.find(m => m.id === id).category !== 'motd' }
             <button transition:fade={{ duration: 500 }} on:click={() => deleteTask = true}>
                 <Item item={items[1]} />
             </button>

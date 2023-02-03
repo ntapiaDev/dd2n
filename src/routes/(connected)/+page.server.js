@@ -4,7 +4,7 @@ import { add_user_to_encampment, delete_encampment, generate_encampment, remove_
 import { add_game, add_user_to_game, delete_game, get_games, get_game_by_id, remove_user_from_game } from "$lib/server/games"
 import { get_from } from "$lib/server/items";
 import { add_log, add_logs, delete_logs } from "$lib/server/logs";
-import { add_square, delete_square } from "$lib/server/square";
+import { add_squares, delete_square } from "$lib/server/square";
 import { add_game_to_user, remove_game_from_user, remove_game_from_users } from "$lib/server/users";
 import { get_recipes } from "$lib/server/workshop";
 import { get_worksites } from "$lib/server/worksites";
@@ -25,7 +25,12 @@ const addGame = async ({ locals }) => {
     const game_id = await add_game(locals.rethinkdb);
     const { teddies, ws } = await generate_cells(game_id, blueprint, locals.rethinkdb);
     await generate_encampment(game_id, completed, unlocked, recipes, locals.rethinkdb);
-    await add_square(game_id, '', 'motd', 'Trouver un moyen de débloquer l\'atelier.', 'Gardien du campement', locals.rethinkdb);
+    await add_squares(game_id, [
+        { color: '#000000', category: 'motd', message: 'Trouver un moyen de débloquer l\'atelier.', username: 'Gardien' },
+        { color: '#000000', category: 'bank', message: 'Il nous faut en priorité des ressources pour les chantiers et de la nourriture.', username: 'Gardien' },
+        { color: '#000000', category: 'worksites', message: 'Il faut se concentrer sur les chantiers définitifs et ne faire les chantiers temporaires qu\'en cas de nécessité.', username: 'Gardien' },
+        { color: '#000000', category: 'worksites', message: 'Nous devons essayer de trouver de nouveaux plans lors de nos expéditions.', username: 'Gardien' },
+    ], locals.rethinkdb);
     await add_logs(game_id, [
         { coordinate: 'Encampment', player: '', action: 'gamestart', log: '', gender: '', color: '' },
         { coordinate: teddies[0], player: '', action: 'teddy', log: '', gender: '', color: '' },
