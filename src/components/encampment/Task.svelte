@@ -1,13 +1,7 @@
 <script>
-    export let task;
+	import { formatDate } from '$lib/game';
 
-    const formatDate = (log) => {
-		const date = new Date(log.date);
-		const addZero = (number) => {
-			return number.toString().length === 2 ? number : '0' + number;
-		};
-		return `le ${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()} à ${addZero(date.getHours())}:${addZero(date.getMinutes())}:${addZero(date.getSeconds())}`;
-	};
+    export let task;
 </script>
 
 <div style={`background-color: ${task.color? task.color + '20' : ''}`}>

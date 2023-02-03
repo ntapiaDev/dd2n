@@ -1,4 +1,5 @@
 <script>
+	import { formatDate } from '$lib/game';
 	import { sortItems } from '$lib/loots';
 	import Item from '../game/Item.svelte';
 	import PlayerName from '../game/PlayerName.svelte';
@@ -69,14 +70,6 @@
 	const firstLetterToLowerCase = (word) => {
 		return word.charAt(0).toLowerCase() + word.slice(1);
 	}
-
-	const formatDate = (log) => {
-		const date = new Date(log.date);
-		const addZero = (number) => {
-			return number.toString().length === 2 ? number : '0' + number;
-		};
-		return `Le ${addZero(date.getDate())}/${addZero(date.getMonth() + 1)}/${date.getFullYear()} à ${addZero(date.getHours())}:${addZero(date.getMinutes())}:${addZero(date.getSeconds())}`;
-	};
 
 	$: gamelog = ['new', 'teddy', 'workshop'].includes(log.action);
 </script>

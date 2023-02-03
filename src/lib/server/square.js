@@ -21,7 +21,7 @@ export const delete_square_by_id = (id, rethinkdb) => {
 }
 
 export const edit_square = (id, color, message, username, rethinkdb) => {
-    return r.table('square').get(id).update({ color, message, username }).run(rethinkdb);
+    return r.table('square').get(id).update({ color, message, username, date: Date.now() }).run(rethinkdb);
 }
 
 export const get_square = (game_id, rethinkdb) => {
