@@ -15,27 +15,40 @@ const nextDay = async ({ locals }) => {
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
     const slots = await get_slots_by_game(locals.user.game_id, locals.rethinkdb);
     const ws = await get_worksites(locals.rethinkdb);
+    const reload = ws.filter(w => w.reload);
     const temporary = ws.filter(w => w.temporary);
     const worksites = encampment.worksites;
 
     const broken = [];
+    const toReload = [];
     let lostDef = 0;
     let defense = getDefenseAll(slots, encampment.players);
 
     for (let completed of worksites.completed) {
-        defense += ws.find(w => w.id === completed).defense;
-        let worksite = temporary.find(w => w.id === completed);
-        if (worksite) {
-            worksites.completed = worksites.completed.filter(w => w !== worksite.id);
-            worksites.unlocked.push({
-                ap: worksite.ap,
-                id: worksite.id
+        const ap = worksites.reload.find(w => w.id === completed)?.ap;
+        defense += ws.find(w => w.id === completed).defense * (ap ?? 1);
+        let rech = reload.find(w => w.id === completed);
+        if (rech && ap > 0) {
+            worksites.reload.find(w => w.id === completed).ap = 0;
+            toReload.push({
+                name: rech.name,
+                defense: rech.defense * ap
             })
-            broken.push({
-                name: worksite.name,
-                defense: worksite.defense
-            })
-            lostDef += worksite.defense;
+            lostDef += rech.defense * ap;
+        } else {
+            let temp = temporary.find(w => w.id === completed);
+            if (temp) {
+                worksites.completed = worksites.completed.filter(w => w !== temp.id);
+                worksites.unlocked.push({
+                    ap: temp.ap,
+                    id: temp.id
+                })
+                broken.push({
+                    name: temp.name,
+                    defense: temp.defense
+                })
+                lostDef += temp.defense;
+            }
         }
     }
     const next = Math.round(encampment.attack * (1.25 + (Math.random() * 5) / 10));
@@ -52,6 +65,7 @@ const nextDay = async ({ locals }) => {
         next,
         regenerated: logs.length,
         survived: defense > encampment.attack,
+        toReload,
         zombies
     }}]
     await add_logs(locals.user.game_id, [...logs, ...events, ...log], locals.rethinkdb);

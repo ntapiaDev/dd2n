@@ -77,10 +77,10 @@
         </span>
         <span class="defense">Total : <b>{defense}</b>
             {#if temporary}
-                (<span>+{temporary} ! </span>)
+                (<span class="dtemp">+{temporary} ! </span>)
             {/if}
             {#if rechargeable}
-                (<span>+{rechargeable} ! </span>)
+                (<span class="drech">+{rechargeable} ! </span>)
             {/if}
             DEF</span>
     </span>
@@ -125,7 +125,7 @@
         color: red;
         font-weight: bold;
     }
-    .defense span:nth-child(3) {
+    .defense span.drech {
         color: blue;
     }
     .reload span {

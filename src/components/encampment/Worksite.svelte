@@ -85,13 +85,13 @@
         {!hidden ? worksite.name : 'Chantier inconnu'}
     </span>
     <span class="resources">
-        {#if !completed && !hidden}
+        {#if !completed && !hidden || completed && reload === 0}
             {#each worksite.resources as resource}
-                {#if rech && ['ammunition', 'food'].includes(resource.item.type)}
+                {#if rech && resource.item.reload}
                     <span class={blocked? '' : (getQuantity(bank, resource) >= ap * resource.quantity ? 'rechargeable' : 'failed')}>
                         {getQuantity(bank, resource)}/{ap * resource.quantity} <Item item={resource.item} />
                     </span>
-                {:else}
+                {:else if !completed}
                     <span class={blocked? '' : (getQuantity(bank, resource) >= resource.quantity ? 'valid' : 'failed')}>
                         {getQuantity(bank, resource)}/{resource.quantity} <Item item={resource.item} />
                     </span>
@@ -100,25 +100,25 @@
         {/if}
     </span>
     <span class="ap">
-        {#if !completed && !hidden}
-            <input type="range" min="0" max={!rech ? apLeft : 10} disabled={!checkResources(bank, worksite.resources, 1) || blocked} bind:value={ap}>
+        {#if !completed && !hidden || completed && reload === 0}
+            <input type="range" min="0" max={!rech ? apLeft : 10} disabled={!checkResources(bank, worksite.resources, 1, worksite.reload, true) || blocked} bind:value={ap}>
             <span class={!ap || blocked ? '' : (ap <= $page.data.user.ap ? 'valid' : 'failed')}>
                 {ap}
             </span>
         {/if}
     </span>
-    <span class={'defense ' + (completed ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
+    <span class={'defense ' + (completed && reload !== 0 ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
     <span class="icon">
         {#if completed && !temp && !rech}
             <Item item={items[0]} />
-        {:else if completed && rech}
+        {:else if completed && rech && reload !== 0}
             <Item item={items[1]} />
         {:else if completed && temp}
             <Item item={items[2]} />
         {:else if !hidden}
             {#if blocked}
                 <Item item={items[5]} />
-            {:else if checkResources(bank, worksite.resources, ap)}
+            {:else if checkResources(bank, worksite.resources, ap, worksite.reload, true)}
                 <form method="POST" action="/encampment?/worksite" use:enhance>
                     <input type="text" name="ap" value={ap} hidden>
                     <input type="text" name="id" value={worksite.id} hidden>

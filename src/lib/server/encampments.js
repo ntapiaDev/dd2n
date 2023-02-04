@@ -68,6 +68,22 @@ export const delete_encampment = (game_id, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).delete().run(rethinkdb);
 }
 
+export const do_reload = (game_id, id, ap, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            worksites: {
+                reload: doc("worksites")("reload").map(function(worksite) {
+                    return r.branch(
+                        worksite("id").eq(id),
+                        worksite.merge({"ap": worksite('ap').add(ap)}),
+                        worksite
+                    );
+                })
+            }
+        };
+    }).run(rethinkdb);
+}
+
 export const generate_encampment = (game_id, completed, unlocked, recipes, rethinkdb) => {
     return r.table('encampments').insert({
         attack: 40 + Math.ceil(Math.random() * 10),

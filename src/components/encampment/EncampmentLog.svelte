@@ -138,9 +138,9 @@
 	{:else if log.action === 'withdraw'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris <Item item={log.log.item} /> dans la banque.</div>
 	{:else if log.action === 'build'}
-		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b></div>
-		{#if log.log.completed}
-			<div class="mtb">Le chantier est maintenant terminé, le campement gagne {log.log.defense} DEF !</div>
+		{#if log.log.type === 'reloading'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA pour <span class="reload">recharger</span> <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b></div>
+			<div class="mtb">Le chantier est à nouveau fonctionnel, le campement gagne {log.log.defense} DEF !</div>
 			<div class="item">
 				<span class="build">
 					{log.log.items.length === 1 && log.log.items[0].quantity === 1 ?
@@ -155,10 +155,29 @@
 					</span>
 				</span>
 			</div>
-			{#if log.log.type === 'reload'}
-				<div class="mt">C'est un chantier <span class="reload">rechargeable</span>, il devra être rechargé après l'attaque !</div>
-			{:else if log.log.type === 'temporary'}
-				<div class="mt">C'est un chantier <span class="alert">temporaire</span>, il ne résistera pas à l'attaque !</div>
+		{:else}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b></div>
+			{#if log.log.completed}
+				<div class="mtb">Le chantier est maintenant terminé, le campement gagne {log.log.defense} DEF !</div>
+				<div class="item">
+					<span class="build">
+						{log.log.items.length === 1 && log.log.items[0].quantity === 1 ?
+							'L\'objet suivant a été utilisé' : 'Les objets suivants ont été utilisés'} :
+						<span>
+							{#each log.log.items as item, i}
+								{#if log.log.items.length > 1 && log.log.items.length === i + 1}
+									<span>et</span>
+								{/if}
+								<Item {item} />
+							{/each}
+						</span>
+					</span>
+				</div>
+				{#if log.log.type === 'reload'}
+					<div class="mt">C'est un chantier <span class="reload">rechargeable</span>, il devra être rechargé après l'attaque !</div>
+				{:else if log.log.type === 'temporary'}
+					<div class="mt">C'est un chantier <span class="alert">temporaire</span>, il ne résistera pas à l'attaque !</div>
+				{/if}
 			{/if}
 		{/if}
 		{#if log.log.warning === 'hunger'}
@@ -229,9 +248,17 @@
 			<div>Grace à vos defenses de <span class="success">{log.log.defense} DEF</span>, votre campement a résisté à l'attaque.</div>
 			<div>Environ <span class={(log.log.defense - log.log.lostDef) >= log.log.next ? 'success' : 'alert'}>{log.log.next} zombies</span> sont attendus la nuit prochaine et <span class="alert">{log.log.zombies} nouveaux zombies</span> ont été repérés aux environs du campement.</div>
 			{#if log.log.broken.length}
-				<div>Les chantiers suivants ont été détruits pendant l'assaut :</div>
+				<div>Les chantiers suivants ont été <span class="alert">détruits</span> pendant l'assaut :</div>
 				<ul>
 					{#each log.log.broken as worksite}
+						<li><Item item={build} substitute="Chantier" /> {worksite.name} (<b>-{worksite.defense} DEF</b>)</li>
+					{/each}
+				</ul>
+			{/if}
+			{#if log.log.toReload.length}
+				<div>Les chantiers suivants ont besoin d'être <span class="reload">rechargés</span> :</div>
+				<ul>
+					{#each log.log.toReload as worksite}
 						<li><Item item={build} substitute="Chantier" /> {worksite.name} (<b>-{worksite.defense} DEF</b>)</li>
 					{/each}
 				</ul>

@@ -3,7 +3,7 @@ import { getItem, handleStack } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
-import { add_recipe, add_reload, add_worksite, build, built, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
+import { add_recipe, add_reload, add_worksite, build, built, do_reload, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { add_square, delete_square_by_id, edit_square, get_square, get_square_by_id } from "$lib/server/square";
 import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
@@ -154,10 +154,10 @@ const workshop = async ({ locals, request }) => {
     if (!encampment.workshop.recipes.includes(id)) return fail(400, { unknown: true });
     const recipe = await get_recipe(id, locals.rethinkdb);
     if (ap < recipe.left.ap) return fail(400, { more: true });
-    if (!checkResources(encampment.items, recipe.left.resources, 1)) return fail(400, { materials: true });
+    if (!checkResources(encampment.items, recipe.left.resources, 1, false, false)) return fail(400, { materials: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
     await update_stats(locals.user.id, ap, hunger, thirst, 'workshop', locals.rethinkdb);
-    const [bank, items] = updateBank(recipe.left.resources, encampment.items, 1);
+    const [bank, items] = updateBank(recipe.left.resources, encampment.items, 1, false, false);
     const product = recipe.right;
     if (product.durabilityMax) product.durability = product.durabilityMax;
     product.quantity = recipe.left.quantity;
@@ -174,31 +174,39 @@ const worksite = async ({ locals, request }) => {
     else if (ap > locals.user.ap) return fail(400, { ap: true });
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
     const id = data.get('id');
+    const reload = encampment.worksites.reload;
     const unlocked = encampment.worksites.unlocked;
     const worksites = await get_worksites_by_group(locals.rethinkdb);
     const worksite = worksites.find(g => g.reduction.find(w => w.id === id)).reduction.find(w => w.id === id);
-    if (encampment.worksites.completed.includes(id)) return fail(400, { completed: true });
-    else if (!unlocked.some(w => w.id === id)) return fail(400, { unlocked: true });
+    const reloading = reload.some(r => r.id === worksite.id);
+    if (encampment.worksites.completed.includes(id) && (!worksite.reload || reload.find(r => r.id === worksite.id).ap > 0)) return fail(400, { completed: true });
+    else if (!unlocked.some(w => w.id === id) && !reload.some(r => r.id === worksite.id)) return fail(400, { unlocked: true });
     else if (
         !worksite.reload && unlocked.find(w => w.id === id).ap < ap ||
-        worksite.reload && unlocked.find(w => w.id === id).ap * 10 < ap) return fail(400, { toMuch: true });
+        worksite.reload && 10 < ap) return fail(400, { toMuch: true });
     if (worksite.parent && isBlocked(worksite, encampment.worksites.completed, worksites)) return fail(400, { unlocked: true });
-    if (!checkResources(encampment.items, worksite.resources, ap)) return fail(400, { resources: true });
+    if (!checkResources(encampment.items, worksite.resources, ap, worksite.reload, reloading)) return fail(400, { resources: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
     await update_stats(locals.user.id, ap, hunger, thirst, 'worksite', locals.rethinkdb);
     let completed = false;
     let items = [];
-    let type;
+    let type = '';
     if (worksite.reload) {
-        const [bank, i] = updateBank(worksite.resources, encampment.items, ap);
+        const [bank, i] = updateBank(worksite.resources, encampment.items, ap, true, reloading);
         completed = true;
         items = i;
-        type = 'reload';
-        await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
-        await add_reload(locals.user.game_id, id, ap, locals.rethinkdb);
+        type = reloading ? 'reloading' : 'reload';
+        if (reloading) {
+            await update_bank(locals.user.game_id, bank.filter(i => i.quantity > 0), locals.rethinkdb);
+            await do_reload(locals.user.game_id, id, ap, locals.rethinkdb);
+        }
+        else {
+            await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
+            await add_reload(locals.user.game_id, id, ap, locals.rethinkdb);
+        }
     }
     else if (unlocked.find(w => w.id === id).ap === ap) {
-        const [bank, i] = updateBank(worksite.resources, encampment.items, 1);
+        const [bank, i] = updateBank(worksite.resources, encampment.items, 1, false, false);
         completed = true;
         items = i;
         if (worksite.temporary) type = 'temporary';
