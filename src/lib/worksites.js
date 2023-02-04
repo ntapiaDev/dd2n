@@ -1,8 +1,8 @@
 import { sortItems } from "$lib/loots";
 
-export const checkResources = (bank, resources) => {
+export const checkResources = (bank, resources, ap) => {
     for (let resource of resources) {
-        if (getQuantity(bank, resource) < resource.quantity) return false;
+        if (getQuantity(bank, resource) < resource.quantity * (resource.item.reload ? ap : 1)) return false;
     }
     return true;
 }
@@ -38,10 +38,10 @@ export const isBlocked = (child, completed, worksites) => {
     return !previous.every(w => completed.includes(w));
 }
 
-export const updateBank = (resources, bank) => {
+export const updateBank = (resources, bank, ap) => {
     let items = [];
     for (let resource of resources) {
-        let quantity = resource.quantity;
+        let quantity = resource.quantity * (resource.item.reload ? ap : 1);
         while (quantity > 0 && !resource.item.unique) {
             let item = {...sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0)};
             sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0).quantity -= quantity;

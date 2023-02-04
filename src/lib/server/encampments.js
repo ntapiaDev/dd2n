@@ -14,6 +14,16 @@ export const add_recipe = (game_id, id, rethinkdb) => {
     }).run(rethinkdb);
 }
 
+export const add_reload = (game_id, id, ap, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            worksites: {
+                reload: doc("worksites")("reload").append({ id, ap })
+            }
+        }
+    }).run(rethinkdb);
+}
+
 export const add_worksite = (game_id, ap, id, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update(function(doc) {
         return {
@@ -64,13 +74,14 @@ export const generate_encampment = (game_id, completed, unlocked, recipes, rethi
         game_id,
         items: [],
         players: [],
-        worksites: {
-            completed,
-            unlocked
-        },
         workshop: {
             recipes,
             unlocked: false
+        },
+        worksites: {
+            completed,
+            reload: [],
+            unlocked
         }
     }).run(rethinkdb);
 }

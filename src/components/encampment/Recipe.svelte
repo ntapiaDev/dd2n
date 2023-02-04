@@ -35,7 +35,7 @@
         {/each}
     </span>
     <div class="submit">
-        {#if checkResources(bank, recipe.left.resources)}
+        {#if checkResources(bank, recipe.left.resources, 1)}
             <form method="POST" action="/encampment?/workshop" use:enhance>
                 <input type="text" name="ap" value={recipe.left.ap} hidden>
                 <input type="text" name="id" value={recipe.left.id} hidden>

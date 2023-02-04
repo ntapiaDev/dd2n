@@ -21,6 +21,13 @@
         },
         {
             credit: 'Freepik',
+            description: 'Rechargeable',
+            icon: 'reload',
+            id: '9b46dad0-1719-4b19-8341-8bcc0bede8b0',
+            type: 'misc'
+        },
+        {
+            credit: 'Freepik',
             description: 'Temporaire',
             icon: 'temporary',
             id: 'd3280ca6-e585-4183-a831-df089eebaa20',
@@ -93,7 +100,7 @@
     </span>
     <span class="ap">
         {#if !completed && !hidden}
-            <input type="range" min="0" max={!rech ? apLeft : 10} disabled={!checkResources(bank, worksite.resources) || blocked} bind:value={ap}>
+            <input type="range" min="0" max={!rech ? apLeft : 10} disabled={!checkResources(bank, worksite.resources, 1) || blocked} bind:value={ap}>
             <span class={!ap || blocked ? '' : (ap <= $page.data.user.ap ? 'valid' : 'failed')}>
                 {ap}
             </span>
@@ -101,26 +108,28 @@
     </span>
     <span class={'defense ' + (completed ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? ap * worksite.defense : '??')}</span>
     <span class="icon">
-        {#if completed && !temp}
+        {#if completed && !temp && !rech}
             <Item item={items[0]} />
-        {:else if completed && temp}
+        {:else if completed && rech}
             <Item item={items[1]} />
+        {:else if completed && temp}
+            <Item item={items[2]} />
         {:else if !hidden}
             {#if blocked}
-                <Item item={items[4]} />
-            {:else if checkResources(bank, worksite.resources)}
+                <Item item={items[5]} />
+            {:else if checkResources(bank, worksite.resources, ap)}
                 <form method="POST" action="/encampment?/worksite" use:enhance>
                     <input type="text" name="ap" value={ap} hidden>
                     <input type="text" name="id" value={worksite.id} hidden>
                     <button>
-                        <Item item={items[2]} border={ap > $page.data.user.ap ? 'red' : ''} />
+                        <Item item={items[3]} border={ap > $page.data.user.ap ? 'red' : ''} />
                     </button>
                 </form>
             {:else}
-                <Item item={items[3]} />
+                <Item item={items[4]} />
             {/if}
         {:else}
-            <Item item={items[5]} />
+            <Item item={items[6]} />
         {/if}
     </span>
 </div>
@@ -199,7 +208,7 @@
         background-color: rgb(255, 230, 205);
     }
     .completed.rech {
-        background-color: rgb(205, 255, 255);
+        background-color: rgb(205, 205, 255);
     }
     .defense.completed {
         color: green;
