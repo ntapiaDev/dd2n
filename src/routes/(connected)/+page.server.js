@@ -18,7 +18,7 @@ const addGame = async ({ locals }) => {
     if (locals.user.role !== 'admin') return fail(400, { admin: true });
     const worksites = await get_worksites(locals.rethinkdb);
     const completed = worksites.filter(w => w.completed).map(w => w.id);
-    const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(({completed, defense, name, parent, rarity, resources, temporary, unlocked, ...rest}) => rest);
+    const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(({completed, defense, description, name, parent, reload, rarity, resources, temporary, unlocked, ...rest}) => rest);
     const workshop = await get_recipes(locals.rethinkdb);
     const recipes = workshop.filter(w => w.left.unlocked).map(w => w.left.id);
     const blueprint = await get_from('workshop', locals.rethinkdb);

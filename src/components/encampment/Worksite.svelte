@@ -56,20 +56,22 @@
         }
     ];
 
-    let ap = apLeft;
-    $: if(apLeft) ap = apLeft;
-
+    $: rech = worksite.reload;
+    $: ap = rech ? 1 : apLeft;
+    $: if(apLeft && !rech) ap = apLeft;
     $: temp = worksite.temporary;
 
     $: bank = $page.data.encampment?.items ?? [];
 </script>
 
-<div class:blocked class:completed class:temp class:hidden class={type + ' ' + worksite.rarity}>
+<div class:blocked class:completed class:rech class:temp class:hidden class={type + ' ' + worksite.rarity}>
     {#if type === 'parent'}
         <span class="description">{worksite.description}</span>
     {/if}
     <span class="name">
-        {#if worksite.temporary}
+        {#if rech}
+            <span class="reload">!</span>
+        {:else if temp}
             <span class="temporary">!</span>
         {/if}
         {!hidden ? worksite.name : 'Chantier inconnu'}
@@ -77,25 +79,31 @@
     <span class="resources">
         {#if !completed && !hidden}
             {#each worksite.resources as resource}
-                <span class={blocked? '' : (getQuantity(bank, resource) >= resource.quantity ? 'valid' : 'failed')}>
-                    {getQuantity(bank, resource)}/{resource.quantity} <Item item={resource.item} />
-                </span>
+                {#if rech && ['ammunition', 'food'].includes(resource.item.type)}
+                    <span class={blocked? '' : (getQuantity(bank, resource) >= ap * resource.quantity ? 'rechargeable' : 'failed')}>
+                        {getQuantity(bank, resource)}/{ap * resource.quantity} <Item item={resource.item} />
+                    </span>
+                {:else}
+                    <span class={blocked? '' : (getQuantity(bank, resource) >= resource.quantity ? 'valid' : 'failed')}>
+                        {getQuantity(bank, resource)}/{resource.quantity} <Item item={resource.item} />
+                    </span>
+                {/if}
             {/each}
         {/if}
     </span>
     <span class="ap">
         {#if !completed && !hidden}
-            <input type="range" min="0" max={apLeft} disabled={!checkResources(bank, worksite.resources) || blocked} bind:value={ap}>
+            <input type="range" min="0" max={!rech ? apLeft : 10} disabled={!checkResources(bank, worksite.resources) || blocked} bind:value={ap}>
             <span class={!ap || blocked ? '' : (ap <= $page.data.user.ap ? 'valid' : 'failed')}>
                 {ap}
             </span>
         {/if}
     </span>
-    <span class={'defense ' + (completed ? (worksite.temporary ? 'temporary' : 'completed') : '')}>{!hidden ? worksite.defense : '??'}</span>
+    <span class={'defense ' + (completed ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? ap * worksite.defense : '??')}</span>
     <span class="icon">
-        {#if completed && !worksite.temporary}
+        {#if completed && !temp}
             <Item item={items[0]} />
-        {:else if completed && worksite.temporary}
+        {:else if completed && temp}
             <Item item={items[1]} />
         {:else if !hidden}
             {#if blocked}
@@ -151,6 +159,9 @@
     .failed {
         color: red;
     }
+    .rechargeable {
+        color: blue;
+    }
     .valid {
         color: green;
     }
@@ -187,6 +198,9 @@
     .completed.temp {
         background-color: rgb(255, 230, 205);
     }
+    .completed.rech {
+        background-color: rgb(205, 255, 255);
+    }
     .defense.completed {
         color: green;
         font-weight: bold;
@@ -202,17 +216,25 @@
     .child {
         margin-top: 2px;
     }
+    .reload,
     .temporary {
         margin-right: 4px;
-        color: red;
+        color: blue;
         font-weight: bold;
+    }
+    .temporary {
+        color: red;
     }
     .defense.temporary {
         margin-right: 0;
     }
+    .blocked .rechargeable,
+    .blocked .reload,
     .blocked .temporary {
         color: #DDD;
     }
+    .hidden .rechargeable,
+    .hidden .reload,
     .hidden .temporary {
         color: #AAA;
     }

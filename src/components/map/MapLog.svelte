@@ -107,6 +107,7 @@
 			{log.log.weapon === 'Une grenade explosive' ? 'fait sauter' :
 				['Un cocktail Molotov', 'Une grenade incendiaire'].includes(log.log.weapon) ? 'brûlé vif' :
 				log.log.weapon === 'Une grenade fumigène' ? 'enfumé' :
+				log.log.weapon === 'L\'Éviscérateur' ? 'massacré' :
 				log.log.weapon === 'Du C-4' ? 'exterminé' : 'tué'}
 			<span class="zombies">{log.log.zombies} {log.log.plus > 0 ? `(+${log.log.plus})` : ''} zombie{log.log.zombies > 1 ? 's' : ''}</span> avec <span class="zombies">{firstLetterToLowerCase(log.log.weapon)}</span>.
 			{#if log.log.critical}

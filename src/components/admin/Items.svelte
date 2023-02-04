@@ -118,6 +118,7 @@
                         <option value="rifle">Rifle</option>
                         <option value="shotgun">Shotgun</option>
                         <option value="machine-gun">Machine gun</option>
+                        <option value="gas">Gas</option>
                     </select>
                 {/if}
             {:else if type === 'drug'}

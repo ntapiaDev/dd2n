@@ -10,19 +10,31 @@
     $: [defense, temporary] = getDefense(completed, worksites);
     $: unlocked = encampment.unlocked.map(w => w.id);
 
+    const checkReload = (completed, unlocked, parent, worksites) => {
+        const children = worksites.find(g => g.group === parent.id).reduction;
+        for (let worksite of children) if (worksite.reload && (completed.includes(parent.id) || unlocked.includes(parent.id))) return true;
+        return false;
+    }
+    const checkTemporary = (completed, unlocked, worksites) => {
+        for (let group of worksites)
+            for (let worksite of group.reduction)
+                if ((completed.includes(worksite.id) || unlocked.includes(worksite.id) && !worksite.parent) && worksite.temporary) return true;
+        return false;
+    }
+
     let total = 0;
     let totalUnlocked = 0;
     $: if (encampment) {
         total = totalUnlocked = 0;
         for (let groups of worksites) for (let worksite of groups.reduction) {
             total++;
-            if ((!worksite.parent || encampment.completed.includes(worksite.parent) || encampment.unlocked.find(w => w.id === worksite.parent)) && encampment.unlocked.find(w => w.id === worksite.id)) totalUnlocked++;
+            if ((!worksite.parent || completed.includes(worksite.parent) || encampment.unlocked.find(w => w.id === worksite.parent)) && encampment.unlocked.find(w => w.id === worksite.id)) totalUnlocked++;
         }
     }
 </script>
 
 <div in:fade|local={{ delay: 150, duration: 300 }} out:fade|local={{ duration: 150 }}>
-    <h3>Chantiers de défense ({ `${encampment.completed.length} chantiers terminés, ${encampment.completed.length + totalUnlocked} chantiers sur ${total}` }) :</h3>
+    <h3>Chantiers de défense ({ `${completed.length} chantiers terminés, ${completed.length + totalUnlocked} chantiers sur ${total}` }) :</h3>
     <p>Vous pouvez trouver ici la liste des chantiers de défenses de votre campement.<br>
     Un chantier peut être construit si les ressources nécessaires sont entreposées dans la banque commune. Vous pourrez trouver de nouveaux plans au fil de vos aventures.
     </p>
@@ -49,14 +61,21 @@
                     worksite={child} />
             {/each}
         {/if}
+        {#if checkReload(completed, unlocked, parent, worksites)}
+            <span class="reload">
+                <span>!</span> : chantier rechargeable, devra être rechargé avant la prochaine attaque
+            </span>
+        {/if}
     {/each}
     <span class="misc">
         <span class="temporary">
-            <span class="mark">!</span> : chantier temporaire, ne résistera pas à l'attaque
+            {#if checkTemporary(completed, unlocked, worksites)}
+                <span>!</span> : chantier temporaire, ne résistera pas à l'attaque
+            {/if}
         </span>
         <span class="defense">Total : <b>{defense}</b>
             {#if temporary}
-                (<span class="mark">+{temporary} ! </span>)
+                (<span>+{temporary} ! </span>)
             {/if}
             DEF</span>
     </span>
@@ -87,14 +106,23 @@
         display: flex;
         justify-content: space-between;
     }
+    .reload {
+        display: flex;
+    }
+    .reload,
     .temporary {
         margin: 0.5em 0 0 0.5em;
         color: rgb(100, 100, 100);
     }
+    .reload span,
     .temporary span,
     .defense span {
         color: red;
         font-weight: bold;
+    }
+    .reload span {
+        margin-right: 4px;
+        color: blue;
     }
     .defense {
         margin: 0.5em 0.5em 0 0;
