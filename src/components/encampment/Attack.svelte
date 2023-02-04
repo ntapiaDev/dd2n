@@ -6,6 +6,7 @@
     export let attack;
     export let completed;
     export let players;
+    export let reload;
     export let slots;
     export let worksites;
 
@@ -17,7 +18,7 @@
         type: 'misc'
     }
 
-    $: [defense] = getDefense(completed, worksites);
+    $: [defense] = getDefense(completed, reload, worksites);
     $: slots = getDefenseAll(slots, players);
     $: alert = attack > defense + slots;
 </script>

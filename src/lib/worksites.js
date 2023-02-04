@@ -7,20 +7,23 @@ export const checkResources = (bank, resources, ap) => {
     return true;
 }
 
-export const getDefense = (completed, worksites) => {
+export const getDefense = (completed, reload, worksites) => {
     let defense = 0;
+    let rechargeable = 0;
     let temporary = 0;
     for (let complete of completed) {
         for (let group of worksites) {
             for (let worksite of group.reduction) {
                 if (worksite.id === complete) {
-                    defense += worksite.defense;
+                    const ap = reload.find(w => w.id === worksite.id)?.ap ?? 1;
+                    defense += worksite.defense * ap;
+                    if (worksite.reload) rechargeable += worksite.defense * ap;
                     if (worksite.temporary) temporary += worksite.defense;
                 } 
             }
         }
     }
-    return [defense, temporary];
+    return [defense, rechargeable, temporary];
 }
 
 export const getQuantity = (bank, resource) => {

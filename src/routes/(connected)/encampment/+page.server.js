@@ -188,10 +188,12 @@ const worksite = async ({ locals, request }) => {
     await update_stats(locals.user.id, ap, hunger, thirst, 'worksite', locals.rethinkdb);
     let completed = false;
     let items = [];
+    let type;
     if (worksite.reload) {
         const [bank, i] = updateBank(worksite.resources, encampment.items, ap);
         completed = true;
         items = i;
+        type = 'reload';
         await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
         await add_reload(locals.user.game_id, id, ap, locals.rethinkdb);
     }
@@ -199,11 +201,12 @@ const worksite = async ({ locals, request }) => {
         const [bank, i] = updateBank(worksite.resources, encampment.items, 1);
         completed = true;
         items = i;
+        if (worksite.temporary) type = 'temporary';
         await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
     } else {
         await build(locals.user.game_id, ap, id, locals.rethinkdb);
     }
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, defense: worksite.defense * (worksite.reload ? ap : 1), items, name: worksite.name, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, defense: worksite.defense * (worksite.reload ? ap : 1), items, name: worksite.name, type, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 

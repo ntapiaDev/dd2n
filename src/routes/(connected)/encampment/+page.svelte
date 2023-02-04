@@ -37,7 +37,7 @@
 <h1>Vous êtes dans votre campement :</h1>
 <section>
 	<div class="sidebar">
-		<Attack attack={encampment.attack} completed={encampment.worksites.completed} players={encampment.players} slots={data.slots} {worksites} />
+		<Attack attack={encampment.attack} completed={encampment.worksites.completed} players={encampment.players} reload={encampment.worksites.reload} slots={data.slots} {worksites} />
 		<Actions {user} />
 		<Navigate selected={$sidebar} urgent={data.square.filter(m => m.category === 'urgent')} workshop={encampment.workshop.unlocked} on:clicked={open} />
 		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />

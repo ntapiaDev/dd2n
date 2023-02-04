@@ -7,7 +7,8 @@
     export let worksites;
     
     $: completed = encampment.completed;
-    $: [defense, temporary] = getDefense(completed, worksites);
+    $: reload = encampment.reload;
+    $: [defense, rechargeable, temporary] = getDefense(completed, reload, worksites);
     $: unlocked = encampment.unlocked.map(w => w.id);
 
     const checkReload = (completed, unlocked, parent, worksites) => {
@@ -57,13 +58,14 @@
                     blocked={isBlocked(child, completed, worksites)}
                     completed={completed.includes(child.id)}
                     hidden={!unlocked.includes(child.id) && !completed.includes(child.id)}
+                    reload={reload.find(w => w.id === child.id)?.ap}
                     type="child"
                     worksite={child} />
             {/each}
         {/if}
         {#if checkReload(completed, unlocked, parent, worksites)}
             <span class="reload">
-                <span>!</span> : chantier rechargeable, devra être rechargé avant la prochaine attaque
+                <span>!</span> : chantier rechargeable, devra être rechargé après l'attaque
             </span>
         {/if}
     {/each}
@@ -76,6 +78,9 @@
         <span class="defense">Total : <b>{defense}</b>
             {#if temporary}
                 (<span>+{temporary} ! </span>)
+            {/if}
+            {#if rechargeable}
+                (<span>+{rechargeable} ! </span>)
             {/if}
             DEF</span>
     </span>
@@ -119,6 +124,9 @@
     .defense span {
         color: red;
         font-weight: bold;
+    }
+    .defense span:nth-child(3) {
+        color: blue;
     }
     .reload span {
         margin-right: 4px;

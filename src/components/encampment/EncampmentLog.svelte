@@ -155,6 +155,11 @@
 					</span>
 				</span>
 			</div>
+			{#if log.log.type === 'reload'}
+				<div class="mt">C'est un chantier <span class="reload">rechargeable</span>, il devra être rechargé après l'attaque !</div>
+			{:else if log.log.type === 'temporary'}
+				<div class="mt">C'est un chantier <span class="alert">temporaire</span>, il ne résistera pas à l'attaque !</div>
+			{/if}
 		{/if}
 		{#if log.log.warning === 'hunger'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
@@ -343,6 +348,7 @@
 		margin-left: 4px;
 	}
 	.alert,
+	.reload,
 	.success {
 		color: red;
 		font-weight: bold;
@@ -351,7 +357,8 @@
 	.success {
 		color: green;
 	}
-	.drink {
+	.drink,
+	.reload {
 		color: blue;
 	}
 	.boost {

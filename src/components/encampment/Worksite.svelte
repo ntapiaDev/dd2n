@@ -8,6 +8,7 @@
     export let blocked = false;
     export let completed;
     export let hidden = false;
+    export let reload = undefined;
     export let type;
     export let worksite;
 
@@ -106,7 +107,7 @@
             </span>
         {/if}
     </span>
-    <span class={'defense ' + (completed ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? ap * worksite.defense : '??')}</span>
+    <span class={'defense ' + (completed ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
     <span class="icon">
         {#if completed && !temp && !rech}
             <Item item={items[0]} />
@@ -208,7 +209,7 @@
         background-color: rgb(255, 230, 205);
     }
     .completed.rech {
-        background-color: rgb(205, 205, 255);
+        background-color: rgb(220, 220, 255);
     }
     .defense.completed {
         color: green;
@@ -225,9 +226,11 @@
     .child {
         margin-top: 2px;
     }
-    .reload,
-    .temporary {
+    .reload:first-child,
+    .temporary:first-child {
         margin-right: 4px;
+    } .reload,
+    .temporary {
         color: blue;
         font-weight: bold;
     }
