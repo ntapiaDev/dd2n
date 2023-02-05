@@ -431,5 +431,94 @@
         ],
         "type": "resource",
         "unlocked": true
+    },
+    {
+        "ap": 2,
+        "id": "a12f1d01-c323-4576-8ee8-f347e5f0ef6c",
+        "item": "0f06f9f4-9c29-4c91-bfd2-77e8ed25b32c",
+        "name": "Un jerrican d'essence",
+        "quantity": 1,
+        "rarity": "rare",
+        "resources": [
+            {
+                "item": {
+                    "code": "b1",
+                    "credit": "Freepik",
+                    "description": "De l'alcool ménager",
+                    "icon": "alcool",
+                    "id": "33dd2967-48c7-486e-9870-01dd7a044d6d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 6
+            }
+        ],
+        "type": "resource",
+        "unlocked": false
+    },
+    {
+        "ap": 3,
+        "id": "92d85eb1-e77c-4d47-8c0f-c81f4c09ea2b",
+        "item": "e36d6daa-6a41-40f1-9fdd-ce5bb1161c9f",
+        "name": "L'Éviscérateur",
+        "quantity": 1,
+        "rarity": "épique",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Chanut-is-Industries",
+                    "description": "Quelques boulons et écrous",
+                    "icon": "bolts",
+                    "id": "18ba6820-fe6c-44ef-8194-1860679bd2c6",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Good Ware",
+                    "description": "Un rouleau de corde emmêlé",
+                    "icon": "rope",
+                    "id": "d7a906d0-a28a-43fe-8136-7acebe286828",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Flat Icons",
+                    "description": "Une lame de scie circulaire",
+                    "icon": "saw-blade",
+                    "id": "e94c077e-3b5f-4cc9-8e03-90f3210f11f5",
+                    "rarity": "épique",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "weapon",
+        "unlocked": false
     }
 ]

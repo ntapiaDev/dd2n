@@ -179,6 +179,11 @@
 					<div class="mt">C'est un chantier <span class="alert">temporaire</span>, il ne résistera pas à l'attaque !</div>
 				{/if}
 			{/if}
+			{#if log.log.wounded === 1}
+				<div class="item"><PlayerName color={log.color} username={log.player} /> s'est fait mal lors de la construction du chantier et a maintenant <Item item={wounds[1]} /></div>
+			{:else if log.log.wounded === 2}
+				<div class="item"><PlayerName color={log.color} username={log.player} /> a eu un accident lors de la construction du chantier et est maintenant <Item item={wounds[2]} /></div>
+			{/if}
 		{/if}
 		{#if log.log.warning === 'hunger'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>

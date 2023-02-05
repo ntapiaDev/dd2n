@@ -156,7 +156,7 @@ const workshop = async ({ locals, request }) => {
     if (ap < recipe.left.ap) return fail(400, { more: true });
     if (!checkResources(encampment.items, recipe.left.resources, 1, false, false)) return fail(400, { materials: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
-    await update_stats(locals.user.id, ap, hunger, thirst, 'workshop', locals.rethinkdb);
+    await update_stats(locals.user.id, ap, hunger, thirst, locals.user.wound, 'workshop', locals.rethinkdb);
     const [bank, items] = updateBank(recipe.left.resources, encampment.items, 1, false, false);
     const product = recipe.right;
     if (product.durabilityMax) product.durability = product.durabilityMax;
@@ -168,6 +168,7 @@ const workshop = async ({ locals, request }) => {
 }
 
 const worksite = async ({ locals, request }) => {
+    if (locals.user.wound > 1) return fail(400, { wounded: true });
     const data = await request.formData();
     const ap = parseInt(data.get('ap'));
     if (!ap) return fail(400, { nothing: true });
@@ -187,7 +188,13 @@ const worksite = async ({ locals, request }) => {
     if (worksite.parent && isBlocked(worksite, encampment.worksites.completed, worksites)) return fail(400, { unlocked: true });
     if (!checkResources(encampment.items, worksite.resources, ap, worksite.reload, reloading)) return fail(400, { resources: true });
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
-    await update_stats(locals.user.id, ap, hunger, thirst, 'worksite', locals.rethinkdb);
+    let wound = locals.user.wound;
+    let wounded = 0;
+    if (ap / 200 > Math.random()) {
+        wound++;
+        wounded = wound;
+    }
+    await update_stats(locals.user.id, ap, hunger, thirst, wound, 'worksite', locals.rethinkdb);
     let completed = false;
     let items = [];
     let type = '';
@@ -214,7 +221,7 @@ const worksite = async ({ locals, request }) => {
     } else {
         await build(locals.user.game_id, ap, id, locals.rethinkdb);
     }
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, defense: worksite.defense * (worksite.reload ? ap : 1), items, name: worksite.name, type, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, defense: worksite.defense * (worksite.reload ? ap : 1), items, name: worksite.name, type, warning, wounded }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 

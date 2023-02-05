@@ -7,6 +7,7 @@
     export let apLeft = 0;
     export let blocked = false;
     export let completed;
+    export let encampment;
     export let hidden = false;
     export let reload = undefined;
     export let type;
@@ -60,6 +61,13 @@
             description: 'Verrouillé',
             icon: 'locked',
             id: '83d4e547-37f9-4869-826c-97361a94f03d',
+            type: 'misc'
+        },
+        {
+            credit: 'Freepik',
+            description: 'Se soigner',
+            icon: 'heal', 
+            id: 'eb8a1f18-adb1-47c3-8481-f8210966519f',
             type: 'misc'
         }
     ];
@@ -118,14 +126,18 @@
         {:else if !hidden}
             {#if blocked}
                 <Item item={items[5]} />
-            {:else if checkResources(bank, worksite.resources, ap, worksite.reload, true)}
-                <form method="POST" action="/encampment?/worksite" use:enhance>
-                    <input type="text" name="ap" value={ap} hidden>
-                    <input type="text" name="id" value={worksite.id} hidden>
-                    <button>
-                        <Item item={items[3]} border={ap > $page.data.user.ap ? 'red' : ''} />
-                    </button>
-                </form>
+            {:else if checkResources(bank, worksite.resources, ap, worksite.reload, encampment.some(r => r.id === worksite.id))}
+                {#if $page.data.user.wound > 1}
+                    <Item item={items[7]} substitute="Vous n'êtes pas en état de travailler" />
+                {:else}
+                    <form method="POST" action="/encampment?/worksite" use:enhance>
+                        <input type="text" name="ap" value={ap} hidden>
+                        <input type="text" name="id" value={worksite.id} hidden>
+                        <button>
+                            <Item item={items[3]} border={ap > $page.data.user.ap ? 'red' : ''} />
+                        </button>
+                    </form>
+                {/if}
             {:else}
                 <Item item={items[4]} />
             {/if}

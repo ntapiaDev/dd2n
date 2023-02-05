@@ -103,6 +103,8 @@
 				<p>Ce chantier n'est pas encore débloqué.</p>
 			{:else if form?.workshop}
 				<p>L'atelier est déjà débloqué.</p>
+			{:else if form?.wounded}
+				<p>Vous devez vous soigner avant de pouvoir travailler sur un chantier.</p>
 			{/if}
 		</div>
 	</div>

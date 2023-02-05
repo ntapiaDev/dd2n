@@ -202,8 +202,8 @@ export const _travel = (user_id, location, ap, hunger, thirst, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, force: false, hunger, location, thirst }).run(rethinkdb);
 }
 
-export const update_stats = (user_id, ap, hunger, thirst, stat, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap: r.row('ap').sub(ap), hunger, stats: { [stat]: r.row('stats')(stat).add(stat === 'worksite' ? ap : 1) }, thirst }).run(rethinkdb);
+export const update_stats = (user_id, ap, hunger, thirst, wound, stat, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap: r.row('ap').sub(ap), hunger, stats: { [stat]: r.row('stats')(stat).add(stat === 'worksite' ? ap : 1) }, thirst, wound }).run(rethinkdb);
 }
 
 export const update_users = async (game_id, rethinkdb) => {

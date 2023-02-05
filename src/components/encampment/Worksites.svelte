@@ -50,6 +50,7 @@
             <Worksite
                 apLeft={encampment.unlocked.find(w => w.id === parent.id)?.ap}
                 completed={completed.includes(parent.id)}
+                encampment={reload}
                 type="parent"
                 worksite={parent} />
             {#each worksites.find(w => w.group === parent.id)?.reduction ?? [] as child}
@@ -57,6 +58,7 @@
                     apLeft={encampment.unlocked.find(w => w.id === child.id)?.ap}
                     blocked={isBlocked(child, completed, worksites)}
                     completed={completed.includes(child.id)}
+                    encampment={reload}
                     hidden={!unlocked.includes(child.id) && !completed.includes(child.id)}
                     reload={reload.find(w => w.id === child.id)?.ap}
                     type="child"
