@@ -139,6 +139,10 @@ export const get_by_SESSIONID = async (SESSIONID, rethinkdb) => {
     return user;
 }
 
+export const get_players = (game_id, rethinkdb) => {
+    return r.table('users').filter({ game_id }).orderBy(r.asc('username')).run(rethinkdb);
+}
+
 export const get_slots_by_game = async (game_id, rethinkdb) => {
     return (await r.table('users').filter({ game_id }).map(function(user) {
         return {
@@ -194,7 +198,7 @@ export const setSession = (cookies, SESSIONID) => {
         httpOnly: true,
         sameSite: 'strict',
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24
+        maxAge: 60 * 60 * 24 * 365
     })
 }
 

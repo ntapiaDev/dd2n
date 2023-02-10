@@ -4,6 +4,7 @@
 	import InteractiveItem from './InteractiveItem.svelte';
 	import Item from './Item.svelte';
 
+	export let interactive;
 	export let items;
 	export let name;
 	export let slot;
@@ -65,8 +66,10 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="item" on:mouseenter={() => (open = true)} on:mouseleave={() => (open = false)}>
-	{#if slot}
+	{#if slot && interactive}
 		<InteractiveItem item={slot} action={'/items?/unequip'} />
+	{:else if slot}
+		<Item item={slot} />
 	{:else}
 		<Item item={icons[name]} />
 	{/if}

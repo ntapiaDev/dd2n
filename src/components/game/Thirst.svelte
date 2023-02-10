@@ -2,6 +2,8 @@
 	import { page } from '$app/stores';
 	import Item from './Item.svelte';
 
+	export let thirst = $page.data.user.thirst;
+
 	const items = [
 		{
 			credit: 'kosonicon',
@@ -39,7 +41,7 @@
 			type: 'misc',
 		}
 	];
-	$: thirst = $page.data.user.thirst;
+	$: if ($page.url.pathname !== '/players') thirst = $page.data.user.thirst;
 	$: index = Math.floor(4 - (4 * thirst) / 100) < 5 ? Math.floor(4 - (4 * thirst) / 100) : 4
 
 	$: r = thirst > 75 ? 205 : 255;
@@ -51,4 +53,4 @@
 	$: background = thirst > 0 ? `rgb(${r}, ${g}, ${b})` : 'rgb(255, 105, 105)';
 </script>
 
-<Item item={items[index]} {background} />
+<Item item={items[index]} {background} substitute={`${items[index].description} (${thirst}%)`} />

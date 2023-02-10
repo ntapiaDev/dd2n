@@ -1,6 +1,8 @@
 <script>
 	import { page } from '$app/stores';
 	import Item from './Item.svelte';
+	
+	export let hunger = $page.data.user.hunger;
 
 	const items = [
 		{
@@ -39,7 +41,7 @@
 			type: 'misc',
 		}
 	];
-	$: hunger = $page.data.user.hunger;
+	$: if ($page.url.pathname !== '/players') hunger = $page.data.user.hunger;
 	$: index = Math.floor(4 - (4 * hunger) / 100) < 5 ? Math.floor(4 - (4 * hunger) / 100) : 4
 
 	$: r = hunger > 75 ? 205 : 255;
@@ -51,4 +53,4 @@
 	$: background = hunger > 0 ? `rgb(${r}, ${g}, ${b})` : 'rgb(255, 105, 105)';
 </script>
 
-<Item item={items[index]} {background} />
+<Item item={items[index]} {background} substitute={`${items[index].description} (${hunger}%)`} />

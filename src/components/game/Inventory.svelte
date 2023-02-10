@@ -6,13 +6,16 @@
 	import InteractiveItem from './InteractiveItem.svelte';
 	import Item from './Item.svelte';
 
+    export let interactive = true;
 	export let items;
 
     let size = 10;
 </script>
 
 <span class="inventory">
-    <span class="title">Inventaire</span>
+    {#if interactive}
+        <span class="title">Inventaire</span>
+    {/if}
     {#each sortItems(items) as item (item.uuid)}
         <span class="animation" animate:flip>
             {#if $page.url.pathname === '/map'}
@@ -27,7 +30,9 @@
     {#each Array(size - items.length) as _}
         <span class="empty"></span>
     {/each}
-    <span class="total">({items.length}/{size})</span>
+    {#if interactive}
+        <span class="total">({items.length}/{size})</span>
+    {/if}
 </span>
 
 <style>

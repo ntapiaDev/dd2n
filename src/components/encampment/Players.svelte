@@ -32,6 +32,7 @@
             Tout le monde est à l'intérieur.
         {/if}
     </ul>
+    <a href="/players">Voir la liste détaillée</a>
 </aside>
 
 <style>
@@ -66,5 +67,13 @@
     span.offline {
         background-color: red;
         box-shadow: 0 2px 4px rgba(255, 0, 0, 0.48), 1px 1px 4px rgba(255, 0, 0, 0.9);
+    }
+    a {
+        display: flex;
+        justify-content: center;
+        color: rgb(100, 100, 100);
+    }
+    a:visited {
+        color: rgb(100, 100, 100);
     }
 </style>

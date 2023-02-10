@@ -62,6 +62,7 @@
 				{:else if $page.data.user.location !== 'Encampment'}
 					<a href="/map">Voir la carte</a>
 				{/if}
+				<a href="/players">Liste des joueurs</a>
 			{/if}
 			{#if $page.data.user.role === 'admin'}
 				<a href="/admin">Administrer le site</a>

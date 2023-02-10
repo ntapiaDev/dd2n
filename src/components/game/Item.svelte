@@ -22,9 +22,7 @@
 		(item.wound ? ` (${item.wound})` : '') +
 		(item.ap ? ` (+${item.ap} PA)` : '') +
 		(item.rarity && item.rarity !== 'commun' ? ` (${item.rarity})` : '') +
-		(item.unique ? ' (unique)' : '') +
-		(['satiated', 'hungry', 'hunger'].includes(item.icon) ? ` (${$page.data.user.hunger}%)` : '') +
-		(['hydrated', 'thirsty', 'dehydrated'].includes(item.icon) ? ` (${$page.data.user.thirst}%)` : ''));
+		(item.unique ? ' (unique)' : ''));
 
 	$: durability =	!item.durability ? 1 : item.durability / item.durabilityMax;
 	$: x = durability > 0.5 ? 510 - (255 * 2 * durability) : 255;
