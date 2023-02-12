@@ -294,7 +294,7 @@
 		<div class="item">Vous vous reveillez avec un affreux mal de crâne. <b>Que s'est-il passé hier soir?</b> Vous n'en avez plus aucune idée <Item item={what} /></div>
 		<div class="gamestart">
 			Le monde autour de vous parait maintenant <b>dévasté</b> et vous trouvez refuge parmi un <b>petit groupe de survivants</b> dans un <b>campement abandonné</b>.<br>
-			Il va falloir trouver de meilleurs vêtements, de la nourriture, des ressources, et de quoi vous défendre aussi. <b>Qui sait ce qui rode dehors une fois la nuit tombée?</b>
+			Il va falloir trouver de meilleurs vêtements, de la nourriture, des ressources, et de quoi vous défendre aussi. <b>Qui sait ce qui rôde dehors une fois la nuit tombée?</b>
 		</div>
 	{:else if log.action === 'leave'}
 		<PlayerName color={log.color} username={log.player} /> a quitté la partie.

@@ -15,7 +15,7 @@ export let colors = [
 export const resource = 10;
 export const ammunition = 15;
 export const explosive = 5;
-export const food_drink = 2;
+export const food_drink = 3;
 export const drug_weapon_armour = 2;
 export const blueprint = 1;
 // RARITY : x quantité
@@ -45,7 +45,7 @@ export const quantity_cache = () => Math.ceil(Math.random() * 3) + 1;
 
 // Expuisement batiment et case
 // BUILDING : > valeur
-export const empty_building = 0.9;
+export const empty_building = 0.99;
 // SEARCH : > valeur
 export const empty_1 = 0.66;
 export const empty_2 = 0.75;
@@ -60,10 +60,10 @@ export const nextday_empty = 0.75;
 
 // Nombre de zombies
 // BUILDING : valeur de départ, + valeur par jour
-export const zombies_building = 2;
-export const nextday_building = 2;
+export const zombies_building = 4;
+export const nextday_building = 4;
 // CELL : + valeur par jour
-export const nextday_cell = 1;
+export const nextday_cell = 2;
 
 // Risque de blessure
 // SANS ARME : > valeur

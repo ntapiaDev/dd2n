@@ -51,7 +51,7 @@ const nextDay = async ({ locals }) => {
             }
         }
     }
-    const next = Math.round(encampment.attack * (1.25 + (Math.random() * 5) / 10));
+    const next = Math.round(encampment.attack * (1.5 + (Math.random() * 5) / 10));
     await update_encampment(locals.user.game_id, next, worksites, locals.rethinkdb);
     await add_one_day(locals.user.game_id, locals.rethinkdb);
     const { logs, zombies } = await update_cells(locals.user.game_id, locals.rethinkdb);
@@ -59,7 +59,7 @@ const nextDay = async ({ locals }) => {
     const log = [{ coordinate: 'Encampment', action: 'nextday', log: {
         attack: encampment.attack,
         broken,
-        dead: events,
+        dead: events.filter(e => e.action === 'dead' || e.action === 'wound' && e.log.wound === 4),
         defense,
         lostDef,
         next,

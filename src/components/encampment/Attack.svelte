@@ -29,7 +29,7 @@
     <p>Votre campement possède :</p>
     <div class="item">{defense + slots} (+{slots} <Item {item} />) DEF</div>
     {#if alert}
-        <p>Vous devriez renforcer vos défense !</p>
+        <p>Vous devriez renforcer vos défenses !</p>
     {:else
     }   <p>Vous êtes en sécurité pour ce soir...</p>
     {/if}
