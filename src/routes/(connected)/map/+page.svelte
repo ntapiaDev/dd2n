@@ -223,6 +223,8 @@
 			<p>Votre inventaire est plein.</p>
 		{:else if form?.item}
 			<p>Vous ne possédez pas cette arme ou celle-ci n'est pas équipée.</p>
+		{:else if form?.location}
+			<p>Vous êtes déjà sur cette case.</p>
 		{:else if form?.long}
 			<p>Votre message est trop long (100 caractères maximum).</p>
 		{:else if form?.origin}

@@ -38,7 +38,7 @@ export const generate_cells = async (game_id, workshop, rethinkdb) => {
             const players = [];
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
-            let zombies = Math.floor(Math.random() * (distance * 1.5 - 1));
+            let zombies = Math.floor(Math.random() * (distance * 1.5 - 2));
             if (zombies < 0) zombies = 0;
             if (building) zombies += zombies_building;
             cells.push({

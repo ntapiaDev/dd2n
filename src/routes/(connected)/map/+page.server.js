@@ -228,9 +228,10 @@ const tchat = async ({ locals, request }) => {
 
 const travel = async ({ locals, request }) => {
     if (locals.user.ap === 0) return fail(400, { exhausted: true })
-    const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     const data = await request.formData();
     const getTarget = data.get('target');
+    if (locals.user.location === getTarget) return fail(400, { location: true })
+    const location = await get_cell(locals.user.game_id, locals.user.location, locals.rethinkdb);
     let actionIn;
     let actionOut;
     let target;
