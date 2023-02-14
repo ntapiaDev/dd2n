@@ -3,7 +3,7 @@ import { getItem, handleStack } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
-import { add_recipe, add_reload, add_worksite, build, built, do_reload, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
+import { add_recipe, add_reload, add_worksite, build, built, do_reload, get_encampment, get_bank, remove_user_from_encampment, unlock_tavern, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { add_square, delete_square_by_id, edit_square, get_square, get_square_by_id } from "$lib/server/square";
 import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
@@ -113,8 +113,11 @@ const unlock = async ({ locals, request }) => {
     const inventory = locals.user.inventory;
     if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
     const { item } = getItem(inventory, uuid, false);
-    if (item.origin === 'workshop') {
-        const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    if (item.origin === 'altar') {
+        if (encampment.tavern >= 0) return fail(400, { tavern: true });
+        await unlock_tavern(locals.user.game_id, locals.rethinkdb);
+    } else if (item.origin === 'workshop') {
         if (encampment.workshop.unlocked) return fail(400, { workshop: true });
         await unlock_workshop(locals.user.game_id, locals.rethinkdb);
     }

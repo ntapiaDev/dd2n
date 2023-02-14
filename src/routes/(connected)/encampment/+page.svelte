@@ -10,6 +10,7 @@
 	import Place from '../../../components/encampment/Place.svelte';
 	import Players from '../../../components/encampment/Players.svelte';
 	import Register from '../../../components/encampment/Register.svelte';
+	import Tavern from '../../../components/encampment/Tavern.svelte';
 	import Workshop from '../../../components/encampment/Workshop.svelte';
 	import Worksites from '../../../components/encampment/Worksites.svelte';
 	import NextDay from '../../../components/game/NextDay.svelte';
@@ -22,7 +23,7 @@
 	$: user = $page.data.user;
 	$: worksites = data.worksites;
 
-	$: if (!encampment.workshop.unlocked && $sidebar === 'workshop') sidebar.update(value => value = 'register');
+	$: if (encampment.tavern < 0 && $sidebar === 'tavern' || !encampment.workshop.unlocked && $sidebar === 'workshop') sidebar.update(value => value = 'register');
 	const open = (e) => {
 		sidebar.update(value => value = e.detail.open);
 		invalidateAll();
@@ -37,16 +38,31 @@
 <h1>Vous êtes dans votre campement :</h1>
 <section>
 	<div class="sidebar">
-		<Attack attack={encampment.attack} completed={encampment.worksites.completed} players={encampment.players} reload={encampment.worksites.reload} slots={data.slots} {worksites} />
+		<Attack 
+			attack={encampment.attack}
+			completed={encampment.worksites.completed}
+			players={encampment.players} reload={encampment.worksites.reload}
+			slots={data.slots}
+			{worksites} />
 		<Actions {user} />
-		<Navigate selected={$sidebar} urgent={data.square.filter(m => m.category === 'urgent')} workshop={encampment.workshop.unlocked} on:clicked={open} />
-		<Players encampment={encampment.players} game={$page.data.game.players} lastDate={data.lastDate} />
+		<Navigate 
+			selected={$sidebar}
+			tavern={encampment.tavern}
+			urgent={data.square.filter(m => m.category === 'urgent')}
+			workshop={encampment.workshop.unlocked}
+			on:clicked={open} />
+		<Players
+			encampment={encampment.players}
+			game={$page.data.game.players}
+			lastDate={data.lastDate} />
 	</div>
 	<div class="content">
 		{#if $sidebar === 'register'}
 			<Register logs={data.logs} />
 		{:else if $sidebar === 'place'}
 			<Place square={data.square} />
+		{:else if $sidebar === 'tavern'}
+			<Tavern level={encampment.tavern} />
 		{:else if $sidebar === 'bank'}
 			<Bank items={sortItems(encampment.items)} />
 		{:else if $sidebar === 'worksites'}
@@ -93,6 +109,8 @@
 				<p>Votre message est trop court (3 caractères minimum).</p>
 			{:else if form?.square}
 				<p>Cette tache n'existe pas.</p>
+			{:else if form?.tavern}
+				<p>La taverne est déjà débloquée.</p>
 			{:else if form?.toMany}
 				<p>Vous avez déjà écrit le maximum de messages dans cette catégorie mais vous pouvez éditer ou supprimer un ancien message.</p>
 			{:else if form?.toMuch}

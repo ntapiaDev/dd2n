@@ -35,6 +35,31 @@
 		id: 'e6f9dc67-f4e1-4b66-8192-0b27fccce49e',
 		type: 'misc',
 	};
+	const teddies = [
+		{
+			class: 'teddy',
+			credit: 'Freepik',
+			description: 'Agnès',
+			icon: 'agnes',
+			id: 'e54b92bf-4bd6-4d62-9c51-01e122ec3419',
+			type: 'misc'
+		}, {
+			class: 'teddy',
+			credit: 'Freepik',
+			description: 'Le Loup',
+			icon: 'loup',
+			id: 'b42833fb-a8ba-4aee-bd6c-d6d78e07667c',
+			type: 'misc'
+		},
+		{
+			class: 'teddy',
+			credit: 'Hery Mery',
+			description: 'M. Ouink',
+			icon: 'ouink',
+			id: '5ff7adb3-80b2-4bcb-8813-5e254dc6dc41',
+			type: 'misc'
+		}
+	]
 	const transform = {
 		credit: 'Freepik',
 		description: 'Transformer',
@@ -217,7 +242,10 @@
 			{/if}
 			<b>{log.log.name}<span class="notb">.</span></b></div>
 	{:else if log.action === 'unlocked'}
-		{#if log.log.origin === 'workshop'}
+		{#if log.log.origin === 'altar'}
+			<div class="altar">Après avoir poursuivi une longue et dangereuse quête le menant jusqu'à un mystérieux autel sacrificiel, <PlayerName color={log.color} username={log.player} /> a découvert les plans de <b>Taverne "Le Never Dry"<span class="notb">.</span></b></div>
+			<div class="item tavern">Une fois la construction terminée, vous pourrez venir y faire la fête avec <span><Item item={teddies[0]} /><Item item={teddies[1]} /><span>et</span><Item item={teddies[2]} /></span></div>
+		{:else if log.log.origin === 'workshop'}
 			<div class="item">Après avoir apporté et étudié avec attention les plans trouvés près de l'entrepot de bricolage, <PlayerName color={log.color} username={log.player} /> a débloqué <Item item={transform} substitute="Atelier" /> <b>Atelier de recyclage<span class="notb">.</span></b></div>
 			<div class="mt">Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
 		{/if}
@@ -345,14 +373,17 @@
 		gap: 4px;
 	}
 	.item .build span,
-	.item .workshop {
+	.item .workshop,
+	.tavern span {
 		display: flex;
 		align-items: center;
 	}
 	.item .build span span,
-	.item .workshop span {
+	.item .workshop span,
+	.tavern span span {
 		margin: 0 4px;
 	}
+	.altar,
 	.nextday div,
 	.gamestart {
 		line-height: 24px;

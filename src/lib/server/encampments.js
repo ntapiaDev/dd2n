@@ -90,6 +90,7 @@ export const generate_encampment = (game_id, completed, unlocked, recipes, rethi
         game_id,
         items: [],
         players: [],
+        tavern: -1,
         workshop: {
             recipes,
             unlocked: false
@@ -112,6 +113,10 @@ export const get_encampment = async (game_id, rethinkdb) => {
 
 export const remove_user_from_encampment = (game_id, username, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb);
+}
+
+export const unlock_tavern = (game_id, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update({ tavern: 0 }).run(rethinkdb);
 }
 
 export const unlock_workshop = (game_id, rethinkdb) => {
