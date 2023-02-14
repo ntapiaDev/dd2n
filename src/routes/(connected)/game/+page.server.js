@@ -64,7 +64,7 @@ const nextDay = async ({ locals }) => {
         lostDef,
         next,
         regenerated: logs.length,
-        survived: defense > encampment.attack,
+        survived: defense >= encampment.attack,
         toReload,
         zombies
     }}]

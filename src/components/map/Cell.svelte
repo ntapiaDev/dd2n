@@ -39,7 +39,8 @@
 		(cell.layout.border.includes(4) ? 'bl ' : '') +
 		(cell.building ? 'building ' : '') +
 		(cell.entrance ? 'tunnel ' : '') +
-		(((cell.visited && cell.empty) || (!cell.visited && cell.estimated.empty)) ? 'empty ' : '') +
+		// (((cell.visited && cell.empty) || (!cell.visited && cell.estimated.empty)) ? 'empty ' : '') +
+		(cell.empty ? 'empty ' : '') +
 		((cell.visited && cell.building?.empty) ? 'empty-building ' : '') +
 		(cell.visited ? '' : 'blur '))
 	: 'fog'))

@@ -15,8 +15,8 @@ export let colors = [
 export const resource = 10;
 export const ammunition = 15;
 export const explosive = 5;
-export const food_drink = 3;
-export const drug_weapon_armour = 2;
+export const food_drink = 4;
+export const drug_weapon_armour = 3;
 export const blueprint = 1;
 // RARITY : x quantité
 export const commun = 6;

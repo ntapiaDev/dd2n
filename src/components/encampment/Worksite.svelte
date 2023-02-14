@@ -7,7 +7,7 @@
     export let apLeft = 0;
     export let blocked = false;
     export let completed;
-    export let encampment;
+    export let encampment = [];
     export let hidden = false;
     export let reload = undefined;
     export let type;
