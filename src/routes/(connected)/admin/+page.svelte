@@ -21,7 +21,7 @@
 		{#if selected === 'items'}
 			<Items items={sortItems(data.items)} />
 		{:else if selected === 'worksites'}
-			<Worksites groups={data.groups} resources={data.resources} worksites={data.worksites} />
+			<Worksites groups={data.groups} resources={data.resources} tavern={data.tavern} worksites={data.worksites} />
 		{:else if selected === 'workshop'}
 			<Workshop items={sortItems(data.items.filter(i => !['blueprint', 'misc'].includes(i.type)))} recipes={data.recipes} workshop={data.workshop} />
 		{/if}

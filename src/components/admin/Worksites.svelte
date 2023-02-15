@@ -6,7 +6,9 @@
 
     export let groups;
     export let resources;
+    export let tavern;
     export let worksites;
+    $: console.log(tavern);
     $: console.log(worksites);
 </script>
 

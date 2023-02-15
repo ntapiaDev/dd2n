@@ -140,7 +140,7 @@ const tavern = async ({ locals, request }) => {
     } else {
         await build(locals.user.game_id, ap, id, 'tavern', locals.rethinkdb);
     }
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tavern', { ap, completed, items, name: worksite.name, warning, wounded }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tavern', { ap, completed, items, level: worksite.level, name: worksite.name, warning, wounded }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 

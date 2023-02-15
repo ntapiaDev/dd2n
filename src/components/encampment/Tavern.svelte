@@ -1,9 +1,19 @@
 <script>
 	import { fade } from "svelte/transition";
+	import Item from "../game/Item.svelte";
+	import Meal from "./actions/Meal.svelte";
 	import Worksite from "./Worksite.svelte";
 
     export let encampment;
     export let tavern;
+
+    const item = {
+        credit: 'Freepik',
+        description: 'En travaux',
+        icon: 'works',
+        id: 'cc9e2ab5-d0bb-48e1-9499-757f44841ca7',
+        type: 'misc'
+    }
 </script>
 
 <div in:fade|local={{ delay: 150, duration: 300 }} out:fade|local={{ duration: 150 }}>
@@ -14,9 +24,19 @@
         <img src="./icons/ouink.png" alt="M. Ouink">
         <img src="./icons/agnes.png" alt="Agnès">
     </div>
-    <div class="meal">
-        <p>Chaque niveau de la taverne vous permet de vous nourrir et de boire davantage.</p>
-    </div>
+    {#if encampment.level === 0}
+        <div class="worksite"><Item {item} />La taverne est actuellement en construction...<Item {item} /></div>
+    {:else if encampment.level > 0}
+        <span class="meal">
+            <img class="here" src="./here.png" alt="Cliquez-ici by itim2101">
+            <Meal />
+            <img class="here reverse" src="./here.png" alt="Cliquez-ici by itim2101">
+        </span>
+        <span class="meal-infos">
+            <span>Prendre un bon repas</span>
+            <p>La taverne de niveau {encampment.level} vous permet de gagner +{encampment.level * 10}% de faim et de soif ainsi que {encampment.level} PA.</p>
+        </span>
+    {/if}
     <span class="header">
         <span>Nom</span>
         <span>Ressources nécessaires</span>
@@ -31,6 +51,7 @@
             type={worksite.parent ? "child" : "parent"}
             {worksite} />
     {/each}
+    <p class="caption">Chaque niveau de la taverne vous permet de vous nourrir et de boire davantage.</p>
 </div>
 
 <style>
@@ -59,6 +80,43 @@
         width: 190px;
         height: 190px;
     }
+    .worksite {
+        margin: 1em 0;
+        padding: 0.5em 1em;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 4px;
+        border: 3px double red;
+        background-color: rgb(255, 0, 0, 0.1);
+        border-radius: 0.5em;
+        color: red;
+        font-weight: bold;
+    }
+    .meal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+    .here,
+    .here.reverse {
+        width: 50px;
+        height: 50px;
+    }
+    .here.reverse {
+        -webkit-transform: scaleX(-1);
+                transform: scaleX(-1);
+    }
+    .meal-infos {
+        width: 100%;
+        margin-top: -0.5em;
+        display: inline-block;
+        text-align: center;
+    }
+    .meal-infos p {
+        text-decoration: underline;
+    }
     .header {
         margin-top: 0.5em;
         display: grid;
@@ -66,6 +124,10 @@
         font-weight: bold;
     }
     .header span {
+        text-align: center;
+    }
+    .caption {
+        margin: 0.5em 0 0;
         text-align: center;
     }
 </style>

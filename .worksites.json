@@ -24,6 +24,7 @@
                 "quantity": 1
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -74,6 +75,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -84,6 +86,7 @@
         "name": "Porte en bois",
         "rarity": "commun",
         "resources": [],
+        "type": "defense",
         "unlocked": true
     },
     {
@@ -122,6 +125,7 @@
                 "quantity": 2
             }
         ],
+        "type": "defense",
         "unlocked": true
     },
     {
@@ -172,6 +176,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -182,6 +187,7 @@
         "name": "Mur en bois",
         "rarity": "commun",
         "resources": [],
+        "type": "defense",
         "unlocked": true
     },
     {
@@ -220,6 +226,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": true
     },
     {
@@ -271,6 +278,7 @@
                 "quantity": 2
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -322,6 +330,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -373,6 +382,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -459,6 +469,7 @@
                 "quantity": 1
             }
         ],
+        "type": "defense",
         "unlocked": true
     },
     {
@@ -543,6 +554,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -570,7 +582,127 @@
                 "quantity": 4
             }
         ],
+        "type": "defense",
         "unlocked": true
+    },
+    {
+        "ap": 10,
+        "completed": false,
+        "defense": 20,
+        "description": "Une grande étendue déserte devant le campement, l'endroit idéal pour installer quelques pièges.",
+        "id": "36ec3125-3dea-4e03-8f25-c731726cf5a5",
+        "name": "Champ de débris",
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "credit": "Freepik",
+                    "description": "Une belle branche d'arbre",
+                    "icon": "branch",
+                    "id": "e57f72ab-2846-4339-a9c7-f36bc5d81caa",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Mehwish",
+                    "description": "Une poignée de clous rouillés",
+                    "icon": "nails",
+                    "id": "4d21fab1-f94b-4c89-8172-062283d3932d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "credit": "Vitaly Gorbachev",
+                    "description": "Une bouteille en verre",
+                    "icon": "bottle",
+                    "id": "e437624b-ce76-4726-b194-ae5611c30a01",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            }
+        ],
+        "type": "defense",
+        "unlocked": false
+    },
+    {
+        "ap": 1,
+        "completed": false,
+        "defense": 20,
+        "id": "63955d22-49b5-43cd-970f-a0186969c0cf",
+        "name": "Champ de mines",
+        "parent": "36ec3125-3dea-4e03-8f25-c731726cf5a5",
+        "rarity": "inhabituel",
+        "reload": true,
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Icongeek26",
+                    "description": "Une bobine de ficelle",
+                    "icon": "string",
+                    "id": "d25617b7-3ca9-4012-a424-3a195ad7216b",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "attack": 20,
+                    "code": "b5",
+                    "credit": "Eucalyp",
+                    "description": "Une grenade explosive",
+                    "icon": "grenade",
+                    "id": "e6e92ef0-40ae-4505-82e7-b2783b502eaa",
+                    "rarity": "inhabituel",
+                    "reload": true,
+                    "slot": "W4",
+                    "type": "explosive",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "defense",
+        "unlocked": false
     },
     {
         "ap": 10,
@@ -634,6 +766,7 @@
                 "quantity": 2
             }
         ],
+        "type": "defense",
         "unlocked": true
     },
     {
@@ -711,6 +844,7 @@
                 "quantity": 2
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -762,6 +896,7 @@
                 "quantity": 2
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -813,6 +948,7 @@
                 "quantity": 2
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -877,6 +1013,7 @@
                 "quantity": 2
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -915,6 +1052,7 @@
                 "quantity": 10
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -999,6 +1137,114 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
+        "unlocked": false
+    },
+    {
+        "ap": 1,
+        "completed": false,
+        "defense": 20,
+        "id": "8b583575-bd62-44d4-baca-15195b7fd6b1",
+        "name": "Lance-flammes",
+        "parent": "5315ff8b-da9b-4400-b22d-a477c043ebb1",
+        "rarity": "rare",
+        "reload": true,
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "surang",
+                    "description": "Des morceaux de ferraille",
+                    "icon": "scrap-metal",
+                    "id": "d9608a2d-8ff3-43f3-9fc0-f44467f417e4",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Icongeek26",
+                    "description": "Une bobine de ficelle",
+                    "icon": "string",
+                    "id": "d25617b7-3ca9-4012-a424-3a195ad7216b",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "juicy_fish",
+                    "description": "Une bouteille en plastique vide",
+                    "icon": "plastic-bottle",
+                    "id": "6cfc2a58-8bb1-4f64-9b12-d5aa360e2eaf",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Chanut-is-Industries",
+                    "description": "Quelques boulons et écrous",
+                    "icon": "bolts",
+                    "id": "18ba6820-fe6c-44ef-8194-1860679bd2c6",
+                    "rarity": "inhabituel",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "credit": "Freepik",
+                    "description": "Un jerrican d'essence",
+                    "icon": "fuel",
+                    "id": "0f06f9f4-9c29-4c91-bfd2-77e8ed25b32c",
+                    "rarity": "rare",
+                    "reload": true,
+                    "slot": "W3",
+                    "type": "resource",
+                    "unique": false,
+                    "weapon": "gas"
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "defense",
+        "unlocked": false
+    },
+    {
+        "ap": 15,
+        "completed": false,
+        "defense": 30,
+        "id": "be71dd00-2545-4744-82e4-2a269451b093",
+        "name": "Champ barbelé",
+        "parent": "36ec3125-3dea-4e03-8f25-c731726cf5a5",
+        "rarity": "rare",
+        "resources": [
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Smashicons",
+                    "description": "Du fil barbelé",
+                    "icon": "barbed-wire",
+                    "id": "6911f5a0-c1d8-4aa7-8634-c1f64118b96e",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            }
+        ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1036,6 +1282,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1061,6 +1308,7 @@
                 "quantity": 10
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1125,6 +1373,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1202,6 +1451,7 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1281,6 +1531,7 @@
                 "quantity": 1
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1319,6 +1570,84 @@
                 "quantity": 5
             }
         ],
+        "type": "defense",
+        "unlocked": false
+    },
+    {
+        "ap": 25,
+        "completed": false,
+        "defense": 50,
+        "id": "bdaf2a27-6aa7-41a7-9e4b-133aa8690500",
+        "name": "Champ électrifié",
+        "parent": "36ec3125-3dea-4e03-8f25-c731726cf5a5",
+        "rarity": "épique",
+        "resources": [
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "Freepik",
+                    "description": "Du fil électrique",
+                    "icon": "electric-wire",
+                    "id": "a20689ce-2512-4085-93c8-1067ac7ba033",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "surang",
+                    "description": "Un circuit électronique",
+                    "icon": "circuit",
+                    "id": "a87f456b-c012-4462-8de3-b82a0e7bbfc2",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "ultimatearm",
+                    "description": "Une grosse vis",
+                    "icon": "screw",
+                    "id": "6c7bbac1-f3a3-4169-b653-4f66e12d7165",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "credit": "Freepik",
+                    "description": "Un groupe électrogène",
+                    "icon": "generator",
+                    "id": "7936d504-047a-4727-90de-9fbb9f83c012",
+                    "rarity": "épique",
+                    "type": "resource",
+                    "unique": true
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "Freepik",
+                    "description": "Un écran tactile",
+                    "icon": "tablet",
+                    "id": "502a0872-4351-4c07-9f83-62d7f48641fd",
+                    "rarity": "épique",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1395,6 +1724,7 @@
                 "quantity": 1
             }
         ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1471,6 +1801,86 @@
                 "quantity": 1
             }
         ],
+        "type": "defense",
+        "unlocked": false
+    },
+    {
+        "ap": 40,
+        "completed": false,
+        "defense": 80,
+        "id": "26487698-9eaf-45bd-834e-433563c14e6a",
+        "name": "Champ à lames",
+        "parent": "36ec3125-3dea-4e03-8f25-c731726cf5a5",
+        "rarity": "épique",
+        "resources": [
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "Freepik",
+                    "description": "Du fil électrique",
+                    "icon": "electric-wire",
+                    "id": "a20689ce-2512-4085-93c8-1067ac7ba033",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "surang",
+                    "description": "Un circuit électronique",
+                    "icon": "circuit",
+                    "id": "a87f456b-c012-4462-8de3-b82a0e7bbfc2",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "ultimatearm",
+                    "description": "Une grosse vis",
+                    "icon": "screw",
+                    "id": "6c7bbac1-f3a3-4169-b653-4f66e12d7165",
+                    "rarity": "rare",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 10
+            },
+            {
+                "item": {
+                    "code": "b4",
+                    "credit": "Freepik",
+                    "description": "Un écran tactile",
+                    "icon": "tablet",
+                    "id": "502a0872-4351-4c07-9f83-62d7f48641fd",
+                    "rarity": "épique",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Flat Icons",
+                    "description": "Une lame de scie circulaire",
+                    "icon": "saw-blade",
+                    "id": "e94c077e-3b5f-4cc9-8e03-90f3210f11f5",
+                    "rarity": "épique",
+                    "reload": true,
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 5
+            }
+        ],
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1523,6 +1933,7 @@
             }
         ],
         "temporary": true,
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1574,6 +1985,7 @@
             }
         ],
         "temporary": true,
+        "type": "defense",
         "unlocked": true
     },
     {
@@ -1652,6 +2064,7 @@
             }
         ],
         "temporary": true,
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1715,6 +2128,7 @@
             }
         ],
         "temporary": true,
+        "type": "defense",
         "unlocked": false
     },
     {
@@ -1794,6 +2208,7 @@
             }
         ],
         "temporary": true,
+        "type": "defense",
         "unlocked": false
     }
 ]
