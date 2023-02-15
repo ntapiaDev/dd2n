@@ -3,12 +3,12 @@ import { getItem, handleStack } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
-import { add_recipe, add_reload, add_worksite, build, built, do_reload, get_encampment, get_bank, remove_user_from_encampment, unlock_workshop, update_bank } from "$lib/server/encampments";
+import { add_meal, add_recipe, add_reload, add_worksite, build, built, do_reload, do_tavern, get_encampment, get_bank, remove_user_from_encampment, unlock_tavern, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { add_square, delete_square_by_id, edit_square, get_square, get_square_by_id } from "$lib/server/square";
-import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
+import { _equip, get_slots_by_game, leave_encampment, _meal, update_stats, use_item } from "$lib/server/users";
 import { get_recipe, get_recipes } from "$lib/server/workshop";
-import { get_worksite, get_worksites_by_group } from "$lib/server/worksites";
+import { get_tavern, get_worksite, get_worksites_by_group } from "$lib/server/worksites";
 
 export const load = async ({ locals }) => {
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
@@ -17,8 +17,9 @@ export const load = async ({ locals }) => {
     const recipes = await get_recipes(locals.rethinkdb);
     const square = await get_square(locals.user.game_id, locals.rethinkdb);
     const slots = await get_slots_by_game(locals.user.game_id, locals.rethinkdb);
+    const tavern = await get_tavern(locals.rethinkdb);
     const worksites = await get_worksites_by_group(locals.rethinkdb);
-    return { encampment, lastDate, logs, recipes, square, slots, worksites };
+    return { encampment, lastDate, logs, recipes, square, slots, tavern, worksites };
 }
 
 const blueprint = async ({ locals, request }) => {
@@ -73,6 +74,28 @@ const map = async ({ locals }) => {
     throw redirect(303, '/map');
 }
 
+const meal = async ({ locals }) => {
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    const level = encampment.tavern.level;
+    if (level < 0) return fail(400, { teddies: true });
+    else if (level === 0) return fail(400, { works: true });
+    else if (encampment.tavern.players.includes(locals.user.username)) return fail(400, { players: true });
+    let hunger = locals.user.hunger;
+    let thirst = locals.user.thirst;
+    if (hunger > 75 && thirst > 75) return fail(400, { meal: true });
+    hunger += level * 10;
+    if (hunger > 100) hunger = 100;
+    let fed = hunger - locals.user.hunger;
+    thirst += level * 10;
+    if (thirst > 100) thirst = 100;
+    fed += thirst - locals.user.thirst;
+    let ap = locals.user.ap + Math.floor(fed/10);
+    if (ap > 100) ap = 100;
+    await _meal(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
+    await add_meal(locals.user.game_id, locals.user.username, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'meal', { teddy: Math.floor(Math.random() * 3), value: ap - locals.user.ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
+}
+
 const square = async ({ locals, request }) => {
     const data = await request.formData();
     let category = data.get('category');
@@ -107,14 +130,53 @@ const square = async ({ locals, request }) => {
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'square', { category, mode }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
+const tavern = async ({ locals, request }) => {
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    if (encampment.tavern.level < 0) return fail(400, { teddies: true });
+    if (locals.user.wound > 1) return fail(400, { wounded: true });
+    const data = await request.formData();
+    const ap = parseInt(data.get('ap'));
+    if (!ap) return fail(400, { nothing: true });
+    else if (ap > locals.user.ap) return fail(400, { ap: true });
+    const id = data.get('id');
+    if (encampment.tavern.completed.includes(id)) return fail(400, { completed: true });
+    const worksite = await get_worksite(id, locals.rethinkdb);
+    if (encampment.tavern.level < worksite.level - 1) return fail(400, { unlocked: true });
+    else if (encampment.tavern.unlocked.find(w => w.id === id).ap < ap) return fail(400, { toMuch: true });
+    else if (!checkResources(encampment.items, worksite.resources, ap, false, false)) return fail(400, { resources: true });
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, ap);
+    let wound = locals.user.wound;
+    let wounded = 0;
+    if (ap / 200 > Math.random()) {
+        wound++;
+        wounded = wound;
+    }
+    await update_stats(locals.user.id, ap, hunger, thirst, wound, 'worksite', locals.rethinkdb);
+    let completed = false;
+    let items = [];
+    if (encampment.tavern.unlocked.find(w => w.id === id).ap === ap) {
+        const [bank, i] = updateBank(worksite.resources, encampment.items, 1, false, false);
+        completed = true;
+        items = i;
+        await do_tavern(locals.user.game_id, bank.filter(i => i.quantity > 0), id, worksite.level, locals.rethinkdb);
+    } else {
+        await build(locals.user.game_id, ap, id, 'tavern', locals.rethinkdb);
+    }
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tavern', { ap, completed, items, level: worksite.level, name: worksite.name, warning, wounded }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    throw redirect(303, '/encampment');
+}
+
 const unlock = async ({ locals, request }) => {
     const data = await request.formData();
     const uuid = data.get('uuid');
     const inventory = locals.user.inventory;
     if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
     const { item } = getItem(inventory, uuid, false);
-    if (item.origin === 'workshop') {
-        const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    if (item.origin === 'altar') {
+        if (encampment.tavern.level >= 0) return fail(400, { tavern: true });
+        await unlock_tavern(locals.user.game_id, locals.rethinkdb);
+    } else if (item.origin === 'workshop') {
         if (encampment.workshop.unlocked) return fail(400, { workshop: true });
         await unlock_workshop(locals.user.game_id, locals.rethinkdb);
     }
@@ -219,10 +281,10 @@ const worksite = async ({ locals, request }) => {
         if (worksite.temporary) type = 'temporary';
         await built(locals.user.game_id, bank.filter(i => i.quantity > 0), id, locals.rethinkdb);
     } else {
-        await build(locals.user.game_id, ap, id, locals.rethinkdb);
+        await build(locals.user.game_id, ap, id, 'worksites', locals.rethinkdb);
     }
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, defense: worksite.defense * (worksite.reload ? ap : 1), items, name: worksite.name, type, warning, wounded }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 
-export const actions = { blueprint, deposit, map, square, unlock, withdraw, workshop, worksite };
+export const actions = { blueprint, deposit, map, meal, square, tavern, unlock, withdraw, workshop, worksite };

@@ -115,7 +115,11 @@
             </span>
         {/if}
     </span>
-    <span class={'defense ' + (completed && reload !== 0 ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
+    {#if worksite.type === 'defense'}
+        <span class={'defense ' + (completed && reload !== 0 ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
+    {:else if worksite.type === 'tavern'}
+        <span class="defense" class:completed>{worksite.level}</span>
+    {/if}
     <span class="icon">
         {#if completed && !temp && !rech}
             <Item item={items[0]} />
@@ -130,7 +134,7 @@
                 {#if $page.data.user.wound > 1}
                     <Item item={items[7]} substitute="Vous n'êtes pas en état de travailler" />
                 {:else}
-                    <form method="POST" action="/encampment?/worksite" use:enhance>
+                    <form method="POST" action={`/encampment?/${worksite.type === 'tavern' ? 'tavern' : 'worksite'}`} use:enhance>
                         <input type="text" name="ap" value={ap} hidden>
                         <input type="text" name="id" value={worksite.id} hidden>
                         <button>

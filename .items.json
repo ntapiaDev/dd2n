@@ -46,7 +46,7 @@
     {
         "code": "b1",
         "credit": "Freepik",
-        "description": "Une pizza pepperoni",
+        "description": "Une pizza Fialho",
         "icon": "pizza",
         "id": "13d13ed5-8d6e-4301-82b8-ec60913d3c27",
         "rarity": "commun",
@@ -455,6 +455,7 @@
         "icon": "grenade",
         "id": "e6e92ef0-40ae-4505-82e7-b2783b502eaa",
         "rarity": "inhabituel",
+        "reload": true,
         "slot": "W4",
         "type": "explosive",
         "unique": false
@@ -823,6 +824,7 @@
         "icon": "fuel",
         "id": "0f06f9f4-9c29-4c91-bfd2-77e8ed25b32c",
         "rarity": "rare",
+        "reload": true,
         "slot": "W3",
         "type": "resource",
         "unique": false,
@@ -880,7 +882,7 @@
     },
     {
         "credit": "wanicon",
-        "description": "Plan: Autel des offrandes",
+        "description": "Plan: Taverne \"Le Never Dry\"",
         "icon": "worksite",
         "id": "f4392f6d-5cf6-4e8a-b9bf-c7ebca71e9f0",
         "origin": "altar",
@@ -957,6 +959,13 @@
         "description": "En attente de ressources",
         "icon": "materials",
         "id": "70fe012b-8ac9-401f-bc1a-96489885f1c8",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "En travaux",
+        "icon": "works",
+        "id": "cc9e2ab5-d0bb-48e1-9499-757f44841ca7",
         "type": "misc"
     },
     {
@@ -1057,6 +1066,13 @@
         "description": "Prendre le passage souterrain",
         "icon": "tunnel",
         "id": "10766425-d03d-47a0-a1b4-8c489ca318f5",
+        "type": "misc"
+    },
+    {
+        "credit": "Freepik",
+        "description": "Prendre un bon repas",
+        "icon": "meal",
+        "id": "fc3cb42f-e68e-461a-9fa3-069f8d6bab17",
         "type": "misc"
     },
     {

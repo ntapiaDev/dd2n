@@ -170,6 +170,10 @@ export const lose_ap = (user_id, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap: r.row('ap').sub(1) }).run(rethinkdb);
 }
 
+export const _meal = (user_id, ap, hunger, thirst, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, hunger, thirst }).run(rethinkdb);
+}
+
 export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {
     const NEW_SESSIONID = crypto.randomUUID();
     await r.table('users').filter({ sessionid: SESSIONID }).update({ sessionid: NEW_SESSIONID }).run(rethinkdb);

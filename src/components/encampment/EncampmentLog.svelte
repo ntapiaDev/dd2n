@@ -28,6 +28,13 @@
 			type: 'misc',
 		}
 	];
+	const meal = {
+        credit: 'Freepik',
+        description: 'Prendre un bon repas',
+        icon: 'meal',
+        id: 'fc3cb42f-e68e-461a-9fa3-069f8d6bab17',
+        type: 'misc'
+    }
 	const square = {
 		credit: 'Freepik',
 		description: 'Laisser un message',
@@ -35,6 +42,31 @@
 		id: 'e6f9dc67-f4e1-4b66-8192-0b27fccce49e',
 		type: 'misc',
 	};
+	const teddies = [
+		{
+			class: 'teddy',
+			credit: 'Freepik',
+			description: 'Agnès',
+			icon: 'agnes',
+			id: 'e54b92bf-4bd6-4d62-9c51-01e122ec3419',
+			type: 'misc'
+		}, {
+			class: 'teddy',
+			credit: 'Freepik',
+			description: 'Le Loup',
+			icon: 'loup',
+			id: 'b42833fb-a8ba-4aee-bd6c-d6d78e07667c',
+			type: 'misc'
+		},
+		{
+			class: 'teddy',
+			credit: 'Hery Mery',
+			description: 'M. Ouink',
+			icon: 'ouink',
+			id: '5ff7adb3-80b2-4bcb-8813-5e254dc6dc41',
+			type: 'misc'
+		}
+	]
 	const transform = {
 		credit: 'Freepik',
 		description: 'Transformer',
@@ -121,6 +153,8 @@
         {/if}
 	{:else if log.action === 'feed'}
 		<PlayerName color={log.color} username={log.player} /> a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.
+	{:else if log.action === 'meal'}
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris un bon repas à la taverne avec <Item item={teddies[log.log.teddy]} /> et a regagné {Math.floor(log.log.value)} PA.</div>
 	{:else if log.action === 'boost'}
 		<PlayerName color={log.color} username={log.player} /> a pris <span class="boost">{log.log.boost.toLowerCase()}</span> et a regagné {log.log.value} PA.
 	{:else if log.action === 'tchat'}
@@ -158,7 +192,7 @@
 		{:else}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b></div>
 			{#if log.log.completed}
-				<div class="mtb">Le chantier est maintenant terminé, le campement gagne {log.log.defense} DEF !</div>
+				<div class="mtb">Le chantier est maintenant terminé, le campement gagne <b>{log.log.defense} DEF</b> !</div>
 				<div class="item">
 					<span class="build">
 						{log.log.items.length === 1 && log.log.items[0].quantity === 1 ?
@@ -192,6 +226,37 @@
 		{:else if log.log.warning === 'both'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{/if}
+	{:else if log.action === 'tavern'}
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={meal} substitute='Taverne "Le Never Dry"' /> <b>{log.log.name}<span class="notb">.</span></b></div>
+		{#if log.log.completed}
+			<div class="mtb">Le chantier est maintenant terminé, la taverne atteint le <b>niveau {log.log.level}</b> !</div>
+			<div class="item">
+				<span class="build">
+					{log.log.items.length === 1 && log.log.items[0].quantity === 1 ?
+						'L\'objet suivant a été utilisé' : 'Les objets suivants ont été utilisés'} :
+					<span>
+						{#each log.log.items as item, i}
+							{#if log.log.items.length > 1 && log.log.items.length === i + 1}
+								<span>et</span>
+							{/if}
+							<Item {item} />
+						{/each}
+					</span>
+				</span>
+			</div>
+		{/if}
+		{#if log.log.wounded === 1}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> s'est fait mal lors de la construction du chantier et a maintenant <Item item={wounds[1]} /></div>
+		{:else if log.log.wounded === 2}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> a eu un accident lors de la construction du chantier et est maintenant <Item item={wounds[2]} /></div>
+		{/if}
+		{#if log.log.warning === 'hunger'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
+		{:else if log.log.warning === 'thirst'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Déshydraté'} /></div>
+		{:else if log.log.warning === 'both'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
+		{/if}
 	{:else if log.action === 'workshop'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a fabriqué <Item item={log.log.item} /> en <Item item={transform} substitute="Atelier" /> <b>recyclant</b> <span class="workshop">
 			{#each log.log.items as item, i}
@@ -217,7 +282,10 @@
 			{/if}
 			<b>{log.log.name}<span class="notb">.</span></b></div>
 	{:else if log.action === 'unlocked'}
-		{#if log.log.origin === 'workshop'}
+		{#if log.log.origin === 'altar'}
+			<div class="altar">Après avoir poursuivi une longue et dangereuse quête le menant jusqu'à un mystérieux autel sacrificiel, <PlayerName color={log.color} username={log.player} /> a découvert les plans de <span class="t4"><Item item={meal} substitute='Taverne "Le Never Dry"' /></span> <b>Taverne "Le Never Dry"<span class="notb">.</span></b></div>
+			<div class="item tavern">Une fois la construction terminée, vous pourrez venir y faire la fête avec <span><Item item={teddies[0]} /><Item item={teddies[1]} /><span>et</span><Item item={teddies[2]} /></span></div>
+		{:else if log.log.origin === 'workshop'}
 			<div class="item">Après avoir apporté et étudié avec attention les plans trouvés près de l'entrepot de bricolage, <PlayerName color={log.color} username={log.player} /> a débloqué <Item item={transform} substitute="Atelier" /> <b>Atelier de recyclage<span class="notb">.</span></b></div>
 			<div class="mt">Vous pouvez y transformer vos ressources inutiles en matériaux de meilleure qualité !</div>
 		{/if}
@@ -345,13 +413,19 @@
 		gap: 4px;
 	}
 	.item .build span,
-	.item .workshop {
+	.item .workshop,
+	.tavern span {
 		display: flex;
 		align-items: center;
 	}
 	.item .build span span,
-	.item .workshop span {
+	.item .workshop span,
+	.tavern span span {
 		margin: 0 4px;
+	}
+	.altar {
+		line-height: 18px;
+		margin-bottom: 4px;
 	}
 	.nextday div,
 	.gamestart {
@@ -378,6 +452,10 @@
 	}
 	.ml {
 		margin-left: 4px;
+	}
+	.t4 {
+		position: relative;
+		top: 4px;
 	}
 	.alert,
 	.reload,

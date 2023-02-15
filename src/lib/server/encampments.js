@@ -1,5 +1,15 @@
 import r from 'rethinkdb';
 
+export const add_meal = (game_id, username, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            tavern: {
+                players: doc("tavern")("players").append(username)
+            }
+        }
+    }).run(rethinkdb);
+}
+
 export const add_user_to_encampment = (game_id, username, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
 }
@@ -34,13 +44,13 @@ export const add_worksite = (game_id, ap, id, rethinkdb) => {
     }).run(rethinkdb);
 }
 
-export const build = (game_id, ap, worksite_id, rethinkdb) => {
+export const build = (game_id, ap, id, type, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update(function(doc) {
         return {
-            worksites: {
-                unlocked: doc("worksites")("unlocked").map(function(worksite) {
+            [type]: {
+                unlocked: doc(type)("unlocked").map(function(worksite) {
                     return r.branch(
-                        worksite("id").eq(worksite_id),
+                        worksite("id").eq(id),
                         worksite.merge({"ap": worksite('ap').sub(ap)}),
                         worksite
                     );
@@ -50,14 +60,14 @@ export const build = (game_id, ap, worksite_id, rethinkdb) => {
     }).run(rethinkdb);
 }
 
-export const built = (game_id, items, worksite_id, rethinkdb) => {
+export const built = (game_id, items, id, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update(function(doc) {
         return {
             items,
             worksites: {
-              completed: doc("worksites")("completed").append(worksite_id),
+                completed: doc("worksites")("completed").append(id),
                 unlocked: doc("worksites")("unlocked").filter(function(worksite) {
-                    return worksite("id").ne(worksite_id)
+                    return worksite("id").ne(id)
                 })
             }
         }
@@ -84,12 +94,33 @@ export const do_reload = (game_id, id, ap, rethinkdb) => {
     }).run(rethinkdb);
 }
 
-export const generate_encampment = (game_id, completed, unlocked, recipes, rethinkdb) => {
+export const do_tavern = (game_id, items, id, level, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            items,
+            tavern: {
+                completed: doc("tavern")("completed").append(id),
+                level,
+                unlocked: doc("tavern")("unlocked").filter(function(worksite) {
+                    return worksite("id").ne(id)
+                })
+            }
+        }
+    }).run(rethinkdb);
+}
+
+export const generate_encampment = (game_id, completed, tavern, unlocked, recipes, rethinkdb) => {
     return r.table('encampments').insert({
         attack: 40 + Math.ceil(Math.random() * 10),
         game_id,
         items: [],
         players: [],
+        tavern: {
+            completed: [],
+            level: -1,
+            players: [],
+            unlocked: tavern
+        },
         workshop: {
             recipes,
             unlocked: false
@@ -114,6 +145,16 @@ export const remove_user_from_encampment = (game_id, username, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').difference([username]) }).run(rethinkdb);
 }
 
+export const unlock_tavern = (game_id, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(() => {
+        return {
+            tavern: {
+                level: 0
+            }
+        }
+    }).run(rethinkdb);
+}
+
 export const unlock_workshop = (game_id, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update(() => {
         return {
@@ -129,5 +170,13 @@ export const update_bank = (game_id, items, rethinkdb) => {
 }
 
 export const update_encampment = (game_id, attack, worksites, rethinkdb) => {
-    return r.table('encampments').filter({ game_id }).update({ attack, worksites }).run(rethinkdb);
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            attack,
+            tavern: {
+                players: []
+            },
+            worksites
+        }
+    }).run(rethinkdb);
 }

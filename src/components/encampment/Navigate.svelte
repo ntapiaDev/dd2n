@@ -3,6 +3,7 @@
 	import Link from "./Link.svelte";
 
     export let selected;
+    export let tavern;
     export let urgent;
     export let workshop;
 
@@ -24,6 +25,11 @@
         <li on:click={() => open('place')}>
             <Link selected={selected === 'place'} {urgent} title="Place du village" />
         </li>
+        {#if tavern.level >= 0}
+            <li on:click={tavern.level >= 0 ? () => open('tavern') : ''}>
+                <Link selected={selected === 'tavern'} title='Taverne "Le Never Dry"' />
+            </li>
+        {/if}
         <li on:click={() => open('bank')}>
             <Link selected={selected === 'bank'} title="Banque commune" />
         </li>
