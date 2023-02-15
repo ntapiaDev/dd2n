@@ -84,13 +84,18 @@ export const do_reload = (game_id, id, ap, rethinkdb) => {
     }).run(rethinkdb);
 }
 
-export const generate_encampment = (game_id, completed, unlocked, recipes, rethinkdb) => {
+export const generate_encampment = (game_id, completed, tavern, unlocked, recipes, rethinkdb) => {
     return r.table('encampments').insert({
         attack: 40 + Math.ceil(Math.random() * 10),
         game_id,
         items: [],
         players: [],
-        tavern: -1,
+        tavern: {
+            completed: [],
+            level: 0,
+            players: [],
+            unlocked: tavern
+        },
         workshop: {
             recipes,
             unlocked: false
@@ -116,7 +121,13 @@ export const remove_user_from_encampment = (game_id, username, rethinkdb) => {
 }
 
 export const unlock_tavern = (game_id, rethinkdb) => {
-    return r.table('encampments').filter({ game_id }).update({ tavern: 0 }).run(rethinkdb);
+    return r.table('encampments').filter({ game_id }).update(() => {
+        return {
+            tavern: {
+                level: 0
+            }
+        }
+    }).run(rethinkdb);
 }
 
 export const unlock_workshop = (game_id, rethinkdb) => {

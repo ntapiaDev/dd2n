@@ -23,7 +23,7 @@
 	$: user = $page.data.user;
 	$: worksites = data.worksites;
 
-	$: if (encampment.tavern < 0 && $sidebar === 'tavern' || !encampment.workshop.unlocked && $sidebar === 'workshop') sidebar.update(value => value = 'register');
+	$: if (encampment.tavern.level < 0 && $sidebar === 'tavern' || !encampment.workshop.unlocked && $sidebar === 'workshop') sidebar.update(value => value = 'register');
 	const open = (e) => {
 		sidebar.update(value => value = e.detail.open);
 		invalidateAll();
@@ -62,7 +62,7 @@
 		{:else if $sidebar === 'place'}
 			<Place square={data.square} />
 		{:else if $sidebar === 'tavern'}
-			<Tavern level={encampment.tavern} />
+			<Tavern encampment={encampment.tavern} tavern={data.tavern} />
 		{:else if $sidebar === 'bank'}
 			<Bank items={sortItems(encampment.items)} />
 		{:else if $sidebar === 'worksites'}

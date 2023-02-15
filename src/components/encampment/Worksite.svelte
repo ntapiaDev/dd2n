@@ -115,7 +115,11 @@
             </span>
         {/if}
     </span>
-    <span class={'defense ' + (completed && reload !== 0 ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
+    {#if worksite.type === 'defense'}
+        <span class={'defense ' + (completed && reload !== 0 ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
+    {:else if worksite.type === 'tavern'}
+        <span class="defense" class:completed>{worksite.level}</span>
+    {/if}
     <span class="icon">
         {#if completed && !temp && !rech}
             <Item item={items[0]} />

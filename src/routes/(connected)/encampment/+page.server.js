@@ -8,7 +8,7 @@ import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/s
 import { add_square, delete_square_by_id, edit_square, get_square, get_square_by_id } from "$lib/server/square";
 import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
 import { get_recipe, get_recipes } from "$lib/server/workshop";
-import { get_worksite, get_worksites_by_group } from "$lib/server/worksites";
+import { get_tavern, get_worksite, get_worksites_by_group } from "$lib/server/worksites";
 
 export const load = async ({ locals }) => {
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
@@ -17,8 +17,9 @@ export const load = async ({ locals }) => {
     const recipes = await get_recipes(locals.rethinkdb);
     const square = await get_square(locals.user.game_id, locals.rethinkdb);
     const slots = await get_slots_by_game(locals.user.game_id, locals.rethinkdb);
+    const tavern = await get_tavern(locals.rethinkdb);
     const worksites = await get_worksites_by_group(locals.rethinkdb);
-    return { encampment, lastDate, logs, recipes, square, slots, worksites };
+    return { encampment, lastDate, logs, recipes, square, slots, tavern, worksites };
 }
 
 const blueprint = async ({ locals, request }) => {
@@ -115,7 +116,7 @@ const unlock = async ({ locals, request }) => {
     const { item } = getItem(inventory, uuid, false);
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
     if (item.origin === 'altar') {
-        if (encampment.tavern >= 0) return fail(400, { tavern: true });
+        if (encampment.tavern.level >= 0) return fail(400, { tavern: true });
         await unlock_tavern(locals.user.game_id, locals.rethinkdb);
     } else if (item.origin === 'workshop') {
         if (encampment.workshop.unlocked) return fail(400, { workshop: true });

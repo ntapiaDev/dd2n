@@ -7,7 +7,7 @@ import { add_log, add_logs, delete_logs } from "$lib/server/logs";
 import { add_squares, delete_square } from "$lib/server/square";
 import { add_game_to_user, remove_game_from_user, remove_game_from_users } from "$lib/server/users";
 import { get_recipes } from "$lib/server/workshop";
-import { get_worksites } from "$lib/server/worksites";
+import { get_tavern, get_worksites } from "$lib/server/worksites";
 
 export const load = async ({ locals }) => {
     const games = await get_games(locals.rethinkdb);
@@ -16,15 +16,16 @@ export const load = async ({ locals }) => {
 
 const addGame = async ({ locals }) => {
     if (locals.user.role !== 'admin') return fail(400, { admin: true });
+    const tavern = (await get_tavern(locals.rethinkdb)).map(({completed, defense, description, level, name, parent, rarity, resources, type, unlocked, ...rest}) => rest);
     const worksites = await get_worksites(locals.rethinkdb);
     const completed = worksites.filter(w => w.completed).map(w => w.id);
-    const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(({completed, defense, description, name, parent, reload, rarity, resources, temporary, unlocked, ...rest}) => rest);
+    const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(({completed, defense, description, name, parent, reload, rarity, resources, temporary, type, unlocked, ...rest}) => rest);
     const workshop = await get_recipes(locals.rethinkdb);
     const recipes = workshop.filter(w => w.left.unlocked).map(w => w.left.id);
     const blueprint = await get_from('workshop', locals.rethinkdb);
     const game_id = await add_game(locals.rethinkdb);
     const { teddies, ws } = await generate_cells(game_id, blueprint, locals.rethinkdb);
-    await generate_encampment(game_id, completed, unlocked, recipes, locals.rethinkdb);
+    await generate_encampment(game_id, completed, tavern, unlocked, recipes, locals.rethinkdb);
     await add_squares(game_id, [
         { color: '#000000', category: 'motd', message: 'Trouver un moyen de débloquer l\'atelier.', username: 'Gardien' },
         { color: '#000000', category: 'bank', message: 'Il nous faut en priorité des ressources pour les chantiers et de la nourriture.', username: 'Gardien' },

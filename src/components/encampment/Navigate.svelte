@@ -25,8 +25,8 @@
         <li on:click={() => open('place')}>
             <Link selected={selected === 'place'} {urgent} title="Place du village" />
         </li>
-        {#if tavern >= 0}
-            <li on:click={tavern >= 0 ? () => open('tavern') : ''}>
+        {#if tavern.level >= 0}
+            <li on:click={tavern.level >= 0 ? () => open('tavern') : ''}>
                 <Link selected={selected === 'tavern'} title='Taverne "Le Never Dry"' />
             </li>
         {/if}
