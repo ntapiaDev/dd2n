@@ -1,5 +1,5 @@
 import r from 'rethinkdb';
-import { nextday_building, nextday_cell, nextday_empty, zombies_building } from '$lib/config';
+import { nextday_empty, nextday_zombies, zombies_building, zombies_start } from '$lib/config';
 import { getAltar, getBuildings, getTeddies, getTunnel } from '$lib/game';
 import { encampment, layout, letters, size } from '$lib/layout';
 
@@ -38,7 +38,7 @@ export const generate_cells = async (game_id, workshop, rethinkdb) => {
             const players = [];
             const visible = letters[i] + j === encampment;
             const visited = letters[i] + j === encampment;
-            let zombies = Math.floor(Math.random() * (distance * 1.5 - 2));
+            let zombies = zombies_start(distance);
             if (zombies < 0) zombies = 0;
             if (building) zombies += zombies_building;
             cells.push({
@@ -108,7 +108,7 @@ export const update_cells = async (game_id, rethinkdb) => {
         if (cell.coordinate !== encampment) {
             if (!cell.players.length) cell.visited = false;
             const old = cell.zombies;
-            cell.zombies = Math.round(cell.zombies * (1 + (cell.layout.danger / 10)) + (cell.building ? nextday_building : nextday_cell));
+            cell.zombies = nextday_zombies(cell.zombies, cell.layout.danger, cell.building);
             zombies += (cell.zombies - old);
         }
         if (cell.empty && Math.random() > nextday_empty) {
