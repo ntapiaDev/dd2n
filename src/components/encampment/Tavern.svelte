@@ -15,7 +15,7 @@
         <img src="./icons/agnes.png" alt="Agnès">
     </div>
     <div class="meal">
-        <p>Chaque niveau de la taverne permet de récupérer davatange de points de faim et de soif.</p>
+        <p>Chaque niveau de la taverne vous permet de vous nourrir et de boire davantage.</p>
     </div>
     <span class="header">
         <span>Nom</span>
@@ -25,9 +25,9 @@
     </span>
     {#each tavern as worksite}
         <Worksite
-            apLeft={encampment.unlocked.find(w => w.id === worksite.id).ap}
+            apLeft={encampment.unlocked.find(w => w.id === worksite.id)?.ap}
             blocked={encampment.level < worksite.level - 1}
-            completed={encampment.completed.find(w => w.id === worksite.id)}
+            completed={encampment.completed.includes(worksite.id)}
             type={worksite.parent ? "child" : "parent"}
             {worksite} />
     {/each}

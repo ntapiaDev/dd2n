@@ -34,13 +34,13 @@ export const add_worksite = (game_id, ap, id, rethinkdb) => {
     }).run(rethinkdb);
 }
 
-export const build = (game_id, ap, worksite_id, rethinkdb) => {
+export const build = (game_id, ap, id, type, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update(function(doc) {
         return {
-            worksites: {
-                unlocked: doc("worksites")("unlocked").map(function(worksite) {
+            [type]: {
+                unlocked: doc(type)("unlocked").map(function(worksite) {
                     return r.branch(
-                        worksite("id").eq(worksite_id),
+                        worksite("id").eq(id),
                         worksite.merge({"ap": worksite('ap').sub(ap)}),
                         worksite
                     );
@@ -50,14 +50,14 @@ export const build = (game_id, ap, worksite_id, rethinkdb) => {
     }).run(rethinkdb);
 }
 
-export const built = (game_id, items, worksite_id, rethinkdb) => {
+export const built = (game_id, items, id, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update(function(doc) {
         return {
             items,
             worksites: {
-              completed: doc("worksites")("completed").append(worksite_id),
+                completed: doc("worksites")("completed").append(id),
                 unlocked: doc("worksites")("unlocked").filter(function(worksite) {
-                    return worksite("id").ne(worksite_id)
+                    return worksite("id").ne(id)
                 })
             }
         }
@@ -84,6 +84,21 @@ export const do_reload = (game_id, id, ap, rethinkdb) => {
     }).run(rethinkdb);
 }
 
+export const do_tavern = (game_id, items, id, level, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            items,
+            tavern: {
+                completed: doc("tavern")("completed").append(id),
+                level,
+                unlocked: doc("tavern")("unlocked").filter(function(worksite) {
+                    return worksite("id").ne(id)
+                })
+            }
+        }
+    }).run(rethinkdb);
+}
+
 export const generate_encampment = (game_id, completed, tavern, unlocked, recipes, rethinkdb) => {
     return r.table('encampments').insert({
         attack: 40 + Math.ceil(Math.random() * 10),
@@ -92,7 +107,7 @@ export const generate_encampment = (game_id, completed, tavern, unlocked, recipe
         players: [],
         tavern: {
             completed: [],
-            level: 0,
+            level: -1,
             players: [],
             unlocked: tavern
         },

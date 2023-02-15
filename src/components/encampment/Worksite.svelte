@@ -134,7 +134,7 @@
                 {#if $page.data.user.wound > 1}
                     <Item item={items[7]} substitute="Vous n'êtes pas en état de travailler" />
                 {:else}
-                    <form method="POST" action="/encampment?/worksite" use:enhance>
+                    <form method="POST" action={`/encampment?/${worksite.type === 'tavern' ? 'tavern' : 'worksite'}`} use:enhance>
                         <input type="text" name="ap" value={ap} hidden>
                         <input type="text" name="id" value={worksite.id} hidden>
                         <button>

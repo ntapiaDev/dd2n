@@ -111,6 +111,8 @@
 				<p>Cette tache n'existe pas.</p>
 			{:else if form?.tavern}
 				<p>La taverne est déjà débloquée.</p>
+			{:else if form?.teddies}
+				<p>La taverne n'a pas encore été découverte.</p>
 			{:else if form?.toMany}
 				<p>Vous avez déjà écrit le maximum de messages dans cette catégorie mais vous pouvez éditer ou supprimer un ancien message.</p>
 			{:else if form?.toMuch}
