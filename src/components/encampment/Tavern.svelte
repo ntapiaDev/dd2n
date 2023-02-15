@@ -1,4 +1,5 @@
 <script>
+    import { page } from '$app/stores';
 	import { fade } from "svelte/transition";
 	import Item from "../game/Item.svelte";
 	import Meal from "./actions/Meal.svelte";
@@ -27,15 +28,21 @@
     {#if encampment.level === 0}
         <div class="worksite"><Item {item} />La taverne est actuellement en construction...<Item {item} /></div>
     {:else if encampment.level > 0}
-        <span class="meal">
-            <img class="here" src="./here.png" alt="Cliquez-ici by itim2101">
-            <Meal />
-            <img class="here reverse" src="./here.png" alt="Cliquez-ici by itim2101">
-        </span>
-        <span class="meal-infos">
-            <span>Prendre un bon repas</span>
-            <p>La taverne de niveau {encampment.level} vous permet de gagner +{encampment.level * 10}% de faim et de soif ainsi que {encampment.level} PA.</p>
-        </span>
+        {#if encampment.players.includes($page.data.user.username)}
+            <p class="already">Vous avez déjà pris votre repas à la taverne aujourd'hui, mais vous pouvez toujours jouer avec Agnès, Le Loup et M. Ouink, cela leur ferait très plaisir !</p>
+        {:else if $page.data.user.hunger > 75 && $page.data.user.thirst > 75}
+            <p class="already">Vous n'avez pas faim du tout et vous sentez incapable d'avaler quoi que ce soit, mais vous pouvez toujours jouer avec Agnès, Le Loup et M. Ouink, cela leur ferait très plaisir !</p>
+        {:else}
+            <span class="meal">
+                <img class="here" src="./here.png" alt="Cliquez-ici by itim2101">
+                <Meal ap={encampment.level * 2} value={encampment.level * 10} />
+                <img class="here reverse" src="./here.png" alt="Cliquez-ici by itim2101">
+            </span>
+            <span class="meal-infos">
+                <span>Prendre un bon repas en si bonne compagnie</span>
+                <p>La taverne de niveau {encampment.level} vous permet de regagner +{encampment.level * 10}% de faim et de soif ainsi que {encampment.level * 2} PA.</p>
+            </span>
+        {/if}
     {/if}
     <span class="header">
         <span>Nom</span>
@@ -115,6 +122,10 @@
         text-align: center;
     }
     .meal-infos p {
+        text-decoration: underline;
+    }
+    .already {
+        text-align: center;
         text-decoration: underline;
     }
     .header {

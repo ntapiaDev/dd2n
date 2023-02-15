@@ -2,6 +2,9 @@
 	import { enhance } from '$app/forms';
 	import Item from '../../game/Item.svelte';
 
+	export let ap;
+	export let value;
+
 	const item = {
 		credit: 'Freepik',
         description: 'Prendre un bon repas',
@@ -13,7 +16,7 @@
 
 <form method="POST" action="/encampment?/meal" use:enhance>
 	<button>
-		<Item {item} />
+		<Item {item} substitute={`Prendre un bon repas (+${value}% et ${ap} PA)`} />
 	</button>
 </form>
 

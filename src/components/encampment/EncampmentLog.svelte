@@ -153,6 +153,8 @@
         {/if}
 	{:else if log.action === 'feed'}
 		<PlayerName color={log.color} username={log.player} /> a {log.log.type === 'food' ? 'mangé' : 'bu'} <span class={log.log.type}>{log.log.feed.toLowerCase()}</span> et a regagné {Math.floor(log.log.value)} PA.
+	{:else if log.action === 'meal'}
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris un bon repas à la taverne avec <Item item={teddies[log.log.teddy]} /> et a regagné {Math.floor(log.log.value)} PA.</div>
 	{:else if log.action === 'boost'}
 		<PlayerName color={log.color} username={log.player} /> a pris <span class="boost">{log.log.boost.toLowerCase()}</span> et a regagné {log.log.value} PA.
 	{:else if log.action === 'tchat'}

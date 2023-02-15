@@ -91,6 +91,8 @@
 				<p>Votre message est trop long (200 caractères maximum).</p>
 			{:else if form?.materials}
 				<p>Il n'y a pas assez de ressources pour réaliser cette recette.</p>
+			{:else if form?.meal}
+				<p>Vous n'avez pas faim du tout et vous sentez incapable d'avaler quoi que ce soit.</p>
 			{:else if form?.more}
 				<p>Davantage de points d'action sont nécessaires pour réaliser cette recette.</p>
 			{:else if form?.motd}
@@ -101,6 +103,8 @@
 				<p>Cet objet n'est pas présent dans la banque ou dans votre inventaire.</p>
 			{:else if form?.owner}
 				<p>Vous ne pouvez pas modifier cette tache.</p>
+			{:else if form?.players}
+				<p>Vous avez déjà pris votre repas à la taverne aujourd'hui, revenez demain !</p>
 			{:else if form?.recipe}
 				<p>Cette recette est déjà débloquée.</p>
 			{:else if form?.resources}
@@ -121,6 +125,8 @@
 				<p>Cette recette n'est pas encore débloquée.</p>
 			{:else if form?.unlocked}
 				<p>Ce chantier n'est pas encore débloqué.</p>
+			{:else if form?.works}
+				<p>La taverne est encore en travaux.</p>
 			{:else if form?.workshop}
 				<p>L'atelier est déjà débloqué.</p>
 			{:else if form?.wounded}

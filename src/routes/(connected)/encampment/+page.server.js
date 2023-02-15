@@ -3,10 +3,10 @@ import { getItem, handleStack } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
-import { add_recipe, add_reload, add_worksite, build, built, do_reload, do_tavern, get_encampment, get_bank, remove_user_from_encampment, unlock_tavern, unlock_workshop, update_bank } from "$lib/server/encampments";
+import { add_meal, add_recipe, add_reload, add_worksite, build, built, do_reload, do_tavern, get_encampment, get_bank, remove_user_from_encampment, unlock_tavern, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { add_square, delete_square_by_id, edit_square, get_square, get_square_by_id } from "$lib/server/square";
-import { _equip, get_slots_by_game, leave_encampment, update_stats, use_item } from "$lib/server/users";
+import { _equip, get_slots_by_game, leave_encampment, _meal, update_stats, use_item } from "$lib/server/users";
 import { get_recipe, get_recipes } from "$lib/server/workshop";
 import { get_tavern, get_worksite, get_worksites_by_group } from "$lib/server/worksites";
 
@@ -72,6 +72,28 @@ const map = async ({ locals }) => {
         { coordinate: locals.game.encampment, player: locals.user.username, action: 'inEncampment', log: '', gender: locals.user.gender, color: locals.user.color }
     ], locals.rethinkdb);
     throw redirect(303, '/map');
+}
+
+const meal = async ({ locals }) => {
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    const level = encampment.tavern.level;
+    if (level < 0) return fail(400, { teddies: true });
+    else if (level === 0) return fail(400, { works: true });
+    else if (encampment.tavern.players.includes(locals.user.username)) return fail(400, { players: true });
+    let hunger = locals.user.hunger;
+    let thirst = locals.user.thirst;
+    if (hunger > 75 && thirst > 75) return fail(400, { meal: true });
+    hunger += level * 10;
+    if (hunger > 100) hunger = 100;
+    let fed = hunger - locals.user.hunger;
+    thirst += level * 10;
+    if (thirst > 100) thirst = 100;
+    fed += thirst - locals.user.thirst;
+    let ap = locals.user.ap + Math.floor(fed/10);
+    if (ap > 100) ap = 100;
+    await _meal(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
+    await add_meal(locals.user.game_id, locals.user.username, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'meal', { teddy: Math.floor(Math.random() * 3), value: ap - locals.user.ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const square = async ({ locals, request }) => {
@@ -265,4 +287,4 @@ const worksite = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { blueprint, deposit, map, square, tavern, unlock, withdraw, workshop, worksite };
+export const actions = { blueprint, deposit, map, meal, square, tavern, unlock, withdraw, workshop, worksite };

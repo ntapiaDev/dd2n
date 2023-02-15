@@ -1,5 +1,15 @@
 import r from 'rethinkdb';
 
+export const add_meal = (game_id, username, rethinkdb) => {
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            tavern: {
+                players: doc("tavern")("players").append(username)
+            }
+        }
+    }).run(rethinkdb);
+}
+
 export const add_user_to_encampment = (game_id, username, rethinkdb) => {
     return r.table('encampments').filter({ game_id }).update({ 'players': r.row('players').append(username) }).run(rethinkdb);
 }
@@ -160,5 +170,13 @@ export const update_bank = (game_id, items, rethinkdb) => {
 }
 
 export const update_encampment = (game_id, attack, worksites, rethinkdb) => {
-    return r.table('encampments').filter({ game_id }).update({ attack, worksites }).run(rethinkdb);
+    return r.table('encampments').filter({ game_id }).update(function(doc) {
+        return {
+            attack,
+            tavern: {
+                players: []
+            },
+            worksites
+        }
+    }).run(rethinkdb);
 }
