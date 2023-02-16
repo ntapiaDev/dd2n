@@ -9,7 +9,7 @@
 	let gender = 'male';
 
 	// REGEX Username
-	const USER_REGEX = /^[A-Za-z][A-Za-z0-9_]{2,15}$/;
+	const USER_REGEX = /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9_]{2,15}$/;
 	$: testUsername = !USER_REGEX.test(username);
 	// REGEX Password
 	const LENGTH_REGEX = /^.{8,}$/;

@@ -27,6 +27,7 @@
     </div>
     {#if encampment.level === 0}
         <div class="worksite"><Item {item} />La taverne est actuellement en construction...<Item {item} /></div>
+        <div class="sign"></div>
     {:else if encampment.level > 0}
         {#if encampment.players.includes($page.data.user.username)}
             <p class="already">Vous avez déjà pris votre repas à la taverne aujourd'hui, mais vous pouvez toujours jouer avec Agnès, Le Loup et M. Ouink, cela leur ferait très plaisir !</p>
@@ -40,7 +41,7 @@
             </span>
             <span class="meal-infos">
                 <span>Prendre un bon repas en si bonne compagnie</span>
-                <p>La taverne de niveau {encampment.level} vous permet de regagner +{encampment.level * 10}% de faim et de soif ainsi que {encampment.level * 2} PA.</p>
+                <p>La taverne de niveau {encampment.level} vous permet de récupérer +{encampment.level * 10}% de faim et de soif ainsi que {encampment.level * 2} PA.</p>
             </span>
         {/if}
     {/if}
@@ -88,7 +89,8 @@
         height: 190px;
     }
     .worksite {
-        margin: 1em 0;
+        width: 75%;
+        margin: 1em auto 0 ;
         padding: 0.5em 1em;
         display: flex;
         align-items: center;
@@ -99,6 +101,14 @@
         border-radius: 0.5em;
         color: red;
         font-weight: bold;
+    }
+    .sign {
+        width: 50%;
+        height: 50px;
+        margin: 0 auto 1em;
+        border: none;
+        border-left: 3px solid red;
+        border-right: 3px solid red;
     }
     .meal {
         display: flex;

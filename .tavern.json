@@ -211,10 +211,10 @@
             {
                 "item": {
                     "credit": "Freepik",
-                    "description": "Un groupe électrogène",
-                    "icon": "generator",
-                    "id": "7936d504-047a-4727-90de-9fbb9f83c012",
-                    "rarity": "épique",
+                    "description": "Un jukebox assez rétro",
+                    "icon": "jukebox",
+                    "id": "3370ba09-1ce3-4e5d-9a32-b70f5b270830",
+                    "rarity": "rare",
                     "type": "resource",
                     "unique": true
                 },
@@ -222,14 +222,13 @@
             },
             {
                 "item": {
-                    "code": "b4",
                     "credit": "Freepik",
-                    "description": "Un écran tactile",
-                    "icon": "tablet",
-                    "id": "502a0872-4351-4c07-9f83-62d7f48641fd",
+                    "description": "Un groupe électrogène",
+                    "icon": "generator",
+                    "id": "7936d504-047a-4727-90de-9fbb9f83c012",
                     "rarity": "épique",
                     "type": "resource",
-                    "unique": false
+                    "unique": true
                 },
                 "quantity": 1
             }

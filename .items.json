@@ -831,6 +831,15 @@
         "weapon": "gas"
     },
     {
+        "credit": "Freepik",
+        "description": "Un jukebox assez rétro",
+        "icon": "jukebox",
+        "id": "3370ba09-1ce3-4e5d-9a32-b70f5b270830",
+        "rarity": "rare",
+        "type": "resource",
+        "unique": true
+    },
+    {
         "code": "b4",
         "credit": "ultimatearm",
         "description": "Une grosse vis",
