@@ -11,7 +11,6 @@
 	let type = '';
 
 	const types = [
-        'Sac',
 		'Nourriture',
 		'Boisson',
 		'Médicament',
@@ -19,6 +18,7 @@
 		'Munition',
 		'Explosif',
 		'Armure',
+        'Sac',
 		'Ressource',
 		'Plan',
         'Workshop',
@@ -29,7 +29,7 @@
     let workshop = [];
 
 	$: if (items) {
-		let type = 'bag';
+		let type = 'food';
 		let i = 0;
 		let row = [];
 		itemsArray = [];

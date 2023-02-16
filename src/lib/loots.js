@@ -1,4 +1,4 @@
-import { ammunition, blueprint, commun, drug_weapon_armour, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, épique } from "./config";
+import { ammunition, bag, blueprint, commun, drug, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, weapon_armour, épique } from "./config";
 
 export const getBlueprints = (encampment, recipes, worksites) => {
     const blueprints = [];
@@ -72,7 +72,9 @@ export const getPool = (items, danger, uniques) => {
                 item.type === 'ammunition' ? ammunition :
                 item.type === 'explosive' ? explosive :
                 ['food', 'drink'].includes(item.type) ? food_drink :
-                ['drug', 'weapon', 'armour'].includes(item.type) ? drug_weapon_armour : blueprint;
+                item.type === 'drug' ? drug :
+                ['weapon', 'armour'].includes(item.type) ? weapon_armour :
+                item.type === 'bag' ? bag : blueprint;
             const rarity = item.rarity === 'commun' ? commun :
                 item.rarity === 'inhabituel' ? inhabituel :
                 item.rarity === 'rare' ? rare : épique;
@@ -100,14 +102,15 @@ export const handleSearch = (items, pool, type) => {
     let loots = [];
     let uniques = [];
     const hasPlus = (foundItem) => {
-        if (['weapon', 'armour'].includes(foundItem.type)) {
+        if (['bag', 'weapon', 'armour'].includes(foundItem.type)) {
             const random = Math.round(Math.random() * 100) / 100;
             foundItem.plus =
                 random === plus_four ? 4 :
                 random > plus_tree ? 3 :
                 random > plus_two ? 2 :
                 random > plus_one ? 1 : 0
-            if (foundItem.type === 'weapon') foundItem.attack += foundItem.plus;
+            if (foundItem.type === 'bag') foundItem.capacity += foundItem.plus;
+            else if (foundItem.type === 'weapon') foundItem.attack += foundItem.plus;
             else if (foundItem.type === 'armour') foundItem.defense += foundItem.plus;
         }
         return foundItem;
@@ -135,8 +138,8 @@ export const handleSearch = (items, pool, type) => {
 
 export const handleStack = (items, item) => {
     if (items.find(i => i.id === item.id)) {
-        if (!['weapon', 'armour'].includes(item.type)) items.find(i => i.id === item.id).quantity += item.quantity;
-        else if (item.type === 'armour' && items.find(i => i.id === item.id && i.plus === item.plus)) items.find(i => i.id === item.id && i.plus === item.plus).quantity += item.quantity;
+        if (!['bag', 'weapon', 'armour'].includes(item.type)) items.find(i => i.id === item.id).quantity += item.quantity;
+        else if (['bag', 'armour'].includes(item.type) && items.find(i => i.id === item.id && i.plus === item.plus)) items.find(i => i.id === item.id && i.plus === item.plus).quantity += item.quantity;
         else if (item.type === 'weapon' && items.find(i => i.id === item.id && i.plus === item.plus && i.durability === item.durability)) items.find(i => i.id === item.id && i.plus === item.plus && i.durability === item.durability).quantity += item.quantity;
         else items.push(item);
     }
@@ -148,7 +151,7 @@ export const handleStack = (items, item) => {
 
 export const sortItems = (items) => {
     const rarity = ['commun', 'inhabituel', 'rare', 'épique', 'légendaire'];
-    const type = ['bag', 'food', 'drink', 'drug', 'weapon', 'ammunition', 'explosive', 'armour', 'resource', 'blueprint', 'misc'];
+    const type = ['food', 'drink', 'drug', 'weapon', 'ammunition', 'explosive', 'armour', 'bag', 'resource', 'blueprint', 'misc'];
     return items = items.sort((a, b) => type.indexOf(a.type) > type.indexOf(b.type) ? 1
     : type.indexOf(a.type) < type.indexOf(b.type) ? -1 
     : rarity.indexOf(a.rarity) > rarity.indexOf(b.rarity) ? 1

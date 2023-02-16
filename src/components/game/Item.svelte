@@ -16,7 +16,7 @@
 
 	$: title = substitute ?? (item.description +
 		(item.plus > 0 ? ` <span style="color:${plusColor}">+${item.plus}</span>` : '') +
-		(item.capacity > 0 ? ` (${item.capacity} places)` : '') +
+		(item.capacity > 0 ? ` (<span style="color:${plusColor}">${item.capacity}</span> places)` : '') +
 		(item.attack > 0 ? ` (Puissance : <span style="color:${plusColor}">${item.attack}</span>)` : '') +
 		(item.defense > 0 ? ` (Protection : <span style="color:${plusColor}">${item.defense}</span>)` : '') +
 		(item.value ? ` (+${item.value}% et ${item.value / 10} PA)` : '') +
