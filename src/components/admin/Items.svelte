@@ -11,6 +11,7 @@
 	let type = '';
 
 	const types = [
+        'Sac',
 		'Nourriture',
 		'Boisson',
 		'Médicament',
@@ -28,7 +29,7 @@
     let workshop = [];
 
 	$: if (items) {
-		let type = 'food';
+		let type = 'bag';
 		let i = 0;
 		let row = [];
 		itemsArray = [];
@@ -45,7 +46,7 @@
 			}
 		}
 		itemsArray.push(row);
-        itemsArray.splice(9, 0, workshop);
+        itemsArray.splice(10, 0, workshop);
 	}
 </script>
 
@@ -57,6 +58,7 @@
             <input type="text" name="description" placeholder="Description" required />
             <select name="type" bind:value={type} required>
                 <option value="">Type</option>
+                <option value="bag">Sac</option>
                 <option value="food">Nourriture</option>
                 <option value="drink">Boisson</option>
                 <option value="drug">Médicament</option>
@@ -86,10 +88,13 @@
             {#if ['drink', 'food'].includes(type)}
                 <input type="number" min="1" max="100" name="value" placeholder="Valeur" />
             {/if}
-            {#if ['weapon', 'ammunition', 'explosive', 'armour'].includes(type)}
+            {#if ['bag', 'weapon', 'ammunition', 'explosive', 'armour'].includes(type)}
                 <select name="slot" bind:value={slot} required>
                     <option value="">Slot</option>
-                    {#if type === 'armour'}
+                    {#if type === 'bag'}
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                    {:else if type === 'armour'}
                         <option value="A1">A1</option>
                         <option value="A2">A2</option>
                         <option value="A3">A3</option>
@@ -102,7 +107,9 @@
                         <option value="W4">W4</option>
                     {/if}
                 </select>
-                {#if type === 'armour'}
+                {#if type === 'bag'}
+                    <input type="number" min="1" max="100" name="capacity" placeholder="Capacité" required />
+                {:else if type === 'armour'}
                     <input type="number" min="1" max="100" name="defense" placeholder="Défense" required />
                 {:else if ['weapon', 'explosive'].includes(type)}
                     <input type="number" min="1" max="100" name="attack" placeholder="Attaque" required />

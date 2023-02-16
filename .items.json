@@ -1,5 +1,65 @@
 [
     {
+        "capacity": 5,
+        "credit": "Freepik",
+        "description": "Un sac à dos d'école",
+        "icon": "scholar",
+        "id": "e9fd9824-3ba5-4529-ab2b-eb5639f03442",
+        "rarity": "inhabituel",
+        "slot": "B1",
+        "type": "bag"
+    },
+    {
+        "capacity": 5,
+        "credit": "Freepik",
+        "description": "Un sac à main",
+        "icon": "handbag",
+        "id": "0baa4c05-1209-4b81-bcea-3909a59c355b",
+        "rarity": "inhabituel",
+        "slot": "B2",
+        "type": "bag"
+    },
+    {
+        "capacity": 8,
+        "credit": "justicon",
+        "description": "Un grand sac à dos",
+        "icon": "backpack",
+        "id": "32f579d7-4940-4496-97ba-f67337271c3e",
+        "rarity": "rare",
+        "slot": "B1",
+        "type": "bag"
+    },
+    {
+        "capacity": 10,
+        "credit": "Freepik",
+        "description": "Une valise à roulettes",
+        "icon": "suitcase",
+        "id": "81f15216-c765-4128-9059-6d6f1c8b9c0b",
+        "rarity": "rare",
+        "slot": "B2",
+        "type": "bag"
+    },
+    {
+        "capacity": 10,
+        "credit": "Freepik",
+        "description": "Un sac à dos de randonnées",
+        "icon": "hiking",
+        "id": "cf5ac527-3e9a-4748-be75-dc752a456794",
+        "rarity": "épique",
+        "slot": "B1",
+        "type": "bag"
+    },
+    {
+        "capacity": 15,
+        "credit": "Freepik",
+        "description": "Une mallette de voyage",
+        "icon": "briefcase",
+        "id": "38fc5642-4e60-44d1-aa51-92f6c68156fd",
+        "rarity": "épique",
+        "slot": "B2",
+        "type": "bag"
+    },
+    {
         "code": "b1",
         "credit": "Freepik",
         "description": "Un paquet de chips entamé",
@@ -1262,6 +1322,13 @@
         "type": "misc"
     },
     {
+        "credit": "monkik",
+        "description": "Équiper un bagage à main",
+        "icon": "hand",
+        "id": "dcf17530-8295-4d5d-899e-856d34e4489a",
+        "type": "misc"
+    },
+    {
         "credit": "iconixar",
         "description": "Équiper un casque",
         "icon": "helmet",
@@ -1273,6 +1340,13 @@
         "description": "Équiper un pantalon",
         "icon": "pants",
         "id": "9a707225-a87a-4910-a919-3336ad4d94da",
+        "type": "misc"
+    },
+    {
+        "credit": "DinosoftLabs",
+        "description": "Équiper un sac à dos",
+        "icon": "bag",
+        "id": "fa7a7192-c702-4474-9b67-9751eb9d9e4c",
         "type": "misc"
     },
     {

@@ -30,6 +30,7 @@ const addItem = async ({ locals, request }) => {
     if (data.get('weapon')) item.weapon = data.get('weapon');
     if (data.get('defense')) item.defense = parseInt(data.get('defense'));
     if (data.get('wound')) item.wound = data.get('wound');
+    if (data.get('capacity')) item.capacity = parseInt(data.get('capacity'));
     if (data.get('ap')) item.ap = parseInt(data.get('ap'));
     if (data.get('code')) item.code = data.get('code');
     if (data.get('origin')) item.origin = data.get('origin');
