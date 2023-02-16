@@ -6,6 +6,8 @@ import { encampment } from '$lib/layout';
 export const add_game_to_user = (game_id, id, color, rethinkdb) => {
     return r.table('users').get(id).update({
         ap: 100,
+        bag1: [],
+        bag2: [],
         color,
         force: false,
         game_id,
@@ -79,6 +81,8 @@ export const add_game_to_user = (game_id, id, color, rethinkdb) => {
                 unique: false,
                 uuid: crypto.randomUUID()
             },
+            B1: "",
+            B2: ""
         },
         stats: {
             blueprint: 0,

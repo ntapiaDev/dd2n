@@ -12,7 +12,9 @@
 <span class="bag">
 	<Slot name="B1" slot={B1} {interactive} {items} />
 	<Slot name="B2" slot={B2} {interactive} {items} />
-    <span class="title">({equiped}/2)</span>
+	{#if interactive}
+    	<span class="title">({equiped}/2)</span>
+	{/if}
 </span>
 
 <style>
