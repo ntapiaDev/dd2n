@@ -1,30 +1,70 @@
 <script>
-	import Slot from './Slot.svelte';
+    import { page } from '$app/stores';
+    import { flip } from 'svelte/animate';
+    import { fly } from 'svelte/transition';
+    import { sortItems } from '$lib/loots';
+    import { sidebar } from '../../stores/sidebar';
+	import InteractiveItem from './InteractiveItem.svelte';
+	import Item from './Item.svelte';
 
-	export let interactive = true;
-	export let items = [];
-	export let B1;
-	export let B2;
-
-    $: equiped = (B1 ? 1 : 0) + (B2 ? 1 : 0);
+    export let interactive = true;
+	export let items;
+    export let size;
+    export let type;
 </script>
 
-<span class="bag">
-	<Slot name="B1" slot={B1} {interactive} {items} />
-	<Slot name="B2" slot={B2} {interactive} {items} />
-	{#if interactive}
-    	<span class="title">({equiped}/2)</span>
-	{/if}
-</span>
+{#if size}
+    <span class="bag" transition:fly={{ y: -30, duration: 500 }}>
+        {#if interactive}
+            <span class="title">{type === 'bag1' ? "Sac" : "Bagage"}</span>
+        {/if}
+        {#each sortItems(items) as item (item.uuid)}
+            <span class="animation" animate:flip>
+                {#if $page.url.pathname === '/map'}
+                    <InteractiveItem {item} action={'/map?/drop'} /> 
+                {:else if $page.url.pathname === '/encampment' && $sidebar === 'bank'}
+                    <InteractiveItem {item} action={'/encampment?/deposit'} />
+                {:else}
+                    <Item {item} />
+                {/if}
+            </span>
+        {/each}
+        {#each Array(size - items.length) as _}
+            <span class="empty"></span>
+        {/each}
+        {#if interactive}
+            <span class="total">({items.length}/{size})</span>
+        {/if}
+    </span>
+{/if}
 
 <style>
-	.bag {
-		display: inline-flex;
-        margin-left: 0.5em;
-	}
-	.title {
-		display: flex;
-		align-items: center;
-		margin: 0 4px;
-	}
+    .bag {
+        display: inline-flex;
+        padding: 0.25em 0.5em;
+        background-color: #EEE;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        border-radius: 0 0 0.25em 0.25em;
+    }
+    .title {
+        display: flex;
+        align-items: center;
+        margin: 0 4px;
+        white-space: nowrap;
+    }
+    .animation {
+        width: 25px;
+        height: 25px;
+    }
+    .empty {
+        width: 25px;
+        height: 25px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        border-radius: .25em;
+    }
+    .total {
+        display: flex;
+        align-items: center;
+        margin-left: 4px;
+    }
 </style>

@@ -1,7 +1,7 @@
 <script>
     import { getDefense } from "$lib/player";
 	import Armour from "../../../components/game/Armour.svelte";
-	import Bag from "../../../components/game/Bag.svelte";
+	import Bags from "../../../components/game/Bags.svelte";
     import Hunger from "../../../components/game/Hunger.svelte";
 	import Inventory from "../../../components/game/Inventory.svelte";
     import PlayerName from "../../../components/game/PlayerName.svelte";
@@ -39,7 +39,7 @@
                     <span>
                         <Weapon W1={player.slots.W1} W2={player.slots.W2} W3={player.slots.W3} W4={player.slots.W4} interactive={false} />
                         <span><Armour A1={player.slots.A1} A2={player.slots.A2} A3={player.slots.A3} interactive={false} /></span>
-                        <Bag B1={player.slots.B1} B2={player.slots.B2} interactive={false} />
+                        <Bags B1={player.slots.B1} B2={player.slots.B2} interactive={false} />
                     </span>
                 </td>
                 <td><Inventory items={player.inventory} interactive={false} /></td>

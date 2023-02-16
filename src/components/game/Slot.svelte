@@ -102,5 +102,6 @@
 	.item {
 		width: 25px;
 		height: 25px;
+		z-index: 5;
 	}
 </style>
