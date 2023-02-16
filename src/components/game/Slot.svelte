@@ -58,6 +58,20 @@
 			icon: 'pants',
 			id: '9a707225-a87a-4910-a919-3336ad4d94da',
 			type: 'misc',
+		},
+		B1: {
+			credit: 'DinosoftLabs',
+			description: 'Équiper un sac à dos',
+			icon: 'bag',
+			id: 'fa7a7192-c702-4474-9b67-9751eb9d9e4c',
+			type: 'misc'
+		},
+		B2: {
+			credit: 'monkik',
+			description: 'Équiper un bagage à main',
+			icon: 'hand',
+			id: 'dcf17530-8295-4d5d-899e-856d34e4489a',
+			type: 'misc'
 		}
 	};
 

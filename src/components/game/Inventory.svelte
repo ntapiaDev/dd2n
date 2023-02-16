@@ -10,6 +10,8 @@
 	export let items;
 
     let size = 10;
+    $: slots = $page.data.user.slots;
+    $: total = size + (slots.B1.capacity ?? 0) + (slots.B2.capacity ?? 0);
 </script>
 
 <span class="inventory">
@@ -31,7 +33,7 @@
         <span class="empty"></span>
     {/each}
     {#if interactive}
-        <span class="total">({items.length}/{size})</span>
+        <span class="total">({items.length}/{total})</span>
     {/if}
 </span>
 

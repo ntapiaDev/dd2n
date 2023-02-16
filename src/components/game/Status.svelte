@@ -5,7 +5,6 @@
 </script>
 
 <span class="status">
-	<span class="title">Statuts</span>
 	<Wound />
 	<Hunger />
 	<Thirst />
@@ -14,10 +13,5 @@
 <style>
 	.status {
 		display: inline-flex;
-	}
-	.title {
-		display: flex;
-		align-items: center;
-		margin: 0 4px;
 	}
 </style>
