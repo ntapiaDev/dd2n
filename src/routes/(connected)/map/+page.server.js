@@ -115,8 +115,13 @@ const building = async ({ locals }) => {
     if (location.building.empty) return fail(400, { emptyBuilding: true });
     if (location.building.searchedBy.includes(locals.user.id)) return fail(400, { searchedBuilding: true });
     if (location.zombies > getDefense(locals.user.slots)) return fail(400, { access: true });
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
     const itemList = await get_items_by_code(location.building.code, locals.rethinkdb);
-    let pool = getPool(itemList, 0, locals.user.uniques);
+    const recipes = await get_recipes(locals.rethinkdb);
+    const worksites = await get_worksites_by_group(locals.rethinkdb);
+    const advance = location.building.code === 'b2' ? false : (location.building.code === 'b4' ? true : 'none');
+    const blueprints = getBlueprints(encampment, recipes, worksites, advance);
+    let pool = getPool(itemList.concat(blueprints), 0, locals.game.uniques);
     const { cache, items, loots, uniques } = handleSearch(location.items, pool, 'building');
     let plus = handlePlus(loots);
     let empty = Math.random() > empty_building;
@@ -188,7 +193,7 @@ const search = async ({ locals }) => {
     const itemList = await get_loots(locals.rethinkdb);
     const recipes = await get_recipes(locals.rethinkdb);
     const worksites = await get_worksites_by_group(locals.rethinkdb);
-    const blueprints = getBlueprints(encampment, recipes, worksites);
+    const blueprints = getBlueprints(encampment, recipes, worksites, 'all');
     let pool = getPool(itemList.concat(blueprints), danger, locals.game.uniques);
     const { cache, items, loots, uniques } = handleSearch(location.items, pool, 'search');
     let plus = handlePlus(loots);

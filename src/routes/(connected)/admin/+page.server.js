@@ -72,11 +72,13 @@ const addWorksite = async ({ locals, request }) => {
         };
     };
     const worksite = {
+        advance: data.get('advance') === 'advance',
         completed: data.get('completed') === 'completed',
         defense: parseInt(data.get('defense')),
         name: data.get('name'),
         rarity: data.get('rarity'),
         resources,
+        type: 'defense',
         unlocked: data.get('unlocked') === 'unlocked'
     }
     if (data.get('ap')) worksite.ap = parseInt(data.get('ap'));

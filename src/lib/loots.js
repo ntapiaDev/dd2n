@@ -1,4 +1,4 @@
-import { ammunition, bag, blueprint, commun, drug, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, weapon_armour, épique } from "./config";
+import { ammunition, armour, bag, blueprint, commun, drink, drug, explosive, food, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, weapon, épique } from "./config";
 
 export const findOrigin = (bag1, bag2, inventory, uuid) => {
     let origin = '';
@@ -10,9 +10,10 @@ export const findOrigin = (bag1, bag2, inventory, uuid) => {
     return { origin, target }
 }
 
-export const getBlueprints = (encampment, recipes, worksites) => {
+export const getBlueprints = (encampment, recipes, worksites, advance) => {
     const blueprints = [];
-    if (encampment.workshop.unlocked) {
+    if (advance === 'none') return blueprints;
+    if (encampment.workshop.unlocked && advance === 'all') {
         for (let recipe of recipes) {
             if (!encampment.workshop.recipes.includes(recipe.left.id)) {
                 const blueprint = {
@@ -33,7 +34,8 @@ export const getBlueprints = (encampment, recipes, worksites) => {
     for (let group of worksites) {
         if (!group.group || encampment.worksites.completed.includes(group.group) || encampment.worksites.unlocked.some(w => w.id === group.group))
             for (let worksite of group.reduction)
-                if (!encampment.worksites.completed.includes(worksite.id) && !encampment.worksites.unlocked.some(w => w.id === worksite.id)) models.push(worksite)
+                if (!encampment.worksites.completed.includes(worksite.id) && !encampment.worksites.unlocked.some(w => w.id === worksite.id))
+                    if (advance === 'all' || worksite.advance === advance) models.push(worksite)
     }
     for (let worksite of models) {
         const blueprint = {
@@ -78,13 +80,15 @@ export const getPool = (items, danger, uniques) => {
     let pool = [];
     for (let item of itemList) {
         if (!item.unique || !uniques.includes(item.id)) {
-            const type = item.type === 'resource' ? resource :
-                item.type === 'ammunition' ? ammunition :
-                item.type === 'explosive' ? explosive :
-                ['food', 'drink'].includes(item.type) ? food_drink :
-                item.type === 'drug' ? drug :
-                ['weapon', 'armour'].includes(item.type) ? weapon_armour :
-                item.type === 'bag' ? bag : blueprint;
+            const type = item.type === 'food' ? food :
+            item.type === 'drink' ? drink :
+            item.type === 'drug' ? drug :
+            item.type === 'weapon' ? weapon :
+            item.type === 'ammunition' ? ammunition :
+            item.type === 'explosive' ? explosive :
+            item.type === 'armour' ? armour :
+            item.type === 'bag' ? bag :
+            item.type === 'resource' ? resource : blueprint;
             const rarity = item.rarity === 'commun' ? commun :
                 item.rarity === 'inhabituel' ? inhabituel :
                 item.rarity === 'rare' ? rare : épique;

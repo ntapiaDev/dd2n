@@ -1,5 +1,6 @@
 [
     {
+        "advance": false,
         "ap": 5,
         "completed": false,
         "defense": 5,
@@ -28,6 +29,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 5,
         "completed": false,
         "defense": 10,
@@ -79,6 +81,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "completed": true,
         "defense": 10,
         "description": "Cette porte garde l'entrée du campement, c'est le dernier obstacle entre vous et le monde extérieur.",
@@ -90,6 +93,7 @@
         "unlocked": true
     },
     {
+        "advance": false,
         "ap": 5,
         "completed": false,
         "defense": 10,
@@ -129,6 +133,7 @@
         "unlocked": true
     },
     {
+        "advance": false,
         "ap": 10,
         "completed": false,
         "defense": 20,
@@ -180,6 +185,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "completed": true,
         "defense": 20,
         "description": "Un mur érigé tout autour du campement, vous ne voyez que lui tout autour de vous.",
@@ -191,6 +197,7 @@
         "unlocked": true
     },
     {
+        "advance": false,
         "ap": 10,
         "completed": false,
         "defense": 20,
@@ -230,6 +237,7 @@
         "unlocked": true
     },
     {
+        "advance": false,
         "ap": 10,
         "completed": false,
         "defense": 20,
@@ -282,6 +290,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 15,
         "completed": false,
         "defense": 30,
@@ -334,6 +343,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 15,
         "completed": false,
         "defense": 30,
@@ -386,6 +396,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 1,
         "completed": false,
         "defense": 10,
@@ -473,6 +484,7 @@
         "unlocked": true
     },
     {
+        "advance": false,
         "ap": 1,
         "completed": false,
         "defense": 10,
@@ -558,6 +570,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 15,
         "completed": false,
         "defense": 15,
@@ -586,6 +599,7 @@
         "unlocked": true
     },
     {
+        "advance": false,
         "ap": 10,
         "completed": false,
         "defense": 20,
@@ -649,6 +663,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 1,
         "completed": false,
         "defense": 20,
@@ -705,6 +720,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 10,
         "completed": false,
         "defense": 20,
@@ -770,6 +786,7 @@
         "unlocked": true
     },
     {
+        "advance": false,
         "ap": 10,
         "completed": false,
         "defense": 20,
@@ -848,6 +865,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 20,
         "completed": false,
         "defense": 40,
@@ -900,6 +918,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 20,
         "completed": false,
         "defense": 40,
@@ -952,6 +971,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 20,
         "completed": false,
         "defense": 40,
@@ -1017,6 +1037,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 25,
         "completed": false,
         "defense": 50,
@@ -1056,6 +1077,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 1,
         "completed": false,
         "defense": 20,
@@ -1141,6 +1163,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 1,
         "completed": false,
         "defense": 20,
@@ -1222,6 +1245,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 15,
         "completed": false,
         "defense": 30,
@@ -1248,6 +1272,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 15,
         "completed": false,
         "defense": 30,
@@ -1286,6 +1311,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 15,
         "completed": false,
         "defense": 30,
@@ -1312,6 +1338,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 30,
         "completed": false,
         "defense": 60,
@@ -1377,6 +1404,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 40,
         "completed": false,
         "defense": 80,
@@ -1455,6 +1483,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 1,
         "completed": false,
         "defense": 25,
@@ -1535,6 +1564,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 20,
         "completed": false,
         "defense": 40,
@@ -1574,6 +1604,7 @@
         "unlocked": false
     },
     {
+        "advance": true,
         "ap": 25,
         "completed": false,
         "defense": 50,
@@ -1651,6 +1682,7 @@
         "unlocked": false
     },
     {
+        "advance": true,
         "ap": 25,
         "completed": false,
         "defense": 50,
@@ -1728,6 +1760,7 @@
         "unlocked": false
     },
     {
+        "advance": true,
         "ap": 30,
         "completed": false,
         "defense": 60,
@@ -1805,6 +1838,7 @@
         "unlocked": false
     },
     {
+        "advance": true,
         "ap": 40,
         "completed": false,
         "defense": 80,
@@ -1884,6 +1918,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 5,
         "completed": false,
         "defense": 20,
@@ -1937,6 +1972,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 10,
         "completed": false,
         "defense": 40,
@@ -1989,6 +2025,7 @@
         "unlocked": true
     },
     {
+        "advance": false,
         "ap": 15,
         "completed": false,
         "defense": 60,
@@ -2068,6 +2105,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 20,
         "completed": false,
         "defense": 80,
@@ -2132,6 +2170,7 @@
         "unlocked": false
     },
     {
+        "advance": false,
         "ap": 25,
         "completed": false,
         "defense": 100,

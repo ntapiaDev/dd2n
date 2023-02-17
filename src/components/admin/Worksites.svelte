@@ -55,6 +55,10 @@
                 <option value="durable">Durable</option>
                 <option value="temporary">Temporaire</option>
             </select>
+            <select name="advance">
+                <option value="basic">Basique</option>
+                <option value="advance">Avancé</option>
+            </select>
         </div>
         <input class="description" type="text" name="description" placeholder="Description" />
         <div class="infos">
@@ -129,18 +133,21 @@
         width: 200px;
     }
     .name select:nth-child(3) {
-        width: 130px;
+        width: 120px;
+    }
+    .name select:nth-child(4) {
+        width: 92px;
     }
     .description {
         margin-top: 0.5em;
-        width: 567px;
+        width: 651px;
     }
     .infos {
         margin-top: 0.5em;
     }
     .infos select,
     button {
-        width: 100px;
+        width: 128px;
     }
     .infos select:nth-child(1) {
         width: 150px;

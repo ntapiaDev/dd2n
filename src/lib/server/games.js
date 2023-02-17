@@ -11,7 +11,7 @@ export const add_game = async (rethinkdb) => {
         encampment,
         name: getRandomName(),
         players: [],
-        uniques: ['72395207-c380-4f7d-8ced-63d88378c683'] // Plan du Workshop
+        uniques: []
     }).run(rethinkdb)).generated_keys[0];
 }
 
