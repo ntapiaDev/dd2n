@@ -1,6 +1,7 @@
 <script>
     import { page } from '$app/stores';
     import { fly } from 'svelte/transition';
+    import { sortItems } from '$lib/loots';
 	import Armour from './Armour.svelte';
 	import Bag from './Bag.svelte';
 	import Bags from './Bags.svelte';
@@ -12,15 +13,16 @@
     page.subscribe(value => {
 		player = value.data.user;
 	});
+    $: items = sortItems([...player.bag1, ...player.bag2, ...player.inventory]);
     $: mb = player.slots.B1.capacity || player.slots.B2.capacity;
 </script>
 
 <div in:fly={{ y: -30, duration: 500 }} class:mb>
     <span class="container">
         <Status />
-        <Weapon items={player.inventory} W1={player.slots.W1} W2={player.slots.W2} W3={player.slots.W3} W4={player.slots.W4} />
-        <Armour items={player.inventory} A1={player.slots.A1} A2={player.slots.A2} A3={player.slots.A3} />
-        <Bags items={player.inventory} B1={player.slots.B1} B2={player.slots.B2} />
+        <Weapon {items} W1={player.slots.W1} W2={player.slots.W2} W3={player.slots.W3} W4={player.slots.W4} />
+        <Armour {items} A1={player.slots.A1} A2={player.slots.A2} A3={player.slots.A3} />
+        <Bags {items} B1={player.slots.B1} B2={player.slots.B2} bag1={player.bag1} bag2={player.bag2} />
         <Inventory items={player.inventory} />
     </span>
     <span>

@@ -117,20 +117,20 @@ export const _attack = (user_id, ap, force, hunger, slots, stats, thirst, wound,
     return r.table('users').get(user_id).update({ ap, force, hunger, slots, stats, thirst, wound }).run(rethinkdb);
 }
 
-export const _boost = (user_id, item, ap, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]), stats: { [item.type]: r.row('stats')(item.type).add(1) } }).run(rethinkdb);
+export const _boost = (user_id, origin, item, ap, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, [origin]: r.row(origin).difference([item]), stats: { [item.type]: r.row('stats')(item.type).add(1) } }).run(rethinkdb);
 }
 
 export const enter_encampment = (user_id, rethinkdb) => {
     return r.table('users').get(user_id).update({ location: 'Encampment' }).run(rethinkdb);
 }
 
-export const _equip = (user_id, inventory, slots, rethinkdb) => {
-    return r.table('users').get(user_id).update({ inventory, slots }).run(rethinkdb);
+export const _equip = (user_id, destination, slots, target, rethinkdb) => {
+    return r.table('users').get(user_id).update({ [destination]: target, slots }).run(rethinkdb);
 }
 
-export const _feed = (user_id, item, ap, hunger, thirst, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap, inventory: r.row('inventory').difference([item]), hunger, stats: { [item.type]: r.row('stats')(item.type).add(1) }, thirst }).run(rethinkdb);
+export const _feed = (user_id, origin, item, ap, hunger, thirst, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, [origin]: r.row(origin).difference([item]), hunger, stats: { [item.type]: r.row('stats')(item.type).add(1) }, thirst }).run(rethinkdb);
 }
 
 export const _force = (user_id, rethinkdb) => {
@@ -162,12 +162,16 @@ export const get_by_username = async (username, rethinkdb) => {
     return (await r.table('users').filter({ username: username }).run(rethinkdb))._responses[0]?.r[0]
 }
 
-export const _heal = (user_id, item, rethinkdb) => {
-    return r.table('users').get(user_id).update({ inventory: r.row('inventory').difference([item]), stats: { ['drug']: r.row('stats')('drug').add(1) }, wound: 0 }).run(rethinkdb);
+export const _heal = (user_id, origin, item, rethinkdb) => {
+    return r.table('users').get(user_id).update({ [origin]: r.row(origin).difference([item]), stats: { ['drug']: r.row('stats')('drug').add(1) }, wound: 0 }).run(rethinkdb);
 }
 
 export const leave_encampment = (user_id, rethinkdb) => {
     return r.table('users').get(user_id).update({ location: encampment }).run(rethinkdb);
+}
+
+export const loot = (user_id, destination, target, rethinkdb) => {
+    return r.table('users').get(user_id).update({ [destination]: target }).run(rethinkdb);
 }
 
 export const lose_ap = (user_id, rethinkdb) => {
@@ -186,13 +190,13 @@ export const refresh_SESSIONID = async (SESSIONID, rethinkdb) => {
 
 export const remove_game_from_user = (username, rethinkdb) => {
     return r.table('users').filter({ username }).replace(r.row.without(
-        'ap', 'color', 'force', 'game_id', 'hunger', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
+        'ap', 'bag1', 'bag2', 'color', 'force', 'game_id', 'hunger', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 
 export const remove_game_from_users = (game_id, rethinkdb) => {
     return r.table('users').filter({ game_id }).replace(r.row.without(
-        'ap', 'color', 'force', 'game_id', 'hunger', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
+        'ap', 'bag1', 'bag2', 'color', 'force', 'game_id', 'hunger', 'location', 'inventory', 'slots', 'stats', 'thirst', 'wound'
     )).run(rethinkdb);
 }
 
@@ -247,6 +251,6 @@ export const update_users = async (game_id, rethinkdb) => {
     return events;
 }
 
-export const use_item = (user_id, item, rethinkdb) => {
-    return r.table('users').get(user_id).update({ inventory: r.row('inventory').difference([item]) }).run(rethinkdb);
+export const use_item = (user_id, origin, item, rethinkdb) => {
+    return r.table('users').get(user_id).update({ [origin]: r.row(origin).difference([item]) }).run(rethinkdb);
 }

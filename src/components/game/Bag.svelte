@@ -14,16 +14,16 @@
 </script>
 
 {#if size}
-    <span class="bag" transition:fly={{ y: -30, duration: 500 }}>
+    <span class="bag" in:fly={{ y: -30, duration: 500 }}>
         {#if interactive}
             <span class="title">{type === 'bag1' ? "Sac" : "Bagage"}</span>
         {/if}
         {#each sortItems(items) as item (item.uuid)}
             <span class="animation" animate:flip>
                 {#if $page.url.pathname === '/map'}
-                    <InteractiveItem {item} action={'/map?/drop'} /> 
+                    <InteractiveItem {item} action={'/map?/drop'} origin={type} /> 
                 {:else if $page.url.pathname === '/encampment' && $sidebar === 'bank'}
-                    <InteractiveItem {item} action={'/encampment?/deposit'} />
+                    <InteractiveItem {item} action={'/encampment?/deposit'} origin={type} />
                 {:else}
                     <Item {item} />
                 {/if}

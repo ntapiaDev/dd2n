@@ -1,5 +1,15 @@
 import { ammunition, bag, blueprint, commun, drug, explosive, food_drink, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, weapon_armour, épique } from "./config";
 
+export const findOrigin = (bag1, bag2, inventory, uuid) => {
+    let origin = '';
+    if (bag1.find(i => i.uuid === uuid)) origin = 'bag1';
+    else if (bag2.find(i => i.uuid === uuid)) origin = 'bag2';
+    else if (inventory.find(i => i.uuid === uuid)) origin = 'inventory';
+    else return { origin: false, target: false };
+    const target = origin === 'inventory' ? inventory : origin === 'bag1' ? bag1 : bag2;
+    return { origin, target }
+}
+
 export const getBlueprints = (encampment, recipes, worksites) => {
     const blueprints = [];
     if (encampment.workshop.unlocked) {
@@ -84,6 +94,46 @@ export const getPool = (items, danger, uniques) => {
         }
     }
     return pool;
+}
+
+export const handleBag = (item, user) => {
+    const slots = user.slots;
+    if (['ammunition', 'explosive'].includes(item.type) && slots[item.slot].id === item.id && slots[item.slot].uuid !== item.uuid) {
+        slots[item.slot].quantity += item.quantity;
+        return { destination: 'slots', target: slots }
+    }
+    const b1 = user.bag1;
+    const b2 = user.bag2;
+    const inventory = user.inventory;
+    if (['ammunition', 'explosive'].includes(item.type)) {
+        if (b1.find(i => i.id === item.id)) {
+            b1.find(i => i.id === item.id).quantity += item.quantity;
+            return { destination: 'bag1', target: b1 }
+        } else if (inventory.find(i => i.id === item.id)) {
+            inventory.find(i => i.id === item.id).quantity += item.quantity;
+            return { destination: 'inventory', target: inventory }
+        } else if (b2.find(i => i.id === item.id)) {
+            b2.find(i => i.id === item.id).quantity += item.quantity;
+            return { destination: 'bag2', target: b2 }
+        }
+    }
+    const type = item.type;
+    let destination = 'test';
+    if (inventory.length === 10) {
+        if (!user.slots.B1 || b1.length === user.slots.B1.capacity) {
+            if (!user.slots.B2 || b2.length === user.slots.B2.capacity) return { destination: 'full', target: [] }
+            else destination = 'bag2';
+        } else if (type !== 'resource' || !user.slots.B2 || b2.length === user.slots.B2.capacity) destination = 'bag1';
+        else destination = 'bag2';
+    } else if (!user.slots.B1 && !user.slots.B2 || ['food', 'drink', 'drug', 'blueprint'].includes(type)) destination = 'inventory';
+    else if (user.slots.B1 && b1.length < user.slots.B1.capacity && ['weapon', 'ammunition', 'explosive', 'armour', 'bag'].includes(type)) destination = 'bag1';
+    else if (user.slots.B2 && b2.length < user.slots.B2.capacity && type === 'resource') destination = 'bag2';
+    else destination = 'inventory';
+    if (!['ammunition', 'explosive'].includes(type)) item.quantity = 1;
+    item.uuid = crypto.randomUUID();
+    const target = destination === 'inventory' ? inventory : destination === 'bag1' ? b1 : b2; 
+    target.push(item);
+    return { destination, target }
 }
 
 export const handlePlus = (loots) => {

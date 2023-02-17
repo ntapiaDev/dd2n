@@ -1,6 +1,7 @@
 <script>
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { sortItems } from '$lib/loots';
 	import { sidebar } from '../../../stores/sidebar';
 	import InteractiveItem from '../../game/InteractiveItem.svelte';
 	import Item from '../../game/Item.svelte';
@@ -15,16 +16,18 @@
 		type: 'misc'
 	};
 
+	$: items = sortItems([...user.bag1, ...user.bag2, ...user.inventory]);
+
 	let open = false;
 </script>
 
-{#if user?.inventory.some(i => i.type === 'blueprint')}
+{#if items.some(i => i.type === 'blueprint')}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="item" on:mouseenter={() => (open = true)} on:mouseleave={() => (open = false)}>
 		<Item {item} />
 		{#if open}
 			<div transition:slide={{ duration: 500, easing: quintOut }} on:click={() => (open = false)}>
-				{#each user?.inventory as item}
+				{#each items as item}
 					{#if item.type === 'blueprint' && !item.origin}
 						<span on:click={() => sidebar.update(value => value = item.worksite_id ? 'worksites' : 'workshop')}>
 							<InteractiveItem {item} action={'/encampment?/blueprint'} />

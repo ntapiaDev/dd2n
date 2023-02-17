@@ -14,6 +14,7 @@
 		ammunition: 'Munition',
 		explosive: 'Explosif',
 		armour: 'Armure',
+        bag: 'Sac',
 		resource: 'Ressource',
 		blueprint: 'Plan',
 		misc: 'Divers'

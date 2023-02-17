@@ -1,12 +1,12 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { getItem, handleStack } from "$lib/loots";
+import { findOrigin, getItem, handleBag, handleStack } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
 import { add_meal, add_recipe, add_reload, add_worksite, build, built, do_reload, do_tavern, get_encampment, get_bank, remove_user_from_encampment, unlock_tavern, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { add_square, delete_square_by_id, edit_square, get_square, get_square_by_id } from "$lib/server/square";
-import { _equip, get_slots_by_game, leave_encampment, _meal, update_stats, use_item } from "$lib/server/users";
+import { get_slots_by_game, leave_encampment, loot, _meal, update_stats, use_item } from "$lib/server/users";
 import { get_recipe, get_recipes } from "$lib/server/workshop";
 import { get_tavern, get_worksite, get_worksites_by_group } from "$lib/server/worksites";
 
@@ -25,9 +25,9 @@ export const load = async ({ locals }) => {
 const blueprint = async ({ locals, request }) => {
     const data = await request.formData();
     const uuid = data.get('uuid');
-    const inventory = locals.user.inventory;
-    if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
-    const { item } = getItem(inventory, uuid, false);
+    const { origin, target } = findOrigin(locals.user.bag1, locals.user.bag2, locals.user.inventory, uuid);
+    if (!origin) return fail(400, { item: true });  
+    const { item } = getItem(target, uuid, false);
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
     let unlocked;
     if (item.recipe_id) {
@@ -45,21 +45,21 @@ const blueprint = async ({ locals, request }) => {
         unlocked.type = 'worksite';
         await add_worksite(locals.user.game_id, unlocked.ap, id, locals.rethinkdb);
     }
-    await use_item(locals.user.id, item, locals.rethinkdb);
+    await use_item(locals.user.id, origin, item, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'blueprint', { name: unlocked.name ?? unlocked.left.name, type: unlocked.type }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const deposit = async ({ locals, request }) => {
     const data = await request.formData();
+    const origin = data.get('origin');
     const uuid = data.get('uuid');
-    const inventory = locals.user.inventory;
-    if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
-    const { item } = getItem(inventory, uuid, false);
+    const target = origin === 'inventory' ? locals.user.inventory : origin === 'bag1' ? locals.user.bag1 : locals.user.bag2;
+    if (!target.some(i => i.uuid === uuid)) return fail(400, { origin: true });   
+    const { item } = getItem(target, uuid, false);
     const bank = await get_bank(locals.user.game_id, locals.rethinkdb);
     const items = handleStack(bank, item);
-    const slots = locals.user.slots;
     await update_bank(locals.user.game_id, items, locals.rethinkdb);
-    await _equip(locals.user.id, inventory, slots, locals.rethinkdb);
+    await loot(locals.user.id, origin, target, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'deposit', { item }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
@@ -169,9 +169,9 @@ const tavern = async ({ locals, request }) => {
 const unlock = async ({ locals, request }) => {
     const data = await request.formData();
     const uuid = data.get('uuid');
-    const inventory = locals.user.inventory;
-    if (!inventory.some(i => i.uuid === uuid)) return fail(400, { origin: true });    
-    const { item } = getItem(inventory, uuid, false);
+    const { origin, target } = findOrigin(locals.user.bag1, locals.user.bag2, locals.user.inventory, uuid);
+    if (!origin) return fail(400, { item: true });    
+    const { item } = getItem(target, uuid, false);
     const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
     if (item.origin === 'altar') {
         if (encampment.tavern.level >= 0) return fail(400, { tavern: true });
@@ -180,7 +180,7 @@ const unlock = async ({ locals, request }) => {
         if (encampment.workshop.unlocked) return fail(400, { workshop: true });
         await unlock_workshop(locals.user.game_id, locals.rethinkdb);
     }
-    await use_item(locals.user.id, item, locals.rethinkdb);
+    await use_item(locals.user.id, origin, item, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'unlocked', { origin: item.origin }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
@@ -190,18 +190,10 @@ const withdraw = async ({ locals, request }) => {
     const bank = await get_bank(locals.user.game_id, locals.rethinkdb);
     if (!bank.some(i => i.uuid === uuid)) return fail(400, { origin: true });
     const { item } = getItem(bank, uuid, true);
-    const slots = locals.user.slots;
-    const inventory = locals.user.inventory;
-    if (['ammunition', 'explosive'].includes(item.type) && slots[item.slot].id === item.id) slots[item.slot].quantity += item.quantity;
-    else if (['ammunition', 'explosive'].includes(item.type) && inventory.find(i => i.id === item.id)) inventory.find(i => i.id === item.id).quantity += item.quantity;
-    else {
-        if (inventory.length === 10) return fail(400, { full: true });
-        if (!['ammunition', 'explosive'].includes(item.type)) item.quantity = 1;
-        item.uuid = crypto.randomUUID();
-        inventory.push(item);
-    }
+    const { destination, target } = handleBag(item, locals.user);
+    if (destination === 'full') return fail(400, { full: true });
     await update_bank(locals.user.game_id, bank, locals.rethinkdb);
-    await _equip(locals.user.id, inventory, slots, locals.rethinkdb);
+    await loot(locals.user.id, destination, target, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'withdraw', { item }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }

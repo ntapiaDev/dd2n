@@ -19,9 +19,9 @@
     {#each sortItems(items) as item (item.uuid)}
         <span class="animation" animate:flip>
             {#if $page.url.pathname === '/map'}
-                <InteractiveItem {item} action={'/map?/drop'} /> 
+                <InteractiveItem {item} action={'/map?/drop'} origin='inventory' /> 
             {:else if $page.url.pathname === '/encampment' && $sidebar === 'bank'}
-                <InteractiveItem {item} action={'/encampment?/deposit'} />
+                <InteractiveItem {item} action={'/encampment?/deposit'} origin='inventory' />
             {:else}
                 <Item {item} />
             {/if}
