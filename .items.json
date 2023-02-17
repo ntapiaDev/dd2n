@@ -664,6 +664,7 @@
     },
     {
         "capacity": 8,
+        "code": "b2",
         "credit": "justicon",
         "description": "Un grand sac à dos",
         "icon": "backpack",

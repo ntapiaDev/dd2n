@@ -21,7 +21,7 @@ export const weapon_armour = 2;
 export const bag = 2;
 export const blueprint = 1;
 // RARITY : x quantité
-export const commun = 6;
+export const commun = 5;
 export const inhabituel = 3;
 export const rare = 2;
 export const épique = 1;
