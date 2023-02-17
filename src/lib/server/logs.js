@@ -16,6 +16,14 @@ export const delete_logs = (game_id, rethinkdb) => {
     return r.table('logs').filter({ game_id }).delete().run(rethinkdb);
 }
 
+export const delete_old_logs = (game_id, rethinkdb) => {
+    return r.table('logs')
+        .filter({ game_id })
+        .filter(r.row('action').ne('teddy').and(r.row('action').ne('workshop')))
+        .delete()
+        .run(rethinkdb);
+}
+
 export const get_last_date = (game_id, players, rethinkdb) => {
     return r.table("logs").filter(function(log) {
         return r.expr(players).contains(log("player")).and(log("game_id").eq(game_id))

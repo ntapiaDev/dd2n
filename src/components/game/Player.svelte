@@ -61,7 +61,6 @@
         transform: translate(-50%);
         position: absolute;
         display: flex;
-        justify-content: center;
         gap: 1em;
     }
 </style>

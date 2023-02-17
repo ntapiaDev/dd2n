@@ -652,6 +652,17 @@
         "type": "bag"
     },
     {
+        "capacity": 6,
+        "credit": "Freepik",
+        "description": "Un sac en tissu",
+        "icon": "fabric-bag",
+        "id": "d3e2f7f2-5935-4991-8820-c84b4dcad606",
+        "origin": "recipe",
+        "rarity": "inhabituel",
+        "slot": "B2",
+        "type": "bag"
+    },
+    {
         "capacity": 8,
         "credit": "justicon",
         "description": "Un grand sac à dos",

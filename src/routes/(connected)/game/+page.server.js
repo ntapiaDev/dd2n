@@ -4,7 +4,7 @@ import { getDefenseAll } from "$lib/player";
 import { update_cells } from "$lib/server/cells";
 import { get_encampment, update_encampment } from "$lib/server/encampments";
 import { add_one_day } from "$lib/server/games";
-import { add_logs } from "$lib/server/logs";
+import { add_logs, delete_old_logs } from "$lib/server/logs";
 import { get_slots_by_game, update_users } from "$lib/server/users";
 import { get_worksites } from "$lib/server/worksites";
 
@@ -69,6 +69,7 @@ const nextDay = async ({ locals }) => {
         toReload,
         zombies
     }}]
+    await delete_old_logs(locals.user.game_id, locals.rethinkdb);
     await add_logs(locals.user.game_id, [...logs, ...events, ...log], locals.rethinkdb);
 }
 

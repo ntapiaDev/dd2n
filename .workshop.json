@@ -25,6 +25,43 @@
     },
     {
         "ap": 1,
+        "id": "08daa349-882d-45fc-99ab-eba0af73476b",
+        "item": "d3e2f7f2-5935-4991-8820-c84b4dcad606",
+        "name": "Un sac en tissu",
+        "quantity": 1,
+        "rarity": "inhabituel",
+        "resources": [
+            {
+                "item": {
+                    "credit": "shmai",
+                    "description": "Un vieux chiffon",
+                    "icon": "cloth",
+                    "id": "6bf637b4-8a2e-4f75-b454-345083e0478d",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 2
+            },
+            {
+                "item": {
+                    "code": "b2",
+                    "credit": "Icongeek26",
+                    "description": "Une bobine de ficelle",
+                    "icon": "string",
+                    "id": "d25617b7-3ca9-4012-a424-3a195ad7216b",
+                    "rarity": "commun",
+                    "type": "resource",
+                    "unique": false
+                },
+                "quantity": 1
+            }
+        ],
+        "type": "bag",
+        "unlocked": true
+    },
+    {
+        "ap": 1,
         "id": "305011e1-9dfc-4762-a7b1-09918985dfef",
         "item": "707aad5b-65ec-412c-bb60-f81048670a15",
         "name": "Un mélange protéiné",
