@@ -1,4 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
+import { getTavernAction } from "$lib/game";
 import { findOrigin, getItem, handleBag, handleStack } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked, updateBank } from "$lib/worksites";
@@ -93,7 +94,7 @@ const meal = async ({ locals }) => {
     if (ap > 100) ap = 100;
     await _meal(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
     await add_meal(locals.user.game_id, locals.user.username, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'meal', { teddy: Math.floor(Math.random() * 3), value: ap - locals.user.ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'meal', { action: getTavernAction(), teddy: Math.floor(Math.random() * 3), value: ap - locals.user.ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const square = async ({ locals, request }) => {

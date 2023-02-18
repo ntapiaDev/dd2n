@@ -69,7 +69,7 @@ const nextDay = async ({ locals }) => {
         toReload,
         zombies
     }}]
-    await delete_old_logs(locals.user.game_id, locals.rethinkdb);
+    await delete_old_logs(locals.user.game_id, !encampment.workshop.unlocked ? 'workshop' : '', encampment.tavern.level === -1 ? 'teddy' : '', locals.rethinkdb);
     await add_logs(locals.user.game_id, [...logs, ...events, ...log], locals.rethinkdb);
 }
 

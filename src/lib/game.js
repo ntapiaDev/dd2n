@@ -103,6 +103,11 @@ export const getTeddies = () => {
     return coords;
 }
 
+export const getTavernAction = () => {
+    const actions = ['a joué', 'a dansé', 'a chanté', 'a discuté', 'a débattu', 's\'est chamaillé', 'a mangé', 'a ripaillé', 'a picolé', 's\'est bibiné']
+    return actions[Math.floor(Math.random() * actions.length)]
+}
+
 export const getTunnel = () => [getCoord(middle), getCoord(outer)];
 
 export const sortPlayers = (players) => {
