@@ -1,16 +1,15 @@
 import { add_item, get_items, get_resources } from "$lib/server/items";
 import { add_recipe, get_recipes, get_workshop } from "$lib/server/workshop";
-import { add_worksite, get_tavern, get_worksites, get_worksites_by_group } from "$lib/server/worksites";
+import { add_worksite, get_worksites, get_worksites_by_group } from "$lib/server/worksites";
 
 export async function load ({ locals }) {
     const groups = await get_worksites_by_group(locals.rethinkdb);
     const items = await get_items(locals.rethinkdb);
     const recipes = await get_recipes(locals.rethinkdb);
     const resources = await get_resources(locals.rethinkdb);
-    const tavern = await get_tavern(locals.rethinkdb);
     const workshop = await get_workshop(locals.rethinkdb);
     const worksites = await get_worksites(locals.rethinkdb);
-    return { groups, items, recipes, resources, tavern, workshop, worksites };
+    return { groups, items, recipes, resources, workshop, worksites };
 }
 
 const addItem = async ({ locals, request }) => {

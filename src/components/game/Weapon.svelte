@@ -11,7 +11,7 @@
 
 <span class="weapon">
 	{#if interactive}
-		<span class="title">ATK ({(W1.attack ?? 1)}/{(W2.attack && W2.weapon === W3.weapon ? W2.attack : 0)})</span>
+		<span class="title">ATK ({(W1.attack ?? 1)}/{(W2.attack && W2.weapon === W3.weapon ? W2.attack : 0)}/{(W4.attack ?? 0)})</span>
 	{/if}
 	<Slot name="W1" slot={W1} {interactive} {items} />
 	<Slot name="W2" slot={W2} {interactive} {items} />

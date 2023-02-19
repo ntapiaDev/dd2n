@@ -6,10 +6,7 @@
 
     export let groups;
     export let resources;
-    export let tavern;
     export let worksites;
-    $: console.log(tavern);
-    $: console.log(worksites);
 </script>
 
 <div class="worksites" in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>

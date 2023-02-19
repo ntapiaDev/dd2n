@@ -7,7 +7,6 @@
     export let items;
     export let recipes;
     export let workshop;
-    $: console.log(workshop);
 </script>
 
 <div class="workshop" in:fade|local={{ delay: 150, duration: 300}} out:fade|local={{ duration: 150}}>

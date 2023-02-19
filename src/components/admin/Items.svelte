@@ -5,7 +5,6 @@
 	import Item from '../../components/game/Item.svelte';
 
     export let items;
-	$: console.log(items);
 
 	let slot = '';
 	let type = '';
