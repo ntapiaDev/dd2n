@@ -42,14 +42,14 @@ export const isBlocked = (child, completed, worksites) => {
     return !previous.every(w => completed.includes(w));
 }
 
-export const updateBank = (resources, bank, ap, mustReload, reload) => {
+export const updateBank = (resources, bank, ap, mustReload, reload, plus = false) => {
     let items = [];
     if (mustReload && reload) resources = resources.filter(r => r.item.reload === true);
     for (let resource of resources) {
         let quantity = resource.quantity * (resource.item.reload ? ap : 1);
         while (quantity > 0 && !resource.item.unique) {
-            let item = {...sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0)};
-            sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0).quantity -= quantity;
+            let item = {...sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0 && (plus ? i.plus === resource.item.plus : true))};
+            sortItems(bank).find(i => i.id === resource.item.id && i.quantity > 0 && (plus ? i.plus === resource.item.plus : true)).quantity -= quantity;
             quantity -= item.quantity;
             if (quantity < 0) item.quantity += quantity;
             items.push(item)

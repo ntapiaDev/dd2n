@@ -74,6 +74,13 @@
 		id: '5617997b-dfca-4955-a8a7-724729fc8e9e',
 		type: 'misc'
 	}
+	const upgrade = {
+        credit: 'Freepik',
+        description: 'Améliorer',
+        icon: 'upgrade',
+        id: '775f97d1-31ff-4f01-9684-1f3332e47bca',
+        type: 'misc'
+    }
 	const what = {
 		credit: 'Freepik',
 		description: 'Réveil difficile',
@@ -273,6 +280,23 @@
 		{:else if log.log.warning === 'both'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{/if}
+	{:else if log.action === 'upgrade'}
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a <Item item={upgrade} substitute="Atelier" /> <b>amélioré</b> <Item item={log.log.item} /> en utilisant <span class="workshop">
+			{#each log.log.items as item, i}
+				{#if log.log.items.length > 1 && log.log.items.length === i + 1}
+					<span>et</span>
+				{/if}
+				<Item {item} />
+			{/each}
+		</span></div>
+		<div>Cet objet est maintenant <span class={log.log.item.plus === 1 ? 'p1' : log.log.item.plus === 2 ? 'p2' : log.log.item.plus === 3 ? 'p3' : 'p4'}>+{log.log.item.plus}</span> !</div>
+		{#if log.log.warning === 'hunger'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
+		{:else if log.log.warning === 'thirst'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[1]} substitute={'Déshydraté'} /></div>
+		{:else if log.log.warning === 'both'}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
+		{/if}
 	{:else if log.action === 'blueprint'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a découvert
 			{#if log.log.type === 'recipe'}
@@ -464,14 +488,20 @@
 		font-weight: bold;
 	}
 	.food,
-	.success {
+	.success,
+	.p1 {
 		color: green;
 	}
 	.drink,
-	.reload {
+	.reload,
+	.p2 {
 		color: blue;
 	}
-	.boost {
+	.p3 {
+		color: purple;
+	}
+	.boost,
+	.p4 {
 		color: orange;
 	}
 	.notb {

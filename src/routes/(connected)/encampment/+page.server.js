@@ -185,6 +185,28 @@ const unlock = async ({ locals, request }) => {
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'unlocked', { origin: item.origin }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
+const upgrade = async ({ locals, request }) => {
+    const encampment = await get_encampment(locals.user.game_id, locals.rethinkdb);
+    if (!encampment.workshop.unlocked) return fail(400, { locked: true });
+    if (1 > locals.user.ap) return fail(400, { ap: true });
+    const data = await request.formData();
+    const uuid = data.get('uuid');
+    const _bank = await get_bank(locals.user.game_id, locals.rethinkdb);
+    const item = _bank.find(i => i.uuid === uuid);
+    if (_bank.filter(material => material.id === item.id && material.plus === item.plus).length < 2 && item.quantity < 2) return fail(400, { materials: true });
+    const upgraded = { ...item, plus: item.plus + 1, quantity: 1, uuid: crypto.randomUUID()};
+    if (item.attack) upgraded.attack += 1;
+    if (item.capacity) upgraded.capacity += 1;
+    if (item.defense) upgraded.defense += 1;
+    if (item.durability) upgraded.durability = item.durabilityMax;
+    const [bank, items] = updateBank([{ item, quantity: 2 }], _bank, 1, false, false, true);
+    const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
+    await update_stats(locals.user.id, 1, hunger, thirst, locals.user.wound, 'workshop', locals.rethinkdb);
+    await update_bank(locals.user.game_id, handleStack(bank.filter(i => i.quantity > 0), upgraded), locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'upgrade', { item: upgraded, items, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    throw redirect(303, '/encampment');
+}
+
 const withdraw = async ({ locals, request }) => {
     const data = await request.formData();
     const uuid = data.get('uuid');
@@ -215,10 +237,11 @@ const workshop = async ({ locals, request }) => {
     const [bank, items] = updateBank(recipe.left.resources, encampment.items, 1, false, false);
     const product = recipe.right;
     if (product.durabilityMax) product.durability = product.durabilityMax;
+    if (['bag', 'weapon', 'armour'].includes(product.type)) product.plus = 0;
     product.quantity = recipe.left.quantity;
     product.uuid = crypto.randomUUID();
     await update_bank(locals.user.game_id, handleStack(bank.filter(i => i.quantity > 0), product), locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'workshop', { item: product, items, name: recipe.left.name, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'workshop', { item: product, items, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 
@@ -280,4 +303,4 @@ const worksite = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { blueprint, deposit, map, meal, square, tavern, unlock, withdraw, workshop, worksite };
+export const actions = { blueprint, deposit, map, meal, square, tavern, unlock, upgrade, withdraw, workshop, worksite };

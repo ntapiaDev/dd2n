@@ -12,7 +12,7 @@
 		item.plus === 1 ? 'green' :
 		item.plus === 2 ? 'blue' :
 		item.plus === 3 ? 'purple' :
-		item.plus === 4 ? 'orange' : 'black';
+		item.plus >= 4 ? 'orange' : 'black';
 
 	$: title = substitute ?? (item.description +
 		(item.plus > 0 ? ` <span style="color:${plusColor}">+${item.plus}</span>` : '') +

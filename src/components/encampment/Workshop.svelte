@@ -1,6 +1,7 @@
 <script>
 	import { fade } from "svelte/transition";
 	import Recipe from "./Recipe.svelte";
+	import Upgrade from "./Upgrade.svelte";
 
     export let encampment;
     export let recipes;
@@ -20,6 +21,7 @@
                 {/if}
             {/each}
         </div>
+        <Upgrade />
     {/if}
 </div>
 

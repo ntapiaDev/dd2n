@@ -87,7 +87,7 @@
 	<span on:mouseenter={showPlayers} on:mouseleave={hidePlayers}>
 		<Item item={item} quantity={players.length} {substitute} />
 	</span>
-	<span class="zombies" style={`background-color: rgb(255, 0, 0, ${zombies / 10000})`}>Total de zombies : {zombies}</span>
+	<span class="zombies" style={`background-color: rgb(255, 0, 0, ${zombies / 16000})`}>Total de zombies : {zombies}</span>
 	{#each sortItems(loots) as loot (loot.id)}
 		<span class="item" on:mouseenter={() => showLoots(loot.coordinates)} on:mouseleave={hideLoots} animate:flip>
 			<Item item={loot} quantity={loot.total} />
