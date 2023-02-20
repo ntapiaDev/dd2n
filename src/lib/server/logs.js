@@ -19,6 +19,7 @@ export const delete_logs = (game_id, rethinkdb) => {
 export const delete_old_logs = (game_id, teddy, workshop, rethinkdb) => {
     return r.table('logs')
         .filter({ game_id })
+        .filter(r.row('action').ne('gamestart').and(r.row('action').ne('nextday')))
         .filter(r.row('action').ne(teddy).and(r.row('action').ne(workshop)))
         .delete()
         .run(rethinkdb);

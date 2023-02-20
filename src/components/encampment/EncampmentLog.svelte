@@ -356,7 +356,7 @@
 			{/if}
 		</div>
 	{:else if log.action === 'nextday' && !log.log.survived}
-		<div>Une horde de <span class="alert">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
+		<div><b>Jour {log.log.day} :</b> une horde de <span class="alert">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
 		<div class="not-flex">Vos défenses de <span class="alert">{log.log.defense} DEF</span> n'ont pas suffit à arrêter cet assault et tout le monde s'est fait dévorer le cerveau par une bande d'affreux zombies affamés... <span class="not-flex-item"><Item item={zombie} /></span></div>
 	{:else if log.action === 'gamestart'}
 		<div class="item">Vous vous reveillez avec un affreux mal de crâne. <b>Que s'est-il passé hier soir?</b> Vous n'en avez plus aucune idée <Item item={what} /></div>

@@ -1,12 +1,19 @@
 // Couleurs des joueurs :
 export let colors = [
-    { name: 'Noir', code: "#000000", taken: false },
+    { name: 'Magenta', code: "#8B008B", taken: false },
     { name: 'Violet', code: "#9400D3", taken: false },
     { name: 'Indigo', code: "#4B0082", taken: false },
+    { name: 'Bleu marine', code: "#00008B", taken: false },
     { name: 'Bleu', code: "#0000FF", taken: false },
+    { name: 'Bleuet', code: "#4A83EC", taken: false },
+    { name: 'Sarcelle', code: "#008080", taken: false },
     { name: 'Vert', code: "#008000", taken: false },
+    { name: 'Pomme', code: "#68AD00", taken: false },
+    { name: 'Doré', code: "#FFB700", taken: false },
     { name: 'Orange', code: "#FF7F00", taken: false },
+    { name: 'Corail', code: "#FF4500", taken: false },
     { name: 'Rouge', code: "#FF0000", taken: false },
+    { name: 'Cramoisi', code: "#DC143C", taken: false },
     { name: 'Marron', code: "#800000", taken: false }
 ];
 

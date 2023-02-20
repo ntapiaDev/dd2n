@@ -19,7 +19,7 @@
 
 	$: player = players.find(p => p.coordinate === cell.coordinate);
 	$: color = $page.data.game.players.find(p => p.username === player?.username)?.color;
-	$: small = cell.visible && (cell.zombies >= 100 || loots >= 100) ? 'small' : '';
+	$: small = cell.visible && (cell.zombies >= 100 && (cell.visited || cell.estimated.zombies >= 100) || loots >= 100) ? 'small' : '';
 
 	$: travel = canTravel($page.data.user.location, cell.coordinate, cell.layout.border)
 		&& $page.data.user.ap > 0
@@ -39,7 +39,6 @@
 		(cell.layout.border.includes(4) ? 'bl ' : '') +
 		(cell.building ? 'building ' : '') +
 		(cell.entrance ? 'tunnel ' : '') +
-		// (((cell.visited && cell.empty) || (!cell.visited && cell.estimated.empty)) ? 'empty ' : '') +
 		(cell.empty ? 'empty ' : '') +
 		((cell.visited && cell.building?.empty) ? 'empty-building ' : '') +
 		(cell.visited ? '' : 'blur '))

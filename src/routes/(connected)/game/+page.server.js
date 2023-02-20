@@ -60,6 +60,7 @@ const nextDay = async ({ locals }) => {
     const log = [{ coordinate: 'Encampment', action: 'nextday', log: {
         attack: encampment.attack,
         broken,
+        day: locals.game.day,
         dead: events.filter(e => e.action === 'dead' || e.action === 'wound' && e.log.wound === 4),
         defense,
         lostDef,

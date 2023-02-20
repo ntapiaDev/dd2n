@@ -116,7 +116,7 @@
         {/if}
     </span>
     {#if worksite.type === 'defense'}
-        <span class={'defense ' + (completed && reload !== 0 ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
+        <span class={'defense ' + (completed && reload !== 0 ? (temp ? 'temporary' : rech ? 'reload' : 'completed') : rech ? 'rechargeable' : temp ? 'tempo' : '')}>{!hidden && !rech ? worksite.defense : (!hidden && rech ? (reload ? reload : ap) * worksite.defense : '??')}</span>
     {:else if worksite.type === 'tavern'}
         <span class="defense" class:completed>{worksite.level}</span>
     {/if}
@@ -182,7 +182,8 @@
     .name {
         margin-left: 0.5em;
     }
-    .failed {
+    .failed,
+    .tempo {
         color: red;
     }
     .rechargeable {
@@ -245,7 +246,8 @@
     .reload:first-child,
     .temporary:first-child {
         margin-right: 4px;
-    } .reload,
+    }
+    .reload,
     .temporary {
         color: blue;
         font-weight: bold;
@@ -258,12 +260,14 @@
     }
     .blocked .rechargeable,
     .blocked .reload,
-    .blocked .temporary {
+    .blocked .temporary,
+    .blocked .tempo {
         color: #DDD;
     }
     .hidden .rechargeable,
     .hidden .reload,
-    .hidden .temporary {
+    .hidden .temporary,
+    .hidden .tempo {
         color: #AAA;
     }
 

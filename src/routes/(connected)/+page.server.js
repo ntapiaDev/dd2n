@@ -19,7 +19,7 @@ const addGame = async ({ locals }) => {
     const tavern = (await get_tavern(locals.rethinkdb)).map(({completed, defense, description, level, name, parent, rarity, resources, type, unlocked, ...rest}) => rest);
     const worksites = await get_worksites(locals.rethinkdb);
     const completed = worksites.filter(w => w.completed).map(w => w.id);
-    const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(({completed, defense, description, name, parent, reload, rarity, resources, temporary, type, unlocked, ...rest}) => rest);
+    const unlocked = worksites.filter(w => w.unlocked && !w.completed).map(({advance, completed, defense, description, name, parent, reload, rarity, resources, temporary, type, unlocked, ...rest}) => rest);
     const workshop = await get_recipes(locals.rethinkdb);
     const recipes = workshop.filter(w => w.left.unlocked).map(w => w.left.id);
     const blueprint = await get_from('workshop', locals.rethinkdb);
