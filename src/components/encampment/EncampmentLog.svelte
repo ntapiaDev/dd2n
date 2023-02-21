@@ -341,7 +341,7 @@
 		</div>
 	{:else if log.action === 'nextday' && log.log.survived}
 		<div class="nextday">
-			<div>Une horde de <span class="success">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
+			<div><b class="day">Jour {log.log.day} :</b> une horde de <span class="success">{log.log.attack} zombies</span> a attaqué votre campement pendant la nuit.</div>
 			<div>Grace à vos defenses de <span class="success">{log.log.defense} DEF</span>, votre campement a résisté à l'attaque.</div>
 			<div>Environ <span class={(log.log.defense - log.log.lostDef) >= log.log.next ? 'success' : 'alert'}>{log.log.next} zombies</span> sont attendus la nuit prochaine et <span class="alert">{log.log.zombies} nouveaux zombies</span> ont été repérés aux environs du campement.</div>
 			{#if log.log.broken.length}
@@ -462,7 +462,7 @@
 		gap: 4px;
 		list-style: none;
 	}
-	.nextday b {
+	.nextday b:not(.day) {
 		margin: 0 -4px;
 	}
 	.survived .alert {

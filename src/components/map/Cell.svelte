@@ -55,11 +55,11 @@
 			<input type="text" name="tj" value={cell.j} hidden>
 			<button>{coordinates.length ? (loots === 0 ? '-' : loots) :
 			players.length ? (players.find(p => p.coordinate === cell.coordinate) ? players.find(p => p.coordinate === cell.coordinate).username[0] : '-') :
-			(cell.coordinate === encampment ? 'C' : cell.building ? 
+			(cell.coordinate === encampment ? 'C' : (cell.visible ? (cell.building ? 
 				(cell.building.code === 'b1' ? 'Ep' :
 				cell.building.code === 'b2' ? 'Br' :
 				cell.building.code === 'b3' ? 'Ph' :
-				cell.building.code === 'b4' ? 'In' : 'Co') : (cell.visible ? (cell.visited ? cell.zombies : cell.estimated.zombies) : '?'))}</button>
+				cell.building.code === 'b4' ? 'In' : 'Co') : (cell.visited ? cell.zombies : cell.estimated.zombies)) : '?'))}</button>
 		</form>
 	{:else if cell.visible}
 		{coordinates.length ? (loots === 0 ? '-' : loots) :
