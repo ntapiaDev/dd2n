@@ -32,7 +32,7 @@
 						<span on:click={() => sidebar.update(value => value = item.worksite_id ? 'worksites' : 'workshop')}>
 							<InteractiveItem {item} action={'/encampment?/blueprint'} />
 						</span>
-					{:else if item.origin}
+					{:else if item.type === 'blueprint' && item.origin}
 						<InteractiveItem {item} action={'/encampment?/unlock'} />
 					{/if}
 				{/each}
