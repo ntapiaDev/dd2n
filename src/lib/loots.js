@@ -102,6 +102,8 @@ export const getPool = (items, danger, uniques) => {
 
 export const handleBag = (item, user) => {
     const slots = user.slots;
+    if (item.uuid === user.slots.B1.uuid) user.slots.B1 = '';
+    if (item.uuid === user.slots.B2.uuid) user.slots.B2 = '';
     if (['ammunition', 'explosive'].includes(item.type) && slots[item.slot].id === item.id && slots[item.slot].uuid !== item.uuid) {
         slots[item.slot].quantity += item.quantity;
         return { destination: 'slots', target: slots }
@@ -122,7 +124,7 @@ export const handleBag = (item, user) => {
         }
     }
     const type = item.type;
-    let destination = 'test';
+    let destination = '';
     if (inventory.length === 10) {
         if (!user.slots.B1 || b1.length === user.slots.B1.capacity) {
             if (!user.slots.B2 || b2.length === user.slots.B2.capacity) return { destination: 'full', target: [] }

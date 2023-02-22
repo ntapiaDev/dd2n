@@ -1,6 +1,7 @@
 <script>
     import { getDefense } from "$lib/player";
 	import Armour from "../../../components/game/Armour.svelte";
+	import Bag from "../../../components/game/Bag.svelte";
 	import Bags from "../../../components/game/Bags.svelte";
     import Hunger from "../../../components/game/Hunger.svelte";
 	import Inventory from "../../../components/game/Inventory.svelte";
@@ -46,6 +47,28 @@
                 <td>{player.location === 'Encampment' ? 'Campement' : player.location}</td>
                 <td>{getDefense(player.slots)}</td>
                 <td>{player.ap}</td>
+            </tr>
+            <tr style={`background-color: ${player.color + '20'}`}>
+                <td colspan="3">
+                    <div class="bag">
+                        <span class="title">Sac à dos :</span>
+                        {#if player.slots.B1}
+                            <Bag items={player.bag1} size={player.slots.B1.capacity ?? 0} type="bag1" interactive={false} />
+                        {:else}
+                            Aucun
+                        {/if}
+                    </div>
+                </td>
+                <td colspan="4">
+                    <div class="bag">
+                        <span class="title">Bagage :</span>
+                        {#if player.slots.B2}
+                            <Bag items={player.bag2} size={player.slots.B2.capacity ?? 0} type="bag2" interactive={false} />
+                        {:else}
+                            Aucun
+                        {/if}
+                    </div>
+                </td>
             </tr>
         {/each}
     </table>
@@ -107,6 +130,15 @@
     }
     td.equip span span:nth-child(2) {
         margin-left: 0.5em;
+    }
+    .bag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+    .title {
+        font-weight: bold;
     }
 	h2 {
         margin: 1em 0;

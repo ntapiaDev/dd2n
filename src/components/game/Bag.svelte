@@ -16,7 +16,7 @@
 </script>
 
 {#if size}
-    <span class="bag" style={`width: ${width}px`} in:fly={{ y: -30, duration: 500 }}>
+    <span class="bag" class:interactive style={interactive ? `width: ${width}px` : ''} in:fly={ interactive ? { y: -30, duration: 500 } : { y: 0, duration: 0 } }>
         <span class="container">
             {#if interactive}
                 <span class="title">{type === 'bag1' ? "Sac" : "Bagage"}</span>
@@ -46,6 +46,8 @@
     .bag {
         display: inline-flex;
         justify-content: space-between;
+    }
+    .bag.interactive {
         padding: 0.25em 0.5em;
         background-color: #EEE;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
