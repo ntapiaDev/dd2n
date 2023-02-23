@@ -1,11 +1,13 @@
 <script>
     import { page } from '$app/stores';
 	import { fade } from "svelte/transition";
-	import Item from "../game/Item.svelte";
-	import Meal from "./actions/Meal.svelte";
+	import EncampmentLog from './EncampmentLog.svelte';
 	import Worksite from "./Worksite.svelte";
+    import Meal from "./actions/Meal.svelte";
+    import Item from "../game/Item.svelte";
 
     export let encampment;
+    export let logs;
     export let tavern;
 
     const item = {
@@ -30,9 +32,13 @@
         <div class="sign"></div>
     {:else if encampment.level > 0}
         {#if encampment.players.includes($page.data.user.username)}
-            <p class="already">Vous avez déjà pris votre repas à la taverne aujourd'hui, mais vous pouvez toujours jouer avec Agnès, Le Loup et M. Ouink, cela leur ferait très plaisir !</p>
+            <span class="logs">
+                {#each logs as log}
+                    <EncampmentLog {log} />
+                {/each}
+            </span>
         {:else if $page.data.user.hunger > 75 && $page.data.user.thirst > 75}
-            <p class="already">Vous n'avez pas faim du tout et vous sentez incapable d'avaler quoi que ce soit, mais vous pouvez toujours jouer avec Agnès, Le Loup et M. Ouink, cela leur ferait très plaisir !</p>
+            <p class="not-hungry">Vous n'avez pas faim du tout et vous sentez incapable d'avaler quoi que ce soit, mais vous pouvez toujours jouer avec Agnès, Le Loup et M. Ouink, cela leur ferait très plaisir !</p>
         {:else}
             <span class="meal">
                 <img class="here" src="./here.png" alt="Cliquez-ici by itim2101">
@@ -110,6 +116,14 @@
         border-left: 3px solid red;
         border-right: 3px solid red;
     }
+    .logs {
+        display: block;
+        margin: 1em 0;
+    }
+    .not-hungry {
+        text-align: center;
+        text-decoration: underline;
+    }
     .meal {
         display: flex;
         align-items: center;
@@ -132,10 +146,6 @@
         text-align: center;
     }
     .meal-infos p {
-        text-decoration: underline;
-    }
-    .already {
-        text-align: center;
         text-decoration: underline;
     }
     .header {

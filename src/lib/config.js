@@ -19,14 +19,14 @@ export let colors = [
 
 // Multiplicateurs de loot:
 // TYPE : x quantité
-export const food = 3;
-export const drink = 3;
-export const drug = 2;
-export const weapon = 2;
+export const food = 2;
+export const drink = 2;
+export const drug = 1;
+export const weapon = 1;
 export const ammunition = 15;
 export const explosive = 5;
-export const armour = 2;
-export const bag = 2;
+export const armour = 1;
+export const bag = 1;
 export const resource = 10;
 export const blueprint = 1;
 // RARITY : x quantité
@@ -56,7 +56,7 @@ export const quantity_cache = () => Math.ceil(Math.random() * 3) + 1;
 
 // Expuisement batiment et case
 // BUILDING : > valeur
-export const empty_building = 0.99;
+export const empty_building = 1;
 // SEARCH : > valeur
 export const empty_1 = 0.66;
 export const empty_2 = 0.75;
@@ -70,8 +70,8 @@ export const nextday_attack = (day) => (day * 100 - 50) + Math.round(Math.random
 // CELL régénérée : > valeur
 export const nextday_empty = 0.75;
 // USER : - valeur
-export const nextday_hunger = 25;
-export const nextday_thirst = 25;
+export const nextday_hunger = 24
+export const nextday_thirst = 24;
 
 // Nombre de zombies
 // GAMESTART :

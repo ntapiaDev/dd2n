@@ -56,11 +56,15 @@ export const getBlueprints = (encampment, recipes, worksites, advance) => {
 export const getItem = (items, uuid, stack) => {
     for (let item of items) {
         if (item.uuid === uuid) {
-            if (stack && item.quantity > 1 && !['ammunition', 'explosive'].includes(item.type)) {
+            let newItem = { ...item };
+            if (stack && item.quantity > 1 && !['ammunition'].includes(item.type)) {
                 item.quantity -= 1;
-            }
-            else items.splice(items.indexOf(item), 1);
-            return { item: { ...item } };
+                newItem.quantity = 1;
+            } else if (stack && item.quantity > 10 && ['ammunition'].includes(item.type)) {
+                item.quantity -= 10;
+                newItem.quantity = 10;
+            } else items.splice(items.indexOf(item), 1);
+            return { item: newItem };
         }
     }
 }

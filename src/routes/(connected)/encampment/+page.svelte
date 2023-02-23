@@ -62,7 +62,7 @@
 		{:else if $sidebar === 'place'}
 			<Place square={data.square} />
 		{:else if $sidebar === 'tavern'}
-			<Tavern encampment={encampment.tavern} tavern={data.tavern} />
+			<Tavern encampment={encampment.tavern} logs={data.logs.filter(l => l.action === 'meal')} tavern={data.tavern} />
 		{:else if $sidebar === 'bank'}
 			<Bank items={sortItems(encampment.items)} />
 		{:else if $sidebar === 'worksites'}
