@@ -49,7 +49,8 @@
                 <td>{player.ap}</td>
             </tr>
             <tr style={`background-color: ${player.color + '20'}`}>
-                <td colspan="3">
+                <td>XP</td>
+                <td colspan="2">
                     <div class="bag">
                         <span class="title">Sac à dos :</span>
                         {#if player.slots.B1}
@@ -134,7 +135,6 @@
     .bag {
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: 4px;
     }
     .title {

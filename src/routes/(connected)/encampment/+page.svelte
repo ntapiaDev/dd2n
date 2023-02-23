@@ -81,6 +81,8 @@
 				<p>Ce chantier est déjà terminé.</p>
 			{:else if form?.edit}
 				<p>Vous ne pouvez pas éditer ce message mais vous pouvez le supprimer.</p>
+			{:else if form?.empty}
+				<p>Vos sacs sont déjà vides.</p>
 			{:else if form?.full}
 				<p>Votre inventaire est plein.</p>
 			{:else if form?.invalid}

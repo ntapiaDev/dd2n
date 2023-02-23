@@ -1,4 +1,6 @@
 <script>
+    import { enhance } from '$app/forms';
+    import { page } from '$app/stores';
 	import { flip } from "svelte/animate";
 	import { fade } from "svelte/transition";
 	import InteractiveItem from "../game/InteractiveItem.svelte";
@@ -52,6 +54,13 @@
     <h3>Banque commune ({ `${total === 0 ? 'Aucun' : total} objet${total > 1 ? 's' : ''} entreposé${total > 1 ? 's' : ''}` }) :</h3>
     <p>Vous pouvez entreposer ici tous les objets de votre campement.<br>
     Les ressources de la banque commune sont automatiquement utilisées lors de la construction d'un chantier de défense ou pour les transformations dans l'atelier de recyclage.</p>
+    {#if $page.data.user.bag1.length || $page.data.user.bag2.length || $page.data.user.inventory.length}
+        <form method="POST" action="/encampment?/empty" use:enhance>
+            <button>
+                Vider tous les sacs
+            </button>
+        </form>
+    {/if}
     {#if !items.length}
         <span class="empty">Les coffres du campement sont vides.</span>
     {:else}
@@ -85,10 +94,15 @@
         color: rgb(100, 100, 100);
         margin-bottom: 0.5em;
     }
+	button {
+        padding: 0.1em 0.5em;
+		cursor: pointer;
+	}
     span {
 		display: inline-block;
 	}
     .empty {
         font-weight: bold;
+        margin-top: 0.5em;
     }
 </style>

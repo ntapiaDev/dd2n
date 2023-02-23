@@ -121,6 +121,10 @@ export const _boost = (user_id, origin, item, ap, rethinkdb) => {
     return r.table('users').get(user_id).update({ ap, [origin]: r.row(origin).difference([item]), stats: { [item.type]: r.row('stats')(item.type).add(1) } }).run(rethinkdb);
 }
 
+export const empty_loots = (user_id, rethinkdb) => {
+    return r.table('users').get(user_id).update({ bag1: [], bag2: [], inventory: [] }).run(rethinkdb);
+}
+
 export const enter_encampment = (user_id, rethinkdb) => {
     return r.table('users').get(user_id).update({ location: 'Encampment' }).run(rethinkdb);
 }

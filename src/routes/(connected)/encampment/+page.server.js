@@ -1,13 +1,13 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { getTavernAction } from "$lib/game";
-import { findOrigin, getItem, handleBag, handleStack } from "$lib/loots";
+import { findOrigin, getItem, handleBag, handleStack, sortItems } from "$lib/loots";
 import { checkHT } from "$lib/player";
 import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
 import { add_meal, add_recipe, add_reload, add_worksite, build, built, do_reload, do_tavern, get_encampment, get_bank, remove_user_from_encampment, unlock_tavern, unlock_workshop, update_bank } from "$lib/server/encampments";
 import { add_log, add_logs, get_last_date, get_logs_by_coordinate } from "$lib/server/logs";
 import { add_square, delete_square_by_id, edit_square, get_square, get_square_by_id } from "$lib/server/square";
-import { get_slots_by_game, leave_encampment, loot, _meal, update_stats, use_item } from "$lib/server/users";
+import { empty_loots, get_slots_by_game, leave_encampment, loot, _meal, update_stats, use_item } from "$lib/server/users";
 import { get_recipe, get_recipes } from "$lib/server/workshop";
 import { get_tavern, get_worksite, get_worksites_by_group } from "$lib/server/worksites";
 
@@ -62,6 +62,17 @@ const deposit = async ({ locals, request }) => {
     await update_bank(locals.user.game_id, items, locals.rethinkdb);
     await loot(locals.user.id, origin, target, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'deposit', { item }, locals.user.gender, locals.user.color, locals.rethinkdb);
+}
+
+const empty = async ({ locals }) => {
+    if (!locals.user.bag1.length && !locals.user.bag2.length && !locals.user.inventory.length) return fail(400, { empty: true });  
+    const items = [];
+    for (let item of sortItems([...locals.user.bag1, ... locals.user.bag2, ...locals.user.inventory])) handleStack(items, item);
+    const bank = await get_bank(locals.user.game_id, locals.rethinkdb);
+    for (let item of items) handleStack(bank, item);
+    await update_bank(locals.user.game_id, bank, locals.rethinkdb);
+    await empty_loots(locals.user.id, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'empty', { items }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const map = async ({ locals }) => {
@@ -303,4 +314,4 @@ const worksite = async ({ locals, request }) => {
     throw redirect(303, '/encampment');
 }
 
-export const actions = { blueprint, deposit, map, meal, square, tavern, unlock, upgrade, withdraw, workshop, worksite };
+export const actions = { blueprint, deposit, empty, map, meal, square, tavern, unlock, upgrade, withdraw, workshop, worksite };

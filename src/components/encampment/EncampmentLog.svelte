@@ -176,6 +176,15 @@
 		{/if}
 	{:else if log.action === 'deposit'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a rangé <Item item={log.log.item} /> dans la banque.</div>
+	{:else if log.action === 'empty'}
+		<div class="item empty"><PlayerName color={log.color} username={log.player} /> <span>a rangé</span>
+			{#each log.log.items as item, i}
+				{#if log.log.items.length > 1 && log.log.items.length === i + 1}
+					<span>et</span>
+				{/if}
+				<Item {item} />
+			{/each}
+			<span>dans la banque.</span></div>
 	{:else if log.action === 'withdraw'}
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris <Item item={log.log.item} /> dans la banque.</div>
 	{:else if log.action === 'build'}
@@ -431,6 +440,9 @@
 		flex-wrap: wrap;
 		gap: 1px 4px;
 	}
+	.item.empty {
+		gap: 0;
+	}
 	.item .build {
 		display: flex;
 		align-items: center;
@@ -444,7 +456,8 @@
 	}
 	.item .build span span,
 	.item .workshop span,
-	.tavern span span {
+	.tavern span span,
+	.empty span {
 		margin: 0 4px;
 	}
 	.altar {
