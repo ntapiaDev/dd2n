@@ -42,7 +42,10 @@
 		}
 	];
 	$: if ($page.url.pathname !== '/players') hunger = $page.data.user.hunger;
-	$: index = Math.floor(4 - (4 * hunger) / 100) < 5 ? Math.floor(4 - (4 * hunger) / 100) : 4
+	$: index = hunger > 75 ? 0 :
+		hunger > 50 ? 1 :
+		hunger > 24 ? 2 :
+		hunger > 0 ? 3 : 4;
 
 	$: r = hunger > 75 ? 205 : 255;
 	$: g = hunger > 75 ? 255 :

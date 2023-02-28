@@ -42,7 +42,10 @@
 		}
 	];
 	$: if ($page.url.pathname !== '/players') thirst = $page.data.user.thirst;
-	$: index = Math.floor(4 - (4 * thirst) / 100) < 5 ? Math.floor(4 - (4 * thirst) / 100) : 4
+	$: index = thirst > 75 ? 0 :
+		thirst > 50 ? 1 :
+		thirst > 24 ? 2 :
+		thirst > 0 ? 3 : 4;
 
 	$: r = thirst > 75 ? 205 : 255;
 	$: g = thirst > 75 ? 255 :

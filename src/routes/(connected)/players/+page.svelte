@@ -1,5 +1,6 @@
 <script>
     import { getDefense, getLevel } from "$lib/player";
+    import { tooltip } from "../../../components/game/tooltip";
 	import Armour from "../../../components/game/Armour.svelte";
 	import Bag from "../../../components/game/Bag.svelte";
 	import Bags from "../../../components/game/Bags.svelte";
@@ -28,7 +29,7 @@
         </tr>
         {#each players as player}
             <tr style={`background-color: ${player.color + '20'}`}>
-                <td rowspan="2"><PlayerName username={player.username} color={player.color} /><br /><PlayerName username={`Niv. ${getLevel(player.xp).level}`} color={player.color} /></td>
+                <td rowspan="2"><PlayerName username={player.username} color={player.color} /><br /><span title={`${getLevel(player.xp).progress}%`} use:tooltip><PlayerName username={`Niv. ${getLevel(player.xp).level}`} color={player.color} /></span></td>
                 <td class="status">
                     <div>
                         <Wound wound={player.wound} />

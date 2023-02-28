@@ -3,7 +3,7 @@ import { sortItems } from "$lib/loots";
 export const checkResources = (bank, resources, ap, mustReload, reload) => {
     if (mustReload && reload) resources = resources.filter(r => r.item.reload === true);
     for (let resource of resources) {
-        if (getQuantity(bank, resource) < resource.quantity * (resource.item.reload ? ap : 1)) return false;
+        if (getQuantity(bank, resource) < resource.quantity * (mustReload && resource.item.reload ? ap : 1)) return false;
     }
     return true;
 }
