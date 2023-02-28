@@ -75,7 +75,7 @@ const joinGame = async ({ locals, request }) => {
         else if (game.colors.find(c => c.code === color).taken) return fail(400, { taken: true });
         await add_user_to_encampment(game_id, locals.user.username, locals.rethinkdb);
         await add_user_to_game(game_id, locals.user.username, color, locals.rethinkdb);
-        await add_game_to_user(game_id, locals.user.id, color, locals.rethinkdb);
+        await add_game_to_user(game_id, locals.user.id, color, locals.user.xp, locals.rethinkdb);
         await add_log(game_id, 'Encampment', locals.user.username, 'newGame', '', locals.user.gender, color, locals.rethinkdb);
         throw redirect(303, '/map');
     }

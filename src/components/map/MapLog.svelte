@@ -1,6 +1,7 @@
 <script>
 	import { formatDate } from '$lib/game';
 	import { sortItems } from '$lib/loots';
+	import { tooltip } from '../game/tooltip';
 	import Item from '../game/Item.svelte';
 	import PlayerName from '../game/PlayerName.svelte';
 
@@ -22,6 +23,13 @@
 			type: 'misc',
 		}
 	];
+	const levelUp = {
+		credit: 'Freepik',
+		description: 'LEVEL UP!',
+		icon: 'levelup',
+		id: 'f2677280-4a14-4452-9da6-2ddb5139fbe7',
+		type: 'misc'
+	}
 	const rip = {
 		credit: "Eucalyp" ,
 		description: "Repose en paix" ,
@@ -113,6 +121,10 @@
 			{#if log.log.critical}
 				<span>Un coup bien placé a permis de toucher <span class="zombies">{log.log.critical} zombie{log.log.critical > 1 ? 's' : ''}</span> supplémentaire{log.log.critical > 1 ? 's' : ''}.</span>
 			{/if}
+			<sup class="xp" title={log.log.xp + ' xp'} use:tooltip><img src="./xp.png" alt="Expérience gagnée"></sup>
+			{#if log.log.levelUp.up}
+				<div class="item"><PlayerName color={log.color} username={log.player} /> est maintenant <Item item={levelUp} /> <b>niveau {log.log.levelUp.level}</b> !</div>
+			{/if}
 			{#if log.log.broken}
 				<div>Son arme s'est brisée sous le choc.</div>
 			{:else if log.log.ammo}
@@ -152,11 +164,15 @@
 					<Item {item} />
 				{/each}
 			</span>
+			<sup title={log.log.xp + ' xp'} use:tooltip><img src="./xp.png" alt="Expérience gagnée"></sup>
 		</div>
 		{#if log.log.cache}
 			{#each sortItems(log.log.cache) as item}
 				<div class="item"><PlayerName color={log.color} username={log.player} /> a repéré une cache avec <Item {item} /> supplémentaires !</div>
 			{/each}
+		{/if}
+		{#if log.log.levelUp.up}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est maintenant <Item item={levelUp} /> <b>niveau {log.log.levelUp.level}</b> !</div>
 		{/if}
 		{#if log.log.plus.one || log.log.plus.two || log.log.plus.tree || log.log.plus.four}
 			<div class="mt"><PlayerName color={log.color} username={log.player} /> découvre
@@ -301,6 +317,16 @@
 	}
 	.mt {
 		margin-top: 2px;
+	}
+	sup {
+		align-self: baseline;
+	}
+	sup img {
+		width: 15px;
+		height: 15px;
+	}
+	sup.xp img {
+		margin-bottom: -2px;
 	}
 	.food,
 	.p1 {

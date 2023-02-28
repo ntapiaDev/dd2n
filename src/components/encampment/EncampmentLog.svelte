@@ -1,5 +1,6 @@
 <script>
 	import { formatDate } from '$lib/game';
+	import { tooltip } from '../game/tooltip';
 	import Item from '../game/Item.svelte';
 	import PlayerName from '../game/PlayerName.svelte';
 
@@ -28,6 +29,13 @@
 			type: 'misc',
 		}
 	];
+	const levelUp = {
+		credit: 'Freepik',
+		description: 'LEVEL UP!',
+		icon: 'levelup',
+		id: 'f2677280-4a14-4452-9da6-2ddb5139fbe7',
+		type: 'misc'
+	}
 	const meal = {
         credit: 'Freepik',
         description: 'Prendre un bon repas',
@@ -189,7 +197,10 @@
 		<div class="item"><PlayerName color={log.color} username={log.player} /> a pris <Item item={log.log.item} /> dans la banque.</div>
 	{:else if log.action === 'build'}
 		{#if log.log.type === 'reloading'}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA pour <span class="reload">recharger</span> <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA pour <span class="reload">recharger</span> <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b><sup class="xp" title={log.log.xp + ' xp'} use:tooltip><img src="./xp.png" alt="Expérience gagnée"></sup></div>
+			{#if log.log.levelUp.up}
+				<div class="item"><PlayerName color={log.color} username={log.player} /> est maintenant <Item item={levelUp} /> <b>niveau {log.log.levelUp.level}</b> !</div>
+			{/if}
 			<div class="mtb">Le chantier est à nouveau fonctionnel, le campement gagne {log.log.defense} DEF !</div>
 			<div class="item">
 				<span class="build">
@@ -206,7 +217,10 @@
 				</span>
 			</div>
 		{:else}
-			<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b></div>
+			<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={build} substitute="Chantier" /> <b>{log.log.name}<span class="notb">.</span></b><sup class="xp" title={log.log.xp + ' xp'} use:tooltip><img src="./xp.png" alt="Expérience gagnée"></sup></div>
+			{#if log.log.levelUp.up}
+				<div class="item"><PlayerName color={log.color} username={log.player} /> est maintenant <Item item={levelUp} /> <b>niveau {log.log.levelUp.level}</b> !</div>
+			{/if}
 			{#if log.log.completed}
 				<div class="mtb">Le chantier est maintenant terminé, le campement gagne <b>{log.log.defense} DEF</b> !</div>
 				<div class="item">
@@ -243,7 +257,10 @@
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /> et <Item item={feed[1]} substitute={'Déshydraté'} /></div>
 		{/if}
 	{:else if log.action === 'tavern'}
-		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={meal} substitute='Taverne "Le Never Dry"' /> <b>{log.log.name}<span class="notb">.</span></b></div>
+		<div class="item"><PlayerName color={log.color} username={log.player} /> a dépensé {log.log.ap} PA dans la construction de <Item item={meal} substitute='Taverne "Le Never Dry"' /> <b>{log.log.name}<span class="notb">.</span></b><sup class="xp" title={log.log.xp + ' xp'} use:tooltip><img src="./xp.png" alt="Expérience gagnée"></sup></div>
+		{#if log.log.levelUp.up}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est maintenant <Item item={levelUp} /> <b>niveau {log.log.levelUp.level}</b> !</div>
+		{/if}
 		{#if log.log.completed}
 			<div class="mtb">Le chantier est maintenant terminé, la taverne atteint le <b>niveau {log.log.level}</b> !</div>
 			<div class="item">
@@ -281,7 +298,10 @@
 				{/if}
 				<Item {item} />
 			{/each}
-		</span></div>
+		</span><sup class="xp" title={log.log.xp + ' xp'} use:tooltip><img src="./xp.png" alt="Expérience gagnée"></sup></div>
+		{#if log.log.levelUp.up}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est maintenant <Item item={levelUp} /> <b>niveau {log.log.levelUp.level}</b> !</div>
+		{/if}
 		{#if log.log.warning === 'hunger'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
 		{:else if log.log.warning === 'thirst'}
@@ -297,7 +317,10 @@
 				{/if}
 				<Item {item} />
 			{/each}
-		</span></div>
+		</span><sup class="xp" title={log.log.xp + ' xp'} use:tooltip><img src="./xp.png" alt="Expérience gagnée"></sup></div>
+		{#if log.log.levelUp.up}
+			<div class="item"><PlayerName color={log.color} username={log.player} /> est maintenant <Item item={levelUp} /> <b>niveau {log.log.levelUp.level}</b> !</div>
+		{/if}
 		<div>Cet objet est maintenant <span class={log.log.item.plus === 1 ? 'p1' : log.log.item.plus === 2 ? 'p2' : log.log.item.plus === 3 ? 'p3' : 'p4'}>+{log.log.item.plus}</span> !</div>
 		{#if log.log.warning === 'hunger'}
 			<div class="item"><PlayerName color={log.color} username={log.player} /> est <Item item={feed[0]} substitute={'Affamé'} /></div>
@@ -493,6 +516,13 @@
 	.t4 {
 		position: relative;
 		top: 4px;
+	}
+	sup {
+		align-self: baseline;
+	}
+	sup img {
+		width: 15px;
+		height: 15px;
 	}
 	.alert,
 	.reload,

@@ -2,6 +2,8 @@
     import { page } from '$app/stores';
     import { fly } from 'svelte/transition';
     import { sortItems } from '$lib/loots';
+    import { getPAMax } from "$lib/player";
+    import { tooltip } from './tooltip';
 	import Armour from './Armour.svelte';
 	import Bag from './Bag.svelte';
 	import Bags from './Bags.svelte';
@@ -25,7 +27,7 @@
         <Bags {items} B1={player.slots.B1} B2={player.slots.B2} bag1={player.bag1} bag2={player.bag2} />
         <Inventory items={player.inventory} />
     </span>
-    <span>
+    <span title={'Maximum : ' + getPAMax($page.data.user.xp) + ' PA (100 + niveau actuel)'} use:tooltip>
         {player.ap} PA
     </span>
     <span class="bags">

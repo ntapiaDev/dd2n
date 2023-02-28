@@ -1,5 +1,5 @@
 <script>
-    import { getDefense } from "$lib/player";
+    import { getDefense, getLevel } from "$lib/player";
 	import Armour from "../../../components/game/Armour.svelte";
 	import Bag from "../../../components/game/Bag.svelte";
 	import Bags from "../../../components/game/Bags.svelte";
@@ -28,7 +28,7 @@
         </tr>
         {#each players as player}
             <tr style={`background-color: ${player.color + '20'}`}>
-                <td><PlayerName username={player.username} color={player.color} /></td>
+                <td rowspan="2"><PlayerName username={player.username} color={player.color} /><br /><PlayerName username={`Niv. ${getLevel(player.xp).level}`} color={player.color} /></td>
                 <td class="status">
                     <div>
                         <Wound wound={player.wound} />
@@ -49,7 +49,6 @@
                 <td>{player.ap}</td>
             </tr>
             <tr style={`background-color: ${player.color + '20'}`}>
-                <td>XP</td>
                 <td colspan="2">
                     <div class="bag">
                         <span class="title">Sac à dos :</span>
@@ -82,9 +81,10 @@
             <th>Médicaments</th>
             <th>Chantiers</th>
             <th>Atelier</th>
-            <th>Objet trouvés</th>
+            <th>Objets</th>
             <th>Plans</th>
             <th>Recettes</th>
+            <th>Expérience</th>
             <th>Zombies</th>
         </tr>
         {#each players as player}
@@ -98,6 +98,7 @@
                 <td>{player.stats.items}</td>
                 <td>{player.stats.blueprint}</td>
                 <td>{player.stats.recipe}</td>
+                <td>{player.stats.xp} xp</td>
                 <td>{player.stats.zombies}</td>
             </tr>
         {/each}

@@ -104,6 +104,16 @@ export const getPool = (items, danger, uniques) => {
     return pool;
 }
 
+export const getXp = (loots) => {
+    let xp = 0;
+    const tab = { 'commun': 1, 'inhabituel': 2, 'rare': 3, 'épique': 4 }
+    for (let loot of loots) {
+        xp += (tab[loot.rarity] * (loot.type !== 'ammunition' ? loot.quantity : 1));
+        if (loot.unique) xp += 5;
+    } 
+    return xp;
+}
+
 export const handleBag = (item, user) => {
     const slots = user.slots;
     if (item.uuid === user.slots.B1.uuid) user.slots.B1 = '';

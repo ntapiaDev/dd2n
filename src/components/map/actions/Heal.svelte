@@ -1,7 +1,9 @@
 <script>
+	import { page } from '$app/stores';
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { sortItems } from '$lib/loots';
+	import { getPAMax } from "$lib/player";
 	import InteractiveItem from '../../game/InteractiveItem.svelte';
 	import Item from '../../game/Item.svelte';
 
@@ -20,7 +22,7 @@
 	let open = false;
 </script>
 
-{#if user?.wound || (user?.ap < 100 && items.some(i => i.ap && i.type ==='drug'))}
+{#if user?.wound || (user?.ap < getPAMax($page.data.user.xp) && items.some(i => i.ap && i.type ==='drug'))}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="item" on:mouseenter={() => (open = true)} on:mouseleave={() => (open = false)}>
 		<Item {item} />
@@ -29,7 +31,7 @@
 				{#each items as item}
 					{#if item.type === 'drug' && (user?.wound === 1 || user?.wound === 2 && item.rarity === 'rare' || item.rarity === 'épique') && !item.ap}
 						<InteractiveItem {item} action={'/player?/heal'} />
-					{:else if user?.ap < 100 && item.type === 'drug' && item.ap}
+					{:else if user?.ap < getPAMax($page.data.user.xp) && item.type === 'drug' && item.ap}
 						<InteractiveItem {item} action={'/player?/boost'} />
 					{/if}
 				{/each}
