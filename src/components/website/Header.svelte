@@ -1,6 +1,8 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import { getLevel } from '$lib/player';
+	import { tooltip } from '../game/tooltip';
 	import Item from '../game/Item.svelte';
 	import PlayerName from '../game/PlayerName.svelte';
 
@@ -32,6 +34,7 @@
 		'Objet' + (s?.items > 1 ? 's' : '') + ' trouvé' + (s?.items > 1 ? 's' : '') + ' : ' + (s?.items ?? 0) + '<br/>' +
 		'Plan' + (s?.blueprint > 1 ? 's' : '') + ' trouvé' + (s?.blueprint > 1 ? 's' : '') + ' : ' + (s?.blueprint ?? 0) + '<br/>' +
 		'Recette' + (s?.recipe > 1 ? 's' : '') + ' trouvée' + (s?.recipe > 1 ? 's' : '') + ' : ' + (s?.recipe ?? 0) + '<br/>' +
+		'Expérience gagnée : ' + (s?.xp ?? 0) + ' xp<br/>' +
 		'Zombie' + (s?.zombies > 1 ? 's' : '') + ' tué' + (s?.zombies > 1 ? 's' : '') + ' : ' + (s?.zombies ?? 0)
 </script>
 
@@ -68,7 +71,7 @@
 				<a href="/admin">Administrer le site</a>
 			{/if}
 			<form method="POST" action="/logout" use:enhance>
-				<button type="submit">Se déconnecter ({#if $page.data.user.game_id}<PlayerName color={$page.data.user.color} username={$page.data.user.username} />{:else}{$page.data.user.username}{/if})</button>
+				<button type="submit">Se déconnecter ({#if $page.data.user.game_id}<PlayerName color={$page.data.user.color} username={`${$page.data.user.username} - `} /><span title={`${getLevel($page.data.user.xp).progress}%`} use:tooltip><PlayerName color={$page.data.user.color} username={`Niv. ${getLevel($page.data.user.xp).level}`} /></span>{:else}{$page.data.user.username}{/if})</button>
 			</form>
 			<span class="stats"><Item item={stats} {substitute} /></span>
 		{/if}

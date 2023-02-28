@@ -2,10 +2,11 @@ import bcrypt from 'bcrypt';
 import r from 'rethinkdb';
 import { nextday_hunger, nextday_thirst } from '$lib/config';
 import { encampment } from '$lib/layout';
+import { getPAMax } from "$lib/player";
 
-export const add_game_to_user = (game_id, id, color, rethinkdb) => {
+export const add_game_to_user = (game_id, id, color, xp, rethinkdb) => {
     return r.table('users').get(id).update({
-        ap: 100,
+        ap: getPAMax(xp),
         bag1: [],
         bag2: [],
         color,
@@ -93,6 +94,7 @@ export const add_game_to_user = (game_id, id, color, rethinkdb) => {
             recipe: 0,
             workshop: 0,
             worksite: 0,
+            xp: 0,
             zombies: 0
         },
         thirst: 75,
@@ -108,13 +110,14 @@ export const add_user = async (user, rethinkdb) => {
         password: hashedPassword,
         role: 'user',
         sessionid: SESSIONID,
-        username: user.username
+        username: user.username,
+        xp: 0
     }).run(rethinkdb);
     return SESSIONID;
 }
 
-export const _attack = (user_id, ap, force, hunger, slots, stats, thirst, wound, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap, force, hunger, slots, stats, thirst, wound }).run(rethinkdb);
+export const _attack = (user_id, ap, force, hunger, slots, stats, thirst, wound, xp, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, force, hunger, slots, stats, thirst, wound, xp: r.row('xp').add(xp) }).run(rethinkdb);
 }
 
 export const _boost = (user_id, origin, item, ap, rethinkdb) => {
@@ -204,8 +207,8 @@ export const remove_game_from_users = (game_id, rethinkdb) => {
     )).run(rethinkdb);
 }
 
-export const _search = (user_id, ap, hunger, stats, thirst, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap, hunger, stats, thirst }).run(rethinkdb);
+export const _search = (user_id, ap, hunger, stats, thirst, xp, rethinkdb) => {
+    return r.table('users').get(user_id).update({ ap, hunger, stats, thirst, xp: r.row('xp').add(xp) }).run(rethinkdb);
 }
 
 export const setSession = (cookies, SESSIONID) => {
@@ -223,14 +226,14 @@ export const _travel = (user_id, location, ap, hunger, thirst, rethinkdb) => {
 }
 
 export const update_stats = (user_id, ap, hunger, thirst, wound, stat, rethinkdb) => {
-    return r.table('users').get(user_id).update({ ap: r.row('ap').sub(ap), hunger, stats: { [stat]: r.row('stats')(stat).add(stat === 'worksite' ? ap : 1) }, thirst, wound }).run(rethinkdb);
+    return r.table('users').get(user_id).update({ ap: r.row('ap').sub(ap), hunger, stats: { [stat]: r.row('stats')(stat).add(stat === 'worksite' ? ap : 1), xp: r.row('stats')('xp').add(ap) }, thirst, wound, xp: r.row('xp').add(ap) }).run(rethinkdb);
 }
 
 export const update_users = async (game_id, rethinkdb) => {
     const players = await r.table('users').filter({ game_id }).orderBy(r.asc('username')).run(rethinkdb);
     const events = [];
     for (let player of players) {
-        player.ap = 100;
+        player.ap = getPAMax(player.xp);
         player.force = false;
         player.hunger -= nextday_hunger;
         player.thirst -= nextday_thirst;

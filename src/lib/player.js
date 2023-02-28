@@ -19,3 +19,28 @@ export const getDefenseAll = (slots, players) => {
     }
     return defense;
 }
+
+export const getLevel = (xp) => {
+    let i = 0;
+    let xpTab = { 0: 0 };
+    while (xpTab[i] <= xp) {
+        i++;
+        xpTab[i] = xpTab[i - 1] + i * 100;
+    }
+    for (let key in xpTab)
+        if (xpTab[key] > xp) {
+            let level = key - 1;
+
+            let current = xp - xpTab[level];
+            let total = xpTab[key] - xpTab[level];
+            let progress = Math.floor((current / total) * 100);
+
+            return { level, progress };
+    }
+}
+
+export const getPAMax = (xp) => 100 + getLevel(xp).level;
+
+export const levelUp = (totalXp, xpGained) => {
+    return { up: getLevel(totalXp).level < getLevel(totalXp + xpGained).level, level: getLevel(totalXp + xpGained).level }
+}

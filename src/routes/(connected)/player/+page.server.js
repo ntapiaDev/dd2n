@@ -1,5 +1,6 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { findOrigin, getItem } from "$lib/loots";
+import { getPAMax } from "$lib/player";
 import { add_log } from "$lib/server/logs";
 import { _boost, _feed, _heal } from "$lib/server/users";
 
@@ -9,7 +10,8 @@ export async function load() {
 
 const boost = async ({ locals, request }) => {
     let ap = locals.user.ap;
-    if (ap === 100) return fail(400, { full: true });
+    const max = getPAMax(locals.user.xp);
+    if (ap === max) return fail(400, { full: true });
     const data = await request.formData();
     const uuid = data.get('uuid');
     const { origin, target } = findOrigin(locals.user.bag1, locals.user.bag2, locals.user.inventory, uuid);
@@ -17,7 +19,7 @@ const boost = async ({ locals, request }) => {
     const { item } = getItem(target, uuid, false);
     if (!item.ap) return fail(400, { type: true });
     ap += item.ap;
-    if (ap > 100) ap = 100;
+    if (ap > max) ap = max;
     const value = ap - locals.user.ap;
     await _boost(locals.user.id, origin, item, ap, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'boost', { boost: item.description, value }, locals.user.gender, locals.user.color, locals.rethinkdb);
@@ -45,7 +47,7 @@ const feed = async ({ locals, request }) => {
         fed = thirst - locals.user.thirst;
     }
     let ap = locals.user.ap + Math.floor(fed/10);
-    if (ap > 100) ap = 100;
+    if (ap > getPAMax(locals.user.xp)) ap = getPAMax(locals.user.xp);
     await _feed(locals.user.id, origin, item, ap, hunger, thirst, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'feed', { feed: item.description, type: item.type, value: ap - locals.user.ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }

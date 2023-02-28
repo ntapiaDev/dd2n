@@ -1,7 +1,7 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { getTavernAction } from "$lib/game";
 import { findOrigin, getItem, handleBag, handleStack, sortItems } from "$lib/loots";
-import { checkHT } from "$lib/player";
+import { checkHT, getPAMax, levelUp } from "$lib/player";
 import { checkResources, isBlocked, updateBank } from "$lib/worksites";
 import { add_user_to_location } from "$lib/server/cells";
 import { add_meal, add_recipe, add_reload, add_worksite, build, built, do_reload, do_tavern, get_encampment, get_bank, remove_user_from_encampment, unlock_tavern, unlock_workshop, update_bank } from "$lib/server/encampments";
@@ -102,7 +102,7 @@ const meal = async ({ locals }) => {
     if (thirst > 100) thirst = 100;
     fed += thirst - locals.user.thirst;
     let ap = locals.user.ap + Math.floor(fed/10);
-    if (ap > 100) ap = 100;
+    if (ap > getPAMax(locals.user.xp)) ap = getPAMax(locals.user.xp);
     await _meal(locals.user.id, ap, hunger, thirst, locals.rethinkdb);
     await add_meal(locals.user.game_id, locals.user.username, locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'meal', { action: getTavernAction(), teddy: Math.floor(Math.random() * 3), value: ap - locals.user.ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
@@ -174,7 +174,7 @@ const tavern = async ({ locals, request }) => {
     } else {
         await build(locals.user.game_id, ap, id, 'tavern', locals.rethinkdb);
     }
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tavern', { ap, completed, items, level: worksite.level, name: worksite.name, warning, wounded }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'tavern', { ap, completed, items, level: worksite.level, levelUp: levelUp(locals.user.xp, ap), name: worksite.name, warning, wounded,xp: ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 
@@ -214,7 +214,7 @@ const upgrade = async ({ locals, request }) => {
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await update_stats(locals.user.id, 1, hunger, thirst, locals.user.wound, 'workshop', locals.rethinkdb);
     await update_bank(locals.user.game_id, handleStack(bank.filter(i => i.quantity > 0), upgraded), locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'upgrade', { item: upgraded, items, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'upgrade', { item: upgraded, items, levelUp: levelUp(locals.user.xp, 1), warning, xp: 1 }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 
@@ -252,7 +252,7 @@ const workshop = async ({ locals, request }) => {
     product.quantity = recipe.left.quantity;
     product.uuid = crypto.randomUUID();
     await update_bank(locals.user.game_id, handleStack(bank.filter(i => i.quantity > 0), product), locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'workshop', { item: product, items, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'workshop', { item: product, items, levelUp: levelUp(locals.user.xp, ap), warning, xp: ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 
@@ -310,7 +310,7 @@ const worksite = async ({ locals, request }) => {
     } else {
         await build(locals.user.game_id, ap, id, 'worksites', locals.rethinkdb);
     }
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, defense: worksite.defense * (worksite.reload ? ap : 1), items, name: worksite.name, type, warning, wounded }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'build', { ap, completed, defense: worksite.defense * (worksite.reload ? ap : 1), items, levelUp: levelUp(locals.user.xp, ap), name: worksite.name, type, warning, wounded, xp: ap }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/encampment');
 }
 

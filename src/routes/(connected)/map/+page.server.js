@@ -1,8 +1,8 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { critical_chance, empty_1, empty_2, empty_3, empty_building, wound_armed, wound_unarmed } from "$lib/config";
 import { canTravel } from '$lib/game';
-import { getBlueprints, getItem, getPool, handleBag, handlePlus, handleSearch, handleStack } from "$lib/loots";
-import { checkHT, getDefense } from "$lib/player";
+import { getBlueprints, getItem, getPool, getXp, handleBag, handlePlus, handleSearch, handleStack } from "$lib/loots";
+import { checkHT, getDefense, levelUp } from "$lib/player";
 import { add_tchat, altar_collapse, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_items, update_map, update_search } from "$lib/server/cells";
 import { add_user_to_encampment, get_encampment } from "$lib/server/encampments";
 import { add_unique } from "$lib/server/games";
@@ -100,11 +100,12 @@ const attack = async ({ locals, request }) => {
         critical = zombies - killed - location.zombies;
     }
     const stats = locals.user.stats;
+    stats.xp += (killed + critical);
     stats.zombies += (killed + critical);
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await kill_zombies(locals.user.game_id, location.coordinate, killed + critical, locals.rethinkdb);
-    await _attack(locals.user.id, locals.user.ap - 1, force, hunger, slots, stats, thirst, wound, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, woundedW0, woundedW1, critical, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await _attack(locals.user.id, locals.user.ap - 1, force, hunger, slots, stats, thirst, wound, killed + critical, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, levelUp: levelUp(locals.user.xp, killed + critical), woundedW0, woundedW1, critical, warning, xp: killed + critical }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/map');
 }
 
@@ -126,12 +127,13 @@ const building = async ({ locals }) => {
     let plus = handlePlus(loots);
     let empty = Math.random() > empty_building;
     const stats = locals.user.stats;
-    stats.items += loots.length;
+    stats.items += (loots.length + cache.map(i => i.quantity).reduce((a, b) => a + b, 0));
+    stats.xp += getXp([...loots, ...cache]);
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await update_building(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb);
-    await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
+    await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, getXp([...loots, ...cache]), locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'building', { cache, loots, plus, 'emptyBuilding': empty, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'building', { cache, loots, plus, 'emptyBuilding': empty, levelUp: levelUp(locals.user.xp, getXp([...loots, ...cache])), warning, xp: getXp([...loots, ...cache]) }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const drop = async ({ locals, request }) => {
@@ -199,7 +201,8 @@ const search = async ({ locals }) => {
     let plus = handlePlus(loots);
     let empty = Math.random() > (danger === 1 ? empty_1 : danger === 2 ? empty_2 : empty_3);
     const stats = locals.user.stats;
-    stats.items += loots.length;
+    stats.items += (loots.length + cache.map(i => i.quantity).reduce((a, b) => a + b, 0));
+    stats.xp += getXp([...loots, ...cache]);
     if (loots.some(i => i.type === 'blueprint'))
         for (let loot of loots.filter(i => i.type === 'blueprint')) {
             if (loot.worksite_id) stats.blueprint += 1;
@@ -207,9 +210,9 @@ const search = async ({ locals }) => {
         }
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await update_search(locals.user.game_id, locals.user.id, location.coordinate, items, empty, locals.rethinkdb)
-    await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, locals.rethinkdb);
+    await _search(locals.user.id, locals.user.ap - 1, hunger, stats, thirst, getXp([...loots, ...cache]), locals.rethinkdb);
     if (uniques.length) await add_unique(locals.user.game_id, uniques, locals.rethinkdb);
-    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { cache, loots, plus, 'empty': empty, warning }, locals.user.gender, locals.user.color, locals.rethinkdb);
+    await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'loot', { cache, loots, plus, 'empty': empty, levelUp: levelUp(locals.user.xp, getXp([...loots, ...cache])), warning, xp: getXp([...loots, ...cache]) }, locals.user.gender, locals.user.color, locals.rethinkdb);
 }
 
 const tchat = async ({ locals, request }) => {
