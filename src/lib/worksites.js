@@ -38,7 +38,7 @@ export const getQuantity = (bank, resource) => {
 export const isBlocked = (child, completed, worksites) => {
     const rarities = ['commun', 'inhabituel', 'rare', 'épique'];
     const group = worksites.find(g => g.reduction.some(w => w.id === child.id));
-    const previous = group.reduction.filter(w => w.defense < child.defense && rarities.indexOf(w.rarity) <= rarities.indexOf(child.rarity)).map(w => w.id);
+    const previous = group.reduction.filter(w => w.defense < child.defense && rarities.indexOf(w.rarity) <= rarities.indexOf(child.rarity) && !w.reload).map(w => w.id);
     previous.push(group.group);
     return !previous.every(w => completed.includes(w));
 }
