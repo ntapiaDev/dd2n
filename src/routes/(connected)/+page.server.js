@@ -1,4 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
+import { calcul_attack } from "$lib/config";
 import { generate_cells, delete_cells, remove_user_from_location } from "$lib/server/cells";
 import { add_user_to_encampment, delete_encampment, generate_encampment, remove_user_from_encampment } from "$lib/server/encampments";
 import { add_game, add_user_to_game, delete_game, get_games, get_game_by_id, remove_user_from_game } from "$lib/server/games"
@@ -24,8 +25,8 @@ const addGame = async ({ locals }) => {
     const recipes = workshop.filter(w => w.left.unlocked).map(w => w.left.id);
     const blueprint = await get_from('workshop', locals.rethinkdb);
     const game_id = await add_game(locals.rethinkdb);
-    const { teddies, ws } = await generate_cells(game_id, blueprint, locals.rethinkdb);
-    await generate_encampment(game_id, completed, tavern, unlocked, recipes, locals.rethinkdb);
+    const { teddies, total_zombies, ws } = await generate_cells(game_id, blueprint, locals.rethinkdb);
+    await generate_encampment(game_id, calcul_attack(1, total_zombies), completed, tavern, unlocked, recipes, locals.rethinkdb);
     await add_squares(game_id, [
         { color: '#000000', category: 'motd', message: 'Trouver un moyen de débloquer l\'atelier.', username: 'Gardien' },
         { color: '#000000', category: 'bank', message: 'Il nous faut en priorité des ressources pour les chantiers et de la nourriture.', username: 'Gardien' },

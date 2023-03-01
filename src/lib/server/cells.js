@@ -26,6 +26,7 @@ export const generate_cells = async (game_id, workshop, rethinkdb) => {
     const tunnel = getTunnel();
     let cells = [];
     let code = 1;
+    let total_zombies = 0;
     for (let i = 0; i < size; i++) {
         for (let j = 1; j < size + 1; j++) {
             const altar = letters[i] + j === _altar;
@@ -41,6 +42,7 @@ export const generate_cells = async (game_id, workshop, rethinkdb) => {
             let zombies = zombies_start(distance);
             if (zombies < 0) zombies = 0;
             if (building) zombies += zombies_building;
+            total_zombies += zombies;
             cells.push({
                 altar,
                 building,
@@ -63,7 +65,7 @@ export const generate_cells = async (game_id, workshop, rethinkdb) => {
         }
     }
     await r.table('cells').insert(cells).run(rethinkdb);
-    return { teddies: Object.keys(teddies), ws: Object.entries(buildings).find(b => b[1].code === 'b2')[0] };
+    return { teddies: Object.keys(teddies), total_zombies, ws: Object.entries(buildings).find(b => b[1].code === 'b2')[0] };
 }
 
 export const get_cell = async (game_id, coordinate, rethinkdb) => {
@@ -83,6 +85,10 @@ export const get_map = async (game_id, rethinkdb) => {
         rows.push(row);
     }
     return rows;
+}
+
+export const get_zombies = (game_id, rethinkdb) => {
+    return r.table('cells').filter({ game_id }).sum('zombies').run(rethinkdb);
 }
 
 export const kill_zombies = (game_id, coordinate, killed, rethinkdb) => {

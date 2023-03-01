@@ -22,7 +22,7 @@ export let colors = [
 export const food = 2;
 export const drink = 2;
 export const drug = 1;
-export const weapon = 1;
+export const weapon = 2;
 export const ammunition = 10;
 export const explosive = 5;
 export const armour = 1;
@@ -70,7 +70,8 @@ export const empty_3 = 0.9;
 // const next = Math.round(encampment.attack * (1.1 + (Math.random() * 4) / 10));
 // ATTACK : J2 = entre 50 et 150
 // export const nextday_attack = (day) => (day * 100 - 50) + Math.round(Math.random() * 100);
-export const nextday_attack = (day) => ((day + 1) * 50 - 50) + Math.round(Math.random() * 100);
+// export const nextday_attack = (day) => ((day + 1) * 50 - 50) + Math.round(Math.random() * 100);
+export const calcul_attack = (day, zombies) => Math.round(zombies / (10 - day / 5));
 // CELL régénérée : > valeur
 export const nextday_empty = 0.75;
 // USER : - valeur
@@ -86,7 +87,8 @@ export const nextday_building = 2;
 // CELL : + valeur par jour
 export const nextday_cell = 1;
 // NEXTDAY :
-export const nextday_zombies = (zombies, danger, building) => Math.round(zombies * (1 + (danger / 20)) + (building ? nextday_building : nextday_cell));
+// export const nextday_zombies = (zombies, danger, building) => Math.round(zombies * (1 + (danger / 20)) + (building ? nextday_building : nextday_cell));
+export const nextday_zombies = (zombies, danger, building) => zombies + danger + (building ? nextday_building : 0);
 
 // Risque de blessure
 // SANS ARME : > valeur

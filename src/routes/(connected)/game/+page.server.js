@@ -1,7 +1,7 @@
 import { redirect } from "@sveltejs/kit";
-import { nextday_attack } from "$lib/config";
+import { calcul_attack } from "$lib/config";
 import { getDefenseAll } from "$lib/player";
-import { update_cells } from "$lib/server/cells";
+import { get_zombies, update_cells } from "$lib/server/cells";
 import { get_encampment, update_encampment } from "$lib/server/encampments";
 import { add_one_day } from "$lib/server/games";
 import { add_logs, delete_old_logs } from "$lib/server/logs";
@@ -52,10 +52,12 @@ const nextDay = async ({ locals }) => {
             }
         }
     }
-    const next = nextday_attack(locals.game.day);
+    const { logs, zombies } = await update_cells(locals.user.game_id, locals.rethinkdb);
+    const total_zombies = await get_zombies(locals.game.id, locals.rethinkdb);
+    const next = calcul_attack(locals.game.day, total_zombies);
     await update_encampment(locals.user.game_id, next, worksites, locals.rethinkdb);
     await add_one_day(locals.user.game_id, locals.rethinkdb);
-    const { logs, zombies } = await update_cells(locals.user.game_id, locals.rethinkdb);
+    
     const events = await update_users(locals.user.game_id, locals.rethinkdb);
     const log = [{ coordinate: 'Encampment', action: 'nextday', log: {
         attack: encampment.attack,

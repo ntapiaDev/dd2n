@@ -1,10 +1,10 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { critical_chance, empty_1, empty_2, empty_3, empty_building, wound_armed, wound_unarmed } from "$lib/config";
+import { calcul_attack, critical_chance, empty_1, empty_2, empty_3, empty_building, wound_armed, wound_unarmed } from "$lib/config";
 import { canTravel } from '$lib/game';
 import { getBlueprints, getItem, getPool, getXp, handleBag, handlePlus, handleSearch, handleStack } from "$lib/loots";
 import { checkHT, getDefense, levelUp } from "$lib/player";
-import { add_tchat, altar_collapse, get_cell, get_map, kill_zombies, remove_user_from_location, update_building, update_items, update_map, update_search } from "$lib/server/cells";
-import { add_user_to_encampment, get_encampment } from "$lib/server/encampments";
+import { add_tchat, altar_collapse, get_cell, get_map, get_zombies, kill_zombies, remove_user_from_location, update_building, update_items, update_map, update_search } from "$lib/server/cells";
+import { add_user_to_encampment, get_encampment, update_attack } from "$lib/server/encampments";
 import { add_unique } from "$lib/server/games";
 import { get_from, get_items_by_code, get_loots } from "$lib/server/items";
 import { add_log, add_logs, get_logs_by_coordinate } from "$lib/server/logs";
@@ -105,6 +105,8 @@ const attack = async ({ locals, request }) => {
     const { hunger, thirst, warning } = checkHT(locals.user.hunger, locals.user.thirst, 1);
     await kill_zombies(locals.user.game_id, location.coordinate, killed + critical, locals.rethinkdb);
     await _attack(locals.user.id, locals.user.ap - 1, force, hunger, slots, stats, thirst, wound, killed + critical, locals.rethinkdb);
+    const z = await get_zombies(locals.user.game_id, locals.rethinkdb);
+    await update_attack(locals.user.game_id, calcul_attack(locals.game.day, z), locals.rethinkdb);
     await add_log(locals.user.game_id, locals.user.location, locals.user.username, 'kill', { 'zombies': killed, 'weapon': item.slot !== 'W0' ? item.description : 'Ses poings', plus, ammo, broken, levelUp: levelUp(locals.user.xp, killed + critical), woundedW0, woundedW1, critical, warning, xp: killed + critical }, locals.user.gender, locals.user.color, locals.rethinkdb);
     throw redirect(303, '/map');
 }
