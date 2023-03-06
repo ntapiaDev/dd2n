@@ -54,7 +54,7 @@ const nextDay = async ({ locals }) => {
     }
     const { logs, zombies } = await update_cells(locals.user.game_id, locals.rethinkdb);
     const total_zombies = await get_zombies(locals.game.id, locals.rethinkdb);
-    const next = calcul_attack(locals.game.day, total_zombies);
+    const next = calcul_attack(locals.game.day + 1, total_zombies);
     await update_encampment(locals.user.game_id, next, worksites, locals.rethinkdb);
     await add_one_day(locals.user.game_id, locals.rethinkdb);
     
