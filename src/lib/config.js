@@ -71,7 +71,7 @@ export const empty_3 = 0.9;
 // ATTACK : J2 = entre 50 et 150
 // export const nextday_attack = (day) => (day * 100 - 50) + Math.round(Math.random() * 100);
 // export const nextday_attack = (day) => ((day + 1) * 50 - 50) + Math.round(Math.random() * 100);
-export const calcul_attack = (day, zombies) => Math.round(zombies / (10 - day / 5));
+export const calcul_attack = (day, zombies) => Math.round(zombies / (8 - day / 8));
 // CELL régénérée : > valeur
 export const nextday_empty = 0.75;
 // USER : - valeur

@@ -1,4 +1,5 @@
 import { ammunition, armour, bag, blueprint, commun, drink, drug, explosive, food, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, weapon, épique } from "./config";
+import { isBlocked } from "./worksites";
 
 export const findOrigin = (bag1, bag2, inventory, uuid) => {
     let origin = '';
@@ -32,10 +33,15 @@ export const getBlueprints = (encampment, recipes, worksites, advance) => {
     }
     const models = [];
     for (let group of worksites) {
-        if (!group.group || encampment.worksites.completed.includes(group.group) || encampment.worksites.unlocked.some(w => w.id === group.group))
-            for (let worksite of group.reduction)
+        if (!group.group || encampment.worksites.completed.includes(group.group) || encampment.worksites.unlocked.some(w => w.id === group.group)) {
+            let ws;
+            for (let worksite of group.reduction) {
+                if (!ws) ws = worksite;
                 if (!encampment.worksites.completed.includes(worksite.id) && !encampment.worksites.unlocked.some(w => w.id === worksite.id))
-                    if (advance === 'all' || worksite.advance === advance) models.push(worksite)
+                    if ((advance === 'all' || worksite.advance === advance) && (!worksite.parent || (encampment.worksites.completed.includes(ws.id) || encampment.worksites.unlocked.some(w => w.id === ws.id) || ws.reload) && !isBlocked(ws, encampment.worksites.completed, worksites))) models.push(worksite)
+                ws = worksite;
+            }
+        }
     }
     for (let worksite of models) {
         const blueprint = {

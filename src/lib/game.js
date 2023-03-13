@@ -55,6 +55,12 @@ export const getDistance = (location, target) => {
     return Math.abs(li - ti) + Math.abs(lj - tj);
 }
 
+export const getNests = (quantity) => {
+    const nests = [];
+    for (let i = 0; i < quantity; i++) nests.push(getCoord(outer));
+    return nests;
+}
+
 export const getRandomName = () => {
     const start = ['La caverne', 'La cité', 'La demeure', 'La fôret', 'La montagne', 'La plaine', 'La tanière', 'Le hameaux', 'Le havre', 'Le lac', 'Le refuge', 'Le terrier'];
     const middle = ['des alpagas', 'des loups', 'des cochons', 'des escargots', 'des nains', 'des lapins', 'des orcs', 'des lézards', 'des bandits', 'des chevaliers', 'des voleurs', 'des princes'];

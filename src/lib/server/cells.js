@@ -1,6 +1,6 @@
 import r from 'rethinkdb';
 import { nextday_empty, nextday_zombies, zombies_building, zombies_start } from '$lib/config';
-import { getAltar, getBuildings, getTeddies, getTunnel } from '$lib/game';
+import { getAltar, getBuildings, getNests, getTeddies, getTunnel } from '$lib/game';
 import { encampment, layout, letters, size } from '$lib/layout';
 
 export const add_tchat = (game_id, user_id, coordinate, rethinkdb) => {
@@ -105,16 +105,21 @@ export const update_building = (game_id, user_id, coordinate, items, empty, reth
 
 export const update_cells = async (game_id, rethinkdb) => {
     const cells = (await r.table('cells').filter({ game_id }).run(rethinkdb))._responses[0]?.r;
-    const logs = [];  
+    const logs = [];
+    const nests = getNests(2);
     let zombies = 0;  
     for (let cell of cells) {
         if (cell.building) cell.building.searchedBy = [];        
         cell.searchedBy = [];
         cell.tchat = [];
         if (cell.coordinate !== encampment) {
-            if (!cell.players.length) cell.visited = false;
             const old = cell.zombies;
-            cell.zombies = nextday_zombies(cell.zombies, cell.layout.danger, cell.building);
+            cell.zombies = nextday_zombies(cell.zombies, cell.layout.danger, cell.building) + (nests.includes(cell.coordinate) ? 100 : 0);
+            if (!cell.players.length) cell.visited = false;
+            if (cell.zombies > 100) {
+                cell.visible = true;
+                cell.visited = true;
+            }
             zombies += (cell.zombies - old);
         }
         if (cell.empty && Math.random() > nextday_empty) {
