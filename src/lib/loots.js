@@ -1,4 +1,4 @@
-import { ammunition, armour, bag, blueprint, commun, drink, drug, explosive, food, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, weapon, épique } from "./config";
+import { ammunition, armour, bag, blueprint, commun, drink, drug, explosive, food, inhabituel, loot_building, loot_search, plus_four, plus_one, plus_tree, plus_two, quantity_cache, quant_ammo, quant_items, rare, resource, resource_cache, weapon_w1, weapon_w2, épique } from "./config";
 import { isBlocked } from "./worksites";
 
 export const findOrigin = (bag1, bag2, inventory, uuid) => {
@@ -93,7 +93,8 @@ export const getPool = (items, danger, uniques) => {
             const type = item.type === 'food' ? food :
             item.type === 'drink' ? drink :
             item.type === 'drug' ? drug :
-            item.type === 'weapon' ? weapon :
+            item.type === 'weapon' ? 
+                (item.slot === 'W1' ? weapon_w1 : weapon_w2) :
             item.type === 'ammunition' ? ammunition :
             item.type === 'explosive' ? explosive :
             item.type === 'armour' ? armour :
