@@ -106,7 +106,7 @@ export const update_building = (game_id, user_id, coordinate, items, empty, reth
 export const update_cells = async (game_id, rethinkdb) => {
     const cells = (await r.table('cells').filter({ game_id }).run(rethinkdb))._responses[0]?.r;
     const logs = [];
-    const nests = getNests(2);
+    const nests = getNests(4);
     let zombies = 0;  
     for (let cell of cells) {
         if (cell.building) cell.building.searchedBy = [];        

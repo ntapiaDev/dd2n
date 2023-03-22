@@ -22,7 +22,7 @@ export let colors = [
 export const food = 2;
 export const drink = 2;
 export const drug = 1;
-export const weapon_w1 = 3;
+export const weapon_w1 = 4;
 export const weapon_w2 = 2;
 export const ammunition = 10;
 export const explosive = 5;
@@ -31,13 +31,13 @@ export const bag = 1;
 export const resource = 10;
 export const blueprint = 1;
 // RARITY : x quantité
-export const commun = 5;
+export const commun = 6;
 export const inhabituel = 3;
 export const rare = 2;
 export const épique = 1;
 
 // Plus items : > valeur
-export const plus_four = 1;
+export const plus_four = 0.99;
 export const plus_tree = 0.95;
 export const plus_two = 0.9;
 export const plus_one = 0.75;
