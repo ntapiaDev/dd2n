@@ -42,6 +42,10 @@
                     <input type="text" name="game_id" value={game.id} hidden />
                     <button>Supprimer</button>
                 </form>
+                <form method="POST" action="?/setPrivate" use:enhance>
+                    <input type="text" name="game_id" value={game.id} hidden />
+                    <button>{game.private ? 'Rendre public' : 'Rendre privé'}</button>
+                </form>
             {/if}
         </form>
     </td>

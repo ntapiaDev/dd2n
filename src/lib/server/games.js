@@ -11,6 +11,7 @@ export const add_game = async (rethinkdb) => {
         encampment,
         name: getRandomName(),
         players: [],
+        private: false,
         uniques: []
     }).run(rethinkdb)).generated_keys[0];
 }
@@ -61,4 +62,8 @@ export const remove_user_from_game = async (game_id, username, color, rethinkdb)
         }
     }).run(rethinkdb);
     return r.table('games').get(game_id).update({ players: r.row('players').difference([{ color, username }]) }).run(rethinkdb);
+}
+
+export const set_private = async (game_id, rethinkdb) => {
+    return r.table('games').get(game_id).update({ private: r.row('private').not() }).run(rethinkdb);
 }

@@ -2,7 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { calcul_attack } from "$lib/config";
 import { generate_cells, delete_cells, remove_user_from_location } from "$lib/server/cells";
 import { add_user_to_encampment, delete_encampment, generate_encampment, remove_user_from_encampment } from "$lib/server/encampments";
-import { add_game, add_user_to_game, delete_game, get_games, get_game_by_id, remove_user_from_game } from "$lib/server/games"
+import { add_game, add_user_to_game, delete_game, get_games, get_game_by_id, remove_user_from_game, set_private } from "$lib/server/games"
 import { get_from } from "$lib/server/items";
 import { add_log, add_logs, delete_logs } from "$lib/server/logs";
 import { add_squares, delete_square } from "$lib/server/square";
@@ -82,4 +82,12 @@ const joinGame = async ({ locals, request }) => {
     }
 }
 
-export const actions = { addGame, deleteGame, joinGame };
+const setPrivate = async ({ locals, request }) => {
+    if (locals.user.role !== 'admin') return fail(400, { admin: true });
+    const data = await request.formData();
+    const game_id = data.get('game_id');
+    await set_private(game_id, locals.rethinkdb);
+    throw redirect(303, '/');
+}
+
+export const actions = { addGame, deleteGame, joinGame, setPrivate };

@@ -19,7 +19,9 @@
 			<th>Action</th>
 		</tr>
 		{#each games as game}
-			<Game {game} />
+			{#if !game.private || $page.data.user.role === 'admin' || game.players.find(player => player.username === $page.data.user.username)}
+				<Game {game} />
+			{/if}
 		{/each}
 	</table>
 	{#if $page.data.user.role === 'admin'}
